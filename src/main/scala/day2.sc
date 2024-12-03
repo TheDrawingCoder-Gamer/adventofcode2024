@@ -18,32 +18,21 @@ def testSafe(report: List[Int]): Boolean = {
     }
   }
 }
+// a valid "final" configuration must:
+// be all increasing or all decreasing
+// two adjacent levels differ by at least one or at most three
+// this implies...
+// that all numbers are unique
+// that the list is strictly monotonic
+// that the largest number is at most 3 * length of the list + smallest number
+// (assuming its at the end)
 
 def testSafeDampener(report: List[Int]): Boolean = {
-  val inc = {
-    val c = Integer.signum(report.tail.head - report.head)
-    if (c == 0) {
-      Integer.signum(report.tail.tail.head - report.tail.head)
-    } else c
-  }
-  if (inc == 0) {
-    false
-  } else {
-    val r = report.zipWithIndex.sliding(2).collectFirst(Function.unlift {
-      case List((x, i), (y, _)) => {
-        val diff = y - x
-        Option.when(!(Math.abs(diff) >= 1 && Math.abs(diff) <= 3 && Integer.signum(diff) == inc))(i)
-      }
-      case _ => ???
-    })
-    r.forall { it =>
-      val l = report.take(it)
-      val r = report.drop(it + 1)
-      testSafe(l ++ r) || {
-        val l2 = report.take(it + 1)
-        val r2 = report.drop(it + 2)
-        testSafe(l2 ++ r2)
-      }
+  // I HATE THAT THIS IS INEFFICIENT
+  testSafe(report) || {
+    report.indices.exists { idx =>
+      val newReport = report.take(idx) ++ report.drop(idx + 1)
+      testSafe(newReport)
     }
   }
 
