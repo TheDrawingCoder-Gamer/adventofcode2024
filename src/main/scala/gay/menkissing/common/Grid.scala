@@ -112,6 +112,12 @@ case class Grid[A] private (values: Vector[Vector[A]]){
     })
   }
   def flatten: Vector[A] = values.flatten
+
+  def indices: IterableOnce[(Int, Int)] =
+    for {
+      y <- 0 until height
+      x <- 0 until width
+    } yield (x, y)
 }
 object Grid {
   def apply[A](values: Iterable[A], width: Int): Grid[A] = {
