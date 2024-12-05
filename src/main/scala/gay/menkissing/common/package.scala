@@ -1,6 +1,7 @@
 package gay.menkissing.common
 
 import scala.collection.mutable as mut
+import cats.PartialOrder
 
 def reconstructPath[A](cameFrom: Map[A, A], p: A): List[A] = {
 
@@ -60,3 +61,35 @@ def astarGeneric[A](start: A, isGoal: A => Boolean, h: A => Double, d: (A, A) =>
  * See [[astarGeneric]]
  */
 def astar[A](start: A, goal: A, h: A => Double, d: (A, A) => Double, neighbors: A => IterableOnce[A]): Option[List[A]] = astarGeneric(start, _ == goal, h, d, neighbors)
+
+def topologicalSort[A](a: List[A])(using pord: PartialOrder[A]): Option[List[A]] = {
+  var unsorted = a.toBuffer
+  val sorted = mut.Buffer[A]()
+  
+  def hasIncomingNode(n: A): Boolean = {
+    unsorted.exists(it => pord.lt(it, n))
+  }
+  def nodeEnters(inc: A, n: A): Boolean = {
+    pord.lt(inc, n)
+  }
+  
+  val startNodes: mut.Set[A] = a.filterNot(hasIncomingNode).iterator.to(mut.Set.iterableFactory)
+  
+  while (startNodes.nonEmpty) {
+    val n = startNodes.head
+    startNodes.remove(n)
+    sorted.append(n)
+    unsorted = unsorted.filterNot(_ == n)
+    unsorted.filter(it => nodeEnters(n, it)).foreach { m =>
+      if (!hasIncomingNode(m)) {
+        startNodes.add(m)
+      }
+    }
+  }
+  
+  if (unsorted.nonEmpty) {
+    None
+  } else {
+    Some(sorted.toList)
+  }
+}
