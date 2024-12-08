@@ -93,3 +93,11 @@ def topologicalSort[A](a: List[A])(using pord: PartialOrder[A]): Option[List[A]]
     Some(sorted.toList)
   }
 }
+
+def debugTiming[A](func: => A): A = {
+  val start = System.currentTimeMillis()
+  val res = func
+  val end = System.currentTimeMillis()
+  println(s"Elapsed: ${end - start}")
+  res
+}

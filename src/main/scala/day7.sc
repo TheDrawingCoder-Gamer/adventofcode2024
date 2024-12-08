@@ -1,6 +1,6 @@
 import scala.io.Source
 import scala.collection.parallel.CollectionConverters.*
-
+import gay.menkissing.common.debugTiming
 
 
 def combinationsOfGeneric(n: Int, availableChars: Seq[Char]): Seq[String] = {
@@ -21,24 +21,34 @@ def combinationsOfGeneric(n: Int, availableChars: Seq[Char]): Seq[String] = {
   }
 }
 
+// possibly breaks if values contains a 0
+def calculateTruth(values: List[Long], finalResult: Long, runningResult: Long, part2: Boolean = false): Boolean = {
+  values match {
+    case Nil => finalResult == runningResult
+    case v :: next => {
+      if (runningResult > finalResult)
+        false
+      else {
+        calculateTruth(next, finalResult, runningResult + v, part2)
+          || calculateTruth(next, finalResult, runningResult * v, part2)
+          || (if (part2) calculateTruth(next, finalResult, s"$runningResult$v".toLong, part2) else false)
+      }
+    }
+  }
+}
+
+
 def combinationsOfP1(n: Int): Seq[String] = combinationsOfGeneric(n, Seq('+', '*'))
 def combinationsOfP2(n: Int): Seq[String] = combinationsOfGeneric(n, Seq('+', '*', '|'))
 
 case class Equation(result: Long, inputs: Seq[Long]) {
   def canBeTrue: Boolean = {
     assert(inputs.sizeIs > 1)
-    val combos = inputs.size - 1
-    combinationsOfP1(combos).exists { str =>
-      applyCombo(str) == result
-
-    }
+    calculateTruth(inputs.toList, result, 0)
   }
   def canBeTrueP2: Boolean = {
     assert(inputs.sizeIs > 1)
-    val combos = inputs.size - 1
-    combinationsOfP2(combos).exists { str =>
-      applyCombo(str) == result
-    }
+    calculateTruth(inputs.toList, result, 0, true)
   }
 
   def applyCombo(combo: String): Long = {
@@ -61,4 +71,10 @@ val data = Source.fromResource("day7.txt").getLines.map {
   case _ => ???
 }.toSeq
 
-data.par.filter(_.canBeTrueP2).map(_.result).sum
+debugTiming {
+  data.filter(_.canBeTrue).map(_.result).sum
+}
+
+debugTiming {
+  data.par.filter(_.canBeTrueP2).map(_.result).sum
+}
