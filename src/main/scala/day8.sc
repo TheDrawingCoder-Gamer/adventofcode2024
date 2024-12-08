@@ -41,4 +41,9 @@ def calculateAntiNodesForPointsP2(l: Vec2i, r: Vec2i): List[Vec2i] = {
 
 val uniqueChars = grid.flatten.toSet - '.'
 
-uniqueChars.map(it => calculateAntiNodesFor(it, calculateAntiNodesForPointsP2)).reduce(_ ++ _).size
+debugTiming {
+  uniqueChars.map(it => calculateAntiNodesFor(it, calculateAntiNodeForPoints)).reduce(_ ++ _).size
+}
+debugTiming {
+  uniqueChars.map(it => calculateAntiNodesFor(it, calculateAntiNodesForPointsP2)).reduce(_ ++ _).size
+}

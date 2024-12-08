@@ -98,25 +98,22 @@ def part2(): Int = {
   val gyatPoints = MParSet.empty[Vec2i]
 
   val h = daPoints.par.collect {
-    Function.unlift[Vec2i, Array[Vec2i]] { it =>
+    Function.unlift[Vec2i, Vec2i] { it =>
       if (grid.isDefinedAt(it.x, it.y)) {
-        Some(Direction2D.values.collect {
-          Function.unlift[Direction2D, Vec2i] { dir =>
-            val obstacle = it.genOffset(dir)
-            if (grid.isDefinedAt(obstacle.x, obstacle.y)) {
-              if (testLoop(grid.updated(obstacle)(true))) {
-                Some(obstacle)
-              } else None
-            } else None
-          }
-        })
+        if (testLoop(grid.updated(it)(true))) {
+          Some(it)
+        } else None
       } else None
     }
   }
-  h.flatten.toSet.size
+  h.toSet.size
 
 
 }
 
-// calculatePart1
-part2()
+debugTiming {
+  calculatePart1
+}
+debugTiming {
+  part2()
+}

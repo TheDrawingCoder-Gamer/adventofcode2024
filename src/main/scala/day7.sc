@@ -3,6 +3,8 @@ import scala.collection.parallel.CollectionConverters.*
 import gay.menkissing.common.debugTiming
 
 
+
+
 def combinationsOfGeneric(n: Int, availableChars: Seq[Char]): Seq[String] = {
   @annotation.tailrec
   def intlCombosOf(m: Int, curOnes: Seq[String]): Seq[String] = {
@@ -21,6 +23,11 @@ def combinationsOfGeneric(n: Int, availableChars: Seq[Char]): Seq[String] = {
   }
 }
 
+def concatLong(l: Long, r: Long): Long = {
+  val rDigits = math.log10(r.toDouble).toInt + 1
+  (l * math.pow(10, rDigits)).toLong + r
+}
+
 // possibly breaks if values contains a 0
 def calculateTruth(values: List[Long], finalResult: Long, runningResult: Long, part2: Boolean = false): Boolean = {
   values match {
@@ -31,7 +38,7 @@ def calculateTruth(values: List[Long], finalResult: Long, runningResult: Long, p
       else {
         calculateTruth(next, finalResult, runningResult + v, part2)
           || calculateTruth(next, finalResult, runningResult * v, part2)
-          || (if (part2) calculateTruth(next, finalResult, s"$runningResult$v".toLong, part2) else false)
+          || (if (part2) calculateTruth(next, finalResult, concatLong(runningResult, v), part2) else false)
       }
     }
   }
@@ -72,9 +79,9 @@ val data = Source.fromResource("day7.txt").getLines.map {
 }.toSeq
 
 debugTiming {
-  data.filter(_.canBeTrue).map(_.result).sum
+  data.withFilter(_.canBeTrue).map(_.result).sum
 }
 
 debugTiming {
-  data.par.filter(_.canBeTrueP2).map(_.result).sum
+  data.par.withFilter(_.canBeTrueP2).map(_.result).sum
 }
