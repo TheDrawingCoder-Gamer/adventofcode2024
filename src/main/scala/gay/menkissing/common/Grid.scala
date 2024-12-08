@@ -42,7 +42,7 @@ case class Grid[A] private (values: Vector[Vector[A]]){
   }
   def get(p: Vec2i): Option[A] = get(p.x, p.y)
 
-  def getOrElse(p: Vec2i, orElse: => A) = get(p).getOrElse(orElse)
+  def getOrElse(p: Vec2i, orElse: => A): A = get(p).getOrElse(orElse)
 
   def apply(x: Int, y: Int): A = values(y)(x)
 

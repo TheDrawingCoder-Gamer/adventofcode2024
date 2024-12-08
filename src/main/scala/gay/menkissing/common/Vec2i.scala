@@ -2,7 +2,7 @@ package gay.menkissing.common
 import scala.math.Ordering.Implicits.infixOrderingOps
 // THIS SHIT IS NOT ORDERED!!
 case class Vec2i(x: Int, y: Int) extends Ordered[Vec2i] {
-  def offset(dir: Direction2D, n: Int = 1) = 
+  def offset(dir: Direction2D, n: Int = 1): Vec2i =
     dir match
       case Direction2D.Up => this.copy(y = y + n)
       case Direction2D.Down => this.copy(y = y - n)
