@@ -1,9 +1,9 @@
 import scala.io.Source
 import gay.menkissing.common.*
 import scala.collection.mutable as mut
-import cats.effect.*
-import cats.implicits.*
-import cats.effect.unsafe.implicits.*
+import scala.collection.parallel.ParSet
+import scala.collection.parallel.mutable.ParSet as MParSet
+import scala.collection.parallel.CollectionConverters.*
 
 import GridAxisSystem.*
 
@@ -95,21 +95,25 @@ def part2(): Int = {
 
 
 
-  val gyatPoints = mut.Set.empty[Vec2i]
+  val gyatPoints = MParSet.empty[Vec2i]
 
-  daPoints.foreach { it =>
-    if (grid.isDefinedAt(it.x, it.y)) {
-      Direction2D.values.foreach { dir =>
-        val obstacle = it.genOffset(dir)
-        if (grid.isDefinedAt(obstacle.x, obstacle.y)) {
-          if (!gyatPoints.contains(obstacle) && testLoop(grid.updated(obstacle)(true))) {
-            gyatPoints.add(obstacle)
+  val h = daPoints.par.collect {
+    Function.unlift[Vec2i, Array[Vec2i]] { it =>
+      if (grid.isDefinedAt(it.x, it.y)) {
+        Some(Direction2D.values.collect {
+          Function.unlift[Direction2D, Vec2i] { dir =>
+            val obstacle = it.genOffset(dir)
+            if (grid.isDefinedAt(obstacle.x, obstacle.y)) {
+              if (testLoop(grid.updated(obstacle)(true))) {
+                Some(obstacle)
+              } else None
+            } else None
           }
-        }
-      }
+        })
+      } else None
     }
   }
-  gyatPoints.size
+  h.flatten.toSet.size
 
 
 }
