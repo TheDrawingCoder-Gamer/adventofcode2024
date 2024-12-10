@@ -3,6 +3,25 @@ package gay.menkissing.common
 import scala.collection.mutable as mut
 import cats.PartialOrder
 
+def findAllPathsGeneric[A](start: A, isGoal: A => Boolean, neighbors: A => IterableOnce[A]): List[List[A]] = {
+  val paths = mut.ListBuffer.empty[List[A]]
+   
+  def dfs(src: A, daPath: List[A]): Unit = {
+    if (isGoal(src)) {
+      paths.prepend(daPath.reverse)
+    } else {
+      neighbors(src).iterator.foreach { adjNode =>
+        dfs(adjNode, daPath.prepended(adjNode))
+      }
+    }
+  }
+  dfs(start, List(start))
+  
+  paths.toList
+}
+
+def findAllPaths[A](start: A, dest: A, neighbors: A => IterableOnce[A]): List[List[A]] = findAllPathsGeneric[A](start, _ == dest, neighbors)
+
 def reconstructPath[A](cameFrom: Map[A, A], p: A): List[A] = {
 
   val totalPath = mut.ListBuffer[A](p)
@@ -26,7 +45,7 @@ def reconstructPath[A](cameFrom: Map[A, A], p: A): List[A] = {
  * [[scala.Double.PositiveInfinity]] for this case). If the edge weight depends on direction, the first parameter represents the start node 
  * and the second represents the end node.
  * @param neighbors Returns all nodes that connect to the passed node.
- * @returns An Option containing the shortest path taken to reach the end node. This path includes the start and end node.
+ * @return An Option containing the shortest path taken to reach the end node. This path includes the start and end node.
  */
 def astarGeneric[A](start: A, isGoal: A => Boolean, h: A => Double, d: (A, A) => Double, neighbors: A => IterableOnce[A]): Option[List[A]] = {
   val cameFrom = mut.HashMap[A, A]()
@@ -53,7 +72,7 @@ def astarGeneric[A](start: A, isGoal: A => Boolean, h: A => Double, d: (A, A) =>
     }
   }
 
-  return None
+  None
 }
 /**
  * Simplified generialized AStar

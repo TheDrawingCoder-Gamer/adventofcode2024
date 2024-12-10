@@ -73,6 +73,7 @@ def flattenChunkList(chunks: Iterable[Chunk]): Disk = {
   }.toList)
 }
 
+
 def calculateP2(chunks: Vector[Chunk]): Vector[Chunk] = {
   val data = chunks.iterator.to(mut.ArrayBuffer.iterableFactory[Chunk])
   var curId = chunks.findLast(_.isInstanceOf[File]).get.asInstanceOf[File].id + 1

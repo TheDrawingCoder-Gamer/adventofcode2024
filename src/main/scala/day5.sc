@@ -1,6 +1,6 @@
 import scala.io.Source
 import cats.PartialOrder
-import gay.menkissing.common.topologicalSort
+import gay.menkissing.common.*
 
 val data = Source.fromResource("day5.txt").getLines().toList
 
@@ -54,4 +54,6 @@ val ordering = ruleOrdering(orderingRules)
 
 ordering.partialCompare(97, 13)
 
-invalidUpdates.map(it => topologicalSort(it)(using ordering).get).map(getCentral).sum
+debugTiming {
+  invalidUpdates.map(it => topologicalSort(it)(using ordering).get).map(getCentral).sum
+}
