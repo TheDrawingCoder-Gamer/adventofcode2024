@@ -2,6 +2,11 @@ package gay.menkissing.common
 
 import scala.collection.mutable as mut
 import cats.PartialOrder
+import cats.*
+import cats.data.Kleisli
+import cats.syntax.all.*
+
+import scala.annotation.tailrec
 
 def findAllPathsGeneric[A](start: A, isGoal: A => Boolean, neighbors: A => IterableOnce[A]): List[List[A]] = {
   val paths = mut.ListBuffer.empty[List[A]]
@@ -119,4 +124,16 @@ def debugTiming[A](func: => A): A = {
   val end = System.currentTimeMillis()
   println(s"Elapsed: ${end - start}")
   res
+}
+
+extension[A](f: A => A) {
+  def repeated(n: Int): A => A = {
+    MonoidK[Endo].algebra[A].combineN(f, n)
+  }
+}
+
+extension[A, G[_]](f: A => G[A])(using Monad[G]) {
+  def flatRepeated(n: Int): A => G[A] = {
+    Kleisli.endoMonoidK[G].algebra[A].combineN(Kleisli[G, A, A](f), n).run
+  }
 }
