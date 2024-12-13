@@ -1,28 +1,30 @@
 package gay.menkissing.common
+
 import scala.annotation.targetName
 import scala.math.Ordering.Implicits.infixOrderingOps
+
 // THIS SHIT IS NOT ORDERED!!
-case class Vec2i(x: Int, y: Int) extends Ordered[Vec2i] {
-  def offset(dir: Direction2D, n: Int = 1): Vec2i =
+case class Vec2l(x: Long, y: Long) extends Ordered[Vec2l] {
+  def offset(dir: Direction2D, n: Int = 1): Vec2l =
     dir match
       case Direction2D.Up => this.copy(y = y + n)
       case Direction2D.Down => this.copy(y = y - n)
       case Direction2D.Left => this.copy(x = x - n)
       case Direction2D.Right => this.copy(x = x + n)
-  override def compare(that: Vec2i): Int = {
-    if (this.x - that.x != 0) 
-      this.x - that.x 
+  override def compare(that: Vec2l): Int = {
+    if (this.x - that.x != 0)
+      math.signum(this.x - that.x).toInt 
     else 
-      this.y - that.y
+      math.signum(this.y - that.y).toInt
   }
   @targetName("add")
-  final def +(that: Vec2i): Vec2i = {
-    Vec2i(this.x + that.x, this.y + that.y)
+  final def +(that: Vec2l): Vec2l = {
+    Vec2l(this.x + that.x, this.y + that.y)
   }
-  final def taxiDistance(that: Vec2i): Int = {
+  final def taxiDistance(that: Vec2l): Long = {
     Math.abs(this.x - that.x) + Math.abs(this.y - that.y)
   }
-  def straightLine(that: Vec2i): List[Vec2i] = {
+  def straightLine(that: Vec2l): List[Vec2l] = {
     require(this.x == that.x || this.y == that.y)
     val shouldReverse = (this `max` that) == this 
     def maybeReverse[A](ls: List[A]): List[A] = {
@@ -34,13 +36,12 @@ case class Vec2i(x: Int, y: Int) extends Ordered[Vec2i] {
     if (this.x == that.x) {
       val minY = this.y `min` that.y 
       val maxY = this.y `max` that.y 
-      maybeReverse((minY to maxY).map(yy => Vec2i(this.x, yy)).toList)
+      maybeReverse((minY to maxY).map(yy => Vec2l(this.x, yy)).toList)
     } else { 
       val minX = this.x `min` that.x 
       val maxX = this.x `max` that.x 
-      maybeReverse((minX to maxX).map(xx => Vec2i(xx, this.y)).toList)
+      maybeReverse((minX to maxX).map(xx => Vec2l(xx, this.y)).toList)
     }
   }
-  def toLong: Vec2l = Vec2l(x.toLong, y.toLong)
 }
 

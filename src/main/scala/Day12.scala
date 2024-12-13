@@ -136,11 +136,13 @@ object Day12 {
 
     plants.regions.map(r => r.area * r.sides).sum
   }
-
+/*
   @main def main(): Unit = {
     val data = Source.fromResource("day12tst.txt").mkString
 
     println(part1(data))
     println(part2(data))
   }
+  
+ */
 }
