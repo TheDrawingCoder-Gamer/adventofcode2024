@@ -48,3 +48,5 @@ build/
 
 src/main/resources/*.txt
 !src/main/resources/*tst.txt
+
+*.png

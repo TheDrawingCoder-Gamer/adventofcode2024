@@ -137,3 +137,14 @@ extension[A, G[_]](f: A => G[A])(using Monad[G]) {
     Kleisli.endoMonoidK[G].algebra[A].combineN(Kleisli[G, A, A](f), n).run
   }
 }
+
+// may not be unique
+def prettyCharForNum(num: Int): Char = {
+  if (num < 10) {
+    ('0' + num).toChar
+  } else if (num < 10 + 26) {
+    ('a' + num - 10).toChar
+  } else if (num < 10 + 26 + 26) {
+    ('A' + num - 10 - 26).toChar
+  } else '?'
+}
