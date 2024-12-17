@@ -101,11 +101,11 @@ object Day16 extends Problem[Day16.ProblemState, Int]:
     input.getGoodSeats.size
 
   override lazy val input: String = Source.fromResource("day16.txt").mkString
-
+/*
   @main def main(): Unit = {
     debugAndTimeP1()
     debugAndTimeP2()
   }
-
+*/
 
 

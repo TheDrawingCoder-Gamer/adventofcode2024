@@ -52,7 +52,7 @@ def dijstraAll[A](start: A, isGoal: A => Boolean, d: (A, A) => Double, neighbors
     val next = queue.dequeue()
     if (eqv(next._2, s)) paths.prepend(next._3)
   }
-  
+
   paths.toList
 }
 
@@ -226,3 +226,5 @@ def prettyCharForNum(num: Int): Char = {
     ('A' + num - 10 - 26).toChar
   } else '?'
 }
+
+def logBaseN(n: Double, base: Double): Double = math.log(n) / math.log(base)
