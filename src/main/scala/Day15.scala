@@ -185,11 +185,13 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
     val res = go(input.doubled)
     res.gpsCalc
 
-  override def input: String = Source.fromResource("day15.txt").mkString
+  override lazy val input: String = Source.fromResource("day15.txt").mkString
 }
-
+/*
 @main def main(): Unit =
   println(Day15.fullPart1)
-  println(Day15.fullPart2)
-
-
+  debugTiming {
+    println(Day15.fullPart2)
+  }
+  
+ */

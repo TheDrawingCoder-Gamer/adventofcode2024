@@ -8,6 +8,83 @@ import cats.syntax.all.*
 
 import scala.annotation.tailrec
 
+
+
+def reconstructPaths[A](cameFrom: Map[A, List[A]], p: A, start: A): List[List[A]] = {
+  def dfs(src: A, daPath: List[A]): Eval[List[List[A]]] = {
+    if (src == start) {
+      Eval.now(List(daPath))
+    } else {
+      cameFrom(src).foldLeft(Eval.now(List[List[A]]())) { (acc, adjNode) =>
+        acc.flatMap { cc =>
+          dfs(adjNode, daPath.prepended(adjNode)).map(_ ++ cc)
+        }
+      }
+    }
+  }
+
+  dfs(p, List(p)).value
+}
+
+def equals[A](l: A, r: A): Boolean =
+  l.equals(r)
+
+def dijstraAll[A](start: A, isGoal: A => Boolean, d: (A, A) => Double, neighbors: A => IterableOnce[A], eqv: (A, A) => Boolean = equals): List[List[A]] = {
+  val visited = mut.Set.empty[A]
+
+  val queue = mut.PriorityQueue((0d, start, List(start)))(using Ordering.by[(Double, A, List[A]), Double](it => it._1).reverse)
+  while (!isGoal(queue.head._2)) {
+    val (score, current, path) = queue.dequeue()
+
+    for (neighbor <- neighbors(current).iterator.filterNot(visited)) {
+      val nscore = score + d(current, neighbor)
+      val npath = path.prepended(neighbor)
+
+      queue.addOne((nscore, neighbor, npath))
+    }
+    visited.addOne(current)
+  }
+
+
+  val (shortestScore, s, path) = queue.dequeue()
+  val paths = mut.ListBuffer[List[A]](path)
+  while (queue.head._1 == shortestScore) {
+    val next = queue.dequeue()
+    if (eqv(next._2, s)) paths.prepend(next._3)
+  }
+  
+  paths.toList
+}
+
+def findAllPathsNoRetraverse[A](start: A, isGoal: A => Boolean, neighbors: A => IterableOnce[A]): List[List[A]] = {
+  val paths = mut.ListBuffer.empty[List[A]]
+
+  def dfs(src: A, daPath: List[A]): Eval[List[List[A]]] = {
+    if (isGoal(src)) {
+      Eval.now(List(daPath.reverse))
+    } else {
+      val ns = neighbors(src).iterator.toList
+      ns match {
+        case Nil => Eval.now(List())
+        case ls =>
+          ls.foldLeft(Eval.now(List[List[A]]())) { (acc, adjNode) =>
+            if (!daPath.contains(adjNode)) {
+              acc.flatMap { c =>
+                dfs(adjNode, daPath.prepended(adjNode)).map { cs =>
+                  c ++ cs
+                }
+              }
+            } else {
+              Eval.now(List())
+            }
+          }
+      }
+    }
+  }
+
+  dfs(start, List(start)).value
+}
+
 def findAllPathsGeneric[A](start: A, isGoal: A => Boolean, neighbors: A => IterableOnce[A]): List[List[A]] = {
   val paths = mut.ListBuffer.empty[List[A]]
    
@@ -37,6 +114,7 @@ def reconstructPath[A](cameFrom: Map[A, A], p: A): List[A] = {
   }
   totalPath.toList
 }
+
 
 /** 
  * A generalized astar
