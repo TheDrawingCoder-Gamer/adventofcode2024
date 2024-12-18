@@ -41,6 +41,10 @@ case class Vec2i(x: Int, y: Int) extends Ordered[Vec2i] {
       maybeReverse((minX to maxX).map(xx => Vec2i(xx, this.y)).toList)
     }
   }
+  
+  def cardinalNeighbors: List[Vec2i] =
+    List(Vec2i(x - 1, y), Vec2i(x + 1, y), Vec2i(x, y - 1), Vec2i(x, y + 1))
+  
   def toLong: Vec2l = Vec2l(x.toLong, y.toLong)
 }
 

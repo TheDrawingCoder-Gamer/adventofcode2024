@@ -2,17 +2,18 @@ package gay.menkissing.advent
 
 import gay.menkissing.common.debugTiming
 
+trait Problem[Input, Output] extends ProblemAdv[Input, Output, Output]
 
-trait Problem[Input, Output] {
+trait ProblemAdv[Input, OutputP1, OutputP2] {
   def parse(str: String): Input
 
-  def part1(input: Input): Output
-  def part2(input: Input): Output
+  def part1(input: Input): OutputP1
+  def part2(input: Input): OutputP2
 
   def input: String
 
-  def fullPart1: Output = part1(parse(input))
-  def fullPart2: Output = part2(parse(input))
+  def fullPart1: OutputP1 = part1(parse(input))
+  def fullPart2: OutputP2 = part2(parse(input))
 
 
   def debugAndTimeP1(): Unit =

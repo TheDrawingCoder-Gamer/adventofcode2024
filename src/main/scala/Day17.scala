@@ -123,7 +123,9 @@ object Day17 extends Problem[Day17.ComputerState, String]:
   }
   */
 
+/*
 @main def main(): Unit =
   // Day17.testPrograms()
   Day17.debugAndTimeP1()
   Day17.debugAndTimeP2()
+*/
