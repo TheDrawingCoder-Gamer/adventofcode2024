@@ -228,3 +228,6 @@ def prettyCharForNum(num: Int): Char = {
 }
 
 def logBaseN(n: Double, base: Double): Double = math.log(n) / math.log(base)
+
+def fix[A, B](f: (A => B, A) => B, v: A): B =
+  f(fix(f, _), v)

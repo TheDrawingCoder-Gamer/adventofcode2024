@@ -107,7 +107,9 @@ object Day14 extends ProblemAdv[List[Day14.Robot], Int, Int] {
   lazy val input: String = Source.fromResource("day14.txt").mkString.trim
 }
 
+/*
 @main def main(): Unit = {
   println(Day14.fullPart1)
   println(Day14.fullPart2)
 }
+ */
