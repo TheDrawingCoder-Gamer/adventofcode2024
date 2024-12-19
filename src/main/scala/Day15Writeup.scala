@@ -1,16 +1,50 @@
-import gay.menkissing.advent.Problem
-import gay.menkissing.common.{Direction2D, *}
 import cats.Eval
 import cats.syntax.all.*
+import gay.menkissing.advent.Writeup
+
 
 import scala.annotation.{tailrec, targetName}
-import scala.io.Source
 import scala.collection.mutable as mut
-import GridAxisSystem.*
+import scala.io.Source
 
 
+object Day15Writeup extends Writeup[Day15Writeup.ProblemState, Long] {
+  enum Direction:
+    case Up, Down, Left, Right
 
-object Day15 extends Problem[Day15.ProblemState, Long] {
+  case class Vec2i(x: Int, y: Int):
+    def offset(dir: Direction): Vec2i = {
+      dir match
+        case Direction.Up => Vec2i(x, y - 1)
+        case Direction.Down => Vec2i(x, y + 1)
+        case Direction.Left => Vec2i(x - 1, y)
+        case Direction.Right => Vec2i(x + 1, y)
+    }
+
+    def isContainedIn(w: Int, h: Int): Boolean =
+      x >= 0 && x < w && y >= 0 && y < h
+
+  case class Grid[A](values: Vector[Vector[A]]):
+    val height: Int = values.size
+    val width: Int = values.head.size
+
+    def apply(x: Int, y: Int): A = values(y)(x)
+    def apply(p: Vec2i): A = apply(p.x, p.y)
+
+    def isDefinedAt(p: Vec2i): Boolean = p.isContainedIn(width, height)
+    def isDefinedAt(x: Int, y: Int): Boolean = isDefinedAt(Vec2i(x, y))
+
+    def updated(x: Int, y: Int)(value: A): Grid[A] = Grid(values.updated(y, values(y).updated(x, value)))
+    def updated(p: Vec2i)(value: A): Grid[A] = updated(p.x, p.y)(value)
+
+    def zipWithIndices: Seq[(A, Vec2i)] = {
+      for {
+        y <- 0 until height
+        x <- 0 until width
+      } yield (this (x, y), Vec2i(x, y))
+    }
+  object Grid:
+    def apply[A](values: IterableOnce[IterableOnce[A]]): Grid[A] = Grid(values.iterator.map(_.iterator.toVector).iterator.toVector)
   enum GridItem:
     case Empty, Wall, Box
 
@@ -19,10 +53,10 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
 
   extension (grid: Grid[GridItem]) {
     @targetName("updatedMoveP1")
-    def updatedMove(start: Vec2i, dir: Direction2D): Option[Grid[GridItem]] = {
+    def updatedMove(start: Vec2i, dir: Direction): Option[Grid[GridItem]] =
       @tailrec
       def go(curGrid: Grid[GridItem], start: Vec2i): Option[Grid[GridItem]] =
-        val newPos = start.genOffset(dir)
+        val newPos = start.offset(dir)
         val oldItem = curGrid(start)
         curGrid(newPos) match {
           case GridItem.Wall => None
@@ -31,50 +65,42 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
         }
 
       // prevent weird
-      go(grid.updated(start)(GridItem.Empty), start).map: it =>
-        val newPos = start.genOffset(dir)
-        if it.isDefinedAt(newPos.x, newPos.y) then
+      go(grid, start).map: it =>
+        val newPos = start.offset(dir)
+        if it.isDefinedAt(newPos) then
           it.updated(newPos)(GridItem.Empty)
         else it
-    }
-    def pretty: String =
-      grid.values.map: it =>
-        it.map:
-          case GridItem.Empty => '.'
-          case GridItem.Wall => '#'
-          case GridItem.Box => 'O'
-        .mkString("", "", "")
-      .mkString("", "\n", "")
+
   }
 
   extension (grid: Grid[GridItemP2])
     @targetName("updatedMoveP2")
-    def updatedMove(istart: Vec2i, dir: Direction2D): Option[Grid[GridItemP2]] =
+    def updatedMove(istart: Vec2i, dir: Direction): Option[Grid[GridItemP2]] =
       // ???
       def go(start: Vec2i, movedItems: List[(Vec2i, GridItemP2)]): Eval[Option[List[(Vec2i, GridItemP2)]]] =
-        val newPos = start.genOffset(dir)
+        val newPos = start.offset(dir)
         grid(newPos) match
           case GridItemP2.Wall => Eval.always(None)
           case GridItemP2.Empty => Eval.now(Some(movedItems))
           case GridItemP2.BoxL =>
-            val rPos = newPos.genOffset(Direction2D.Right)
+            val rPos = newPos.offset(Direction.Right)
             assert(grid(rPos) == GridItemP2.BoxR)
             val newItems = movedItems.prepended(newPos, GridItemP2.BoxL)
             dir match
-              case Direction2D.Left | Direction2D.Right =>
+              case Direction.Left | Direction.Right =>
                 go(newPos, newItems)
-              case Direction2D.Up | Direction2D.Down =>
+              case Direction.Up | Direction.Down =>
                 go(newPos, newItems).flatMap:
                   case Some(it) => go(rPos, it.prepended(rPos, GridItemP2.BoxR))
                   case None => Eval.now(None)
           case GridItemP2.BoxR =>
-            val lPos = newPos.genOffset(Direction2D.Left)
+            val lPos = newPos.offset(Direction.Left)
             assert(grid(lPos) == GridItemP2.BoxL)
             val newItems = movedItems.prepended(newPos, GridItemP2.BoxR)
             dir match
-              case Direction2D.Right | Direction2D.Left =>
+              case Direction.Right | Direction.Left =>
                 go(newPos, newItems)
-              case Direction2D.Up | Direction2D.Down =>
+              case Direction.Up | Direction.Down =>
                 go(newPos, newItems).flatMap:
                   case Some(it) => go(lPos, it.prepended(lPos, GridItemP2.BoxL))
                   case None => Eval.now(None)
@@ -86,15 +112,15 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
           case (g, (p, item)) =>
             if (!alreadyInspected.contains(p))
               alreadyInspected.add(p)
-              g.updated(p)(GridItemP2.Empty).updated(p.genOffset(dir))(item)
+              g.updated(p)(GridItemP2.Empty).updated(p.offset(dir))(item)
             else g
 
-  case class ProblemState(grid: Grid[GridItem], robot: Vec2i, remainingMoves: List[Direction2D]):
+  case class ProblemState(grid: Grid[GridItem], robot: Vec2i, remainingMoves: List[Direction]):
     def step: Option[ProblemState] =
       remainingMoves match
         case head :: rest =>
           grid.updatedMove(robot, head) match
-            case Some(newGrid) => Some(ProblemState(newGrid, robot.genOffset(head), rest))
+            case Some(newGrid) => Some(ProblemState(newGrid, robot.offset(head), rest))
             case _ => Some(ProblemState(grid, robot, rest))
         case _ => None
 
@@ -108,21 +134,13 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
         case GridItem.Empty => List(GridItemP2.Empty, GridItemP2.Empty)
       ))
       ProblemStateP2(newGrid, robot.copy(x = robot.x * 2), remainingMoves)
-    def pretty: String =
-      (grid.values.zipWithIndex.map: (it, y) =>
-        (it.zipWithIndex.map: (m, x) =>
-          m match
-            case _ if Vec2i(x, y) == robot => '@'
-            case GridItem.Empty => '.'
-            case GridItem.Wall => '#'
-            case GridItem.Box => 'O').mkString("", "", "")).mkString("", "\n", "")
 
-  case class ProblemStateP2(grid: Grid[GridItemP2], robot: Vec2i, remainingMoves: List[Direction2D]):
+  case class ProblemStateP2(grid: Grid[GridItemP2], robot: Vec2i, remainingMoves: List[Direction]):
     def step: Option[ProblemStateP2] =
       remainingMoves match
         case head :: rest =>
           grid.updatedMove(robot, head) match
-            case Some(newGrid) => Some(ProblemStateP2(newGrid, robot.genOffset(head), rest))
+            case Some(newGrid) => Some(ProblemStateP2(newGrid, robot.offset(head), rest))
             case _ => Some(ProblemStateP2(grid, robot, rest))
         case _ => None
 
@@ -139,9 +157,9 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
             case GridItemP2.BoxL => '['
             case GridItemP2.BoxR => ']').mkString("", "", "")).mkString("", "\n", "")
   override def parse(str: String): ProblemState =
-    val sides = str.split("\n\n")
+    val Array(gridStr, moveStr) = str.split("\n\n")
     var robotPos = Vec2i(-1, -1)
-    val grid = Grid(sides(0).linesIterator.zipWithIndex.map: (str, y) =>
+    val grid = Grid(gridStr.linesIterator.zipWithIndex.map: (str, y) =>
       str.toVector.zipWithIndex.map: (it, x) =>
         it match
           case '#' => GridItem.Wall
@@ -153,47 +171,33 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
             GridItem.Empty
           case _ => ???
       )
-    val dirs = sides(1).linesIterator.flatten.map:
-      case '<' => Direction2D.Left
-      case '^' => Direction2D.Up
-      case '>' => Direction2D.Right
-      case 'v' => Direction2D.Down
+    val dirs = moveStr.linesIterator.flatten.map:
+      case '<' => Direction.Left
+      case '^' => Direction.Up
+      case '>' => Direction.Right
+      case 'v' => Direction.Down
       case _ => ???
 
     ProblemState(grid, robotPos, dirs.toList)
 
-  override def part1(input: ProblemState): Long =
-    @tailrec
-    def go(i: ProblemState): ProblemState =
-      if i.remainingMoves.nonEmpty then
-        go(i.step.get)
-      else i
+  override def part1(str: String): Long =
+    val input = parse(str)
+    Iterator.iterate(input): i =>
+      i.step.getOrElse(i)
+    .find: it =>
+      it.remainingMoves.isEmpty
+    .get.gpsCalc
 
-    //println(input.pretty)
-    val res = go(input)
-    //println(res.grid.pretty)
-    res.gpsCalc
 
-  override def part2(input: ProblemState): Long =
-    @tailrec def go(i: ProblemStateP2): ProblemStateP2 =
-      if i.remainingMoves.nonEmpty then
-        val r = i.step.get
-        //println(i.remainingMoves.head)
-        //println(r.pretty)
-        go(r)
-      else i
-
-    // println(input.doubled.step.get.step.get.pretty)
-    val res = go(input.doubled)
-    res.gpsCalc
+  override def part2(str: String): Long =
+    val input = parse(str)
+    Iterator.iterate(input.doubled): i =>
+      i.step.getOrElse(i)
+    .find(_.remainingMoves.isEmpty).get.gpsCalc
 
   override lazy val input: String = Source.fromResource("day15.txt").mkString
 }
-/*
+
 @main def main(): Unit =
-  println(Day15.fullPart1)
-  debugTiming {
-    println(Day15.fullPart2)
-  }
-  
- */
+  Day15Writeup.debugAndTimeP1()
+  Day15Writeup.debugAndTimeP2()

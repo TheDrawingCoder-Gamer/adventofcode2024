@@ -62,9 +62,9 @@ object Day17 extends Problem[Day17.ComputerState, String]:
         // adv
         // this is the only place that regA gets set :thinking:
         case 0 => advancePtr.copy(regA = regA >> comboOperand)
-        // bxl bitiwse xor b
+        // bxl bitwise xor b
         case 1 => advancePtr.copy(regB = regB ^ operand)
-        // bst module 8
+        // bst modulo 8
         case 2 => advancePtr.copy(regB = comboOperand & 0b111)
         // jnz
         case 3 => if (regA == 0) advancePtr else copy(ip = operand)
@@ -79,9 +79,9 @@ object Day17 extends Problem[Day17.ComputerState, String]:
 
   override def parse(str: String): ComputerState =
     val Array(regs, program) = str.split("\n\n")
-    val List(regA, regB, regC) = regs.linesIterator.map {
+    val List(regA, regB, regC) = regs.linesIterator.map:
       case s"Register $_: $a" => a.toLong
-    }.toList
+    .toList
     val s"Program: $programStr" = program.trim : @unchecked
 
     ComputerState(0, programStr.split(',').map(_.toByte).toVector, regA, regB, regC, List())
@@ -90,9 +90,9 @@ object Day17 extends Problem[Day17.ComputerState, String]:
     input.complete.mkString("", ",", "")
 
   override def part2(input: ComputerState): String =
-    Iterator.iterate(1L) { a =>
+    Iterator.iterate(1L): a =>
       if (input.program.endsWith(input.copy(regA = a).complete)) a << 3 else if (a % 8 < 7) a + 1 else (a >> 3) + 1
-    }.find(it => input.copy(regA = it).completeP2).toString
+    .find(it => input.copy(regA = it).completeP2).toString
 
   override lazy val input: String = Source.fromResource("day17.txt").mkString
   /*
