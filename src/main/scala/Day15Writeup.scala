@@ -197,7 +197,7 @@ object Day15Writeup extends Writeup[Day15Writeup.ProblemState, Long] {
 
   override lazy val input: String = Source.fromResource("day15.txt").mkString
 }
-
+/*
 @main def main(): Unit =
   Day15Writeup.debugAndTimeP1()
-  Day15Writeup.debugAndTimeP2()
+  Day15Writeup.debugAndTimeP2()*/

@@ -1,15 +1,17 @@
-import gay.menkissing.common.*
-import gay.menkissing.advent.Problem
-
-import java.awt.image.BufferedImage
-import java.io.File
-import javax.imageio.ImageIO
+import gay.menkissing.advent.ProblemAdv
 import scala.io.Source
 import scala.collection.mutable as mut
 
 
 
-object Day14 extends Problem[List[Day14.Robot], Int] {
+object Day14 extends ProblemAdv[List[Day14.Robot], Int, Int] {
+  extension (self: Int) {
+    infix def rem(that: Int): Int = {
+      // these don't cancel out due to floor div
+      self - that.abs * (self.toDouble / that.toDouble.abs).floor.toInt
+    }
+  }
+  case class Vec2i(x: Int, y: Int)
   case class GridSize(x: Int, y: Int)
 
   case class Robot(pos: Vec2i, velocity: Vec2i) {
@@ -18,35 +20,17 @@ object Day14 extends Problem[List[Day14.Robot], Int] {
     }
   }
 
+  def longestSubseq[A](seq: List[A], item: A): Int =
+    seq.foldLeft((0, 0)):
+      case ((max, count), a) =>
+        if item == a then
+          (math.max(max, count + 1), count + 1)
+        else
+          (max, 0)
+   ._1
+
   extension (robots: List[Robot])(using size: GridSize) {
-    def hasRect: Boolean = {
-      val grid = robots.asGrid
 
-      grid.zipWithIndices.filterNot(_._1 == 0).exists { (_, p) =>
-        val rightPos = Iterator.iterate(p)(_.offset(Direction2D.Right))
-                               .takeWhile(p1 => grid.get(p1.x, p1.y).exists(_ > 0)).toList.last
-        val bottomPos = Iterator.iterate(p)(_.offset(Direction2D.Down))
-                                .takeWhile(p1 => grid.get(p1.x, p1.y).exists(_ > 0)).toList.last
-
-        if (p != rightPos && p != bottomPos && grid.isDefinedAt(rightPos.x, rightPos.y) && grid
-          .isDefinedAt(bottomPos.x, bottomPos.y)) {
-          assert(grid(rightPos.x, rightPos.y) > 0)
-          assert(grid(bottomPos.x, bottomPos.y) > 0)
-
-          val bottomRight = Vec2i(rightPos.x, bottomPos.y)
-          val sizeX = rightPos.x - p.x
-          val sizeY = rightPos.y - p.y
-
-          sizeX > 5 &&
-            sizeY > 5 &&
-            grid(rightPos.x, bottomPos.y) > 0 &&
-            p.straightLine(rightPos).forall(it => grid(it.x, it.y) > 0) &&
-            p.straightLine(bottomPos).forall(it => grid(it.x, it.y) > 0) &&
-            rightPos.straightLine(bottomRight).forall(it => grid(it.x, it.y) > 0) &&
-            bottomPos.straightLine(bottomRight).forall(it => grid(it.x, it.y) > 0)
-        } else false
-      }
-    }
     def stepN(n: Int = 1): List[Robot] = robots.map(_.stepN(n))
     def safety: Int = {
       val middleX = (size.x / 2)
@@ -73,9 +57,25 @@ object Day14 extends Problem[List[Day14.Robot], Int] {
     def pretty: String = {
       val grid = robots.robotMap
 
-      grid.map(_.map(prettyCharForNum.andThen { case '0' => '.' case i => i }).mkString("", "", ""))
-          .mkString("", "\n", "")
+      grid.map(_.map {
+        case 0 => '.'
+        case _ => '#'
+      }.mkString("", "", "")).mkString("", "\n", "")
     }
+
+    def findEasterEgg: Int =
+      (0 to 10000).find { i =>
+        val newRobots = robots.stepN(i)
+        if (newRobots.groupBy(_.pos.x).map(_._2.length).max > 15 && newRobots.groupBy(_.pos.y).map(_._2.length).max > 15) {
+
+          val xLineMembers = newRobots.groupBy(_.pos.x).maxBy(_._2.length)._2.map(_.pos.y).toSet
+          val yLineMembers = newRobots.groupBy(_.pos.y).maxBy(_._2.length)._2.map(_.pos.x).toSet
+          val xLine = (0 until size.y).map(it => xLineMembers.contains(it)).toList
+          val yLine = (0 until size.x).map(it => yLineMembers.contains(it)).toList
+          longestSubseq(xLine, true) > 15 && longestSubseq(yLine, true) > 15
+        } else false
+      }.getOrElse(-1)
+
     def robotMap: Vector[Vector[Int]] = {
       val goodGrid = mut.ArrayBuffer.fill(size.y, size.x)(0)
 
@@ -85,23 +85,7 @@ object Day14 extends Problem[List[Day14.Robot], Int] {
 
       goodGrid.map(_.toVector).toVector
     }
-    def asGrid: Grid[Int] = Grid(robotMap)
 
-    def asImage: BufferedImage =
-      val image = BufferedImage(size.x, size.y, BufferedImage.TYPE_INT_RGB)
-      val g = image.createGraphics()
-      val rset = robots.map(_.pos).toSet
-      for
-        x <- 0 until size.x
-        y <- 0 until size.y
-      do
-        g.setColor(
-          if rset(Vec2i(x, y)) then java.awt.Color.BLACK else java.awt.Color.WHITE,
-        )
-        g.fillRect(x, y, 1, 1)
-      g.dispose()
-
-      image
   }
   override def parse(str: String): List[Robot] = {
     str.linesIterator.map { case s"p=$px,$py v=$vx,$vy" => Robot(Vec2i(px.toInt, py.toInt), Vec2i(vx.toInt, vy.toInt)) }.toList
@@ -111,28 +95,19 @@ object Day14 extends Problem[List[Day14.Robot], Int] {
   given size: GridSize = GridSize(101, 103)
   override def part1(input: List[Robot]): Int =  {
 
-    val r = input.map(_.stepN(100))
+    val r = input.stepN(100)
     // println(r.pretty)
     r.safety
   }
 
   override def part2(input: List[Robot]): Int = {
-    val startX = 7990
-    Iterator.iterate(input.stepN(startX))(_.stepN()).zipWithIndex.take(100).foreach { (rs, p) =>
-      ImageIO.write(rs.asImage, "png", new File(f"img/2024/14/${p + startX}%05d.png"))
-    }
-
-    -1
-
+    input.findEasterEgg
   }
 
   lazy val input: String = Source.fromResource("day14.txt").mkString.trim
 }
-/*
+
 @main def main(): Unit = {
-  println(-2 rem 6)
   println(Day14.fullPart1)
   println(Day14.fullPart2)
 }
-
- */

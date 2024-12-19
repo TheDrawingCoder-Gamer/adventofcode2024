@@ -95,9 +95,7 @@ def part2(): Int = {
 
 
 
-  val gyatPoints = MParSet.empty[Vec2i]
-
-  val h = daPoints.par.collect {
+  val h = daPoints.collect {
     Function.unlift[Vec2i, Vec2i] { it =>
       if (grid.isDefinedAt(it.x, it.y)) {
         if (testLoop(grid.updated(it)(true))) {
