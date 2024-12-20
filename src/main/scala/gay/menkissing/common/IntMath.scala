@@ -10,8 +10,8 @@ extension (self: Int) {
   }
 
   infix def rem(that: Int): Int = {
-    // these don't cancel out due to floor div
-    self - that.abs * (self.toDouble / that.toDouble.abs).floor.toInt
+    val mod = self % that
+    if mod < 0 then mod + that else mod
   }
   
   infix def ceilDiv(that: Int): Int = {
