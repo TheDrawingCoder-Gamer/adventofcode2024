@@ -7,20 +7,23 @@ import scala.collection.parallel.CollectionConverters.*
 
 object Day20 extends Problem[Day20.RaceTrack, Int]:
   extension (grid: Grid[Boolean])
-    def validCheat(cheat: Cheat): Boolean = grid.timePathfind(cheat.start, cheat.end, cheat.length.toDouble).isEmpty
-    def timePathfind(start: Vec2i, goal: Vec2i, limit: Double = Double.PositiveInfinity): Option[Int] =
+    def pathfind(start: Vec2i, goal: Vec2i): Option[List[Vec2i]] =
+      def reconstructPath(cameFrom: Map[Vec2i, Vec2i], p: Vec2i): List[Vec2i] = {
+        val totalPath = mut.ListBuffer[Vec2i](p)
+        var current = p
+        while (cameFrom.contains(current)) {
+          current = cameFrom(current)
+          totalPath.prepend(current)
+        }
+        totalPath.toList
+      }
       val cameFrom = mut.HashMap[Vec2i, Vec2i]()
       val dist = mut.HashMap[Vec2i, Double](start -> 0d)
 
       val q = mut.PriorityQueue(start -> 0d)(using Ordering.by[(Vec2i, Double), Double](_._2).reverse)
 
-      while q.nonEmpty do
+      while q.nonEmpty && q.head._1 != goal do
         val (current, score) = q.dequeue()
-
-        if score > limit then
-          return None
-        if current == goal then
-          return Some(score.toInt)
 
         current.cardinalNeighbors.filter(grid.get(_).contains(false)).foreach: neighbor =>
           val alt = score + 1d
@@ -29,23 +32,20 @@ object Day20 extends Problem[Day20.RaceTrack, Int]:
             dist(neighbor) = alt
             q.addOne(neighbor -> alt)
 
-      None
+      q.headOption.map: (p, _) =>
+        reconstructPath(cameFrom.toMap, p)
 
   case class RaceTrack(start: Vec2i, end: Vec2i, grid: Grid[Boolean]):
-    lazy val baseScore: Int =
-      grid.timePathfind(start, end).get
+    lazy val basePath: List[Vec2i] = grid.pathfind(start, end).get
+
+    def findCheats(limit: Int): List[Cheat] =
+      basePath.zipWithIndex.flatMap: (lp, li) =>
+        basePath.zipWithIndex.drop(li).flatMap: (rp, ri) =>
+          val dist = lp.taxiDistance(rp)
+          Option.when(dist <= limit && (dist < ri - li))(Cheat(lp, rp, (ri - li) - dist))
 
 
-    private val startCache = mut.HashMap[Vec2i, Int]()
-    private val endCache = mut.HashMap[Vec2i, Int]()
-
-    def cheatScore(cheat: Cheat): Int =
-      val startScore = startCache.getOrElseUpdate(cheat.start, grid.timePathfind(start, cheat.start).get)
-      val endScore = endCache.getOrElseUpdate(cheat.end, grid.timePathfind(cheat.end, end).get)
-      startScore + cheat.length + endScore
-
-  case class Cheat(start: Vec2i, end: Vec2i):
-    val length: Int = start.taxiDistance(end)
+  case class Cheat(start: Vec2i, end: Vec2i, saved: Int)
   
 
 
@@ -64,33 +64,15 @@ object Day20 extends Problem[Day20.RaceTrack, Int]:
           case _ => ()
     RaceTrack(start, end, Grid(goodGrid))
 
-  def findCheats(grid: Grid[Boolean], limit: Int = 2): List[Cheat] =
-    val emptyTiles = grid.zipWithIndices.filter(!_._1)
-
-    emptyTiles.flatMap: (_, l) =>
-      emptyTiles.flatMap: (_, r) =>
-        if l == r then
-          None
-        else if l.taxiDistance(r) > limit then
-          None
-        else
-          val c = Cheat(l, r)
-          Option.when(grid.validCheat(c))(c)
-    .toList
-
   override def part1(input: RaceTrack): Int =
-    val baseScore = input.baseScore
-    val cheats = findCheats(input.grid)
-    val timesSaved = cheats.par.map(baseScore - input.cheatScore(_))
-    // println(timesSaved.groupBy(identity).map((l, r) => (l, r.length)))
-    timesSaved.count(_ >= 100)
+    val cheats = input.findCheats(2)
+
+    cheats.count(_.saved >= 100)
 
   override def part2(input: RaceTrack): Int =
-    val baseScore = input.baseScore
-    val cheats = findCheats(input.grid, 20)
-    val timesSaved = cheats.par.map(baseScore - input.cheatScore(_))
+    val cheats = input.findCheats(20)
 
-    timesSaved.count(_ >= 100)
+    cheats.count(_.saved >= 100)
 
   override lazy val input: String = Source.fromResource("day20.txt").mkString
 
