@@ -53,7 +53,7 @@ object Day19 extends Problem[(List[String], List[String]), Long]:
 
   override def input: String = Source.fromResource("day19.txt").mkString
 
-
+/*
 @main def main(): Unit =
   Day19.debugAndTimeP1()
-  Day19.debugAndTimeP2()
+  Day19.debugAndTimeP2()*/
