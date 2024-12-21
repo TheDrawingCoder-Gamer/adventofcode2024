@@ -1,4 +1,5 @@
 package gay.menkissing.common
+import scala.annotation.experimental
 import scala.collection.mutable as mut
 
 object Memo {
@@ -10,6 +11,11 @@ object Memo {
     val cache = mut.HashMap[(A1, A2), B]()
     (a1: A1, a2: A2) => cache.getOrElseUpdate((a1, a2), f(a1, a2))
   }
+  @experimental def memoizeTupled[F, Args <: NonEmptyTuple, R](f: F)(using tf: util.TupledFunction[F, Args => R]): F =
+    val cache = mut.HashMap[Args, R]()
+    val tupledF = tf.tupled(f)
+    tf.untupled(args => cache.getOrElseUpdate(args, tupledF(args)))
+
   def memoizeCond[A, B](f: A => B, saveWhen: A => Boolean): A => B = {
     val cache = mut.HashMap[A, B]()
     (a: A) => if (saveWhen(a)) cache.getOrElseUpdate(a, f(a)) else f(a)

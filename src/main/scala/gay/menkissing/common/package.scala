@@ -231,3 +231,30 @@ def logBaseN(n: Double, base: Double): Double = math.log(n) / math.log(base)
 
 def fix[A, B](f: (A => B, A) => B)(v: A): B =
   f(fix(f), v)
+
+def oneOf(values: Boolean*): Boolean =
+  @tailrec
+  def go(values: List[Boolean], c: Int): Boolean =
+    if c > 1 then
+      false
+    else
+        values match
+          case head :: next => go(next, c + (if head then 1 else 0))
+          case Nil =>
+            c == 1
+  go(values.toList, 0)
+
+extension[A, B] (map: mut.HashMap[A, B])
+  def memo(in: A)(func: => B): B = map.getOrElseUpdate(in, func)
+
+private def bfsImpl[A, B, C](a: A, z: C, append: (C, B) => C)(f: A => Either[Iterable[A], B]): C =
+  var result = z
+  val queue = mut.Queue(a)
+  while queue.nonEmpty do
+    f(queue.dequeue()) match
+      case Right(r) => result = append(result, r)
+      case Left(states) => queue.enqueueAll(states)
+  result
+
+def bfsFoldl[A, B](a: A)(f: A => Either[Iterable[A], B])(using M: Monoid[B]): B =
+  bfsImpl(a, M.empty, M.combine)(f)
