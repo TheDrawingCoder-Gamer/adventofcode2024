@@ -227,7 +227,8 @@ object Day21 extends Problem[List[String], Long]:
     .sum
 
   override lazy val input: String = Source.fromResource("day21.txt").mkString
-
+/*
   @experimental @main def main(): Unit =
     Day21.debugAndTimeP1()
     Day21.debugAndTimeP2()
+  */
