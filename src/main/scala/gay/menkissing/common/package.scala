@@ -205,8 +205,9 @@ def debugTiming[A](func: => A): A = {
 }
 
 extension[A](f: A => A) {
-  def repeated(n: Int): A => A = {
-    MonoidK[Endo].algebra[A].combineN(f, n)
+  def repeated(n: Int): A => A = { (x: A) =>
+    // MonoidK[Endo].algebra[A].combineN(f, n)
+    Iterator.iterate(x)(f).drop(n).next()
   }
 }
 

@@ -10,18 +10,14 @@ object Day22 extends Problem[List[Int], Long]:
 
   // 16777216 == 2 ^ 24
   val pow2to24minus1 = 16777216 - 1
-  def stepRand(i: Int): Int =
+  def advance(i: Int): Int =
     var x = i
-    // starting with 0b1111111111111111
-    // 64 is 6 zero bits
     x ^= (x << 6)
-    // upp
-    // upper bits 1, 0b0000000000111111
     x &= pow2to24minus1
-    // 32 is 5 zero bits
+
     x ^= (x >> 5)
     x &= pow2to24minus1
-    // 2048 is 11 zero bits
+
     x ^= (x << 11)
     x &= pow2to24minus1
 
@@ -29,19 +25,19 @@ object Day22 extends Problem[List[Int], Long]:
 
   override def part1(input: List[Int]): Long =
     input.map: l =>
-      stepRand.repeated(2000)(l).toLong
+      advance.repeated(2000)(l).toLong
     .sum
 
   override def part2(input: List[Int]): Long =
     val sequences = input.map: l =>
-      Iterator.iterate(l)(stepRand).take(2000).map(_ % 10).toList
+      Iterator.iterate(l)(advance).take(2000).map(_ % 10).toList
     val validDiffSequences =
-      (-9 to 9).flatMap: x =>
-        (-9 to 9).flatMap: y =>
-          (-9 to 9).flatMap: z =>
-            (-9 to 9).map: w =>
-              Vector(x, y, z, w)
-      .toVector
+      for {
+        x <- -9 to 9
+        y <- -9 to 9
+        z <- -9 to 9
+        w <- -9 to 9
+      } yield Vector(x, y, z, w)
     val diffMap =
       sequences.map: seq =>
         seq.sliding(5).foldLeft(Map[Vector[Int], Int]()):
@@ -58,7 +54,7 @@ object Day22 extends Problem[List[Int], Long]:
 
 
 
-    validDiffSequences.par.flatMap: i =>
+    validDiffSequences.flatMap: i =>
       diffMap.get(i).map(v => (i, v))
     .maxBy(_._2)._2
 
