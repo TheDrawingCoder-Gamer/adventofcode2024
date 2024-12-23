@@ -10,21 +10,7 @@ import scala.annotation.tailrec
 
 
 
-def reconstructPaths[A](cameFrom: Map[A, List[A]], p: A, start: A): List[List[A]] = {
-  def dfs(src: A, daPath: List[A]): Eval[List[List[A]]] = {
-    if (src == start) {
-      Eval.now(List(daPath))
-    } else {
-      cameFrom(src).foldLeft(Eval.now(List[List[A]]())) { (acc, adjNode) =>
-        acc.flatMap { cc =>
-          dfs(adjNode, daPath.prepended(adjNode)).map(_ ++ cc)
-        }
-      }
-    }
-  }
 
-  dfs(p, List(p)).value
-}
 
 def equals[A](l: A, r: A): Boolean =
   l.equals(r)
@@ -259,3 +245,7 @@ private def bfsImpl[A, B, C](a: A, z: C, append: (C, B) => C)(f: A => Either[Ite
 
 def bfsFoldl[A, B](a: A)(f: A => Either[Iterable[A], B])(using M: Monoid[B]): B =
   bfsImpl(a, M.empty, M.combine)(f)
+  
+extension[A] (set: scala.collection.Set[A]) {
+  def ⊆(that: scala.collection.Set[A]): Boolean = set.subsetOf(that)
+}
