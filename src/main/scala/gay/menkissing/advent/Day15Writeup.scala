@@ -1,7 +1,8 @@
+package gay.menkissing.advent
+
 import cats.Eval
 import cats.syntax.all.*
 import gay.menkissing.advent.Writeup
-
 
 import scala.annotation.{tailrec, targetName}
 import scala.collection.mutable as mut

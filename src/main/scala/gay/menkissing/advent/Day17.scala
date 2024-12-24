@@ -1,8 +1,10 @@
+package gay.menkissing.advent
+
 import gay.menkissing.advent.Problem
 import gay.menkissing.common.*
 
-import scala.collection.parallel.CollectionConverters.*
 import scala.annotation.tailrec
+import scala.collection.parallel.CollectionConverters.*
 import scala.io.Source
 
 object Day17 extends Problem[Day17.ComputerState, String]:

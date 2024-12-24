@@ -1,6 +1,8 @@
+package gay.menkissing.advent
+
 import gay.menkissing.advent.ProblemAdv
 import gay.menkissing.common.*
-import GridAxisSystem.*
+import gay.menkissing.common.GridAxisSystem.*
 
 import scala.annotation.tailrec
 import scala.io.Source

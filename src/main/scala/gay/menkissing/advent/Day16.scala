@@ -1,7 +1,9 @@
+package gay.menkissing.advent
+
 import gay.menkissing.advent.Problem
-import gay.menkissing.common.{Direction2D, *}
-import GridAxisSystem.*
 import gay.menkissing.common.Direction2D.Down
+import gay.menkissing.common.GridAxisSystem.*
+import gay.menkissing.common.*
 
 import scala.io.Source
 

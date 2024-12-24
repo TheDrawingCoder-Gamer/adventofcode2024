@@ -1,8 +1,10 @@
+package gay.menkissing.advent
+
 import gay.menkissing.advent.Problem
 import gay.menkissing.common.*
 
-import scala.io.Source
 import scala.collection.parallel.CollectionConverters.*
+import scala.io.Source
 
 object Day22 extends Problem[List[Int], Long]:
   override def parse(str: String): List[Int] =

@@ -1,3 +1,5 @@
+package gay.menkissing.advent
+
 import gay.menkissing.advent.Problem
 
 import scala.io.Source

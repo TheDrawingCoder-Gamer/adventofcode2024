@@ -1,9 +1,10 @@
+package gay.menkissing.advent
+
 import gay.menkissing.advent.ProblemAdv
 
 import scala.annotation.tailrec
-import scala.io.Source
-
 import scala.collection.mutable as mut
+import scala.io.Source
 
 object Day18Writeup extends ProblemAdv[(Int, Int, List[Day18Writeup.Vec2i]), Int, Day18Writeup.Vec2i]:
   case class Vec2i(x: Int, y: Int):

@@ -1,8 +1,10 @@
+package gay.menkissing.advent
+
 import scala.collection.mutable as mut
 import scala.io.Source
 
 
-object Day12 {
+object Day12 extends Writeup[Day12.PlantMap, Int] {
   type Region = Vector[(Int, Int)]
   def cardinalPositions(x: Int, y: Int): List[(Int, Int)] = {
     List((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1))
@@ -145,4 +147,6 @@ object Day12 {
   }
   
  */
+
+  override def input: String = Source.fromResource("day12.txt").mkString
 }

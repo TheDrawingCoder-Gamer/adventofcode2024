@@ -12,3 +12,14 @@ lazy val root = (project in file("."))
       "org.scala-lang.modules" %% "scala-parallel-collections" % "1.0.4",
     Compile / run / fork := true
   )
+
+lazy val bench = project.in(file("bench"))
+  .dependsOn(root)
+  .enablePlugins(JmhPlugin)
+  .settings(
+      Jmh / sourceDirectory := (Compile / sourceDirectory).value,
+      Jmh / classDirectory := (Compile / classDirectory).value,
+      Jmh / dependencyClasspath := (Compile / dependencyClasspath).value,
+      Jmh / compile := (Jmh / compile).dependsOn(Test / compile).value,
+      Jmh / run := (Jmh / run).dependsOn(Jmh / compile).evaluated
+  )

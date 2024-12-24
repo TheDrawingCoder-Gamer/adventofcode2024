@@ -1,9 +1,11 @@
-import gay.menkissing.common.*
-import gay.menkissing.advent.Problem
+package gay.menkissing.advent
 
-import scala.io.Source
+import gay.menkissing.advent.Problem
+import gay.menkissing.common.*
+
 import scala.collection.mutable as mut
 import scala.collection.parallel.CollectionConverters.*
+import scala.io.Source
 
 object Day20 extends Problem[Day20.RaceTrack, Int]:
   extension (grid: Grid[Boolean])

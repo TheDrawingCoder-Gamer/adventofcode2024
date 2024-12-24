@@ -1,14 +1,15 @@
+package gay.menkissing.advent
+
 import cats.kernel.Monoid
 import gay.menkissing.advent.Problem
 import gay.menkissing.common
 import gay.menkissing.common.*
 
 import scala.annotation.experimental
-import scala.io.Source
 import scala.collection.mutable as mut
 import scala.collection.parallel.CollectionConverters.*
+import scala.io.Source
 
-@experimental
 object Day21 extends Problem[List[String], Long]:
   override def parse(str: String): List[String] =
     str.linesIterator.toList
@@ -228,7 +229,7 @@ object Day21 extends Problem[List[String], Long]:
 
   override lazy val input: String = Source.fromResource("day21.txt").mkString
 /*
-  @experimental @main def main(): Unit =
+ @main def main(): Unit =
     Day21.debugAndTimeP1()
     Day21.debugAndTimeP2()
   */

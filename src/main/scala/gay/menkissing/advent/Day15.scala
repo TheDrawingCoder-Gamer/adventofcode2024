@@ -1,12 +1,14 @@
-import gay.menkissing.advent.Problem
-import gay.menkissing.common.{Direction2D, *}
+package gay.menkissing.advent
+
 import cats.Eval
 import cats.syntax.all.*
+import gay.menkissing.advent.Problem
+import gay.menkissing.common.GridAxisSystem.*
+import gay.menkissing.common.*
 
 import scala.annotation.{tailrec, targetName}
-import scala.io.Source
 import scala.collection.mutable as mut
-import GridAxisSystem.*
+import scala.io.Source
 
 
 
