@@ -66,11 +66,5 @@ object Day13 extends Problem[List[Day13.CraneMachine], Long] {
     input.flatMap(_.correctUnitError.minimumTokensP2).sum
   }
 
-  lazy val input: String = Source.fromResource("day13.txt").mkString.trim
+  val input: String = Source.fromResource("day13.txt").mkString.trim
 }
-/*
-@main def main(): Unit = {
-  println(Day13.fullPart1)
-  println(Day13.fullPart2)
-}
- */

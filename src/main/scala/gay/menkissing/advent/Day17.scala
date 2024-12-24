@@ -1,13 +1,12 @@
 package gay.menkissing.advent
 
-import gay.menkissing.advent.Problem
 import gay.menkissing.common.*
 
 import scala.annotation.tailrec
 import scala.collection.parallel.CollectionConverters.*
 import scala.io.Source
 
-object Day17 extends Problem[Day17.ComputerState, String]:
+object Day17 extends ProblemAdv[Day17.ComputerState, String, Long]:
   case class ComputerState(ip: Int, program: Vector[Byte], regA: Long, regB: Long, regC: Long, outputs: List[Byte]):
     def advancePtr: ComputerState = copy(ip = ip + 2)
 
@@ -91,12 +90,12 @@ object Day17 extends Problem[Day17.ComputerState, String]:
   override def part1(input: ComputerState): String =
     input.complete.mkString("", ",", "")
 
-  override def part2(input: ComputerState): String =
+  override def part2(input: ComputerState): Long =
     Iterator.iterate(1L): a =>
       if (input.program.endsWith(input.copy(regA = a).complete)) a << 3 else if (a % 8 < 7) a + 1 else (a >> 3) + 1
-    .find(it => input.copy(regA = it).completeP2).toString
+    .find(it => input.copy(regA = it).completeP2).get
 
-  override lazy val input: String = Source.fromResource("day17.txt").mkString
+  override val input: String = Source.fromResource("day17.txt").mkString
   /*
   def testPrograms(): Unit = {
     {

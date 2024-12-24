@@ -65,9 +65,4 @@ object Day22 extends Problem[List[Int], Long]:
 
 
 
-  override def input: String = Source.fromResource("day22.txt").mkString
-
-/*
-@main def main(): Unit =
-  Day22.debugAndTimeP1()
-  Day22.debugAndTimeP2()*/
+  override val input: String = Source.fromResource("day22.txt").mkString

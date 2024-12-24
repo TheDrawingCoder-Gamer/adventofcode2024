@@ -138,15 +138,6 @@ object Day12 extends Writeup[Day12.PlantMap, Int] {
 
     plants.regions.map(r => r.area * r.sides).sum
   }
-/*
-  @main def main(): Unit = {
-    val data = Source.fromResource("day12tst.txt").mkString
 
-    println(part1(data))
-    println(part2(data))
-  }
-  
- */
-
-  override def input: String = Source.fromResource("day12.txt").mkString
+  override val input: String = Source.fromResource("day12.txt").mkString
 }

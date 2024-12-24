@@ -59,10 +59,4 @@ object Day18 extends ProblemAdv[List[Vec2i], Int, Vec2i]:
 
   val gridSize: GridSize = if test then GridSize(7, 7) else GridSize(71, 71)
   val bytesFallen: Int = if test then 12 else 1024
-  override lazy val input: String = Source.fromResource(if test then "day18tst.txt" else "day18.txt").mkString
-
-/*
-@main def main(): Unit =
-  Day18.debugAndTimeP1()
-  Day18.debugAndTimeP2()
-*/
+  override val input: String = Source.fromResource(if test then "day18tst.txt" else "day18.txt").mkString

@@ -73,9 +73,4 @@ object Day18Writeup extends ProblemAdv[(Int, Int, List[Day18Writeup.Vec2i]), Int
 
   val test = false
 
-  override lazy val input: String = Source.fromResource(if test then "day18tst.txt" else "day18.txt").mkString
-
-/*
-@main def main(): Unit =
-  Day18Writeup.debugAndTimeP1()
-  Day18Writeup.debugAndTimeP2() */
+  override val input: String = Source.fromResource(if test then "day18tst.txt" else "day18.txt").mkString

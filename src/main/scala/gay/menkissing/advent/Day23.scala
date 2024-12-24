@@ -20,9 +20,8 @@ object Day23 extends ProblemAdv[Day23.LANConnections, Long, String]:
 
   case class LANConnections(values: List[(String, String)]):
     val allComputers: List[String] = values.flatMap((x, y) => List(x, y)).distinct
-    val computerMap: Map[String, Set[String]] = values.flatMap(it => List((it._1, it._2), (it._2, it._1))).groupMap(_._1)(_._2).view.mapValues(_.toSet).toMap
-
-    def contains(l: String, r: String): Boolean = computerMap(l).contains(r)
+    val computerMap: Map[String, Set[String]] =
+      values.flatMap(it => List((it._1, it._2), (it._2, it._1))).groupMap(_._1)(_._2).view.mapValues(_.toSet).toMap
 
 
   def maximumClique(graph: Map[String, Set[String]]): Set[String] =
@@ -39,21 +38,14 @@ object Day23 extends ProblemAdv[Day23.LANConnections, Long, String]:
 
 
   override def part1(conns: LANConnections): Long =
-    val freakySets =
-      conns.allComputers.toSet.subsets(3).toVector.par.filter: l =>
-        l.exists(_.head == 't')
-          && l.forall: it =>
-              l.filter(_ != it).forall: r =>
-                conns.contains(it, r)
-      .toSet
-    freakySets.size
+    conns.allComputers.toSet.subsets(3).filter: l =>
+      l.exists(_.head == 't')
+        && l.forall: it =>
+            l.filter(_ != it).forall: r =>
+              conns.computerMap(it).contains(r)
+    .distinct.size
 
   override def part2(conns: LANConnections): String =
     maximumClique(conns.computerMap).toList.sorted.mkString(",")
 
   override val input: String = Source.fromResource("day23.txt").mkString
-
-
-@main def main(): Unit =
-  Day23.debugAndTimeP1()
-  Day23.debugAndTimeP2()

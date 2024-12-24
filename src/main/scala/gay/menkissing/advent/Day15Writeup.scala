@@ -196,9 +196,5 @@ object Day15Writeup extends Writeup[Day15Writeup.ProblemState, Long] {
       i.step.getOrElse(i)
     .find(_.remainingMoves.isEmpty).get.gpsCalc
 
-  override lazy val input: String = Source.fromResource("day15.txt").mkString
+  override val input: String = Source.fromResource("day15.txt").mkString
 }
-/*
-@main def main(): Unit =
-  Day15Writeup.debugAndTimeP1()
-  Day15Writeup.debugAndTimeP2()*/

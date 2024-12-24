@@ -10,7 +10,7 @@ trait ProblemAdv[Input, OutputP1, OutputP2] {
   def part1(input: Input): OutputP1
   def part2(input: Input): OutputP2
 
-  def input: String
+  val input: String
 
   def fullPart1: OutputP1 = part1(parse(input))
   def fullPart2: OutputP2 = part2(parse(input))
@@ -23,6 +23,10 @@ trait ProblemAdv[Input, OutputP1, OutputP2] {
   def debugAndTimeP2(): Unit =
     val res = debugTiming(fullPart2)
     println(res)
+  
+  final def main(args: Array[String]): Unit =
+    debugAndTimeP1()
+    debugAndTimeP2()
 }
 
 trait WriteupAdv[Input, OutputP1, OutputP2] {
@@ -31,7 +35,7 @@ trait WriteupAdv[Input, OutputP1, OutputP2] {
   def part1(str: String): OutputP1
   def part2(str: String): OutputP2
   
-  def input: String
+  val input: String
 
   def fullPart1: OutputP1 = part1(input)
   def fullPart2: OutputP2 = part2(input)
@@ -43,6 +47,10 @@ trait WriteupAdv[Input, OutputP1, OutputP2] {
   def debugAndTimeP2(): Unit =
     val res = debugTiming(fullPart2)
     println(res)
+  
+  final def main(args: Array[String]): Unit =
+    debugAndTimeP1()
+    debugAndTimeP2()
 }
 
 trait Writeup[Input, Output] extends WriteupAdv[Input, Output, Output]

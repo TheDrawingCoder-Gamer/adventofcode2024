@@ -76,8 +76,4 @@ object Day20 extends Problem[Day20.RaceTrack, Int]:
 
     cheats.count(_.saved >= 100)
 
-  override lazy val input: String = Source.fromResource("day20.txt").mkString
-/*
-@main def main(): Unit =
-  Day20.debugAndTimeP1()
-  Day20.debugAndTimeP2()*/
+  override val input: String = Source.fromResource("day20.txt").mkString
