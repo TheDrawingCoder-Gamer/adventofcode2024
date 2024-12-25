@@ -4,7 +4,15 @@ package bench
 
 
 import org.openjdk.jmh.annotations.Benchmark
+import org.openjdk.jmh.annotations.*
 
+import java.util.concurrent.TimeUnit
+
+@BenchmarkMode(Array(Mode.AverageTime))
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@Fork(1)
+@Warmup(iterations = 3)
+@Measurement(iterations = 3)
 class Bench:
   @Benchmark
   def day01p1(): Unit =
@@ -142,4 +150,11 @@ class Bench:
   @Benchmark
   def day23p2(): Unit =
     Day23.fullPart2
+
+  @Benchmark
+  def day24p1(): Unit = Day24.fullPart1
+
+  @Benchmark
+  def day24p2(): Unit = Day24.fullPart2
+
 
