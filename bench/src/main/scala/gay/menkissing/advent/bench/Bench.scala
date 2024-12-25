@@ -160,4 +160,6 @@ class Bench:
   @Benchmark
   def day24p2(): Unit = Day24.fullPart2
 
+  @Benchmark
+  def day25p1(): Unit = Day25.fullPart1
 

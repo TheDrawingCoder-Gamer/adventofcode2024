@@ -5,8 +5,7 @@ import scala.io.Source
 import scala.util.Using
 
 object FileIO:
-  def getContentsOf(str: String): String = 
-    println(Path.of("").toAbsolutePath)
+  def getContentsOf(str: String): String =
     Using(Source.fromFile(s"src/main/resources/$str")): src => 
       src.mkString
     .get

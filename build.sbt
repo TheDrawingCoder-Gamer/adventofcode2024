@@ -1,4 +1,5 @@
 import scala.scalanative.build.Mode.releaseFull
+import scala.scalanative.build._
 
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
@@ -18,7 +19,7 @@ lazy val root = crossProject(JVMPlatform, NativePlatform)
   )
   .nativeSettings(
     nativeConfig ~= { c =>
-      c.withMode(releaseFull).withOptimize(true)
+      c.withMode(releaseFull).withOptimize(true).withGC(GC.none)
     }
   )
 
