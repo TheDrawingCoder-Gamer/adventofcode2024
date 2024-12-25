@@ -5,13 +5,10 @@ import gay.menkissing.common.*
 import gay.menkissing.common.GridAxisSystem.*
 
 import scala.collection.mutable as mut
-import scala.collection.parallel.CollectionConverters.*
-import scala.collection.parallel.ParSet
-import scala.collection.parallel.mutable.ParSet as MParSet
 import scala.io.Source
 
 object Day6 extends Problem[(Grid[Boolean], Int), Int]:
-  val input = Source.fromResource("day6.txt").mkString
+  val input = FileIO.getContentsOf("day6.txt")
 
   override def parse(str: String): (Grid[Boolean], Int) =
     (Grid[Boolean](str.linesIterator.map(_.map(_ == '#'))), str.linesIterator.flatten.indexWhere(_ == '^'))

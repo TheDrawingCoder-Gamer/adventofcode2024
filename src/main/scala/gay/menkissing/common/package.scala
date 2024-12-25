@@ -183,10 +183,10 @@ def topologicalSort[A](a: List[A])(using pord: PartialOrder[A]): Option[List[A]]
 }
 
 def debugTiming[A](func: => A): A = {
-  val start = System.currentTimeMillis()
+  val start = System.nanoTime()
   val res = func
-  val end = System.currentTimeMillis()
-  println(s"Elapsed: ${end - start}")
+  val end = System.nanoTime()
+  println(s"Elapsed: ${(end - start).toDouble / 1000000.0}")
   res
 }
 

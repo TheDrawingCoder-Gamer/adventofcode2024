@@ -2,11 +2,10 @@ package gay.menkissing.advent
 
 import gay.menkissing.advent.Problem
 
-import scala.io.Source
 
 object Day3 extends Problem[String, Int]:
   
-  val input: String = Source.fromResource("day3.txt").mkString
+  val input: String = FileIO.getContentsOf("day3.txt")
 
   override def parse(str: String): String = str
   

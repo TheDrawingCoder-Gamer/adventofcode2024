@@ -8,7 +8,7 @@ import scala.collection.mutable.ListBuffer
 import scala.io.Source
 
 object Day8 extends Problem[Grid[Char], Int]:
-  val input = Source.fromResource("day8.txt").mkString
+  val input = FileIO.getContentsOf("day8.txt")
 
   override def parse(str: String): Grid[Char] =
     Grid[Char](str.linesIterator.map(_.iterator))

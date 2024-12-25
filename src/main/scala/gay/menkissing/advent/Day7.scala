@@ -3,11 +3,10 @@ package gay.menkissing.advent
 import gay.menkissing.advent.Problem
 import gay.menkissing.common.debugTiming
 
-import scala.collection.parallel.CollectionConverters.*
 import scala.io.Source
 
 object Day7 extends Problem[List[Day7.Equation], Long]:
-  val input = Source.fromResource("day7.txt").mkString
+  val input = FileIO.getContentsOf("day7.txt")
 
   case class Equation(result: Long, inputs: List[Long]) {
     def canBeTrue: Boolean = {
@@ -91,4 +90,4 @@ object Day7 extends Problem[List[Day7.Equation], Long]:
     input.withFilter(_.canBeTrue).map(_.result).sum
 
   override def part2(input: List[Equation]): Long =
-    input.par.withFilter(_.canBeTrueP2).map(_.result).sum
+    input.withFilter(_.canBeTrueP2).map(_.result).sum

@@ -8,7 +8,7 @@ import scala.io.Source
 
 object Day9 extends Problem[String, Long]:
   
-  val input = Source.fromResource("day9.txt").mkString.trim
+  val input = FileIO.getContentsOf("day9.txt").trim
 
   override def parse(str: String): String = str
 

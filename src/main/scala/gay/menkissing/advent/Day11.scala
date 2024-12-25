@@ -5,13 +5,11 @@ import gay.menkissing.common.*
 
 import scala.annotation.tailrec
 import scala.collection.mutable as mut
-import scala.collection.parallel.CollectionConverters.*
-import scala.collection.parallel.ParSeq
 import scala.io.Source
 
 
 object Day11 extends Problem[List[Long], Long]:
-  val input = Source.fromResource("day11.txt").mkString.trim
+  val input = FileIO.getContentsOf("day11.txt").trim
 
   override def parse(str: String): List[Long] =
     str.split(' ').map(_.toLong).toList

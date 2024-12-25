@@ -3,7 +3,6 @@ package gay.menkissing.advent
 import gay.menkissing.common.*
 
 import scala.annotation.tailrec
-import scala.collection.parallel.CollectionConverters.*
 import scala.io.Source
 
 object Day17 extends ProblemAdv[Day17.ComputerState, String, Long]:
@@ -95,7 +94,7 @@ object Day17 extends ProblemAdv[Day17.ComputerState, String, Long]:
       if (input.program.endsWith(input.copy(regA = a).complete)) a << 3 else if (a % 8 < 7) a + 1 else (a >> 3) + 1
     .find(it => input.copy(regA = it).completeP2).get
 
-  override val input: String = Source.fromResource("day17.txt").mkString
+  override val input: String = FileIO.getContentsOf("day17.txt")
   /*
   def testPrograms(): Unit = {
     {

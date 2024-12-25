@@ -139,5 +139,5 @@ object Day12 extends Writeup[Day12.PlantMap, Int] {
     plants.regions.map(r => r.area * r.sides).sum
   }
 
-  override val input: String = Source.fromResource("day12.txt").mkString
+  override val input: String = FileIO.getContentsOf("day12.txt")
 }

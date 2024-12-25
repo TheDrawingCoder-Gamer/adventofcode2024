@@ -53,4 +53,4 @@ object Day19 extends Problem[(List[String], List[String]), Long]:
     val (towels, designs) = input
     designs.map(countDesigns(towels, _)).sum
 
-  override val input: String = Source.fromResource("day19.txt").mkString
+  override val input: String = FileIO.getContentsOf("day19.txt")

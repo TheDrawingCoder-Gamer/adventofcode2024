@@ -5,8 +5,6 @@ import gay.menkissing.advent.ProblemAdv
 import gay.menkissing.common.*
 
 import scala.annotation.tailrec
-import scala.collection.parallel.CollectionConverters.*
-import scala.collection.parallel.immutable.ParVector
 import scala.collection.{AbstractIterator, mutable as mut}
 import scala.io.Source
 
@@ -48,4 +46,4 @@ object Day23 extends ProblemAdv[Day23.LANConnections, Long, String]:
   override def part2(conns: LANConnections): String =
     maximumClique(conns.computerMap).toList.sorted.mkString(",")
 
-  override val input: String = Source.fromResource("day23.txt").mkString
+  override val input: String = FileIO.getContentsOf("day23.txt")

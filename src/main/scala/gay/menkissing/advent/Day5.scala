@@ -4,11 +4,9 @@ import cats.PartialOrder
 import gay.menkissing.advent.Problem
 import gay.menkissing.common.*
 
-import scala.io.Source
-
 
 object Day5 extends Problem[(List[(Int, Int)], List[List[Int]]), Int]:
-  val input = Source.fromResource("day5.txt").mkString
+  val input = FileIO.getContentsOf("day5.txt")
 
   override def parse(str: String): (List[(Int, Int)], List[List[Int]]) =
 

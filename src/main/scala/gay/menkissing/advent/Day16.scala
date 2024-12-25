@@ -1,7 +1,5 @@
 package gay.menkissing.advent
 
-import gay.menkissing.advent.Problem
-import gay.menkissing.common.Direction2D.Down
 import gay.menkissing.common.GridAxisSystem.*
 import gay.menkissing.common.*
 
@@ -102,7 +100,7 @@ object Day16 extends Problem[Day16.ProblemState, Int]:
   override def part2(input: ProblemState): Int =
     input.getGoodSeats.size
 
-  override val input: String = Source.fromResource("day16.txt").mkString
+  override val input: String = FileIO.getContentsOf("day16.txt")
 
 
 

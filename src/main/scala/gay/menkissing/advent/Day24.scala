@@ -126,4 +126,4 @@ object Day24 extends ProblemAdv[Day24.Machine, Long, String]:
   override def part2(input: Machine): String =
     solve(input).flatten.toVector.sorted.mkString(",")
 
-  override val input: String = Source.fromResource("day24.txt").mkString
+  override val input: String = FileIO.getContentsOf("day24.txt")

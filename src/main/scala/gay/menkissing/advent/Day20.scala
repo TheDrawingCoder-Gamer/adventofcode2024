@@ -4,7 +4,6 @@ import gay.menkissing.advent.Problem
 import gay.menkissing.common.*
 
 import scala.collection.mutable as mut
-import scala.collection.parallel.CollectionConverters.*
 import scala.io.Source
 
 object Day20 extends Problem[Day20.RaceTrack, Int]:
@@ -76,4 +75,4 @@ object Day20 extends Problem[Day20.RaceTrack, Int]:
 
     cheats.count(_.saved >= 100)
 
-  override val input: String = Source.fromResource("day20.txt").mkString
+  override val input: String = FileIO.getContentsOf("day20.txt")

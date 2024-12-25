@@ -7,7 +7,6 @@ import gay.menkissing.common.*
 
 import scala.annotation.experimental
 import scala.collection.mutable as mut
-import scala.collection.parallel.CollectionConverters.*
 import scala.io.Source
 
 object Day21 extends Problem[List[String], Long]:
@@ -227,4 +226,4 @@ object Day21 extends Problem[List[String], Long]:
       num * res
     .sum
 
-  override val input: String = Source.fromResource("day21.txt").mkString
+  override val input: String = FileIO.getContentsOf("day21.txt")

@@ -107,11 +107,14 @@ class Bench:
   @Benchmark
   def day16p2(): Unit = Day16.fullPart2
 
+  @OutputTimeUnit(TimeUnit.MICROSECONDS)
   @Benchmark
   def day17p1(): Unit = Day17.fullPart1
 
+  @OutputTimeUnit(TimeUnit.MICROSECONDS)
   @Benchmark
   def day17p2(): Unit = Day17.fullPart2
+
 
   @Benchmark
   def day18p1(): Unit = Day18.fullPart1

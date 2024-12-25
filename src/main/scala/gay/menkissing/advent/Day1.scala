@@ -2,11 +2,9 @@ package gay.menkissing.advent
 
 import gay.menkissing.advent.Problem
 
-import scala.io.Source
-
 
 object Day1 extends Problem[(List[Int], List[Int]), Int]:
-  override val input = Source.fromResource("day1.txt").mkString
+  override val input = FileIO.getContentsOf("day1.txt")
 
   override def parse(str: String): (List[Int], List[Int]) = 
     input.linesIterator.map { case s"$a   $b" => (a.toInt, b.toInt) }.toList.unzip

@@ -3,12 +3,11 @@ package gay.menkissing.advent
 import gay.menkissing.advent.Problem
 import gay.menkissing.common.*
 
-import scala.collection.parallel.CollectionConverters.*
 import scala.io.Source
 
 
 object Day10 extends Problem[Grid[Int], Int]:
-  val input = Source.fromResource("day10.txt").mkString
+  val input = FileIO.getContentsOf("day10.txt")
 
   override def parse(str: String): Grid[Int] =
     Grid[Int](str.linesIterator.map(_.map(_.asDigit)))
@@ -21,7 +20,7 @@ object Day10 extends Problem[Grid[Int], Int]:
   }
   
   def scoreTrail(grid: Grid[Int], start: Vec2i, endNodes: Seq[Vec2i]): Int = {
-    endNodes.par.collect(Function.unlift { it =>
+    endNodes.collect(Function.unlift { it =>
       astar[Vec2i](start, it, c => c.taxiDistance(it), (l, r) => if (grid(r) - grid(l) == 1) 1.0 else Double.PositiveInfinity, i => neighbors(grid, i))
     }).size
   }
@@ -30,7 +29,7 @@ object Day10 extends Problem[Grid[Int], Int]:
     def rateSingleTrail(e: Vec2i): Int = {
       findAllPaths[Vec2i](start, e, it => neighbors(grid, it)).size
     }
-    endNodes.par.map(rateSingleTrail).sum
+    endNodes.map(rateSingleTrail).sum
   }
   
   def parseZeroNines(data: Grid[Int]): (Seq[Vec2i], Seq[Vec2i]) =
@@ -41,7 +40,7 @@ object Day10 extends Problem[Grid[Int], Int]:
   def part1(grid: Grid[Int]): Int = {
     val (zeros, nines) = parseZeroNines(grid)
   
-    zeros.par.map(scoreTrail(grid, _, nines)).sum
+    zeros.map(scoreTrail(grid, _, nines)).sum
   }
   
   
@@ -49,5 +48,5 @@ object Day10 extends Problem[Grid[Int], Int]:
   def part2(grid: Grid[Int]): Int = {
     val (zeros, nines) = parseZeroNines(grid)
   
-    zeros.par.map(rateTrailhead(grid, _, nines)).sum
+    zeros.map(rateTrailhead(grid, _, nines)).sum
   }

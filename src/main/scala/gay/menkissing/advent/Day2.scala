@@ -7,7 +7,7 @@ import gay.menkissing.advent.Problem
 import scala.io.Source
 
 object Day2 extends Problem[List[List[Int]], Int]:
-  override val input: String = Source.fromResource("day2.txt").mkString
+  override val input: String = FileIO.getContentsOf("day2.txt")
 
   override def parse(str: String): List[List[Int]] =
     str.linesIterator.map(_.split(' ').map(_.toInt).toList).toList
