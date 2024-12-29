@@ -7,8 +7,8 @@ object Day07y2020 extends Problem[Day07y2020.Rules, Int]:
 
   override def parse(str: String): Rules =
     str.linesIterator.map:
-      case s"$color bags contain $rest" =>
-        color -> rest.dropRight(1).split(',').foldLeft(Set.empty[BagDesc]):
+      case s"$color bags contain $rest." =>
+        color -> rest.split(',').foldLeft(Set.empty[BagDesc]):
           case (acc, r) =>
             r.trim match
               case s"no other bags" => acc
@@ -21,7 +21,7 @@ object Day07y2020 extends Problem[Day07y2020.Rules, Int]:
       val rule = input(bag)
       rule.exists(_.color == "shiny gold") || rule.exists(it => containsShinyGold(it.color))
 
-    input.count(it => containsShinyGold(it._1))
+    input.removed("shiny gold").count(it => containsShinyGold(it._1))
 
 
   override def part2(input: Rules): Int =
