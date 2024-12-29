@@ -10,9 +10,11 @@ object FileIO:
       src.mkString
     .get
   
+  private def padNum(day: Int): String =
+    if day < 10 then s"0$day" else day.toString
   def getInput(year: Int, day: Int, test: Boolean = false, extraInfo: String = ""): String =
     if year == 2024 then
-      getContentsOf(s"day$day$extraInfo${if test then "tst" else ""}.txt")
+      getContentsOf(s"day${padNum(day)}$extraInfo${if test then "tst" else ""}.txt")
     else
-      getContentsOf(s"y$year/day$day$extraInfo${if test then "tst" else ""}.txt")
+      getContentsOf(s"y$year/day${padNum(day)}$extraInfo${if test then "tst" else ""}.txt")
     
