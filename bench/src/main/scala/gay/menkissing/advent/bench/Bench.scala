@@ -1,7 +1,8 @@
 package gay.menkissing.advent
 package bench
 
-
+import y2020.*
+import y2021.*
 
 import org.openjdk.jmh.annotations.Benchmark
 import org.openjdk.jmh.annotations.*
@@ -162,4 +163,10 @@ class Bench:
 
   @Benchmark
   def day25p1(): Unit = Day25.fullPart1
+
+  @Benchmark
+  def day03y2020p1(): Unit = Day03y2020.fullPart1
+
+  @Benchmark
+  def day03y2020p2(): Unit = Day03y2020.fullPart2
 

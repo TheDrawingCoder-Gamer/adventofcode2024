@@ -50,7 +50,7 @@ object Day04y2020 extends Problem[List[Day04y2020.Passport], Int]:
       var hcl = Option.empty[String]
       var ecl = Option.empty[String]
       var pid = Option.empty[String]
-      block.split(raw"\s").foreach:
+      block.split(raw"\s+").foreach:
         // throw if not valid int
         case s"byr:$b" => byr = Some(b.toInt)
         case s"iyr:$i" => iyr = Some(i.toInt)
