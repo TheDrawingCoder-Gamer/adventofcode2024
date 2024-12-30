@@ -7,7 +7,7 @@ object Day1 extends Problem[(List[Int], List[Int]), Int]:
   override lazy val input = FileIO.getContentsOf("day1.txt")
 
   override def parse(str: String): (List[Int], List[Int]) = 
-    input.linesIterator.map { case s"$a   $b" => (a.toInt, b.toInt) }.toList.unzip
+    str.linesIterator.map { case s"$a   $b" => (a.toInt, b.toInt) }.toList.unzip
 
   override def part1(input: (List[Int], List[Int])): Int =
     val (fst, snd) = input
