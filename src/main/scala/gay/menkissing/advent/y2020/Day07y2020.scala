@@ -32,4 +32,4 @@ object Day07y2020 extends Problem[Day07y2020.Rules, Int]:
           acc + (bag.amount * getBagAmount(bag.color))
     getBagAmount("shiny gold") - 1
 
-  override val input: String = FileIO.getInput(2020, 7)
+  override lazy val input: String = FileIO.getInput(2020, 7)

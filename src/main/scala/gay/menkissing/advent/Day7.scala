@@ -6,7 +6,7 @@ import gay.menkissing.common.debugTiming
 import scala.io.Source
 
 object Day7 extends Problem[List[Day7.Equation], Long]:
-  val input = FileIO.getContentsOf("day7.txt")
+  lazy val input = FileIO.getContentsOf("day7.txt")
 
   case class Equation(result: Long, inputs: List[Long]) {
     def canBeTrue: Boolean = {

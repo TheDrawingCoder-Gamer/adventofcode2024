@@ -18,5 +18,5 @@ object Day03y2020 extends Problem[Vector[Vector[Boolean]], Long]:
     List((1, 1), (3, 1), (5, 1), (7, 1), (1, 2)).foldLeft(1L):
       case (acc, (x, y)) => acc * input.testSlope(x, y)
 
-  override val input: String = FileIO.getInput(2020, 3)
+  override lazy val input: String = FileIO.getInput(2020, 3)
 

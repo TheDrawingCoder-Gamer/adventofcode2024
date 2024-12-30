@@ -9,7 +9,7 @@ import scala.io.Source
 
 
 object Day11 extends Problem[List[Long], Long]:
-  val input = FileIO.getContentsOf("day11.txt").trim
+  lazy val input = FileIO.getContentsOf("day11.txt").trim
 
   override def parse(str: String): List[Long] =
     str.split(' ').map(_.toLong).toList

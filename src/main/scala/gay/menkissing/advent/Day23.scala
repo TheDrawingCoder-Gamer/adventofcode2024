@@ -46,4 +46,4 @@ object Day23 extends ProblemAdv[Day23.LANConnections, Long, String]:
   override def part2(conns: LANConnections): String =
     maximumClique(conns.computerMap).toList.sorted.mkString(",")
 
-  override val input: String = FileIO.getContentsOf("day23.txt")
+  override lazy val input: String = FileIO.getContentsOf("day23.txt")

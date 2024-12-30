@@ -189,5 +189,5 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
     val res = go(input.doubled)
     res.gpsCalc
 
-  override val input: String = FileIO.getContentsOf("day15.txt")
+  override lazy val input: String = FileIO.getContentsOf("day15.txt")
 }

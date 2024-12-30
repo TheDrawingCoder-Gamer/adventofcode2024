@@ -33,6 +33,6 @@ object Day18y2021 extends Problem[Day18y2021.SnailfishNum, Long]:
 
   override def part2(input: SnailfishNum): Long = ???
 
-  override val input: String = ???
+  override lazy val input: String = ???
 
 

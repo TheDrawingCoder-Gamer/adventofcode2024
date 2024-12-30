@@ -20,5 +20,5 @@ object Day05y2020 extends Problem[List[Int], Int]:
           Option.when(r - l > 1)(r - 1)
     .get
 
-  override val input: String = FileIO.getInput(2020, 5)
+  override lazy val input: String = FileIO.getInput(2020, 5)
 

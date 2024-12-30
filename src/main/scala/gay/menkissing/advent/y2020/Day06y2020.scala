@@ -17,4 +17,4 @@ object Day06y2020 extends Problem[List[List[Set[Char]]], Int]:
       block.reduce(_ & _).size
     .sum
 
-  override val input: String = FileIO.getInput(2020, 6)
+  override lazy val input: String = FileIO.getInput(2020, 6)

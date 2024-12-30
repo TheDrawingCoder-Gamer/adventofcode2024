@@ -10,7 +10,7 @@ trait ProblemAdv[Input, +OutputP1, +OutputP2] {
   def part1(input: Input): OutputP1
   def part2(input: Input): OutputP2
 
-  val input: String
+  lazy val input: String
 
   def fullPart1: OutputP1 = part1(parse(input))
   def fullPart2: OutputP2 = part2(parse(input))
@@ -35,7 +35,7 @@ trait WriteupAdv[Input, +OutputP1, +OutputP2] {
   def part1(str: String): OutputP1
   def part2(str: String): OutputP2
   
-  val input: String
+  lazy val input: String
 
   def fullPart1: OutputP1 = part1(input)
   def fullPart2: OutputP2 = part2(input)

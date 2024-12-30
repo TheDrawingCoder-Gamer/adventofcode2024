@@ -73,4 +73,4 @@ object Day18Writeup extends ProblemAdv[(Int, Int, List[Day18Writeup.Vec2i]), Int
 
   val test = false
 
-  override val input: String = FileIO.getContentsOf(if test then "day18tst.txt" else "day18.txt")
+  override lazy val input: String = FileIO.getContentsOf(if test then "day18tst.txt" else "day18.txt")

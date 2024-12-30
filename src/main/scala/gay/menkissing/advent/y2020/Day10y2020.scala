@@ -52,5 +52,5 @@ object Day10y2020 extends Problem[List[Int], Long]:
     ???
 
 
-  override val input: String = FileIO.getInput(2020, 10, true)
+  override lazy val input: String = FileIO.getInput(2020, 10, true)
 

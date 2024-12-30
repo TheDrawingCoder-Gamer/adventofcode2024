@@ -70,7 +70,7 @@ object Day04y2020 extends Problem[List[Day04y2020.Passport], Int]:
 
   override def part2(input: List[Passport]): Int = input.count(_.isValidP2)
 
-  override val input: String = FileIO.getInput(2020, 4)
+  override lazy val input: String = FileIO.getInput(2020, 4)
 
 
 

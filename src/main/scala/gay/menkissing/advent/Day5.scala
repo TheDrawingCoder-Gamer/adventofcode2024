@@ -6,7 +6,7 @@ import gay.menkissing.common.*
 
 
 object Day5 extends Problem[(List[(Int, Int)], List[List[Int]]), Int]:
-  val input = FileIO.getContentsOf("day5.txt")
+  lazy val input = FileIO.getContentsOf("day5.txt")
 
   override def parse(str: String): (List[(Int, Int)], List[List[Int]]) =
 

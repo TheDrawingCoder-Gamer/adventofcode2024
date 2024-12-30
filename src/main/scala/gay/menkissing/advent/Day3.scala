@@ -5,7 +5,7 @@ import gay.menkissing.advent.Problem
 
 object Day3 extends Problem[String, Int]:
   
-  val input: String = FileIO.getContentsOf("day3.txt")
+  lazy val input: String = FileIO.getContentsOf("day3.txt")
 
   override def parse(str: String): String = str
   

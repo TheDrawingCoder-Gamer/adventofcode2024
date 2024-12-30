@@ -27,6 +27,6 @@ object Day25 extends Problem[List[Day25.KeyOrLock], Long]:
   // No part 2 on Christmas!
   override def part2(input: List[KeyOrLock]): Long = -1L
 
-  override val input: String = FileIO.getContentsOf("day25.txt")
+  override lazy val input: String = FileIO.getContentsOf("day25.txt")
 
 
