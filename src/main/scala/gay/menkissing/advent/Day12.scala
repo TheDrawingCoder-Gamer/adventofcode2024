@@ -4,7 +4,7 @@ import scala.collection.mutable as mut
 import scala.io.Source
 
 
-object Day12 extends Writeup[Day12.PlantMap, Int] {
+object Day12 extends Problem[Day12.PlantMap, Int] {
   type Region = Vector[(Int, Int)]
   def cardinalPositions(x: Int, y: Int): List[(Int, Int)] = {
     List((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1))
@@ -127,15 +127,11 @@ object Day12 extends Writeup[Day12.PlantMap, Int] {
     PlantMap(str.linesIterator.toVector)
   }
 
-  def part1(input: String): Int = {
-    val plants = parse(input)
-
+  def part1(plants: PlantMap): Int = {
     plants.regions.map(r => r.area * r.perimeter).sum
   }
 
-  def part2(input: String): Int = {
-    val plants = parse(input)
-
+  def part2(plants: PlantMap): Int = {
     plants.regions.map(r => r.area * r.sides).sum
   }
 
