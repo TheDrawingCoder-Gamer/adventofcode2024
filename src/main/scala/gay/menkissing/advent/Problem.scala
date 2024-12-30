@@ -2,9 +2,9 @@ package gay.menkissing.advent
 
 import gay.menkissing.common.debugTiming
 
-trait Problem[Input, Output] extends ProblemAdv[Input, Output, Output]
+trait Problem[Input, +Output] extends ProblemAdv[Input, Output, Output]
 
-trait ProblemAdv[Input, OutputP1, OutputP2] {
+trait ProblemAdv[Input, +OutputP1, +OutputP2] {
   def parse(str: String): Input
 
   def part1(input: Input): OutputP1
@@ -29,7 +29,7 @@ trait ProblemAdv[Input, OutputP1, OutputP2] {
     debugAndTimeP2()
 }
 
-trait WriteupAdv[Input, OutputP1, OutputP2] {
+trait WriteupAdv[Input, +OutputP1, +OutputP2] {
   def parse(str: String): Input
   
   def part1(str: String): OutputP1
