@@ -8,20 +8,19 @@ import scala.io.Source
 
 
 object Day14 extends ProblemAdv[List[Day14.Robot], Int, Int] {
-  extension (self: Int) {
-    infix def rem(that: Int): Int = {
-      // these don't cancel out due to floor div
-      self - that.abs * (self.toDouble / that.toDouble.abs).floor.toInt
-    }
-  }
-  case class Vec2i(x: Int, y: Int)
-  case class GridSize(x: Int, y: Int)
+  extension (self: Int)
+    infix def rem(that: Int): Int =
+      val m = math.abs(self) % that
+      if self < 0 then
+        that - m
+      else
+        m
 
-  case class Robot(pos: Vec2i, velocity: Vec2i) {
-    def stepN(n: Int = 1)(using size: GridSize): Robot = {
+  case class Vec2i(x: Int, y: Int)
+
+  case class Robot(pos: Vec2i, velocity: Vec2i):
+    def stepN(n: Int = 1): Robot =
       copy(pos = pos.copy(x = (pos.x + n * velocity.x) rem size.x, y = (pos.y + n * velocity.y) rem size.y))
-    }
-  }
 
   def longestSubseq[A](seq: List[A], item: A): Int =
     seq.foldLeft((0, 0)):
@@ -32,31 +31,21 @@ object Day14 extends ProblemAdv[List[Day14.Robot], Int, Int] {
           (max, 0)
    ._1
 
-  extension (robots: List[Robot])(using size: GridSize) {
+  extension (robots: List[Robot]) {
 
     def stepN(n: Int = 1): List[Robot] = robots.map(_.stepN(n))
-    def safety: Int = {
+    def safety: Int =
       val middleX = (size.x / 2)
       val middleY = (size.y / 2)
 
-      robots.groupBy { robot =>
-        if (robot.pos.x == middleX || robot.pos.y == middleY) {
-          -1
-        } else if (robot.pos.x < middleX) {
-          if (robot.pos.y < middleY) {
-            0
-          } else {
-            2
-          }
-        } else {
-          if (robot.pos.y < middleY) {
-            1
-          } else {
-            3
-          }
-        }
-      }.removed(-1).values.map(_.length).product
-    }
+      robots.groupBy: robot =>
+        (robot.pos.x.compareTo(middleX), robot.pos.y.compareTo(middleY)) match
+          case (0, _) | (_, 0) => -1
+          case ( 1, -1) => 0
+          case (-1, -1) => 1
+          case (-1,  1) => 2
+          case ( 1,  1) => 3
+      .removed(-1).values.map(_.length).product
     def pretty: String = {
       val grid = robots.robotMap
 
@@ -67,20 +56,13 @@ object Day14 extends ProblemAdv[List[Day14.Robot], Int, Int] {
     }
 
     def findEasterEgg: Int =
-      (0 to 10000).find { i =>
+      (0 to 10403).find: i =>
         val newRobots = robots.stepN(i)
-        if (newRobots.groupBy(_.pos.x).map(_._2.length).max > 15 && newRobots.groupBy(_.pos.y).map(_._2.length).max > 15) {
-
-          val xLineMembers = newRobots.groupBy(_.pos.x).maxBy(_._2.length)._2.map(_.pos.y).toSet
-          val yLineMembers = newRobots.groupBy(_.pos.y).maxBy(_._2.length)._2.map(_.pos.x).toSet
-          val xLine = (0 until size.y).map(it => xLineMembers.contains(it)).toList
-          val yLine = (0 until size.x).map(it => yLineMembers.contains(it)).toList
-          longestSubseq(xLine, true) > 15 && longestSubseq(yLine, true) > 15
-        } else false
-      }.getOrElse(-1)
+        newRobots.groupBy(_.pos.y).count(_._2.length >= 10) > 15 && newRobots.groupBy(_.pos.x).count(_._2.length >= 15) >= 3
+      .getOrElse(-1)
 
     def robotMap: Vector[Vector[Int]] = {
-      val goodGrid = mut.ArrayBuffer.fill(size.y, size.x)(0)
+      val goodGrid = mut.ArrayBuffer.fill(size.y + 1, size.x + 1)(0)
 
       robots.foreach { robot =>
         goodGrid(robot.pos.y)(robot.pos.x) = goodGrid(robot.pos.y)(robot.pos.x) + 1
@@ -90,12 +72,15 @@ object Day14 extends ProblemAdv[List[Day14.Robot], Int, Int] {
     }
 
   }
-  override def parse(str: String): List[Robot] = {
-    str.linesIterator.map { case s"p=$px,$py v=$vx,$vy" => Robot(Vec2i(px.toInt, py.toInt), Vec2i(vx.toInt, vy.toInt)) }.toList
-  }
+  override def parse(str: String): List[Robot] =
+    str.linesIterator.map:
+      case s"p=$px,$py v=$vx,$vy" =>
+        Robot(Vec2i(px.toInt, py.toInt), Vec2i(vx.toInt, vy.toInt))
+    .toList
+
 
   // given size: GridSize = GridSize(11, 7)
-  given size: GridSize = GridSize(101, 103)
+  val size: Vec2i = Vec2i(101, 103)
   override def part1(input: List[Robot]): Int =  {
 
     val r = input.stepN(100)
@@ -104,7 +89,9 @@ object Day14 extends ProblemAdv[List[Day14.Robot], Int, Int] {
   }
 
   override def part2(input: List[Robot]): Int = {
-    input.findEasterEgg
+    val r = input.findEasterEgg
+    println(input.stepN(r).pretty)
+    r
   }
 
   val input: String = FileIO.getContentsOf("day14.txt").trim
