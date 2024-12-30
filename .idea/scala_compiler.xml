@@ -10,5 +10,10 @@
         <plugin path="$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-native/nscplugin_3.6.2/0.5.4/nscplugin_3.6.2-0.5.4.jar" />
       </plugins>
     </profile>
+    <profile name="sbt 3" modules="adventofcode2024.adventofcode2024.rootJS">
+      <parameters>
+        <parameter value="-scalajs" />
+      </parameters>
+    </profile>
   </component>
 </project>
