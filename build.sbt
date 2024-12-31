@@ -8,8 +8,7 @@ ThisBuild / scalaVersion := "3.6.2"
 val goodDir = file(".")
 
 
-lazy val root = crossProject(JVMPlatform, JSPlatform)
-  .crossType(CrossType.Pure)
+lazy val root = project
   .in(file("."))
   .settings(
     name := "adventofcode2024",
@@ -27,7 +26,7 @@ lazy val root = crossProject(JVMPlatform, JSPlatform)
    */
 
 lazy val bench = project.in(file("bench"))
-  .dependsOn(root.jvm)
+  .dependsOn(root)
   .enablePlugins(JmhPlugin)
   .settings(
       Jmh / sourceDirectory := (Compile / sourceDirectory).value,

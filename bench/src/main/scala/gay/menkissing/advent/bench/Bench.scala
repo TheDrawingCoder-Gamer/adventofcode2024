@@ -170,3 +170,9 @@ class Bench:
   @Benchmark
   def day03y2020p2(): Unit = Day03y2020.fullPart2
 
+  @Benchmark
+  def day19y2021p1(): Unit = Day19y2021.fullPart1
+
+  @Benchmark
+  def day19y2021p2(): Unit = Day19y2021.fullPart2
+

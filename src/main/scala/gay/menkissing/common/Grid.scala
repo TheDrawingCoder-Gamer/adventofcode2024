@@ -95,7 +95,6 @@ case class Grid[A] private (values: Vector[Vector[A]]){
         y <- (y - 1) to (y + 1)
         x <- (x - 1) to (x + 1)
       } yield get(x, y).getOrElse(default)
-    println(foo)
     Grid(foo, 3)
   }
   def slice(start: Vec2i, end: Vec2i): Grid[A] = {
