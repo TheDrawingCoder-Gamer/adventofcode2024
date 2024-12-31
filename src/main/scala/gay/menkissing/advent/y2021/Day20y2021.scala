@@ -51,7 +51,7 @@ object Day20y2021 extends Problem[(Vector[Boolean], Day20y2021.Image), Int]:
   }
 
   override def parse(str: String): (Vector[Boolean], Image) =
-    val List(t: String, b: String) = input.trim.split("\n\n").toList: @unchecked
+    val List(t: String, b: String) = str.trim.split("\n\n").toList: @unchecked
 
     val algo = t.trim.map(_ == '#').toVector
     val image = Image(Grid(b.linesIterator.map(_.trim.map(_ == '#')).toVector), false)

@@ -50,7 +50,7 @@ object Day21y2021 extends Problem[Day21y2021.ProblemState, BigInt]:
   lazy val input = FileIO.getInput(2021, 21)
 
   override def parse(str: String): ProblemState =
-    val List(player1, player2) = input.linesIterator.map { it =>
+    val List(player1, player2) = str.linesIterator.map { it =>
       Player(0, it.dropWhile(_ != ':').drop(1).trim.toInt)
     }.toList
     ProblemState(0, 0, player1, player2)
