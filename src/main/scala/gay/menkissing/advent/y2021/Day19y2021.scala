@@ -38,7 +38,6 @@ object Day19y2021 extends Problem[List[Set[Vec3i]], Int]{
     }.toList
   }
   def solve(data: List[Set[Vec3i]]): Solution = {
-    val data = parse(input)
     val baseSector = mut.Set.from(data.head)
     val foundScanners = mut.Set(Vec3i(0,0,0))
     val unmappedSector = mut.ListBuffer().addAll(data.tail)
