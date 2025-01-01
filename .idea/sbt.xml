@@ -9,7 +9,11 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/bench" />
+            <option value="$PROJECT_DIR$/core/js" />
+            <option value="$PROJECT_DIR$/core/jvm" />
+            <option value="$PROJECT_DIR$/core/shared" />
             <option value="$PROJECT_DIR$/project" />
+            <option value="$PROJECT_DIR$/root" />
           </set>
         </option>
         <option name="sbtVersion" value="1.10.6" />

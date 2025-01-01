@@ -16,14 +16,15 @@ publishTo := {
     Some("releases"  at nexus + "service/local/staging/deploy/maven2")
 }
 
-lazy val root = //crossProject(JSPlatform, JVMPlatform)
-    project
-   //.crossType(CrossType.Pure)
-  .in(file("."))
+lazy val root = project.aggregate(core.jvm, core.js, core.native)
+
+lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
+    //project
+  .in(file("core"))
   .settings(
     name := "adventofcode2024",
     libraryDependencies += "org.typelevel" %%% "cats-core" % "2.12.0",
-    libraryDependencies += "org.typelevel" %%% "cats-parse" % "1.0.0",
+    libraryDependencies += "org.typelevel" %%% "cats-parse" % "1.1.0",
     libraryDependencies += "org.typelevel" %%% "cats-collections-core" % "0.9.9",
     Compile / run / fork := true,
     Compile / run / baseDirectory := goodDir,
@@ -38,8 +39,8 @@ lazy val root = //crossProject(JSPlatform, JVMPlatform)
    */
 
 lazy val bench = project.in(file("bench"))
-  //.dependsOn(root.jvm)
-  .dependsOn(root)
+  .dependsOn(core.jvm)
+  //.dependsOn(root)
   .enablePlugins(JmhPlugin)
   .settings(
       Jmh / sourceDirectory := (Compile / sourceDirectory).value,
@@ -47,5 +48,6 @@ lazy val bench = project.in(file("bench"))
       Jmh / dependencyClasspath := (Compile / dependencyClasspath).value,
       Jmh / compile := (Jmh / compile).dependsOn(Test / compile).value,
       Jmh / run := (Jmh / run).dependsOn(Jmh / compile).evaluated,
-      run / baseDirectory := goodDir
+      run / baseDirectory := goodDir,
+      publishLocal := nop
   )

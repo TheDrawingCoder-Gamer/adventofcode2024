@@ -47,7 +47,7 @@ build/
 .bsp/
 
 src/main/resources/**/*.txt
-!src/main/resources/**/*tst.txt
+!core/shared/src/main/resources/**/*tst.txt
 
 *.png
 
