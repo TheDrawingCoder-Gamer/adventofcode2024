@@ -2,8 +2,7 @@ import gay.menkissing.common.*
 import cats.*
 import cats.implicits.*
 import scala.io.Source 
-import scala.collection.mutable as mut 
-import scala.jdk.StreamConverters.*
+import scala.collection.mutable as mut
 
 extension (a: Int) { 
   infix def ascendsTo(b: Int): Range = {
@@ -15,13 +14,13 @@ extension (a: Int) {
 }
 case class Pathway(points: List[Vec2i]) {
   def bake: Set[Vec2i] = 
-    Set.from(points.sliding(2).map { case List(s, e) => 
+    points.sliding(2).flatMap { case List(s, e) => 
       require(s.x == e.x || s.y == e.y)
       for {
         y <- s.y ascendsTo e.y
         x <- s.x ascendsTo e.x
       } yield Vec2i(x, y)
-    }.flatten)
+    }.toSet
 }
 
 val source = Vec2i(500, 0)
@@ -93,17 +92,15 @@ object SparseCaveGrid {
   }
 }
 def parse(input: String): Vector[Pathway] = {
-  input.lines().map { it =>
-    Pathway(it.split("->").map(_.trim).map { s => 
-      s match {
-        case s"$l,$r" => Vec2i(l.toInt, r.toInt)
-      }
+  input.linesIterator.map { it =>
+    Pathway(it.split("->").map(_.trim).map {
+      case s"$l,$r" => Vec2i(l.toInt, r.toInt)
     }.toList)
-  }.toScala(Vector)
+  }.toVector
 }
 
 val input = Source.fromResource("day14.txt").mkString 
 val data = parse(input)
-val goodData = data.map(_.bake).flatten.toSet
+val goodData = data.flatMap(_.bake).toSet
 val daGrid = SparseCaveGrid(goodData, source)
-LazyList.iterate(Option(daGrid))(_.map(_.withSand).flatten).takeWhile(_.isDefined).size - 1
+Iterator.iterate(Option(daGrid))(_.flatMap(_.withSand)).takeWhile(_.isDefined).size - 1

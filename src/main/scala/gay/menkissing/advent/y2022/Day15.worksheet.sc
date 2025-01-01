@@ -1,7 +1,7 @@
 import cats.*
 import cats.implicits.*
 import scala.io.Source
-import net.bulbyvr.common.Vec2i 
+import gay.menkissing.common.Vec2i
 import cats.collections.*
 import scala.collection.mutable as mut
 import cats.syntax.all.*
@@ -49,11 +49,10 @@ class RangeGrid(values: Set[SensorRanged]) {
 
 val input = Source.fromResource("day15.txt").mkString
 val data  = 
-  input.linesIterator.map { it => 
-    it match {
-      case s"Sensor at x=$sx, y=$sy: closest beacon is at x=$bx, y=$by" => SensorRanged(Vec2i(sx.toInt, sy.toInt), Vec2i(bx.toInt, by.toInt))
-      case _ => ???
-    }
+  input.linesIterator.map {
+    case s"Sensor at x=$sx, y=$sy: closest beacon is at x=$bx, y=$by" => SensorRanged(Vec2i(sx.toInt, sy
+      .toInt), Vec2i(bx.toInt, by.toInt))
+    case _ => assert(false)
   }.toVector
 
 val grid = RangeGrid(data.toSet)

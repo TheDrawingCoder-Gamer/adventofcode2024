@@ -1,7 +1,7 @@
 package gay.menkissing.advent
 package y2022
 
-object Day21 {
+object Day21y2022 extends Problem[Day21y2022.Context, Long] {
   /* 
   extension (sc: StringContext) {
     def algebriacNumber(args: Any*): AlgebraicNumber = {
@@ -289,12 +289,10 @@ object Day21 {
   }
   
 
-  def parseMonke(input: String, p2: Boolean): (String, Expression) = {
+  lazy val input = FileIO.getInput(2022, 21)
+  def parseMonke(input: String): (String, Expression) = {
     input match {
-      case s"humn: $_" if p2 => 
-        "humn" -> Expression.Unknown
-
-      case s"$monke: $l $op $r" => 
+      case s"$monke: $l $op $r" =>
         val daOp = op match {
           case "+" => Operation.Add 
           case "-" => Operation.Subtract 
@@ -308,17 +306,16 @@ object Day21 {
       case _ => ???
     }
   }
-  def parse(input: String, p2: Boolean): Context = {
-    Context(input.linesIterator.map(it => parseMonke(it, p2)).toMap)
+  def parse(input: String): Context = {
+    Context(input.linesIterator.map(parseMonke).toMap)
   }
-  def part1(input: String): Long = {
-    val ctx = parse(input, false)
+  def part1(ctx: Context): Long = {
     val root = ctx.monkes("root")
     evaluate(ctx, root) 
   }
-  def part2(input: String): Long = {
-    import BuiltExpr.* 
-    val ctx = parse(input, true)
+  def part2(badCtx: Context): Long = {
+    import BuiltExpr.*
+    val ctx = badCtx.copy(monkes = badCtx.monkes.updated("humn", Expression.Unknown))
 
     val Op(l, _, r) = buildExpr(ctx): @unchecked 
     if (!(l.canEval ^ r.canEval)) {

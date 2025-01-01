@@ -21,6 +21,8 @@ object Day20y2022 extends Problem[Vector[Long], Long] {
     r
   }
 
+  // Using this reduces performance LOL
+  // when the programming is functional....
   extension[A] (vec: Vector[A])
     def move(from: Int, to: Int): Vector[A] =
       if from == to then

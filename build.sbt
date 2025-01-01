@@ -16,13 +16,14 @@ publishTo := {
     Some("releases"  at nexus + "service/local/staging/deploy/maven2")
 }
 
-lazy val root = project // (JSPlatform, JVMPlatform)
-   //.crossType(CrossType.Pure)
+lazy val root = crossProject(JSPlatform, JVMPlatform)
+   .crossType(CrossType.Pure)
   .in(file("."))
   .settings(
     name := "adventofcode2024",
     libraryDependencies += "org.typelevel" %%% "cats-core" % "2.12.0",
     libraryDependencies += "org.typelevel" %%% "cats-parse" % "1.0.0",
+    libraryDependencies += "org.typelevel" %%% "cats-collections-core" % "0.9.9",
     Compile / run / fork := true,
     Compile / run / baseDirectory := goodDir,
   )
@@ -36,8 +37,8 @@ lazy val root = project // (JSPlatform, JVMPlatform)
    */
 
 lazy val bench = project.in(file("bench"))
-  //.dependsOn(root.jvm)
-  .dependsOn(root)
+  .dependsOn(root.jvm)
+  //.dependsOn(root)
   .enablePlugins(JmhPlugin)
   .settings(
       Jmh / sourceDirectory := (Compile / sourceDirectory).value,

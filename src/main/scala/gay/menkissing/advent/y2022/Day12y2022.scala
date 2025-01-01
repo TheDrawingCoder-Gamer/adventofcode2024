@@ -5,8 +5,7 @@ import cats.implicits.*
 import cats.*
 import cats.syntax.all.*
 import gay.menkissing.common.*
-import cats.data.State
-import scala.io.Source
+
 // import cats.collections.*
 // import cats.collections.syntax.all.*
 object Day12y2022 extends Problem[(Vec2i, Vec2i, Day12y2022.MountainMap), Int] {
@@ -40,12 +39,12 @@ object Day12y2022 extends Problem[(Vec2i, Vec2i, Day12y2022.MountainMap), Int] {
   }
 
   def manhattanDistance(v1: Vec2i, v2: Vec2i) = Math.abs(v1.x - v2.x) + Math.abs(v1.y - v2.y)
-  
+
 
   def neighbors(p: Vec2i): List[Vec2i] = 
     Direction2D.values.map(it => p.offset(it)).toList
 
-  
+
   def parse(str: String): (Vec2i, Vec2i, MountainMap) = {
     var start = Vec2i(0,0)
     var end = Vec2i(0, 0)
@@ -75,16 +74,16 @@ object Day12y2022 extends Problem[(Vec2i, Vec2i, Day12y2022.MountainMap), Int] {
     (start, end, MountainMap(grid))
   }
 
-  lazy val input = FileIO.getInput(2022, 12) 
+  lazy val input = FileIO.getInput(2022, 12)
   def part1(input: (Vec2i, Vec2i, MountainMap)): Int =
     val (start, end, graph) = input
-    astar(start, end, it => manhattanDistance(end, it), (_, _) => 1.0, graph.neighborVerts).get.length
-    
+    astar(start, end, it => manhattanDistance(end, it), (_, _) => 1.0, graph.neighborVerts).get.length - 1
+
   def part2(input: (Vec2i, Vec2i, MountainMap)): Int = {
     val (start, end, graph) = input
     val starts = graph.filterIndex((i, b) => b == 0).map(_._1)
     val res = starts.map(start => astar[Vec2i](start, end, it => manhattanDistance(end, it), (_, _) => 1.0, graph.neighborVerts))
-    
+
     res.map(_.map(_.length).getOrElse(Int.MaxValue)).min - 1
   }
 }

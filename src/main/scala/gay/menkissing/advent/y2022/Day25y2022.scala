@@ -1,8 +1,11 @@
 package gay.menkissing.advent
 package y2022
 
-object Day25 {
+import scala.annotation.tailrec
+
+object Day25y2022 extends HalfDay[List[Long], String] {
   def snafuToDec(input: String): Long = {
+    @tailrec
     def helper(input: List[Char], accum: Long): Long = {
       input match {
         case c :: tail => 
@@ -35,42 +38,10 @@ object Day25 {
       case 0 => '0'
       case 1 => '1'
       case 2 => '2'
-      case _ => ???
+      case _ => assert(false)
     }
   }
-  /*
-  final def decToSnafu(n: Int): String = {
-    if (n == 0) return "0"
-    // Find smallest value representable with "one digit"
-    // that is still bigger than n 
-    
 
-    val digit = digitStream.find(_ >= n).get 
-    val isTwo = (digit % 2) == 0
-    val place = 
-      if (isTwo)
-        (digit / 2) / 5
-      else 
-        digit / 5
-    val placeValue = place * 5 
-    val lowerPlaceValue = (place - 1) * 5 
-    if (digit == n) {
-      val padding = "0" * (place - 1)
-      if (isTwo)
-        "2" + padding 
-      else 
-        "1" + padding 
-    // If it is within range to use = or - 
-    } else if ((digit - n) <= (lowerPlaceValue * 2)) {
-      val remaining = digit - n 
-      if (remaining <= lowerPlaceValue)
-        remaining
-        
-    } else {
-    
-    }
-  }
-  */
   def decToSnafu(n: Long): String = {
     val sunits = Iterator.unfold(n) { n => 
       Option.when(n != 0) {
@@ -81,10 +52,11 @@ object Day25 {
     if (sunits.isEmpty) "0"
     else sunits.mkString.reverse
   }
+  lazy val input = FileIO.getInput(2022, 25)
   def parse(input: String): List[Long] = {
-    input.linesIterator.map(snafuToDec _).toList
+    input.linesIterator.map(snafuToDec).toList
   }
-  def run(input: String): String = {
-    decToSnafu(parse(input).sum)
+  def part1(input: List[Long]): String = {
+    decToSnafu(input.sum)
   }
 }

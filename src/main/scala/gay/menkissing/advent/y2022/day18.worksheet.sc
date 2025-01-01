@@ -44,7 +44,7 @@ case class Cube(pos: Vec3i, north: Boolean, east: Boolean, south: Boolean, west:
     for {
       daPos <- neighbors(pos)
     } {
-      currentMap.get(daPos).map { daCube => 
+      currentMap.get(daPos).foreach { daCube =>
         if (daPos.x != pos.x) {
           val daX = pos.x - daPos.x 
           daX.sign match {

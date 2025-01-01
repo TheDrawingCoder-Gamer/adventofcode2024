@@ -4,7 +4,7 @@ package y2022
 import gay.menkissing.common.*
 
 
-object Day22y2022 extends Problem[(Day22y2022.ForbiddenGrid, List[Day22y2022.Instruction]), Int] {
+object Day22y2022 extends HalfDay[(Day22y2022.ForbiddenGrid, List[Day22y2022.Instruction]), Int] {
   enum GridPos {
     case Solid, Open, GNil 
   }
@@ -248,5 +248,4 @@ object Day22y2022 extends Problem[(Day22y2022.ForbiddenGrid, List[Day22y2022.Ins
     rowN + colN + facingN
   }
 
-  def part2(input: (ForbiddenGrid, List[Instruction])): Int = ???
 }

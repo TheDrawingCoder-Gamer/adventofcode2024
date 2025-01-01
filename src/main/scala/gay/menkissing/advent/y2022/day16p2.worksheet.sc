@@ -2,6 +2,7 @@ import cats.*
 import cats.implicits.*
 import cats.data.*
 import scala.io.Source 
+import gay.menkissing.common.astar
 
 val fullTime = 26 
 case class ValveRoom(room: String, flowRate: Int, connectsTo: Vector[String]) {
@@ -51,43 +52,7 @@ def shortestTime(rooms: ValveMap, curPos: ValveRoom, on: List[String]): Int = {
     res.minBy(_.size).size - 1
 }
 import scala.collection.mutable as mut
-def reconstructPath[A](cameFrom: Map[A, A], p: A): List[A] = {
 
-  val totalPath = mut.ListBuffer[A](p)
-  var current = p
-  while (cameFrom.contains(current)) {
-    current = cameFrom(current)
-    totalPath.prepend(current)
-  }
-  totalPath.toList
-}
-def astar[A](start: A, goal: A, h: A => Double, d: (A, A) => Double, neighbors: A => Iterable[A]): Option[List[A]] = {
-  val cameFrom = mut.HashMap[A, A]()
-
-  val gscore = mut.HashMap(start -> 0d)
-
-  val fscore = mut.HashMap(start -> h(start))
-
-  val openSet = mut.PriorityQueue(start)(using Ordering.by(it => fscore.getOrElse(it, Double.PositiveInfinity)).reverse)
-  while (openSet.nonEmpty) {
-    val current = openSet.dequeue()
-
-    if (current == goal) 
-      return Some(reconstructPath(cameFrom.toMap, current))
-    for (neighbor <- neighbors(current)) {
-      val stinkyGScore = gscore.getOrElse(current, Double.PositiveInfinity) + d(current, neighbor)
-      if (stinkyGScore < gscore.getOrElse(neighbor, Double.PositiveInfinity)) {
-        cameFrom(neighbor) = current 
-        gscore(neighbor) = stinkyGScore
-        fscore(neighbor) = stinkyGScore + h(neighbor)
-        if (!openSet.exists(_ == neighbor)) 
-          openSet.enqueue(neighbor)
-      }
-    }
-  }
-
-  return None
-}
 
 def graphAStar(start: String, goal: String, graph: ValveMap): Option[List[String]] = {
   astar(start, goal, _ => 0d, (_, _) => 1d, it => graph(it).connectsTo)
@@ -97,7 +62,7 @@ case class HappenedNow(pressureAdded: Int, turnedOn: Option[String])
 def runFirstBit(rooms: ValveMap, pos: Position, state: State): (List[Position], HappenedNow) = {
   if (pos.progress == 0) { 
     val newPressure = pos.dest.value(state.time)
-    val res = pathsToImportant(rooms, pos.dest, state.on).map { (room, path) => 
+    val res = pathsToImportant(rooms, pos.dest, state.on).flatMap { (room, path) => 
       require(path.isDefined)
       // includes current, and nodes to get there. no minus 1 because of valve turning
       val timeTaken = path.get.size
@@ -106,7 +71,7 @@ def runFirstBit(rooms: ValveMap, pos: Position, state: State): (List[Position], 
         None 
       else 
         Some(Position(room, goodTime - state.time))
-    }.flatten 
+    }
     (res.toList, HappenedNow(pos.dest.value(state.time), Some(pos.dest.room)))
   } else {
     (List(pos.copy(progress = pos.progress - 1)), HappenedNow(0, None))
