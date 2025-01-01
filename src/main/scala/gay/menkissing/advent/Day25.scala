@@ -2,7 +2,7 @@ package gay.menkissing.advent
 
 import gay.menkissing.common.Grid
 
-object Day25 extends Problem[List[Day25.KeyOrLock], Long]:
+object Day25 extends HalfDay[List[Day25.KeyOrLock], Long]:
   case class KeyOrLock(isKey: Boolean, pinHeights: Vector[Int]):
     def compatibleWith(that: KeyOrLock): Boolean =
       assert(this.isKey ^ that.isKey)
@@ -23,9 +23,6 @@ object Day25 extends Problem[List[Day25.KeyOrLock], Long]:
       locks.filter: lock =>
         key.compatibleWith(lock)
     .size
-
-  // No part 2 on Christmas!
-  override def part2(input: List[KeyOrLock]): Long = -1L
 
   override lazy val input: String = FileIO.getContentsOf("day25.txt")
 
