@@ -26,6 +26,9 @@ extension (self: Long) {
   def binaryDigits: Int = {
     logBaseN(self.toDouble, 2.0).toInt
   }
+  infix def rem(that: Long): Long = {
+    self - math.abs(that) * math.floorDiv(self, math.abs(that))
+  }
 }
 
 object Digits {
