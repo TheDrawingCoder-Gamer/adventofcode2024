@@ -16,8 +16,9 @@ publishTo := {
     Some("releases"  at nexus + "service/local/staging/deploy/maven2")
 }
 
-lazy val root = crossProject(JSPlatform, JVMPlatform)
-   .crossType(CrossType.Pure)
+lazy val root = //crossProject(JSPlatform, JVMPlatform)
+    project
+   //.crossType(CrossType.Pure)
   .in(file("."))
   .settings(
     name := "adventofcode2024",
@@ -37,8 +38,8 @@ lazy val root = crossProject(JSPlatform, JVMPlatform)
    */
 
 lazy val bench = project.in(file("bench"))
-  .dependsOn(root.jvm)
-  //.dependsOn(root)
+  //.dependsOn(root.jvm)
+  .dependsOn(root)
   .enablePlugins(JmhPlugin)
   .settings(
       Jmh / sourceDirectory := (Compile / sourceDirectory).value,

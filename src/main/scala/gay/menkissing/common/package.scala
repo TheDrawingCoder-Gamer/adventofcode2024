@@ -197,6 +197,9 @@ extension[A](f: A => A) {
   }
 }
 
+def repeat(times: Int)(block: => Unit): Unit =
+  (0 until times).foreach(_ => block)
+
 extension[A, G[_]](f: A => G[A])(using Monad[G]) {
   def flatRepeated(n: Int): A => G[A] = {
     Kleisli.endoMonoidK[G].algebra[A].combineN(Kleisli[G, A, A](f), n).run
