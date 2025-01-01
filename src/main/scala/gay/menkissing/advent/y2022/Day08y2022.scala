@@ -12,7 +12,7 @@ object Day08y2022 extends Problem[Grid[Int], Int]:
 
   override def parse(str: String): Grid[Int] =
     Grid:
-      input.linesIterator.map:
+      str.linesIterator.map:
         _.map(_.toInt - '0')
         
   @annotation.tailrec

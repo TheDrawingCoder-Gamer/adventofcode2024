@@ -5,7 +5,7 @@ import scala.io.Source
 import scala.collection.mutable as mut
 import util.chaining.*
 
-object Day07y2022:
+object Day07y2022 extends Problem[Seq[Day07y2022.Command], Int]:
 
   lazy val input = FileIO.getInput(2022, 7)
   enum Command {
