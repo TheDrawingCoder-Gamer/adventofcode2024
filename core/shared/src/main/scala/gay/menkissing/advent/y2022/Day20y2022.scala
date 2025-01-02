@@ -3,7 +3,6 @@ package y2022
 
 import gay.menkissing.common.*
 
-import scala.collection.mutable.ArrayBuffer
 
 object Day20y2022 extends Problem[Vector[Long], Long] {
   def mix(pos: Int, n: Long, dataSize: Int): Int = {

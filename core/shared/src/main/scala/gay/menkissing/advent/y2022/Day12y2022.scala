@@ -6,7 +6,7 @@ import gay.menkissing.common.*
 // import cats.collections.*
 // import cats.collections.syntax.all.*
 object Day12y2022 extends Problem[(Vec2i, Vec2i, Day12y2022.MountainMap), Int] {
-  case class MountainMap(grid: Grid[Byte]) {
+  case class MountainMap(grid: Grid[Byte]) extends AnyVal {
     def verticies: Vector[Vec2i] = 
       (for {
         xx <- 0 until grid.width
@@ -77,7 +77,7 @@ object Day12y2022 extends Problem[(Vec2i, Vec2i, Day12y2022.MountainMap), Int] {
     astar(start, end, it => manhattanDistance(end, it), (_, _) => 1.0, graph.neighborVerts).get.length - 1
 
   def part2(input: (Vec2i, Vec2i, MountainMap)): Int = {
-    val (start, end, graph) = input
+    val (_, end, graph) = input
     val starts = graph.filterIndex((i, b) => b == 0).map(_._1)
     val res = starts.map(start => astar[Vec2i](start, end, it => manhattanDistance(end, it), (_, _) => 1.0, graph.neighborVerts))
 

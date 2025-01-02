@@ -9,25 +9,7 @@ import scala.math.BigInt
 
 // I totally forgot why this works - figure it out later!
 object Day11y2022 extends Problem[Vector[Day11y2022.Monkey], Long]:
-  class Monkey(val n: Int, val items: mut.ListBuffer[Long], val op: MonkeyOp, val divisor: Int, val throwTrue: Int, val throwFalse: Int, var inspected: Long = 0) {
-    /*
-    def inspect(monkeys: Vector[Monkey]): Vector[Long] = {
-      items.foreach {it =>
-        val res = op(it)
-        val res2 = (res / sanityLoss) % divisor
-        val bool = res2 == 0
-        val thingie = if (bool) throwTrue else throwFalse
-
-        monkeys(thingie).items += res2
-
-
-      }
-      val res = items.toVector
-      items.clear()
-      res
-    }
-    */
-  }
+  class Monkey(val n: Int, val items: mut.ListBuffer[Long], val op: MonkeyOp, val divisor: Int, val throwTrue: Int, val throwFalse: Int, var inspected: Long = 0)
 
   enum MonkeyOp(l: Option[Long], r: Option[Long]) {
     case Addition(l: Option[Long], r: Option[Long]) extends MonkeyOp(l, r)
@@ -45,24 +27,29 @@ object Day11y2022 extends Problem[Vector[Day11y2022.Monkey], Long]:
   }
   lazy val input = FileIO.getInput(2022, 11)
 
-  val multiplyRegex = raw"([a-z0-9]+) \* ([a-z0-9]+)".r
-  val additionRegex = raw"([a-z0-9]+) \+ ([a-z0-9]+)".r
-  val divisibleByRegex = raw"divisible by ([0-9]+)".r
-  val throwToMonkey = raw"throw to monkey ([0-9]+)".r
-
   def parse(str: String): Vector[Monkey] =
     str.split("\n\n").map { it =>
-      val xs = it.linesIterator.toVector
-      val monkey = xs(0).drop("Monkey ".length).dropRight(1).toInt
-      val items = xs(1).trim.drop("Starting items:".length).split(',').map(_.trim.toLong).toSeq
-      val op = xs(2).trim.drop("Operation: new = ".length).trim
-      val goodOp =
-        multiplyRegex.findFirstMatchIn(op).map(it => MonkeyOp.Multiply(it.group(1).toLongOption, it.group(2).toLongOption))
-        .orElse(additionRegex.findFirstMatchIn(op).map(it => MonkeyOp.Addition(it.group(1).toLongOption, it.group(2).toLongOption)))
-      val test = divisibleByRegex.findFirstMatchIn(xs(3)).map(_.group(1).toInt).get
-      val ifTrue = throwToMonkey.findFirstMatchIn(xs(4)).map(_.group(1).toInt).get
-      val ifFalse = throwToMonkey.findFirstMatchIn(xs(5)).map(_.group(1).toInt).get
-      Monkey(monkey, items.to(mut.ListBuffer), goodOp.get, test, ifTrue, ifFalse)
+      val xs = it.trim.linesIterator.toVector
+      xs.map(_.trim) match
+        case Vector(s"Monkey $name:",
+                    s"Starting items:$startingItems",
+                    s"Operation: new = $operation",
+                    s"Test: divisible by $div",
+                    s"If true: throw to monkey $trueMonkey",
+                    s"If false: throw to monkey $falseMonkey") =>
+          val goodOp =
+            operation.trim match
+              case s"$l $op $r" =>
+
+                val cons = op match
+                  case "*" => MonkeyOp.Multiply.apply
+                  case "+" => MonkeyOp.Addition.apply
+                  case _ => assert(false)
+                cons(l.toLongOption, r.toLongOption)
+              case _ => assert(false)
+
+          Monkey(name.toInt, startingItems.split(',').map(_.trim.toLong).to(mut.ListBuffer), goodOp, div.toInt, trueMonkey.toInt, falseMonkey.toInt)
+        case _ => assert(false)
 
     }.toVector
 

@@ -6,7 +6,7 @@ import scala.util.Using
 
 object FileIO:
   def getContentsOf(str: String): String =
-    Using(Source.fromFile(s"src/main/resources/$str")): src => 
+    Using(Source.fromFile(s"core/shared/src/main/resources/$str")): src =>
       src.mkString
     .get
   

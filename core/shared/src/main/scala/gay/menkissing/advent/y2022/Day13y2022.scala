@@ -39,10 +39,6 @@ object Day13y2022 extends Problem[Vector[Day13y2022.Packet], Int]:
   given orderPacket: Order[Packet] = Order.fromOrdering(using Ordering.ordered)
   case class NestedPacket(packets: List[Packet]) extends Packet
   case class LeafPacket(n: Int) extends Packet
-  case class PacketPair(top: Packet, bottom: Packet) {
-    def compared: Comparison = top `comparison` bottom
-
-  }
 
 
   val leafParser: Parser[LeafPacket] = Numbers.bigInt.map(it => LeafPacket(it.toInt))

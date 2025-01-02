@@ -10,7 +10,11 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/bench" />
             <option value="$PROJECT_DIR$/core/js" />
+            <option value="$PROJECT_DIR$/core/js-jvm" />
+            <option value="$PROJECT_DIR$/core/js-native" />
             <option value="$PROJECT_DIR$/core/jvm" />
+            <option value="$PROJECT_DIR$/core/jvm-native" />
+            <option value="$PROJECT_DIR$/core/native" />
             <option value="$PROJECT_DIR$/core/shared" />
             <option value="$PROJECT_DIR$/project" />
             <option value="$PROJECT_DIR$/root" />

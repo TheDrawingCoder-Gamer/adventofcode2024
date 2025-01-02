@@ -4,9 +4,7 @@ package y2022
 import gay.menkissing.common.Vec2i
 
 import scala.collection.mutable as mut
-import scala.io.Source
 import cats.collections.*
-import cats.collections.syntax.all.*
 import cats.syntax.all.*
 
 // TODO: Unacceptably slow

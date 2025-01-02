@@ -66,7 +66,6 @@ object Day16y2022 extends HalfDay[Day16y2022.ValveMap, Int]:
     else
       res.minBy(_.size).size - 1
   }
-  import scala.collection.mutable as mut
 
 
   def graphAStar(start: String, goal: String, graph: ValveMap): Option[List[String]] = {

@@ -43,6 +43,7 @@ lazy val bench = project.in(file("bench"))
   //.dependsOn(root)
   .enablePlugins(JmhPlugin)
   .settings(
+
       Jmh / sourceDirectory := (Compile / sourceDirectory).value,
       Jmh / classDirectory := (Compile / classDirectory).value,
       Jmh / dependencyClasspath := (Compile / dependencyClasspath).value,

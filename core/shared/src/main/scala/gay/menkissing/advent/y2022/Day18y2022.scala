@@ -3,9 +3,6 @@ package y2022
 
 import gay.menkissing.common.Sys3D.*
 
-import scala.io.Source
-
-
 object Day18y2022 extends HalfDay[Map[Vec3i, Day18y2022.Cube], Int]:
   def parse(input: String): Map[Vec3i, Cube] = {
     val data = input.linesIterator.map {
@@ -112,7 +109,7 @@ object Day18y2022 extends HalfDay[Map[Vec3i, Day18y2022.Cube], Int]:
                    up: Int,
                    down: Int
                    ):
-    def inBounds(pos: Vec3i) =
+    def inBounds(pos: Vec3i): Boolean =
       pos.x >= west
         && pos.x <= east
         && pos.y >= down
