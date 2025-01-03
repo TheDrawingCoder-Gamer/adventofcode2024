@@ -18,7 +18,7 @@ publishTo := {
 
 lazy val root = project.aggregate(core.jvm, core.js, core.native)
                        .settings(
-                         publishArtifact := false
+                         publish / skip := true
                        )
 
 lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
@@ -53,12 +53,12 @@ lazy val bench = project.in(file("bench"))
       Jmh / compile := (Jmh / compile).dependsOn(Test / compile).value,
       Jmh / run := (Jmh / run).dependsOn(Jmh / compile).evaluated,
       run / baseDirectory := goodDir,
-      publishArtifact := false
+      publish / skip := true
   )
 
 lazy val inputHelper = project.in(file("inputhelper"))
     .settings(
-      publishArtifact := false,
+      publish / skip := true,
       run / baseDirectory := goodDir,
       libraryDependencies += "com.softwaremill.sttp.client4" %% "core" % "4.0.0-M22"
     )
