@@ -1,7 +1,5 @@
 package gay.menkissing.advent
 
-import gay.menkissing.common.Grid
-
 object Day25 extends HalfDay[List[Day25.KeyOrLock], Long]:
   case class KeyOrLock(isKey: Boolean, pinHeights: Vector[Int]):
     def compatibleWith(that: KeyOrLock): Boolean =
@@ -24,6 +22,6 @@ object Day25 extends HalfDay[List[Day25.KeyOrLock], Long]:
         key.compatibleWith(lock)
     .size
 
-  override lazy val input: String = FileIO.getContentsOf("day25.txt")
+  override lazy val input: String = FileIO.getInput(2024, 25)
 
 

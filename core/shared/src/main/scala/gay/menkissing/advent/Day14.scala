@@ -94,5 +94,5 @@ object Day14 extends ProblemAdv[List[Day14.Robot], Int, Int] {
     r
   }
 
-  lazy val input: String = FileIO.getContentsOf("day14.txt").trim
+  lazy val input: String = FileIO.getInput(2024, 14).trim
 }

@@ -5,7 +5,7 @@ import gay.menkissing.advent.Problem
 import scala.io.Source
 
 object Day2 extends Problem[List[List[Int]], Int]:
-  override lazy val input: String = FileIO.getContentsOf("day2.txt")
+  override lazy val input: String = FileIO.getInput(2024, 2)
 
   override def parse(str: String): List[List[Int]] =
     str.linesIterator.map(_.split(' ').map(_.toInt).toList).toList

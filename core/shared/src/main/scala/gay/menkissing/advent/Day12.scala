@@ -135,5 +135,5 @@ object Day12 extends Problem[Day12.PlantMap, Int] {
     plants.regions.map(r => r.area * r.sides).sum
   }
 
-  override lazy val input: String = FileIO.getContentsOf("day12.txt")
+  override lazy val input: String = FileIO.getInput(2024, 12)
 }

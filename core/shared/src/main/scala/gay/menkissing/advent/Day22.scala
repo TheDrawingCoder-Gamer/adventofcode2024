@@ -64,4 +64,4 @@ object Day22 extends Problem[List[Int], Long]:
 
 
 
-  override lazy val input: String = Source.fromResource("day22.txt").mkString
+  override lazy val input: String = FileIO.getInput(2024, 22)

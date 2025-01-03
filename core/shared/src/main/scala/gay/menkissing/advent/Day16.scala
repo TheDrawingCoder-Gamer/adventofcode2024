@@ -100,7 +100,7 @@ object Day16 extends Problem[Day16.ProblemState, Int]:
   override def part2(input: ProblemState): Int =
     input.getGoodSeats.size
 
-  override lazy val input: String = FileIO.getContentsOf("day16.txt")
+  override lazy val input: String = FileIO.getInput(2024, 16)
 
 
 

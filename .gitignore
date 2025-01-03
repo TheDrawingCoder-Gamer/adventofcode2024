@@ -46,7 +46,7 @@ build/
 ### Scala ###
 .bsp/
 
-src/main/resources/**/*.txt
+core/shared/src/main/resources/**/*.txt
 !core/shared/src/main/resources/**/*tst.txt
 
 *.png

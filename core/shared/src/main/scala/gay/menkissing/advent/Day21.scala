@@ -228,4 +228,4 @@ object Day21 extends Problem[List[String], Long]:
       num * res
     .sum
 
-  override lazy val input: String = FileIO.getContentsOf("day21.txt")
+  override lazy val input: String = FileIO.getInput(2024, 21)

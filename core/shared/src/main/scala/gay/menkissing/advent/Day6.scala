@@ -8,7 +8,7 @@ import scala.collection.mutable as mut
 import scala.io.Source
 
 object Day6 extends Problem[(Grid[Boolean], Int), Int]:
-  lazy val input = FileIO.getContentsOf("day6.txt")
+  lazy val input = FileIO.getInput(2024, 6)
 
   override def parse(str: String): (Grid[Boolean], Int) =
     (Grid[Boolean](str.linesIterator.map(_.map(_ == '#'))), str.linesIterator.flatten.indexWhere(_ == '^'))

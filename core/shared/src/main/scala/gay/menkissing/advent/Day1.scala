@@ -4,7 +4,7 @@ import gay.menkissing.advent.Problem
 
 
 object Day1 extends Problem[(List[Int], List[Int]), Int]:
-  override lazy val input = FileIO.getContentsOf("day1.txt")
+  override lazy val input = FileIO.getInput(2024, 1)
 
   override def parse(str: String): (List[Int], List[Int]) = 
     str.linesIterator.map { case s"$a   $b" => (a.toInt, b.toInt) }.toList.unzip

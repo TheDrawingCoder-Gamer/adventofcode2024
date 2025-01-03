@@ -195,5 +195,5 @@ object Day15Writeup extends Writeup[Day15Writeup.ProblemState, Long] {
       i.step.getOrElse(i)
     .find(_.remainingMoves.isEmpty).get.gpsCalc
 
-  override lazy val input: String = FileIO.getContentsOf("day15.txt")
+  override lazy val input: String = FileIO.getInput(2024, 15)
 }

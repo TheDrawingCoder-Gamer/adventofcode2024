@@ -53,4 +53,4 @@ object Day19 extends Problem[(List[String], List[String]), Long]:
     val (towels, designs) = input
     designs.map(countDesigns(towels, _)).sum
 
-  override lazy val input: String = FileIO.getContentsOf("day19.txt")
+  override lazy val input: String = FileIO.getInput(2024, 19)

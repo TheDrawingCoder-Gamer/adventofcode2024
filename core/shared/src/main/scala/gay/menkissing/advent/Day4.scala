@@ -7,7 +7,7 @@ import scala.io.Source
 
 
 object Day4 extends Problem[Grid[Char], Int]:
-  lazy val input = FileIO.getContentsOf("day4.txt")
+  lazy val input = FileIO.getInput(2024, 4)
 
   override def parse(str: String): Grid[Char] =
     Grid[Char](str.linesIterator.map(_.toCharArray))

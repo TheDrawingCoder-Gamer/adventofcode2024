@@ -66,5 +66,5 @@ object Day13 extends Problem[List[Day13.CraneMachine], Long] {
     input.flatMap(_.correctUnitError.minimumTokensP2).sum
   }
 
-  lazy val input: String = FileIO.getContentsOf("day13.txt").trim
+  lazy val input: String = FileIO.getInput(2024, 13).trim
 }

@@ -75,4 +75,4 @@ object Day20 extends Problem[Day20.RaceTrack, Int]:
 
     cheats.count(_.saved >= 100)
 
-  override lazy val input: String = FileIO.getContentsOf("day20.txt")
+  override lazy val input: String = FileIO.getInput(2024, 20)

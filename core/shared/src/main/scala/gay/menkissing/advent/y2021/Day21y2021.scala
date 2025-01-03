@@ -5,6 +5,8 @@ import cats.data.*
 import cats.implicits.*
 import cats.*
 
+import gay.menkissing.common.*
+
 object Day21y2021 extends Problem[Day21y2021.ProblemState, BigInt]:
   case class Player(score: Int, space: Int):
     def move(n: Int): Player =
@@ -105,7 +107,7 @@ object Day21y2021 extends Problem[Day21y2021.ProblemState, BigInt]:
   
   override def part2(input: ProblemState): BigInt =
     val p2State = P2State(input, BigInt(1))
-    val (l, r) = LazyList.unfold((BigInt(0), BigInt(0), Chain(p2State))):
+    val (l, r) = unfolded((BigInt(0), BigInt(0), Chain(p2State))):
       case (p1Sum, p2Sum, states) =>
         Option.when(states.nonEmpty):
           val r = states.foldLeft((p1Sum, p2Sum, Chain[P2State]())):
@@ -114,6 +116,5 @@ object Day21y2021 extends Problem[Day21y2021.ProblemState, BigInt]:
   
               (p1 + counts._1, p2 + counts._2, allStates ++ list)
           ((r._1, r._2), r)
-    .last
     l.max(r)
 

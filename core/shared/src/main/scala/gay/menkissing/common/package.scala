@@ -250,3 +250,37 @@ def bfsFoldl[A, B](a: A)(f: A => Either[Iterable[A], B])(using M: Monoid[B]): B 
 extension[A] (set: scala.collection.Set[A]) {
   def ⊆(that: scala.collection.Set[A]): Boolean = set.subsetOf(that)
 }
+
+extension[A] (self: Iterable[A])
+  def findMap[B](f: A => Option[B]): Option[B] = self.collectFirst(f.unlift)
+
+extension[A, B] (self: Either[A, B])
+  def leftOrDie: A = self.swap.getOrElse(throw new Exception("Right.leftOrDie"))
+
+  def rightOrDie: B = self.getOrElse(throw new Exception("Left.rightOrDie"))
+
+extension[A] (self: Iterator[A])
+  def findMap[B](f: A => Option[B]): Option[B] =
+    val i = self.flatMap(f)
+    Option.when(i.hasNext)(i.next())
+
+
+extension[A] (self: Vector[A])
+  def unsnoc: (Vector[A], A) = (self.init, self.last)
+
+object Unsnoc:
+  def unapply[A](vec: Vector[A]): Option[(Vector[A], A)] =
+    Option.when(vec.nonEmpty)(vec.unsnoc)
+
+@tailrec
+def unfoldedMap[A, S](init: S)(f: S => Either[A, S]): A =
+  f(init) match
+    case Left(a) => a
+    case Right(s) => unfoldedMap(s)(f)
+    
+def unfolded[A, S](init: S)(f: S => Option[(A, S)]): A =
+  def go(state: S, acc: Option[A]): Option[A] =
+    f(state) match
+      case None => acc
+      case Some((a, v)) => go(v, Some(a))
+  go(init, None).get

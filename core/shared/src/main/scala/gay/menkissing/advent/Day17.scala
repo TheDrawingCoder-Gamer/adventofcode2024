@@ -94,7 +94,7 @@ object Day17 extends ProblemAdv[Day17.ComputerState, String, Long]:
       if (input.program.endsWith(input.copy(regA = a).complete)) a << 3 else if (a % 8 < 7) a + 1 else (a >> 3) + 1
     .find(it => input.copy(regA = it).completeP2).get
 
-  override lazy val input: String = FileIO.getContentsOf("day17.txt")
+  override lazy val input: String = FileIO.getInput(2024, 17)
   /*
   def testPrograms(): Unit = {
     {

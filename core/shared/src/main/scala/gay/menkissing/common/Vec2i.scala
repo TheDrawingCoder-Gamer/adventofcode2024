@@ -52,6 +52,13 @@ case class Vec2i(x: Int, y: Int) extends Ordered[Vec2i] {
   def cardinalNeighbors: List[Vec2i] =
     List(Vec2i(x - 1, y), Vec2i(x + 1, y), Vec2i(x, y - 1), Vec2i(x, y + 1))
   
+  def allNeighbors: Iterator[Vec2i] =
+    for {
+      x <- (-1 to 1).iterator
+      y <- (-1 to 1)
+      if x != 0 || y != 0
+    } yield Vec2i(this.x + x, this.y + y)
+  
   def toLong: Vec2l = Vec2l(x.toLong, y.toLong)
 
   def stepsTowards(that: Vec2i): Vector[Direction2D] =
