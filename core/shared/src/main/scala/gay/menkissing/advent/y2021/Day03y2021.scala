@@ -12,15 +12,11 @@ object Day03y2021 extends Problem[(List[Int], Int), Int]:
   def part1(input: (List[Int], Int)): Int =
     val (is, bitSize) = input
     val halfCount = is.length / 2
-    val counts = (0 until bitSize).reverse.map: bit =>
-      val num = 1 << bit
-      is.count(it => (num & it) != 0) > halfCount
-
-    val gamma = counts.foldLeft(0):
-      case (acc, x) =>
-        val r = if x then 1 else 0
-        (acc << 1) + r
-
+    val gamma = (0 until bitSize).reverse.foldLeft(0): 
+      case (acc, bit) =>
+        val num = 1 << bit
+        val is1 = is.count(it => (num & it) != 0) > halfCount
+        (acc << 1) + (if is1 then 1 else 0)
 
     val epsilon = gamma ^ ((1 << bitSize) - 1)
 
