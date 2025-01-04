@@ -28,8 +28,8 @@ object Day05y2021 extends Problem[List[Day05y2021.Line], Int]:
         case LineOrientation.Vertical => (math.min(start.y, end.y) to math.max(start.y, end.y))
           .map(y => Vec2i(start.x, y)).toSet
         case LineOrientation.Diagonal =>
-          ((start.x to end.x by math.signum(end.x - start.x)).toList, (start.y to end.y by math.signum(end.y - start.y)).toList).parMapN:
-            (x, y) => Vec2i(x, y)
+          ((start.x to end.x by math.signum(end.x - start.x)).toList, 
+            (start.y to end.y by math.signum(end.y - start.y)).toList).parMapN(Vec2i.apply)
           .toSet
   enum LineOrientation:
     case Horizontal, Vertical, Diagonal, Point
@@ -54,17 +54,17 @@ object Day05y2021 extends Problem[List[Day05y2021.Line], Int]:
           case Some(v) => Some(v + 1)
           case None => Some(1)
 
+    def countDanger: Int = map.count((_, i) => i >= 2)
+
   def part1(input: List[Line]): Int =
     val daMap = mut.HashMap.empty[Vec2i, Int]
-    input.filter(_.orientation != LineOrientation.Diagonal).foreach: line =>
-      daMap.updateInPlaceField(line)
+    input.filter(_.orientation != LineOrientation.Diagonal).foreach(daMap.updateInPlaceField)
 
-    daMap.count((_, i) => i >= 2)
+    daMap.countDanger
 
   def part2(input: List[Line]): Int =
     val daMap = mut.HashMap.empty[Vec2i, Int]
-    input.foreach: line =>
-      daMap.updateInPlaceField(line)
+    input.foreach(daMap.updateInPlaceField)
 
-    daMap.count((_, i) => i >= 2)
+    daMap.countDanger
 
