@@ -37,6 +37,7 @@ object Main extends Bench:
     import y2021.*
 
     benchmarkFull(1, Day01y2021)
+    benchmarkFull(2, Day02y2021)
     benchmarkFull(6, Day6y2021)
     benchmarkFull(19, Day19y2021)
     benchmarkFull(20, Day20y2021)
