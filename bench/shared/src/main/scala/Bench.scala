@@ -27,7 +27,12 @@ def nanoTimed[U](a: => U): Double =
 
 case class Benchmark(name: String, body: Blackhole.Impl => Unit, unit: TimeUnit)
 
-case class Result(name: String, mean: Double, error: Double, unit: TimeUnit)
+case class Result(name: String, mean: Double, error: Double, unit: TimeUnit):
+  def pretty: String =
+    val goodMean = TimeUnit.Nanoseconds.convertTo(mean, unit)
+    val goodError = TimeUnit.Nanoseconds.convertTo(error, unit)
+    
+    s"$name $goodMean [+/-] ${goodError} ${unit.display}"
 
 trait Bench:
   val warmup: Int = 3
@@ -40,6 +45,7 @@ trait Bench:
     benchmarks.append(Benchmark(name, hole => {
       hole.consumed(body)
     }, benchUnit))
+
 
   def main(badArgs: Array[String]): Unit =
     val args = Args.args(badArgs)
@@ -68,15 +74,14 @@ trait Bench:
           times.append(time)
           Gc.gc()
         val stats = ListStatistics(times.toVector)
-        Result(name, stats.mean, stats.standardErrorOfTheMean, unit)
+        val r = Result(name, stats.mean, stats.standardErrorOfTheMean, unit)
+        println(r.pretty)
+        r
 
     println("results: ")
-    benches.foreach:
-      case Result(name, mean, error, unit) =>
-        val goodMean = TimeUnit.Nanoseconds.convertTo(mean, unit)
-        val goodError = TimeUnit.Nanoseconds.convertTo(error, unit)
+    benches.foreach(it => println(it.pretty))
 
-        println(s"$name $goodMean [+/-] ${goodError} ${unit.display}")
+        
 
 
 

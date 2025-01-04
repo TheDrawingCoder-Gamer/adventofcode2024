@@ -1,6 +1,10 @@
 import scala.scalanative.build.Mode.releaseFull
-import scala.scalanative.build._
-import complete.DefaultParsers._
+import scala.scalanative.build.*
+import complete.DefaultParsers.*
+import org.scalajs.jsenv.{Input, RunConfig}
+
+import scala.concurrent.Await
+import scala.concurrent.duration.Duration
 import scala.sys.process.Process
 import scala.sys.process.*
 
@@ -69,16 +73,25 @@ lazy val bench = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("
   .jsSettings(
     scalaJSUseMainModuleInitializer := true,
     scalaJSLinkerConfig ~= {
-      _.withModuleKind(ModuleKind.CommonJSModule)
+      _.withModuleKind(ModuleKind.ESModule)
+       // .withExperimentalUseWebAssembly(true)
     },
-    jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(org.scalajs.jsenv.nodejs.NodeJSEnv.Config().withArgs(List("--expose-gc"))),
     runNode := {
-      val file = (Compile / fullOptJS).value
+      val report = (Compile / fullLinkJS).value.data
       val args: Seq[String] = spaceDelimited("<arg>").parsed
 
-      val nodeRun: Seq[String] = (Seq[String]("node", "--expose-gc", file.data.toString) ++ Seq("--") ++ args)
+      val mainModule = report.publicModules.find(_.moduleID == "main").get
 
-      Process(nodeRun, (run / baseDirectory).value).!<
+
+      val linkerOutputDir = (Compile / fullLinkJS / scalaJSLinkerOutputDirectory).value
+
+      val path = (linkerOutputDir / mainModule.jsFileName).toPath
+
+
+
+      val process = Process(Seq[String]("node", "--expose-gc", path.toString, "--") ++ args, (run / baseDirectory).value)
+
+      process.!<
     }
   )
 
