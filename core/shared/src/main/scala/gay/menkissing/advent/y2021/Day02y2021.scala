@@ -29,14 +29,12 @@ object Day02y2021 extends Problem[List[(Day02y2021.Dir, Int)], Int]:
 
 
   def part1(input: List[(Dir, Int)]): Int =
-    val (horz, down, up) = input.foldLeft((0, 0, 0)):
-      case ((horz, down, up), (dir, n)) =>
+    val (horz, depth) = input.foldLeft((0, 0)):
+      case ((horz, depth), (dir, n)) =>
         dir match
-          case Dir.Forward => (horz + n, down, up)
-          case Dir.Down => (horz, down + n, up)
-          case Dir.Up => (horz, down, up + n)
-
-    val depth = down - up
+          case Dir.Forward => (horz + n, depth)
+          case Dir.Down => (horz, depth + n)
+          case Dir.Up => (horz, depth - n)
 
     depth * horz
 
