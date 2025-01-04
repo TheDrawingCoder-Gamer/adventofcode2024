@@ -41,6 +41,7 @@ object Main extends Bench:
     benchmarkFull(3, Day03y2021)
     benchmarkFull(5, Day05y2021)
     benchmarkFull(6, Day6y2021)
+    benchmarkFull(7, Day07y2021)
     benchmarkFull(19, Day19y2021)
     benchmarkFull(20, Day20y2021)
     benchmarkFull(21, Day21y2021)
