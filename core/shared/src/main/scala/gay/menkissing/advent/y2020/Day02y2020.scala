@@ -21,4 +21,4 @@ object Day02y2020 extends Problem[List[Day02y2020.PolicyEntry], Int]:
       val r = entry.password(entry.right - 1) == entry.of
       l ^ r
 
-  override lazy val input: String = FileIO.getContentsOf("y2020/day02.txt")
+  override lazy val input: String = FileIO.getInput(2020, 2)

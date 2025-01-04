@@ -90,7 +90,7 @@ object Day14 extends ProblemAdv[List[Day14.Robot], Int, Int] {
 
   override def part2(input: List[Robot]): Int = {
     val r = input.findEasterEgg
-    println(input.stepN(r).pretty)
+    // println(input.stepN(r).pretty)
     r
   }
 

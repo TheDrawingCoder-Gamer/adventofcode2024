@@ -1,5 +1,8 @@
 import scala.scalanative.build.Mode.releaseFull
 import scala.scalanative.build._
+import complete.DefaultParsers._
+import scala.sys.process.Process
+import scala.sys.process.*
 
 ThisBuild / organization := "gay.menkissing"
 ThisBuild / version := "0.1.0-SNAPSHOT"
@@ -7,6 +10,8 @@ ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / scalaVersion := "3.6.2"
 
 val goodDir = file(".")
+
+lazy val runNode = inputKey[Unit]("Run a node app with arguments.")
 
 publishTo := {
   val nexus = "https://s01.oss.sonatype.org/"
@@ -32,29 +37,51 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     Compile / run / fork := true,
     Compile / run / baseDirectory := goodDir,
   )
-  /*
+
   .nativeSettings(
     nativeConfig ~= { c =>
-      c.withMode(releaseFull).withOptimize(true).withGC(GC.none)
+      c.withMode(releaseFull)
     }
   )
 
-   */
 
-lazy val bench = project.in(file("bench"))
-  .dependsOn(core.jvm)
+
+lazy val bench = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("bench"))
+  .dependsOn(core)
   //.dependsOn(root)
-  .enablePlugins(JmhPlugin)
+  .configurePlatform(JVMPlatform)(_.enablePlugins(JmhPlugin))
   .settings(
-
+    publish / skip := true,
+    run / baseDirectory := goodDir,
+  )
+  .jvmSettings(
       Jmh / sourceDirectory := (Compile / sourceDirectory).value,
       Jmh / classDirectory := (Compile / classDirectory).value,
       Jmh / dependencyClasspath := (Compile / dependencyClasspath).value,
       Jmh / compile := (Jmh / compile).dependsOn(Test / compile).value,
       Jmh / run := (Jmh / run).dependsOn(Jmh / compile).evaluated,
-      run / baseDirectory := goodDir,
-      publish / skip := true
   )
+  .nativeSettings(
+    nativeConfig ~= { c =>
+      c.withMode(releaseFull)
+    }
+  )
+  .jsSettings(
+    scalaJSUseMainModuleInitializer := true,
+    scalaJSLinkerConfig ~= {
+      _.withModuleKind(ModuleKind.CommonJSModule)
+    },
+    jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(org.scalajs.jsenv.nodejs.NodeJSEnv.Config().withArgs(List("--expose-gc"))),
+    runNode := {
+      val file = (Compile / fullOptJS).value
+      val args: Seq[String] = spaceDelimited("<arg>").parsed
+
+      val nodeRun: Seq[String] = (Seq[String]("node", "--expose-gc", file.data.toString) ++ Seq("--") ++ args)
+
+      Process(nodeRun, (run / baseDirectory).value).!<
+    }
+  )
+
 
 lazy val inputHelper = project.in(file("inputhelper"))
     .settings(
@@ -62,3 +89,5 @@ lazy val inputHelper = project.in(file("inputhelper"))
       run / baseDirectory := goodDir,
       libraryDependencies += "com.softwaremill.sttp.client4" %% "core" % "4.0.0-M22"
     )
+
+

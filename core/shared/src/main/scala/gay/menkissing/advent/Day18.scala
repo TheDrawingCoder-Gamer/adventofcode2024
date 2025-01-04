@@ -22,7 +22,7 @@ object Day18 extends ProblemAdv[List[Vec2i], Int, Vec2i]:
     val daGrid = bytes.foldLeft(Grid.fill(gridSize.x, gridSize.y)(false))((g, p) => g.updated(p)(true))
     val daEnd = Vec2i(gridSize.x - 1, gridSize.y - 1)
     val path = astar[Vec2i](Vec2i(0, 0), daEnd, _.taxiDistance(daEnd), (_, _) => 1d, _.cardinalNeighbors.filter(p => daGrid.get(p).contains(false))).get
-    println(path)
+
     path.size - 1
 
 

@@ -45,7 +45,7 @@ object Day6y2021 extends Problem[Vector[Int], Long]:
     advance.repeated(256)(fishMap).foldLeft(0L):
       case (acc, (_, v)) => acc + v
 
-  override lazy val input: String = FileIO.getContentsOf("y2021/day6.txt")
+  override lazy val input: String = FileIO.getInput(2021, 6)
 
 
 

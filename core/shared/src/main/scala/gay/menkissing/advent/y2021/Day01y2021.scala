@@ -17,5 +17,5 @@ object Day01y2021 extends Problem[List[Int], Int]:
   override def part2(input: List[Int]): Int =
     measureScans(slidingSums(input))
 
-  override lazy val input: String = FileIO.getContentsOf("y2021/day01.txt")
+  override lazy val input: String = FileIO.getInput(2021, 1)
 

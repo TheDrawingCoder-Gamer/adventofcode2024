@@ -12,7 +12,7 @@ object Day11 extends Problem[List[Long], Long]:
   lazy val input = FileIO.getInput(2024, 11)
 
   override def parse(str: String): List[Long] =
-    str.split(' ').map(_.toLong).toList
+    str.split(' ').map(_.trim.toLong).toList
 
 
   def testPowOf2(n: Long): Boolean = {

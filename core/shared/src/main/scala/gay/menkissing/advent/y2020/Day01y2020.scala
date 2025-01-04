@@ -15,4 +15,4 @@ object Day01y2020 extends Problem[List[Int], Int]:
       Option.when(x + y + z == 2020)(x * y * z)
     }.next()
 
-  override lazy val input: String = FileIO.getContentsOf("y2020/day01.txt")
+  override lazy val input: String = FileIO.getInput(2020, 1)

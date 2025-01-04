@@ -16,7 +16,7 @@ object Day23 extends ProblemAdv[Day23.LANConnections, Long, String]:
       .toList
 
   case class LANConnections(values: List[(String, String)]):
-    val allComputers: List[String] = values.flatMap((x, y) => List(x, y)).distinct
+    val allComputers: Set[String] = values.iterator.flatMap((x, y) => List(x, y)).toSet
     val computerMap: Map[String, Set[String]] =
       values.flatMap(it => List((it._1, it._2), (it._2, it._1))).groupMap(_._1)(_._2).view.mapValues(_.toSet).toMap
 
@@ -35,7 +35,7 @@ object Day23 extends ProblemAdv[Day23.LANConnections, Long, String]:
 
 
   override def part1(conns: LANConnections): Long =
-    conns.allComputers.toSet.subsets(3).filter: l =>
+    conns.allComputers.subsets(3).filter: l =>
       l.exists(_.head == 't')
         && l.forall: it =>
             l.filter(_ != it).forall: r =>

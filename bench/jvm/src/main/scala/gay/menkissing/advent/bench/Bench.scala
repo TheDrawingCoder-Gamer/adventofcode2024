@@ -1,10 +1,8 @@
 package gay.menkissing.advent
 package bench
 
-import y2020.*
-import y2021.*
-
-import org.openjdk.jmh.annotations.Benchmark
+import gay.menkissing.advent.y2020.*
+import gay.menkissing.advent.y2021.*
 import org.openjdk.jmh.annotations.*
 
 import java.util.concurrent.TimeUnit

@@ -8,7 +8,13 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/bench" />
+            <option value="$PROJECT_DIR$/bench/js" />
+            <option value="$PROJECT_DIR$/bench/js-jvm" />
+            <option value="$PROJECT_DIR$/bench/js-native" />
+            <option value="$PROJECT_DIR$/bench/jvm" />
+            <option value="$PROJECT_DIR$/bench/jvm-native" />
+            <option value="$PROJECT_DIR$/bench/native" />
+            <option value="$PROJECT_DIR$/bench/shared" />
             <option value="$PROJECT_DIR$/core/js" />
             <option value="$PROJECT_DIR$/core/js-jvm" />
             <option value="$PROJECT_DIR$/core/js-native" />
