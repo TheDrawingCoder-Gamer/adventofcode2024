@@ -16,20 +16,23 @@ def nanoTimed[U](a: => U): Double =
   (end - start).toDouble
 
 case class Benchmark(name: String, body: Blackhole.Impl => Unit, unit: TimeUnit):
-  def run(plan: IterationPlan): IterationResult =
-    println(s"benchmarking $name...")
+  def run(plan: IterationPlan, quiet: Boolean = false): IterationResult =
+    if (!quiet)
+      println(s"benchmarking $name...")
     val hole = Blackhole.obtainBlackhole()
 
     (1 to plan.warmup).foreach: n =>
       val time = nanoTimed(body(hole))
       hole.teardown()
-      println(f"warmup $n: ${TimeUnit.Nanoseconds.convertTo(time, unit)}%1.3f ${unit.display}")
+      if (!quiet)
+        println(f"warmup $n: ${TimeUnit.Nanoseconds.convertTo(time, unit)}%1.3f ${unit.display}")
       Gc.gc()
     val times = mut.ListBuffer[Double]()
     (1 to plan.measurement).foreach: n =>
       val time = nanoTimed(body(hole))
       hole.teardown()
-      println(f"iteration $n: ${TimeUnit.Nanoseconds.convertTo(time, unit)}%1.3f ${unit.display}")
+      if (!quiet)
+        println(f"iteration $n: ${TimeUnit.Nanoseconds.convertTo(time, unit)}%1.3f ${unit.display}")
       times.append(time)
       Gc.gc()
     val stats = ListStatistics(times.toVector)
@@ -53,16 +56,19 @@ trait Bench:
 
   def main(badArgs: Array[String]): Unit =
     val args = Args.args(badArgs)
+    val goodArgs = args.filter(!_.startsWith("--"))
     val daBenches =
-      if args.nonEmpty then
-        val reg = args(0).r
+      if goodArgs.nonEmpty then
+        val reg = goodArgs(0).r
         benchmarks.filter(it => reg.matches(it._1)).toVector
       else
         benchmarks.toVector
 
+    val quiet = args.contains("--quiet")
+
     val hole = Blackhole.obtainBlackhole()
 
-    val benches = daBenches.map(it => spawn.Spawn.run(IterationPlan(warmup, measurement), it.name))
+    val benches = daBenches.map(it => spawn.Spawn.run(IterationPlan(warmup, measurement), it.name, quiet))
 
     println("results: ")
     benches.foreach(it => println(it.pretty))

@@ -19,6 +19,8 @@ val goodDir = file(".")
 
 lazy val runNode = inputKey[Unit]("Run a node app with arguments.")
 
+lazy val benchAll = inputKey[Unit]("Bench for all platforms.")
+
 publishTo := {
   val nexus = "https://s01.oss.sonatype.org/"
   if (isSnapshot.value)
@@ -29,7 +31,8 @@ publishTo := {
 
 lazy val root = project.aggregate(core.jvm, core.js, core.native)
                        .settings(
-                         publish / skip := true
+                         publish / skip := true,
+
                        )
 
 lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
@@ -59,7 +62,8 @@ lazy val bench = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("
   .settings(
     publish / skip := true,
     run / baseDirectory := goodDir,
-    Compile / run / mainClass := Some("gay.menkissing.bench.Main")
+    Compile / run / mainClass := Some("gay.menkissing.bench.Main"),
+
   )
   .jvmSettings(
       Jmh / sourceDirectory := (Compile / sourceDirectory).value,
@@ -103,6 +107,9 @@ lazy val bench = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("
     }
   )
 
+lazy val benchJVM = bench.jvm
+lazy val benchJS = bench.js
+lazy val benchNative = bench.native
 
 lazy val inputHelper = project.in(file("inputhelper"))
     .settings(
@@ -112,3 +119,16 @@ lazy val inputHelper = project.in(file("inputhelper"))
     )
 
 
+lazy val benchExec = project
+  .settings(
+    benchAll := {
+      Def.inputTaskDyn {
+        val args = spaceDelimited("<arg>").parsed.mkString(" ")
+        Def.sequential(
+          (bench.jvm / Compile / run).toTask(" --quiet " ++ args),
+          (bench.js / runNode).toTask(" --quiet " ++ args),
+          (bench.native / Compile / run).toTask(" --quiet " ++ args)
+        )
+      }.evaluated
+    }
+  )

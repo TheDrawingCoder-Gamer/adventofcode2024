@@ -25,32 +25,32 @@ object Spawn:
   @JSImport("node:child_process", JSImport.Namespace)
   object childProcess extends ChildProcessPackage
 
-  private def runForkedCommand(plan: IterationPlan, name: String): SpawnResult =
+  private def runForkedCommand(plan: IterationPlan, name: String, quiet: Boolean): SpawnResult =
     val args = Args.process.argv
     val frontMatter = args.takeWhile(_ != "--").toSeq
     childProcess.spawnSync(frontMatter.head, js.Array(Seq("--expose-gc")*), js.Dynamic.literal("input" ->
       s"""
         |const { JSForkedMain } = await import("${frontMatter.last}")
         |
-        |JSForkedMain.forkedMain("$name", ${plan.warmup}, ${plan.measurement})
+        |JSForkedMain.forkedMain("$name", ${plan.warmup}, ${plan.measurement}, $quiet)
         |""".stripMargin,
       "encoding" -> "utf8", "stdio" -> js.Array("pipe", "inherit", "pipe")))
 
 
-  def run(plan: IterationPlan, name: String): IterationResult =
-    val res = runForkedCommand(plan, name)
+  def run(plan: IterationPlan, name: String, quiet: Boolean): IterationResult =
+    val res = runForkedCommand(plan, name, quiet)
     IterationResult.parse(res.stderr.linesIterator.toList.last)
 
 
 @JSExportTopLevel("JSForkedMain")
 object ForkedMain:
   @JSExport("forkedMain")
-  def forkedMain(name: String, warmup: Int, measurement: Int): Unit = {
+  def forkedMain(name: String, warmup: Int, measurement: Int, quiet: Boolean): Unit = {
 
     val plan = IterationPlan(warmup, measurement)
 
     val benchmark = Main.benchmarkMap(name)
-    val res = benchmark.run(plan)
+    val res = benchmark.run(plan, quiet)
 
     System.err.println(res.serialized)
   }
