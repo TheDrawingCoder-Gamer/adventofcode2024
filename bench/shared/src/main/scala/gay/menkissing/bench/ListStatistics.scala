@@ -1,3 +1,5 @@
+package gay.menkissing.bench
+
 class ListStatistics(val samples: Vector[Double]):
   def max: Double =
     samples.maxOption.getOrElse(Double.NaN)

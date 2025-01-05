@@ -1,4 +1,8 @@
+package gay.menkissing.bench
+
 import gay.menkissing.advent.*
+import gay.menkissing.bench.Bench
+import gay.menkissing.bench.Main.benchmark
 
 
 // JVM can run this too, but Jmh is preferred bc they know what they are doing

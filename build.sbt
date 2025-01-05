@@ -3,6 +3,8 @@ import scala.scalanative.build.*
 import complete.DefaultParsers.*
 import org.scalajs.jsenv.{Input, RunConfig}
 
+import java.io.ByteArrayInputStream
+import java.nio.charset.StandardCharsets
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import scala.sys.process.Process
@@ -57,6 +59,7 @@ lazy val bench = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("
   .settings(
     publish / skip := true,
     run / baseDirectory := goodDir,
+    Compile / run / mainClass := Some("gay.menkissing.bench.Main")
   )
   .jvmSettings(
       Jmh / sourceDirectory := (Compile / sourceDirectory).value,
@@ -64,6 +67,7 @@ lazy val bench = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("
       Jmh / dependencyClasspath := (Compile / dependencyClasspath).value,
       Jmh / compile := (Jmh / compile).dependsOn(Test / compile).value,
       Jmh / run := (Jmh / run).dependsOn(Jmh / compile).evaluated,
+      Compile / run / fork := true
   )
   .nativeSettings(
     nativeConfig ~= { c =>
@@ -71,7 +75,6 @@ lazy val bench = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("
     }
   )
   .jsSettings(
-    scalaJSUseMainModuleInitializer := true,
     scalaJSLinkerConfig ~= {
       _.withModuleKind(ModuleKind.ESModule)
        // .withExperimentalUseWebAssembly(true)
@@ -89,9 +92,14 @@ lazy val bench = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("
 
 
 
-      val process = Process(Seq[String]("node", "--expose-gc", path.toString, "--") ++ args, (run / baseDirectory).value)
-
-      process.!<
+      val process = Process(Seq[String]("node", "--expose-gc", "-", s"${path.toString}", "--") ++ args, (run / baseDirectory).value)
+      val is = new ByteArrayInputStream(
+        s"""
+          |const { JSMain } = await import("${path.toString}")
+          |
+          |JSMain.main()
+          |""".stripMargin.getBytes(StandardCharsets.UTF_8))
+      process.#<(is).!
     }
   )
 
