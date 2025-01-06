@@ -33,6 +33,8 @@ object Day12y2022 extends Problem[(Vec2i, Vec2i, Day12y2022.MountainMap), Int] {
         vert <- verticies 
       } yield (vert, grid(vert))).filter(f.tupled)
     }
+
+    def zipWithIndex: Seq[(Byte, Vec2i)] = grid.zipWithIndices
   }
 
   def manhattanDistance(v1: Vec2i, v2: Vec2i) = Math.abs(v1.x - v2.x) + Math.abs(v1.y - v2.y)
@@ -78,9 +80,8 @@ object Day12y2022 extends Problem[(Vec2i, Vec2i, Day12y2022.MountainMap), Int] {
 
   def part2(input: (Vec2i, Vec2i, MountainMap)): Int = {
     val (_, end, graph) = input
-    val starts = graph.filterIndex((i, b) => b == 0).map(_._1)
-    val res = starts.map(start => astar[Vec2i](start, end, it => manhattanDistance(end, it), (_, _) => 1.0, graph.neighborVerts))
+    val starts = graph.zipWithIndex.flatMap((i, p) => Option.when(i == 0)(p))
+    starts.flatMap(start => astar[Vec2i](start, end, it => manhattanDistance(end, it), (_, _) => 1.0, graph.neighborVerts).map(_.length)).min - 1
 
-    res.map(_.map(_.length).getOrElse(Int.MaxValue)).min - 1
   }
 }

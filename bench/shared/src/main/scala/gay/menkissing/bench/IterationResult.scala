@@ -21,3 +21,6 @@ object IterationResult:
     str match
       case s"$name;$mean;$error;$unit" =>
         IterationResult(name, mean.toDouble, error.toDouble, TimeUnit.parse(unit))
+      case _ =>
+        println(str)
+        throw new RuntimeException("Not a valid IterationResult")

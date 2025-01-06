@@ -21,13 +21,14 @@ case class Benchmark(name: String, body: Blackhole.Impl => Unit, unit: TimeUnit)
       println(s"benchmarking $name...")
     val hole = Blackhole.obtainBlackhole()
 
+    val times = mut.ListBuffer[Double]()
     (1 to plan.warmup).foreach: n =>
       val time = nanoTimed(body(hole))
       hole.teardown()
       if (!quiet)
         println(f"warmup $n: ${TimeUnit.Nanoseconds.convertTo(time, unit)}%1.3f ${unit.display}")
       Gc.gc()
-    val times = mut.ListBuffer[Double]()
+
     (1 to plan.measurement).foreach: n =>
       val time = nanoTimed(body(hole))
       hole.teardown()

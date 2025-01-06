@@ -1,74 +1,94 @@
 package gay.menkissing.advent
 package y2022
 
-import gay.menkissing.common.Vec2i
+import gay.menkissing.common.*
 
 import scala.collection.mutable as mut
-import cats.collections.*
 import cats.syntax.all.*
+import cats.data.Chain
 
 // TODO: Unacceptably slow
-object Day15y2022 extends Problem[Day15y2022.RangeGrid, Long]:
+object Day15y2022 extends Problem[Set[Day15y2022.SensorRanged], Long]:
   case class SensorRanged(pos: Vec2i, beacon: Vec2i) {
     val range = pos `taxiDistance` beacon
     lazy val leftBound = pos.x - range
     lazy val rightBound = pos.x + range
     lazy val bottomBound = pos.y + range
     lazy val topBound = pos.y - range
-    def ranges: Map[Int, Diet[Int]] =
-      (for {
-        row <- topBound to bottomBound
-      } yield rangeForRow(row).map(it => (row, it)))
-        .flatten
-        .map((k, v) => (k, Diet.fromRange(v)))
-        .toMap
-    def rangeForRow(row: Int): Option[Range[Int]] = {
-      val diff = Math.abs(pos.y - row)
+    def rangeForRow(row: Int): Option[Range] = {
+      val diff = math.abs(pos.y - row)
       val newRange = range - diff
       if (newRange <= 0)
         None
       else
         Some(Range(pos.x - newRange, pos.x + newRange))
     }
-    def affectsRow(row: Int): Boolean =
-      rangeForRow(row).isDefined
-    def withinRange(that: Vec2i): Boolean =
-      (pos `taxiDistance` that) <= range
-    def positionsInRow(row: Int): Set[Vec2i] =
-      (for {
-        xx <- rangeForRow(row).map(_.toList)
-      } yield xx.map(it => Vec2i(it, row))).getOrElse(List()).toSet.filter(it => this.withinRange(it) && it != beacon)
+
   }
+  def emptySpots(target: Range, cover: List[Range]): Set[Int] =
+    cover.foldLeft(List(target)):
+      case (acc, range) =>
+        acc.flatMap(r => diffRange(r, range))
+    .flatten.toSet
+
   class RangeGrid(values: Set[SensorRanged]) {
-     val rows = values.view.map(_.ranges).fold(Map())(_ |+| _).filter((k, v) => k >= 0)
-     def getRow(row: Int): Diet[Int] = {
-       rows.getOrElse(row, Diet.empty)
+     def getRow(row: Int): List[Range] = {
+       values.foldLeft(Chain.empty[Range]):
+         case (acc, ls) =>
+           acc ++ Chain.fromOption(ls.rangeForRow(row))
+       .toList
      }
-     def findValidPos(max: Int): Option[Vec2i] = {
-       val (row, daRow) = rows.find((k, v) => k >= 0 && k <= max && !v.containsRange(Range(0, max))).get
-       (0 to max).find(it => !daRow.contains(it)).map(it => Vec2i(it, row))
+     def beaconsOnLine(row: Int): Set[Int] =
+       values.withFilter(_.beacon.y == row).map(_.beacon.x)
+
+     def findValidPos(max: Int): Seq[Vec2i] = {
+       (0 to max).flatMap: y =>
+         val r = emptySpots(0 to max, getRow(y))
+         if r.nonEmpty then
+           val b = r.diff(beaconsOnLine(y))
+           Option.when(b.nonEmpty):
+             // This may be incorrect because my solution has 2 available slots
+             //println(b)
+             //assert(b.size == 1)
+             Vec2i(b.toList.head, y)
+         else
+           None
      }
   }
 
   lazy val input = FileIO.getInput(2022, 15)
 
-  def parse(input: String): RangeGrid =
-    val data  =
-      input.linesIterator.map {
-        case s"Sensor at x=$sx, y=$sy: closest beacon is at x=$bx, y=$by" => SensorRanged(Vec2i(sx.toInt, sy
-          .toInt), Vec2i(bx.toInt, by.toInt))
-        case _ => assert(false)
-      }.toSet
-    RangeGrid(data)
+  def diffRange(r1: Range, r2: Range): List[Range] =
+    val init = r1.start to math.min(r2.start - 1, r1.last)
+    val tail = math.max(r1.start, r2.last + 1) to r1.last
+    val res = if init == tail then
+      List(init)
+    else
+      List(init, tail)
+    res.filter(_.nonEmpty)
+
+
+  def parse(input: String): Set[SensorRanged] =
+    input.linesIterator.map {
+      case s"Sensor at x=$sx, y=$sy: closest beacon is at x=$bx, y=$by" => SensorRanged(Vec2i(sx.toInt, sy
+        .toInt), Vec2i(bx.toInt, by.toInt))
+      case _ => assert(false)
+    }.toSet
 
   val max = 4000000
 
-  def part1(input: RangeGrid): Long =
-    input.getRow(2000000).foldLeftRange(0L):
-      case (acc, range) => acc + (range.end - range.start).toLong
+  def part1(input: Set[SensorRanged]): Long =
+    input.foldLeft(0L):
+      case (acc, item) =>
+        item.rangeForRow(2000000) match
+          case Some(range) =>  acc + (range.end - range.start).toLong
+          case _           =>  acc
 
-  def part2(input: RangeGrid): Long =
-    val Vec2i(x, y) = input.findValidPos(max).get
+  def part2(input: Set[SensorRanged]): Long =
+    val grid = RangeGrid(input)
+    val spots = grid.findValidPos(max)
+    assert(spots.length == 1)
+    val Vec2i(x, y) = spots.head
     (x.toLong * 4000000) + y.toLong
 
 
