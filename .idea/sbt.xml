@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/bench/jvm-native" />
             <option value="$PROJECT_DIR$/bench/native" />
             <option value="$PROJECT_DIR$/bench/shared" />
+            <option value="$PROJECT_DIR$/benchExec" />
             <option value="$PROJECT_DIR$/core/js" />
             <option value="$PROJECT_DIR$/core/js-jvm" />
             <option value="$PROJECT_DIR$/core/js-native" />

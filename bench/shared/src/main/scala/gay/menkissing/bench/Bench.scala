@@ -36,7 +36,10 @@ case class Benchmark(name: String, body: Blackhole.Impl => Unit, unit: TimeUnit)
       times.append(time)
       Gc.gc()
     val stats = ListStatistics(times.toVector)
-    IterationResult(name, stats.mean, stats.standardErrorOfTheMean, unit)
+    val r = IterationResult(name, stats.mean, stats.standardErrorOfTheMean, unit)
+    if (!quiet)
+      println(r.pretty)
+    r
 
 trait Bench:
   val warmup: Int = 3
@@ -71,7 +74,9 @@ trait Bench:
     val benches = daBenches.map(it => spawn.Spawn.run(IterationPlan(warmup, measurement), it.name, quiet))
 
     println("results: ")
-    benches.foreach(it => println(it.pretty))
+    // benches.foreach(it => println(s"${it.name}: ${it.hocon}"))
+    benches.foreach(it => println(s"${it.pretty}; ${it.hocon}"))
+
 
         
 

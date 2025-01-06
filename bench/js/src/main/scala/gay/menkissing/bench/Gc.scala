@@ -6,7 +6,7 @@ import scalajs.js
 object Gc:
   @js.native
   @JSGlobal("gc")
-  def jsGc(): Unit = js.native
+  def jsGc(minorGc: Boolean): Unit = js.native
 
 
-  def gc(): Unit = jsGc()
+  def gc(): Unit = jsGc(false)
