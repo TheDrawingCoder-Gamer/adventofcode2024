@@ -72,7 +72,7 @@ object Main extends Bench:
     benchmarkFull(13, Day13y2022)
     benchmarkFull(14, Day14y2022)
     benchmarkFull(15, Day15y2022, unitP1 = TimeUnit.Microseconds, unitP2 = TimeUnit.Microseconds)
-    benchmarkHalf(16, Day16y2022)
+    benchmarkFull(16, Day16y2022)
 
     benchmarkHalf(18, Day18y2022)
 
