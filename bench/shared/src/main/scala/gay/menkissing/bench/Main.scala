@@ -9,13 +9,13 @@ import gay.menkissing.bench.Main.benchmark
 object Main extends Bench:
   case class Year(n: Int) extends AnyVal
 
-  def benchmarkFull[A, B, C](day: Int, p: ProblemAdv[A, B, C])(using year: Year): Unit =
-    benchmark(s"day${day}y${year.n}p1"):
+  def benchmarkFull[A, B, C](day: Int, p: ProblemAdv[A, B, C], unitP1: TimeUnit = TimeUnit.Milliseconds, unitP2: TimeUnit = TimeUnit.Milliseconds)(using year: Year): Unit =
+    benchmark(s"day${day}y${year.n}p1", unitP1):
       p.fullPart1
-    benchmark(s"day${day}y${year.n}p2"):
+    benchmark(s"day${day}y${year.n}p2", unitP2):
       p.fullPart2
-  def benchmarkHalf[A, B](day: Int, p: HalfDay[A, B])(using year: Year): Unit =
-    benchmark(s"day${day}y${year.n}p1"):
+  def benchmarkHalf[A, B](day: Int, p: HalfDay[A, B], unit: TimeUnit = TimeUnit.Milliseconds)(using year: Year): Unit =
+    benchmark(s"day${day}y${year.n}p1", unit):
       p.fullPart1
 
   {
@@ -71,7 +71,7 @@ object Main extends Bench:
     benchmarkFull(12, Day12y2022)
     benchmarkFull(13, Day13y2022)
     benchmarkFull(14, Day14y2022)
-    benchmarkFull(15, Day15y2022)
+    benchmarkFull(15, Day15y2022, unitP1 = TimeUnit.Microseconds, unitP2 = TimeUnit.Microseconds)
     benchmarkHalf(16, Day16y2022)
 
     benchmarkHalf(18, Day18y2022)
