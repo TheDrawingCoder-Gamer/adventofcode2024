@@ -4,7 +4,8 @@ import gay.menkissing.advent.ProblemAdv
 import gay.menkissing.common.*
 
 import scala.annotation.tailrec
-import scala.collection.{AbstractIterator, mutable as mut, immutable as immut}
+import scala.collection.{AbstractIterator, mutable as mut}
+import scala.collection.immutable.BitSet
 import scala.io.Source
 
 object Day23 extends ProblemAdv[Day23.LANConnections, Long, String]:
@@ -33,23 +34,21 @@ object Day23 extends ProblemAdv[Day23.LANConnections, Long, String]:
       String.valueOf(Array(c1, c2))
 
   case class LANConnections(values: List[(Int, Int)]):
-    val computerMap: Map[Int, immut.BitSet] =
-      values.flatMap(it => List((it._1, it._2), (it._2, it._1))).groupMap(_._1)(_._2).view.mapValues(_.to(immut.BitSet)).toMap
+    val computerMap: Map[Int, BitSet] =
+      values.flatMap(it => List((it._1, it._2), (it._2, it._1))).groupMap(_._1)(_._2).view.mapValues(_.to(BitSet)).toMap
 
 
-  @specialized
-  def maximumClique(graph: Map[Int, immut.BitSet]): immut.BitSet =
-    @specialized
-    def maximalCliques(r: immut.BitSet, p: immut.BitSet, x: immut.BitSet): Set[immut.BitSet] =
+  def maximumClique(graph: Map[Int, BitSet]): BitSet =
+    def maximalCliques(r: BitSet, p: BitSet, x: BitSet): Set[BitSet] =
       if p.isEmpty && x.isEmpty then
         Set(r)
       else
         val u = p.union(x).head
-        p.diff(graph(u)).foldLeft((Set[immut.BitSet](), p, x)):
+        p.diff(graph(u)).foldLeft((Set[BitSet](), p, x)):
           case ((res, p, x), v) =>
             (res ++ maximalCliques(r.incl(v), p.intersect(graph(v)), p.intersect(graph(v))), p - v, x.incl(v))
         ._1
-    maximalCliques(immut.BitSet(), graph.keySet.to(immut.BitSet), immut.BitSet()).maxBy(_.size)
+    maximalCliques(BitSet(), graph.keySet.to(BitSet), BitSet()).maxBy(_.size)
 
 
   override def part1(conns: LANConnections): Long =
