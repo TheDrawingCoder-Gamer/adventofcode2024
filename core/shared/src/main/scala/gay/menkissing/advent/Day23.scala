@@ -28,33 +28,32 @@ object Day23 extends ProblemAdv[Day23.LANConnections, Long, String]:
       (n >> 5).toChar == 't'
 
     def unapply(n: Int): String =
-      val c1 = (n >> 5).toChar
-      val c2 = (n & 0b11111).toChar
+      val c1 = ((n >> 5) + 'a').toChar
+      val c2 = ((n & 0b11111) + 'a').toChar
       String.valueOf(Array(c1, c2))
 
   case class LANConnections(values: List[(Int, Int)]):
-    val allComputers: Set[Int] = values.iterator.flatMap((x, y) => Iterator(x, y)).toSet
-    val computerMap: Map[Int, Set[Int]] =
-      values.flatMap(it => List((it._1, it._2), (it._2, it._1))).groupMap(_._1)(_._2).view.mapValues(_.toSet).toMap
+    val computerMap: Map[Int, immut.BitSet] =
+      values.flatMap(it => List((it._1, it._2), (it._2, it._1))).groupMap(_._1)(_._2).view.mapValues(_.to(immut.BitSet)).toMap
 
 
   @specialized
-  def maximumClique[A](graph: Map[A, Set[A]]): Set[A] =
+  def maximumClique(graph: Map[Int, immut.BitSet]): immut.BitSet =
     @specialized
-    def maximalCliques(r: Set[A], p: Set[A], x: Set[A]): Set[Set[A]] =
+    def maximalCliques(r: immut.BitSet, p: immut.BitSet, x: immut.BitSet): Set[immut.BitSet] =
       if p.isEmpty && x.isEmpty then
         Set(r)
       else
         val u = p.union(x).head
-        p.diff(graph(u)).foldLeft((Set[Set[A]](), p, x)):
+        p.diff(graph(u)).foldLeft((Set[immut.BitSet](), p, x)):
           case ((res, p, x), v) =>
             (res ++ maximalCliques(r.incl(v), p.intersect(graph(v)), p.intersect(graph(v))), p - v, x.incl(v))
         ._1
-    maximalCliques(Set(), graph.keySet, Set()).maxBy(_.size)
+    maximalCliques(immut.BitSet(), graph.keySet.to(immut.BitSet), immut.BitSet()).maxBy(_.size)
 
 
   override def part1(conns: LANConnections): Long =
-    val goodMap = conns.computerMap.map((x, y) => (x, y.to(immut.BitSet)))
+    val goodMap = conns.computerMap
     val res = for {
       (n1, n2s) <- goodMap.iterator
       if Computer.startsWithT(n1)
