@@ -11,7 +11,7 @@ import scala.io.Source
 object Day23 extends ProblemAdv[Day23.LANConnections, Long, String]:
   override def parse(str: String): Day23.LANConnections =
     LANConnections:
-      str.linesIterator.map:
+      str.trim.linesIterator.map:
         case s"$x-$y" =>
           (Computer(x), Computer(y))
       .toList
@@ -26,7 +26,7 @@ object Day23 extends ProblemAdv[Day23.LANConnections, Long, String]:
       (c1 << 5) + c2
 
     def startsWithT(n: Int): Boolean =
-      (n >> 5).toChar == 't'
+      ((n >> 5) + 'a').toChar == 't'
 
     def unapply(n: Int): String =
       val c1 = ((n >> 5) + 'a').toChar
