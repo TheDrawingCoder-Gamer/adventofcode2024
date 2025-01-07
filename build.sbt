@@ -107,10 +107,6 @@ lazy val bench = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("
     }
   )
 
-lazy val benchJVM = bench.jvm
-lazy val benchJS = bench.js
-lazy val benchNative = bench.native
-
 lazy val inputHelper = project.in(file("inputhelper"))
     .settings(
       publish / skip := true,
@@ -130,5 +126,6 @@ lazy val benchExec = project
           (bench.native / Compile / run).toTask(" --quiet " ++ args)
         )
       }.evaluated
-    }
+    },
+    publish / skip := true
   )
