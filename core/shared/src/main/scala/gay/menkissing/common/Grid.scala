@@ -76,8 +76,8 @@ case class Grid[A] private (values: Vector[Vector[A]]){
       _.prependedAll(Vector.fill[A](n)(default))
        .appendedAll(Vector.fill[A](n)(default))
      )
-      .appended(Vector.fill(width + n * 2)(default))
-      .prepended(Vector.fill(width + n * 2)(default))
+      .appendedAll(Vector.fill(n, width + n * 2)(default))
+      .prependedAll(Vector.fill(n, width + n * 2)(default))
     )
   }
   def expandDir(default: A)(n: Int, dir: Direction2D): Grid[A] = {

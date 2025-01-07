@@ -80,8 +80,8 @@ object Main extends Bench:
     benchmarkFull(20, Day20y2022)
     benchmarkFull(21, Day21y2022)
     benchmarkFull(22, Day22y2022)
-
-
+    benchmarkFull(23, Day23y2022)
+    benchmarkFull(24, Day24y2022)
     benchmarkHalf(25, Day25y2022)
   }
 
