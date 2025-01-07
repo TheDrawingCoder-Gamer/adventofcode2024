@@ -18,6 +18,7 @@ object Main extends Bench:
     benchmark(s"day${day}y${year.n}p1", unit):
       p.fullPart1
 
+
   {
     given Year = Year(2020)
 
@@ -78,7 +79,7 @@ object Main extends Bench:
 
     benchmarkFull(20, Day20y2022)
     benchmarkFull(21, Day21y2022)
-    benchmarkHalf(22, Day22y2022)
+    benchmarkFull(22, Day22y2022)
 
 
     benchmarkHalf(25, Day25y2022)

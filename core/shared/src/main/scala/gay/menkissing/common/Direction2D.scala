@@ -28,5 +28,15 @@ enum Direction2D {
       case Direction2D.Up => Direction2D.Left
       case Direction2D.Down => Direction2D.Right
       case Direction2D.Left => Direction2D.Down
-      case Direction2D.Right => Direction2D.Up 
+      case Direction2D.Right => Direction2D.Up
+      
+      
+  def reverse: Direction2D = clockwise.clockwise
+  
+  def flipHorizontal: Direction2D =
+    this match
+      case Direction2D.Up => Direction2D.Up
+      case Direction2D.Down => Direction2D.Down
+      case Direction2D.Left => Direction2D.Right
+      case Direction2D.Right => Direction2D.Left
 }
