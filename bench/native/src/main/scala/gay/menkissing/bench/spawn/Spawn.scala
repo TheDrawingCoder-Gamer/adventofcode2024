@@ -1,9 +1,9 @@
 package gay.menkissing.bench.spawn
 
-import gay.menkissing.bench.{IterationPlan, IterationResult, Main}
+import gay.menkissing.bench.{IterationPlan, IterationResult, Main, Verbosity}
 
 object Spawn:
-  def run(plan: IterationPlan, name: String, quiet: Boolean): Vector[Double] =
+  def run(name: String, verbosity: Verbosity): Vector[Double] =
     // Native doesn't actually need forking so this should be fine
-    Main.benchmarkMap(name).run(quiet)
+    Main.benchmarkMap(name).run(verbosity)
 

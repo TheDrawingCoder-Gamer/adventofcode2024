@@ -1,6 +1,6 @@
 package gay.menkissing.bench.spawn
 
-import gay.menkissing.bench.{Args, IterationPlan, IterationResult, Main}
+import gay.menkissing.bench.{Args, IterationPlan, IterationResult, Main, Verbosity}
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel, JSImport}
@@ -25,32 +25,31 @@ object Spawn:
   @JSImport("node:child_process", JSImport.Namespace)
   object childProcess extends ChildProcessPackage
 
-  private def runForkedCommand(plan: IterationPlan, name: String, quiet: Boolean): SpawnResult =
+  private def runForkedCommand(name: String, verbosity: Verbosity): SpawnResult =
     val args = Args.process.argv
     val frontMatter = args.takeWhile(_ != "--").toSeq
     childProcess.spawnSync(frontMatter.head, js.Array(Seq("--expose-gc")*), js.Dynamic.literal("input" ->
       s"""
         |const { JSForkedMain } = await import("${frontMatter.last}")
         |
-        |JSForkedMain.forkedMain("$name", ${plan.warmup}, ${plan.measurement}, $quiet)
+        |JSForkedMain.forkedMain("$name", ${verbosity.ordinal})
         |""".stripMargin,
       "encoding" -> "utf8", "stdio" -> js.Array("pipe", "inherit", "pipe")))
 
 
-  def run(plan: IterationPlan, name: String, quiet: Boolean): Vector[Double] =
-    val res = runForkedCommand(plan, name, quiet)
+  def run(name: String, verbosity: Verbosity): Vector[Double] =
+    val res = runForkedCommand(name, verbosity)
     res.stderr.linesIterator.toList.last.split(',').map(_.toDouble).toVector
 
 
 @JSExportTopLevel("JSForkedMain")
 object ForkedMain:
   @JSExport("forkedMain")
-  def forkedMain(name: String, warmup: Int, measurement: Int, quiet: Boolean): Unit = {
-
-    val plan = IterationPlan(warmup, measurement)
+  def forkedMain(name: String, verbosityN: Int): Unit = {
+    val verbosity = Verbosity.fromOrdinal(verbosityN)
 
     val benchmark = Main.benchmarkMap(name)
-    val res = benchmark.run(quiet)
+    val res = benchmark.run(verbosity)
 
     System.err.println(res.mkString(","))
   }

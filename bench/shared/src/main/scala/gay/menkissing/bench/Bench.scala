@@ -15,7 +15,8 @@ def nanoTimed[U](a: => U): Double =
   (end - start).toDouble
 
 
-
+enum Verbosity:
+  case Quiet, Normal, Verbose
 
 trait Bench:
 
@@ -26,8 +27,8 @@ trait Bench:
 
 
   case class Benchmark(name: String, body: Blackhole.Impl => Unit, opts: BenchmarkOptions):
-    def run(quiet: Boolean = false): Vector[Double] =
-      if (!quiet)
+    def run(verbosity: Verbosity): Vector[Double] =
+      if (verbosity.ordinal >= Verbosity.Normal.ordinal)
         println(s"benchmarking $name...")
       val hole = Blackhole.obtainBlackhole()
 
@@ -39,7 +40,7 @@ trait Bench:
         if n > opts.warmup then
           times.append(time)
 
-        if (!quiet)
+        if (verbosity.ordinal >= Verbosity.Verbose.ordinal)
           val displayN = if n > opts.warmup then n - opts.warmup else n
           println(f"${if n > opts.warmup then "iteration" else "warmup"} $displayN: ${TimeUnit.Nanoseconds.convertTo(time, opts.unit)}%1.3f ${opts.unit.display}")
         Gc.gc()
@@ -73,10 +74,18 @@ trait Bench:
       else
         benchmarks.toVector
 
-    val quiet = args.contains("--quiet")
+    val quiet = args.contains("--quiet") && !args.contains("--no-quiet")
+    val verbose = args.contains("--verbose")
 
+    val verbosity =
+      if verbose then
+        Verbosity.Verbose
+      else if quiet then
+        Verbosity.Quiet
+      else
+        Verbosity.Normal
     val benches = daBenches.map { it =>
-      val samples = spawn.Spawn.run(IterationPlan(warmup, measurement), it.name, quiet)
+      val samples = spawn.Spawn.run(it.name, verbosity)
       val result = IterationResult(it.name, ListStatistics(samples), it.opts.unit)
       println(result.fullResult)
       result
