@@ -37,9 +37,9 @@ object Spawn:
       "encoding" -> "utf8", "stdio" -> js.Array("pipe", "inherit", "pipe")))
 
 
-  def run(plan: IterationPlan, name: String, quiet: Boolean): IterationResult =
+  def run(plan: IterationPlan, name: String, quiet: Boolean): Vector[Double] =
     val res = runForkedCommand(plan, name, quiet)
-    IterationResult.parse(res.stderr.linesIterator.toList.last)
+    res.stderr.linesIterator.toList.last.split(',').map(_.toDouble).toVector
 
 
 @JSExportTopLevel("JSForkedMain")
@@ -50,7 +50,7 @@ object ForkedMain:
     val plan = IterationPlan(warmup, measurement)
 
     val benchmark = Main.benchmarkMap(name)
-    val res = benchmark.run(plan, quiet)
+    val res = benchmark.run(quiet)
 
-    System.err.println(res.serialized)
+    System.err.println(res.mkString(","))
   }

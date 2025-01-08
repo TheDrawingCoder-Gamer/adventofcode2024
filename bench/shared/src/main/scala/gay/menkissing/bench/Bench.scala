@@ -8,54 +8,59 @@ import scala.collection.mutable as mut
 
 
 
-
 def nanoTimed[U](a: => U): Double =
   val start = System.nanoTime()
   a
   val end = System.nanoTime()
   (end - start).toDouble
 
-case class Benchmark(name: String, body: Blackhole.Impl => Unit, unit: TimeUnit):
-  def run(plan: IterationPlan, quiet: Boolean = false): IterationResult =
-    if (!quiet)
-      println(s"benchmarking $name...")
-    val hole = Blackhole.obtainBlackhole()
 
-    val times = mut.ListBuffer[Double]()
-    (1 to plan.warmup).foreach: n =>
-      val time = nanoTimed(body(hole))
-      hole.teardown()
-      if (!quiet)
-        println(f"warmup $n: ${TimeUnit.Nanoseconds.convertTo(time, unit)}%1.3f ${unit.display}")
-      Gc.gc()
 
-    (1 to plan.measurement).foreach: n =>
-      val time = nanoTimed(body(hole))
-      hole.teardown()
-      if (!quiet)
-        println(f"iteration $n: ${TimeUnit.Nanoseconds.convertTo(time, unit)}%1.3f ${unit.display}")
-      times.append(time)
-      Gc.gc()
-    val stats = ListStatistics(times.toVector)
-    val r = IterationResult(name, stats.mean, stats.standardErrorOfTheMean, unit)
-    if (!quiet)
-      println(r.pretty)
-    r
 
 trait Bench:
+
+
   val warmup: Int = 3
   val measurement: Int = 3
   val unit: TimeUnit = TimeUnit.Milliseconds
+
+
+  case class Benchmark(name: String, body: Blackhole.Impl => Unit, opts: BenchmarkOptions):
+    def run(quiet: Boolean = false): Vector[Double] =
+      if (!quiet)
+        println(s"benchmarking $name...")
+      val hole = Blackhole.obtainBlackhole()
+
+      val times = mut.ListBuffer[Double]()
+      // JavaScript gets upset here if I break this into two loops so i dont
+      (1 to opts.warmup + opts.measurement).foreach: n =>
+        val time = nanoTimed(body(hole))
+        hole.teardown()
+        if n > opts.warmup then
+          times.append(time)
+
+        if (!quiet)
+          val displayN = if n > opts.warmup then n - opts.warmup else n
+          println(f"${if n > opts.warmup then "iteration" else "warmup"} $displayN: ${TimeUnit.Nanoseconds.convertTo(time, opts.unit)}%1.3f ${opts.unit.display}")
+        Gc.gc()
+
+      times.toVector
+
+  case class BenchmarkOptions(
+                               unit: TimeUnit = unit,
+                               warmup: Int = warmup,
+                               measurement: Int = measurement
+                             )
 
   private val benchmarks = mut.ListBuffer[Benchmark]()
 
   lazy val benchmarkMap: Map[String, Benchmark] =
     benchmarks.map(it => (it.name, it)).toMap
 
-  final def benchmark[U](name: String, benchUnit: TimeUnit = unit)(body: => U): Unit =
+  final def benchmark[U](name: String, options: BenchmarkOptions = BenchmarkOptions())(body: => U): Unit =
     benchmarks.append(Benchmark(name, hole => {
       hole.consumed(body)
-    }, benchUnit))
+    }, options))
 
 
   def main(badArgs: Array[String]): Unit =
@@ -70,9 +75,12 @@ trait Bench:
 
     val quiet = args.contains("--quiet")
 
-    val hole = Blackhole.obtainBlackhole()
-
-    val benches = daBenches.map(it => spawn.Spawn.run(IterationPlan(warmup, measurement), it.name, quiet))
+    val benches = daBenches.map { it =>
+      val samples = spawn.Spawn.run(IterationPlan(warmup, measurement), it.name, quiet)
+      val result = IterationResult(it.name, ListStatistics(samples), it.opts.unit)
+      println(result.fullResult)
+      result
+    }
 
     println("results: ")
     // benches.foreach(it => println(s"${it.name}: ${it.hocon}"))

@@ -25,8 +25,6 @@ object Day04y2021 extends Problem[(List[Int], List[Day04y2021.BingoCard]), Int]:
     base.map(it => (it, false))
 
   extension (card: RealBingoCard)
-    def acceptCallouts(callouts: Set[Int]): RealBingoCard =
-      card.map((n, x) => (n, x || callouts(n)))
     def acceptCallout(callout: Int): RealBingoCard =
       card.map((n, x) => (n, (n == callout) || x))
 

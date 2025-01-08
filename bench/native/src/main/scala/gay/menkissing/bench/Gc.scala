@@ -1,4 +1,4 @@
 package gay.menkissing.bench
 
 object Gc:
-  def gc(): Unit = ()
+  def gc(): Unit = System.gc()

@@ -28,7 +28,23 @@ class ListStatistics(val samples: Vector[Double]):
     Math.sqrt(samples.map(xi => Math.pow(xi - mean, 2)).sum / (n * (n - 1)))
   }
 
+  def meanErrorAt(confidence: Double): Double =
+    if n <= 2 then
+      Double.NaN
+    else
+      val dist = util.TDistribution(n - 1)
+      val a = dist.inverseCumulativeProbability(1 - (1 - confidence) / 2)
+      a * standardDeviation / math.sqrt(n)
 
+  def confidenceIntervalAt(confidence: Double): Option[(Double, Double)] =
+    Option.when(n > 2):
+      val dist = util.TDistribution(n - 1)
+      val a = dist.inverseCumulativeProbability(1 - (1 - confidence) / 2)
+      val mean = this.mean
+      (
+        mean - a * standardDeviation / math.sqrt(n),
+        mean + a * standardDeviation / math.sqrt(n)
+      )
 
 
 

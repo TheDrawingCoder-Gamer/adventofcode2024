@@ -9,13 +9,32 @@ import gay.menkissing.bench.Main.benchmark
 object Main extends Bench:
   case class Year(n: Int) extends AnyVal
 
-  def benchmarkFull[A, B, C](day: Int, p: ProblemAdv[A, B, C], unitP1: TimeUnit = TimeUnit.Milliseconds, unitP2: TimeUnit = TimeUnit.Milliseconds)(using year: Year): Unit =
-    benchmark(s"day${day}y${year.n}p1", unitP1):
+  enum FullOpts:
+    case Separate(p1: BenchmarkOptions, p2: BenchmarkOptions)
+    case Both(opts: BenchmarkOptions)
+
+    def part1: BenchmarkOptions =
+      this match
+        case Both(opts) => opts
+        case Separate(p1, _) => p1
+
+    def part2: BenchmarkOptions =
+      this match
+        case Both(opts) => opts
+        case Separate(_, p2) => p2
+
+  object FullOpts:
+    def part1Only(opts: BenchmarkOptions) = FullOpts.Separate(opts, BenchmarkOptions())
+
+    def part2Only(opts: BenchmarkOptions) = FullOpts.Separate(BenchmarkOptions(), opts)
+
+  def benchmarkFull[A, B, C](day: Int, p: ProblemAdv[A, B, C], opts: FullOpts = FullOpts.Both(BenchmarkOptions()))(using year: Year): Unit =
+    benchmark(s"day${day}y${year.n}p1", opts.part1):
       p.fullPart1
-    benchmark(s"day${day}y${year.n}p2", unitP2):
+    benchmark(s"day${day}y${year.n}p2", opts.part2):
       p.fullPart2
-  def benchmarkHalf[A, B](day: Int, p: HalfDay[A, B], unit: TimeUnit = TimeUnit.Milliseconds)(using year: Year): Unit =
-    benchmark(s"day${day}y${year.n}p1", unit):
+  def benchmarkHalf[A, B](day: Int, p: HalfDay[A, B], opts: BenchmarkOptions = BenchmarkOptions())(using year: Year): Unit =
+    benchmark(s"day${day}y${year.n}p1", opts):
       p.fullPart1
 
 
@@ -73,7 +92,7 @@ object Main extends Bench:
     benchmarkFull(12, Day12y2022)
     benchmarkFull(13, Day13y2022)
     benchmarkFull(14, Day14y2022)
-    benchmarkFull(15, Day15y2022, unitP1 = TimeUnit.Microseconds, unitP2 = TimeUnit.Microseconds)
+    benchmarkFull(15, Day15y2022, FullOpts.part1Only(BenchmarkOptions(unit = TimeUnit.Microseconds)))
     benchmarkFull(16, Day16y2022)
 
     benchmarkHalf(18, Day18y2022)
@@ -116,7 +135,7 @@ object Main extends Bench:
     benchmarkFull(14, Day14)
     benchmarkFull(15, Day15)
     benchmarkFull(16, Day16)
-    benchmarkFull(17, Day17)
+    benchmarkFull(17, Day17, FullOpts.Both(BenchmarkOptions(unit = TimeUnit.Microseconds, warmup = 10, measurement = 25)))
     benchmarkFull(18, Day18)
     benchmarkFull(19, Day19)
     benchmarkFull(20, Day20)

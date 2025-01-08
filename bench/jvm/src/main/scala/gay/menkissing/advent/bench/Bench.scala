@@ -3,6 +3,7 @@ package bench
 
 import gay.menkissing.advent.y2020.*
 import gay.menkissing.advent.y2021.*
+import gay.menkissing.advent.y2022.*
 import org.openjdk.jmh.annotations.*
 
 import java.util.concurrent.TimeUnit
@@ -186,3 +187,8 @@ class Bench:
   @Benchmark
   def day21y2021p2(): Unit = Day21y2021.fullPart2
 
+
+  @Benchmark
+  def day15y2022p1(): Unit = Day15y2022.fullPart1
+  @Benchmark
+  def day15y2022p2(): Unit = Day15y2022.fullPart2
