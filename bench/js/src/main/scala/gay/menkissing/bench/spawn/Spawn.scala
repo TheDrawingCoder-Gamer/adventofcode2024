@@ -1,6 +1,6 @@
 package gay.menkissing.bench.spawn
 
-import gay.menkissing.bench.{Args, IterationPlan, IterationResult, Main, Verbosity}
+import gay.menkissing.bench.{Args, BenchmarkRunOpts, IterationPlan, IterationResult, Main, Verbosity}
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel, JSImport}
@@ -25,21 +25,24 @@ object Spawn:
   @JSImport("node:child_process", JSImport.Namespace)
   object childProcess extends ChildProcessPackage
 
-  private def runForkedCommand(name: String, verbosity: Verbosity): SpawnResult =
+  private def runForkedCommand(name: String, runOpts: BenchmarkRunOpts): SpawnResult =
     val args = Args.process.argv
     val frontMatter = args.takeWhile(_ != "--").toSeq
     childProcess.spawnSync(frontMatter.head, js.Array(Seq("--expose-gc")*), js.Dynamic.literal("input" ->
       s"""
         |const { JSForkedMain } = await import("${frontMatter.last}")
         |
-        |JSForkedMain.forkedMain("$name", ${verbosity.ordinal})
+        |JSForkedMain.forkedMain("$name", ${runOpts.verbosity.ordinal})
         |""".stripMargin,
-      "encoding" -> "utf8", "stdio" -> js.Array("pipe", "inherit", "pipe")))
+      "encoding" -> "utf8", "stdio" -> js.Array("pipe", "inherit", "pipe"), "timeout" -> runOpts.timeout.map(_.toMillis).getOrElse(js.undefined)))
 
 
-  def run(name: String, verbosity: Verbosity): Vector[Double] =
-    val res = runForkedCommand(name, verbosity)
-    res.stderr.linesIterator.toList.last.split(',').map(_.toDouble).toVector
+  def run(name: String, runOpts: BenchmarkRunOpts): Option[Vector[Double]] =
+    val res = runForkedCommand(name, runOpts)
+    if res.signal != null then
+      None
+    else
+      Some(res.stderr.linesIterator.toList.last.split(',').map(_.toDouble).toVector)
 
 
 @JSExportTopLevel("JSForkedMain")

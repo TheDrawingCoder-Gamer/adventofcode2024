@@ -3,25 +3,31 @@ package gay.menkissing.bench
 
 import cats.syntax.all.*
 
+import java.util.concurrent.TimeUnit
+import scala.concurrent.duration.Duration
+import util.*
+
+case class IterationFailure(name: String, why: String)
+
 case class IterationResult(name: String, stats: ListStatistics, unit: TimeUnit):
   def mean: Double = stats.mean
   def error: Double = stats.meanErrorAt(0.999)
 
   def pretty: String =
-    val goodMean = TimeUnit.Nanoseconds.convertTo(mean, unit)
-    val goodError = TimeUnit.Nanoseconds.convertTo(error, unit)
+    val goodMean = Duration(mean, TimeUnit.NANOSECONDS).toUnit(unit)
+    val goodError = Duration(error, TimeUnit.NANOSECONDS).toUnit(unit)
 
     f"$name $goodMean%1.3f [+/-] ${goodError}%1.3f ${unit.display}"
 
   def fullResult: String =
-    val goodMean = TimeUnit.Nanoseconds.convertTo(mean, unit)
-    val goodError = TimeUnit.Nanoseconds.convertTo(error, unit)
+    val goodMean = Duration(mean, TimeUnit.NANOSECONDS).toUnit(unit)
+    val goodError = Duration(error, TimeUnit.NANOSECONDS).toUnit(unit)
     val (ciMin, ciMax) = stats.confidenceIntervalAt(0.999).getOrElse((Double.NaN, Double.NaN))
-    val goodMin = TimeUnit.Nanoseconds.convertTo(stats.min, unit)
-    val goodMax = TimeUnit.Nanoseconds.convertTo(stats.max, unit)
-    val goodStdDev = TimeUnit.Nanoseconds.convertTo(stats.standardDeviation, unit)
-    val goodCiMin = TimeUnit.Nanoseconds.convertTo(ciMin, unit)
-    val goodCiMax = TimeUnit.Nanoseconds.convertTo(ciMax, unit)
+    val goodMin = Duration(stats.min, TimeUnit.NANOSECONDS).toUnit(unit)
+    val goodMax = Duration(stats.max, TimeUnit.NANOSECONDS).toUnit(unit)
+    val goodStdDev = Duration(stats.standardDeviation, TimeUnit.NANOSECONDS).toUnit(unit)
+    val goodCiMin = Duration(ciMin, TimeUnit.NANOSECONDS).toUnit(unit)
+    val goodCiMax = Duration(ciMax, TimeUnit.NANOSECONDS).toUnit(unit)
     f"""
        |results for $name:
        |  $goodMean%1.3f +-(99.9%%) $goodError%1.3f ${unit.display}/op [Average]
@@ -30,8 +36,8 @@ case class IterationResult(name: String, stats: ListStatistics, unit: TimeUnit):
        |""".stripMargin
 
   def hocon: String =
-    val goodMean = TimeUnit.Nanoseconds.convertTo(mean, unit)
-    val goodError = TimeUnit.Nanoseconds.convertTo(error, unit)
+    val goodMean = Duration(mean, TimeUnit.NANOSECONDS).toUnit(unit)
+    val goodError = Duration(error, TimeUnit.NANOSECONDS).toUnit(unit)
 
     f"""[$goodMean%1.3f, $goodError%1.3f,${unit.serialized}]""".stripMargin
 

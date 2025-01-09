@@ -12,3 +12,4 @@ def calculateErrorOfMeanAt(n: Long, stdev: Double, confidence: Double): Double =
     val a = dist.inverseCumulativeProbability(1 - (1 - confidence) / 2)
     a * stdev / math.sqrt(n)
 }
+

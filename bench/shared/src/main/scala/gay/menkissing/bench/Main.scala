@@ -4,6 +4,8 @@ import gay.menkissing.advent.*
 import gay.menkissing.bench.Bench
 import gay.menkissing.bench.Main.benchmark
 
+import java.util.concurrent.TimeUnit
+
 
 // JVM can run this too, but Jmh is preferred bc they know what they are doing
 object Main extends Bench:
@@ -92,7 +94,7 @@ object Main extends Bench:
     benchmarkFull(12, Day12y2022)
     benchmarkFull(13, Day13y2022)
     benchmarkFull(14, Day14y2022)
-    benchmarkFull(15, Day15y2022, FullOpts.part1Only(BenchmarkOptions(unit = TimeUnit.Microseconds)))
+    benchmarkFull(15, Day15y2022, FullOpts.part1Only(BenchmarkOptions(unit = TimeUnit.MICROSECONDS)))
     benchmarkFull(16, Day16y2022)
 
     benchmarkHalf(18, Day18y2022)
@@ -135,7 +137,7 @@ object Main extends Bench:
     benchmarkFull(14, Day14)
     benchmarkFull(15, Day15)
     benchmarkFull(16, Day16)
-    benchmarkFull(17, Day17, FullOpts.Both(BenchmarkOptions(unit = TimeUnit.Microseconds, warmup = 10, measurement = 25)))
+    benchmarkFull(17, Day17, FullOpts.Both(BenchmarkOptions(unit = TimeUnit.MICROSECONDS, warmup = 10, measurement = 25)))
     benchmarkFull(18, Day18)
     benchmarkFull(19, Day19)
     benchmarkFull(20, Day20)

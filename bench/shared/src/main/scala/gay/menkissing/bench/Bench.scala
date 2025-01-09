@@ -4,8 +4,10 @@ package gay.menkissing.bench
 import gay.menkissing.bench.*
 import gay.menkissing.bench.Blackhole.*
 
+import java.util.concurrent.TimeUnit
 import scala.collection.mutable as mut
-
+import scala.concurrent.duration.{Duration, NANOSECONDS}
+import util.*
 
 
 def nanoTimed[U](a: => U): Double =
@@ -15,15 +17,16 @@ def nanoTimed[U](a: => U): Double =
   (end - start).toDouble
 
 
-enum Verbosity:
-  case Quiet, Normal, Verbose
+case class BenchmarkRunOpts(timeout: Option[Duration],
+                            verbosity: Verbosity
+                           )
 
 trait Bench:
 
 
   val warmup: Int = 3
   val measurement: Int = 3
-  val unit: TimeUnit = TimeUnit.Milliseconds
+  val unit: TimeUnit = TimeUnit.MILLISECONDS
 
 
   case class Benchmark(name: String, body: Blackhole.Impl => Unit, opts: BenchmarkOptions):
@@ -42,7 +45,7 @@ trait Bench:
 
         if (verbosity.ordinal >= Verbosity.Verbose.ordinal)
           val displayN = if n > opts.warmup then n - opts.warmup else n
-          println(f"${if n > opts.warmup then "iteration" else "warmup"} $displayN: ${TimeUnit.Nanoseconds.convertTo(time, opts.unit)}%1.3f ${opts.unit.display}")
+          println(f"${if n > opts.warmup then "iteration" else "warmup"} $displayN: ${Duration(time, NANOSECONDS).toUnit(opts.unit)}%1.3f ${opts.unit.display}")
         Gc.gc()
 
       times.toVector
@@ -65,35 +68,35 @@ trait Bench:
 
 
   def main(badArgs: Array[String]): Unit =
-    val args = Args.args(badArgs)
-    val goodArgs = args.filter(!_.startsWith("--"))
+    val args = CLIArgs.parse(Args.args(badArgs))
     val daBenches =
-      if goodArgs.nonEmpty then
-        val reg = goodArgs(0).r
-        benchmarks.filter(it => reg.matches(it._1)).toVector
+      if args.patterns.nonEmpty then
+        benchmarks.filter(it => args.patterns.exists(_.matches(it._1))).toVector
       else
         benchmarks.toVector
 
-    val quiet = args.contains("--quiet") && !args.contains("--no-quiet")
-    val verbose = args.contains("--verbose")
 
-    val verbosity =
-      if verbose then
-        Verbosity.Verbose
-      else if quiet then
-        Verbosity.Quiet
-      else
-        Verbosity.Normal
     val benches = daBenches.map { it =>
-      val samples = spawn.Spawn.run(it.name, verbosity)
-      val result = IterationResult(it.name, ListStatistics(samples), it.opts.unit)
-      println(result.fullResult)
-      result
+      val samples = spawn.Spawn.run(it.name, BenchmarkRunOpts(args.timeout, args.verbosity))
+      samples.map { samples =>
+        val result = IterationResult(it.name, ListStatistics(samples), it.opts.unit)
+        if args.verbosity.ordinal >= Verbosity.Normal.ordinal then
+          println(result.fullResult)
+        result
+      }.toRight {
+        println("timed out")
+        IterationFailure(it.name, "Timed Out")
+      }
+
     }
 
     println("results: ")
     // benches.foreach(it => println(s"${it.name}: ${it.hocon}"))
-    benches.foreach(it => println(s"${it.pretty}; ${it.hocon}"))
+    benches.foreach:
+      case Left(value) =>
+        println(s"${value.name} failed: ${value.why}")
+      case Right(value) =>
+        println(s"${value.name}: ${value.pretty}; ${value.hocon}")
 
 
         
