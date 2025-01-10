@@ -25,7 +25,7 @@ case class IterationResult(name: String, stats: ListStatistics, unit: TimeUnit):
     val (ciMin, ciMax) = stats.confidenceIntervalAt(0.999).getOrElse((Double.NaN, Double.NaN))
     val goodMin = Duration(stats.min, TimeUnit.NANOSECONDS).toUnit(unit)
     val goodMax = Duration(stats.max, TimeUnit.NANOSECONDS).toUnit(unit)
-    val goodStdDev = Duration(stats.standardDeviation, TimeUnit.NANOSECONDS).toUnit(unit)
+    val goodStdDev = Duration(stats.sampleStandardDeviation, TimeUnit.NANOSECONDS).toUnit(unit)
     val goodCiMin = Duration(ciMin, TimeUnit.NANOSECONDS).toUnit(unit)
     val goodCiMax = Duration(ciMax, TimeUnit.NANOSECONDS).toUnit(unit)
     f"""
@@ -40,6 +40,26 @@ case class IterationResult(name: String, stats: ListStatistics, unit: TimeUnit):
     val goodError = Duration(error, TimeUnit.NANOSECONDS).toUnit(unit)
 
     f"""[$goodMean%1.3f, $goodError%1.3f,${unit.serialized}]""".stripMargin
+
+  def fullHocon: String =
+    f"""
+       |$name = {
+       | mean = $mean
+       | stderr = $error
+       | unit = ns
+       | asUnit = ${unit.serialized}
+       |}
+       |""".stripMargin
+
+  def sbtDsl: String =
+    s"""
+       |"$name" -> BenchmarkTiming(
+       |  mean = ${mean}d,
+       |  error = ${error}d,
+       |  unit = Some(TimeUnit.NANOSECONDS),
+       |  convertTo = Some(TimeUnit.${unit.name()})
+       |)
+       |""".stripMargin
 
 /*
 object IterationResult:

@@ -18,9 +18,18 @@ class ListStatistics(val samples: Vector[Double]):
       Double.NaN
 
   def standardDeviation: Double =
-    val m = mean
-    val variance = samples.map(x => math.pow(x - m, 2)).sum / n
     math.sqrt(variance)
+
+  def variance: Double =
+    val m = mean
+    samples.map(x => math.pow(x - m, 2)).sum / n
+
+  def unbiasedVariance: Double =
+    val m = mean
+    samples.map(x => math.pow(x - m, 2)).sum / (n - 1)
+
+  def sampleStandardDeviation: Double =
+    math.sqrt(unbiasedVariance)
 
   def standardErrorOfTheMean: Double = {
     val mean = this.mean
@@ -34,7 +43,7 @@ class ListStatistics(val samples: Vector[Double]):
     else
       val dist = util.TDistribution(n - 1)
       val a = dist.inverseCumulativeProbability(1 - (1 - confidence) / 2)
-      a * standardDeviation / math.sqrt(n)
+      a * sampleStandardDeviation / math.sqrt(n)
 
   def confidenceIntervalAt(confidence: Double): Option[(Double, Double)] =
     Option.when(n > 2):
@@ -42,8 +51,8 @@ class ListStatistics(val samples: Vector[Double]):
       val a = dist.inverseCumulativeProbability(1 - (1 - confidence) / 2)
       val mean = this.mean
       (
-        mean - a * standardDeviation / math.sqrt(n),
-        mean + a * standardDeviation / math.sqrt(n)
+        mean - a * sampleStandardDeviation / math.sqrt(n),
+        mean + a * sampleStandardDeviation / math.sqrt(n)
       )
 
 

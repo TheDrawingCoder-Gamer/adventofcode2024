@@ -9,34 +9,46 @@ import scala.concurrent.duration.Duration
 enum Verbosity:
   case Quiet, Normal, Verbose
 
+
+
 case class CLIArgs(verbosity: Verbosity = Verbosity.Normal,
                    timeout: Option[Duration] = None,
-                   patterns: List[Regex] = List())
+                   patterns: List[Regex] = List(),
+                   excludedPatterns: List[Regex] = List(),
+                   outputHoconTo: Option[String] = None)
 
 object CLIArgs:
   def parse(args: Array[String]): CLIArgs =
     var hasQuiet = false
     var hasNoQuiet = false
     var hasVerbose = false
+    var outputHocon = Option.empty[String]
     var timeout = Option.empty[Duration]
     val patterns = mut.ListBuffer.empty[Regex]
+    val excludePatterns = mut.ListBuffer.empty[Regex]
     var i = 0
     while (i < args.length) {
       val arg = args(i)
-      if arg.startsWith("--") then
-        arg.drop(2) match
-          case "quiet" => hasQuiet = true
-          case "no-quiet" => hasNoQuiet = true
-          case "verbose" => hasVerbose = true
-          case "timeout" =>
-            i += 1
-            val nextArg = args(i)
-            if !nextArg.last.isDigit then
-              timeout = Some(Duration(nextArg))
-            else
-              timeout = Some(Duration(nextArg.toDouble, TimeUnit.MILLISECONDS))
-      else
-        patterns.prepend(arg.r)
+      arg match
+        case "--quiet" => hasQuiet = true
+        case "--no-quiet" => hasNoQuiet = true
+        case "--verbose" => hasVerbose = true
+        case "--hocon-output" =>
+          i += 1
+          val nextArg = args(i)
+          outputHocon = Some(nextArg)
+        case "--timeout" =>
+          i += 1
+          val nextArg = args(i)
+          if !nextArg.last.isDigit then
+            timeout = Some(Duration(nextArg))
+          else
+            timeout = Some(Duration(nextArg.toDouble, TimeUnit.MILLISECONDS))
+        case s"--$rest" => throw new Exception(s"invalid option $rest")
+        case s"excl:$pattern" =>
+          excludePatterns.prepend(pattern.r)
+        case pattern =>
+          patterns.prepend(pattern.r)
       i += 1
     }
     val verbosity =
@@ -48,4 +60,4 @@ object CLIArgs:
         Verbosity.Quiet
       else
         Verbosity.Normal
-    CLIArgs(verbosity, timeout, patterns.toList)
+    CLIArgs(verbosity, timeout, patterns.toList, excludePatterns.toList, outputHocon)

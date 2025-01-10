@@ -54,3 +54,5 @@ core/shared/src/main/resources/**/*.txt
 .bloop
 .metals
 metals.sbt
+
+benchResults

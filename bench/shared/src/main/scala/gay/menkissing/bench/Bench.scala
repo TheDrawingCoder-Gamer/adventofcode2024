@@ -69,11 +69,13 @@ trait Bench:
 
   def main(badArgs: Array[String]): Unit =
     val args = CLIArgs.parse(Args.args(badArgs))
-    val daBenches =
+    def patternMatches(name: String): Boolean =
       if args.patterns.nonEmpty then
-        benchmarks.filter(it => args.patterns.exists(_.matches(it._1))).toVector
+        args.patterns.exists(_.matches(name))
       else
-        benchmarks.toVector
+        true
+    val daBenches =
+      benchmarks.filter(it => patternMatches(it._1) && args.excludedPatterns.forall(!_.matches(it._1))).toVector
 
 
     val benches = daBenches.map { it =>
@@ -96,8 +98,20 @@ trait Bench:
       case Left(value) =>
         println(s"${value.name} failed: ${value.why}")
       case Right(value) =>
-        println(s"${value.name}: ${value.pretty}; ${value.hocon}")
+        println(s"${value.name}: ${value.pretty}")
 
+    args.outputHoconTo.foreach: path =>
+      val stringBuilder = new StringBuilder()
+      stringBuilder.append("import java.util.concurrent.TimeUnit\n\n")
+      stringBuilder.append(s"object ${Platform.name}Benches {\n")
+      stringBuilder.append("  val benchmarks = Map(")
+      benches.foreach:
+        case Left(_) => ()
+        case Right(value) =>
+          stringBuilder.append(value.sbtDsl.indent(4).stripTrailing())
+          stringBuilder.append(",")
+      stringBuilder.append(s"\n  ).map { case (k, v) => (k + \"plat${Platform.name.toLowerCase}\", v)\n}")
+      SaveFile.saveFile(path, stringBuilder.mkString)
 
         
 
