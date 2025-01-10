@@ -53,7 +53,8 @@ trait Bench:
   case class BenchmarkOptions(
                                unit: TimeUnit = unit,
                                warmup: Int = warmup,
-                               measurement: Int = measurement
+                               measurement: Int = measurement,
+                               excludePlatforms: List[PlatformKind] = List()
                              )
 
   private val benchmarks = mut.ListBuffer[Benchmark]()
@@ -79,16 +80,21 @@ trait Bench:
 
 
     val benches = daBenches.map { it =>
-      val samples = spawn.Spawn.run(it.name, BenchmarkRunOpts(args.timeout, args.verbosity))
-      samples.map { samples =>
-        val result = IterationResult(it.name, ListStatistics(samples), it.opts.unit)
-        if args.verbosity.ordinal >= Verbosity.Normal.ordinal then
-          println(result.fullResult)
-        result
-      }.toRight {
-        println("timed out")
-        IterationFailure(it.name, "Timed Out")
-      }
+      if it.opts.excludePlatforms.contains(Platform.current) then
+        Left:
+          println(s"skipping ${it.name} for current platform")
+          IterationFailure(it.name, "Skipped for current platform")
+      else
+        val samples = spawn.Spawn.run(it.name, BenchmarkRunOpts(args.timeout, args.verbosity))
+        samples.map { samples =>
+          val result = IterationResult(it.name, ListStatistics(samples), it.opts.unit)
+          if args.verbosity.ordinal >= Verbosity.Normal.ordinal then
+            println(result.fullResult)
+          result
+        }.toRight {
+          println("timed out")
+          IterationFailure(it.name, "Timed Out")
+        }
 
     }
 
@@ -110,7 +116,7 @@ trait Bench:
         case Right(value) =>
           stringBuilder.append(value.sbtDsl.indent(4).stripTrailing())
           stringBuilder.append(",")
-      stringBuilder.append(s"\n  ).map { case (k, v) => (k + \"plat${Platform.name.toLowerCase}\", v)\n}")
+      stringBuilder.append(s"\n  ).map { case (k, v) => (k + \"plat${Platform.name.toLowerCase}\", v) }\n}")
       SaveFile.saveFile(path, stringBuilder.mkString)
 
         

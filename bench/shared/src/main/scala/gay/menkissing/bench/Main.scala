@@ -25,6 +25,10 @@ object Main extends Bench:
         case Both(opts) => opts
         case Separate(_, p2) => p2
 
+  val fastOpts = BenchmarkOptions(warmup = 5, measurement = 10)
+  // for the fast ones...
+  val fastFullOpts = FullOpts.Both(fastOpts)
+
   object FullOpts:
     def part1Only(opts: BenchmarkOptions) = FullOpts.Separate(opts, BenchmarkOptions())
 
@@ -45,15 +49,15 @@ object Main extends Bench:
 
     import y2020.*
 
-    benchmarkFull(1, Day01y2020)
-    benchmarkFull(2, Day02y2020)
-    benchmarkFull(3, Day03y2020)
-    benchmarkFull(4, Day04y2020)
-    benchmarkFull(5, Day05y2020)
-    benchmarkFull(6, Day06y2020)
-    benchmarkFull(7, Day07y2020)
-    benchmarkFull(8, Day08y2020)
-    benchmarkFull(9, Day09y2020)
+    benchmarkFull(1, Day01y2020, fastFullOpts)
+    benchmarkFull(2, Day02y2020, fastFullOpts)
+    benchmarkFull(3, Day03y2020, fastFullOpts)
+    benchmarkFull(4, Day04y2020, fastFullOpts)
+    benchmarkFull(5, Day05y2020, fastFullOpts)
+    benchmarkFull(6, Day06y2020, fastFullOpts)
+    benchmarkFull(7, Day07y2020, fastFullOpts)
+    benchmarkFull(8, Day08y2020, fastFullOpts)
+    benchmarkFull(9, Day09y2020, fastFullOpts)
     benchmarkHalf(10, Day10y2020)
   }
 
@@ -62,16 +66,16 @@ object Main extends Bench:
 
     import y2021.*
 
-    benchmarkFull(1, Day01y2021)
-    benchmarkFull(2, Day02y2021)
-    benchmarkFull(3, Day03y2021)
-    benchmarkFull(4, Day04y2021)
-    benchmarkFull(5, Day05y2021)
-    benchmarkFull(6, Day6y2021)
-    benchmarkFull(7, Day07y2021)
+    benchmarkFull(1, Day01y2021, fastFullOpts)
+    benchmarkFull(2, Day02y2021, fastFullOpts)
+    benchmarkFull(3, Day03y2021, fastFullOpts)
+    benchmarkFull(4, Day04y2021, fastFullOpts)
+    benchmarkFull(5, Day05y2021, fastFullOpts)
+    benchmarkFull(6, Day6y2021, fastFullOpts)
+    benchmarkFull(7, Day07y2021, fastFullOpts)
     benchmarkFull(19, Day19y2021)
     benchmarkFull(20, Day20y2021)
-    benchmarkFull(21, Day21y2021)
+    benchmarkFull(21, Day21y2021, FullOpts.Separate(fastOpts, BenchmarkOptions(excludePlatforms = List(PlatformKind.Native))))
 
   }
 
@@ -80,31 +84,31 @@ object Main extends Bench:
 
     import y2022.*
 
-    benchmarkFull(1, Day01y2022)
-    benchmarkFull(2, Day02y2022)
-    benchmarkFull(3, Day03y2022)
-    benchmarkFull(4, Day04y2022)
-    benchmarkFull(5, Day05y2022)
-    benchmarkFull(6, Day06y2022)
-    benchmarkFull(7, Day07y2022)
+    benchmarkFull(1, Day01y2022, fastFullOpts)
+    benchmarkFull(2, Day02y2022, fastFullOpts)
+    benchmarkFull(3, Day03y2022, fastFullOpts)
+    benchmarkFull(4, Day04y2022, fastFullOpts)
+    benchmarkFull(5, Day05y2022, fastFullOpts)
+    benchmarkFull(6, Day06y2022, fastFullOpts)
+    benchmarkFull(7, Day07y2022, fastFullOpts)
     benchmarkFull(8, Day08y2022)
-    benchmarkFull(9, Day09y2022)
-    benchmarkFull(10, Day10y2022)
-    benchmarkFull(11, Day11y2022)
-    benchmarkFull(12, Day12y2022)
-    benchmarkFull(13, Day13y2022)
-    benchmarkFull(14, Day14y2022)
-    benchmarkFull(15, Day15y2022, FullOpts.part1Only(BenchmarkOptions(unit = TimeUnit.MICROSECONDS)))
+    benchmarkFull(9, Day09y2022, fastFullOpts)
+    benchmarkFull(10, Day10y2022, fastFullOpts)
+    benchmarkFull(11, Day11y2022, fastFullOpts)
+    benchmarkFull(12, Day12y2022, FullOpts.part1Only(fastOpts))
+    benchmarkFull(13, Day13y2022, fastFullOpts)
+    benchmarkFull(14, Day14y2022, FullOpts.part1Only(fastOpts))
+    benchmarkFull(15, Day15y2022, FullOpts.part1Only(fastOpts.copy(unit = TimeUnit.MICROSECONDS)))
     benchmarkFull(16, Day16y2022)
 
-    benchmarkHalf(18, Day18y2022)
+    benchmarkHalf(18, Day18y2022, fastOpts)
 
-    benchmarkFull(20, Day20y2022)
-    benchmarkFull(21, Day21y2022)
-    benchmarkFull(22, Day22y2022)
-    benchmarkFull(23, Day23y2022)
+    benchmarkFull(20, Day20y2022, FullOpts.part1Only(fastOpts))
+    benchmarkFull(21, Day21y2022, fastFullOpts)
+    benchmarkFull(22, Day22y2022, fastFullOpts)
+    benchmarkFull(23, Day23y2022, FullOpts.part1Only(fastOpts))
     benchmarkFull(24, Day24y2022)
-    benchmarkHalf(25, Day25y2022)
+    benchmarkHalf(25, Day25y2022, fastOpts)
   }
 
   {
@@ -112,40 +116,40 @@ object Main extends Bench:
 
     import y2023.*
 
-    benchmarkFull(1, Day01y2023)
-    benchmarkFull(2, Day02y2023)
-    benchmarkFull(3, Day03y2023)
-    benchmarkFull(4, Day04y2023)
+    benchmarkFull(1, Day01y2023, fastFullOpts)
+    benchmarkFull(2, Day02y2023, fastFullOpts)
+    benchmarkFull(3, Day03y2023, fastFullOpts)
+    benchmarkFull(4, Day04y2023, fastFullOpts)
   }
 
   {
     given Year = Year(2024)
 
-    benchmarkFull(1, Day1)
-    benchmarkFull(2, Day2)
-    benchmarkFull(3, Day3)
-    benchmarkFull(4, Day4)
-    benchmarkFull(5, Day5)
-    benchmarkFull(6, Day6)
-    benchmarkFull(7, Day7)
-    benchmarkFull(8, Day8)
+    benchmarkFull(1, Day1, fastFullOpts)
+    benchmarkFull(2, Day2, fastFullOpts)
+    benchmarkFull(3, Day3, fastFullOpts)
+    benchmarkFull(4, Day4, fastFullOpts)
+    benchmarkFull(5, Day5, FullOpts.part1Only(fastOpts))
+    benchmarkFull(6, Day6, FullOpts.part1Only(fastOpts))
+    benchmarkFull(7, Day7, fastFullOpts)
+    benchmarkFull(8, Day8, fastFullOpts)
     benchmarkFull(9, Day9)
     benchmarkFull(10, Day10)
-    benchmarkFull(11, Day11)
+    benchmarkFull(11, Day11, fastFullOpts)
     benchmarkFull(12, Day12)
     benchmarkFull(13, Day13)
-    benchmarkFull(14, Day14)
-    benchmarkFull(15, Day15)
-    benchmarkFull(16, Day16)
+    benchmarkFull(14, Day14, FullOpts.part1Only(fastOpts))
+    benchmarkFull(15, Day15, fastFullOpts)
+    benchmarkFull(16, Day16, fastFullOpts)
     benchmarkFull(17, Day17, FullOpts.Both(BenchmarkOptions(unit = TimeUnit.MICROSECONDS, warmup = 10, measurement = 25)))
-    benchmarkFull(18, Day18)
-    benchmarkFull(19, Day19)
+    benchmarkFull(18, Day18, FullOpts.part1Only(fastOpts))
+    benchmarkFull(19, Day19, fastFullOpts)
     benchmarkFull(20, Day20)
-    benchmarkFull(21, Day21)
-    benchmarkFull(22, Day22)
-    benchmarkFull(23, Day23)
-    benchmarkFull(24, Day24)
-    benchmarkHalf(25, Day25)
+    benchmarkFull(21, Day21, fastFullOpts)
+    benchmarkFull(22, Day22, FullOpts.part1Only(fastOpts))
+    benchmarkFull(23, Day23, fastFullOpts)
+    benchmarkFull(24, Day24, FullOpts.part1Only(fastOpts))
+    benchmarkHalf(25, Day25, fastOpts)
   }
 
 
