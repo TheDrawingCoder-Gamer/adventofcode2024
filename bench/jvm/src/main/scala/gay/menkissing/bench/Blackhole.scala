@@ -8,7 +8,7 @@ object Blackhole:
 
   extension (hole: Impl)
     def consumed(obj: Any): Unit = hole.consume(obj)
-
+    
     // I wonder who this warning is for : )
     def teardown(): Unit = hole.evaporate("Yes, I am Stephen Hawking, and know a thing or two about black holes.")
 
