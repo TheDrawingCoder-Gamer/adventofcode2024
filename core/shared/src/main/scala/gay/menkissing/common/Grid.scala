@@ -1,6 +1,7 @@
 package gay.menkissing.common
 
 import cats.*
+import cats.syntax.all.*
 
 case class Grid[A] private (values: Vector[Vector[A]]){
   val width: Int = values.head.length 
@@ -57,7 +58,7 @@ case class Grid[A] private (values: Vector[Vector[A]]){
 
   def extractColumn(x: Int): Seq[A] = values.transpose.apply(x).toSeq
 
-  def rows: Seq[Seq[A]] = values.toSeq.map(_.toSeq) 
+  def rows: Seq[Seq[A]] = values.map(_.toSeq) 
 
   def columns: Seq[Seq[A]] = values.transpose.toSeq.map(_.toSeq)
 
@@ -128,6 +129,13 @@ case class Grid[A] private (values: Vector[Vector[A]]){
     } yield (this(x, y), Vec2i(x, y))
   }
 
+  
+  def mapWithIndex(f: (Vec2i, A) => A): Grid[A] =
+    Grid:
+      values.zipWithIndex.map: (row, y) =>
+        row.zipWithIndex.map: (p, x) => 
+          f(Vec2i(x, y), p)
+        
 
 }
 object Grid {
@@ -142,6 +150,8 @@ object Grid {
   def fill[A](x: Int, y: Int)(v: => A) = {
     Grid[A](Vector.fill(y, x)(v))
   }
+  
+  def fromString[A](str: String)(fn: Char => A): Grid[A] = Grid(str.linesIterator.map(_.map(fn)))
 }
 given gridShow[A](using s: Show[A]): Show[Grid[A]] with {
   def show(t: Grid[A]): String = {
@@ -153,4 +163,12 @@ given gridFunctor: Functor[Grid] with {
   def map[A, B](fa: Grid[A])(f: A => B): Grid[B] = {
     Grid(fa.values.map(_.map(f.apply)))
   }
+}
+
+given gridFoldable: Foldable[Grid] with {
+  override def foldLeft[A, B](fa: Grid[A], b: B)(f: (B, A) => B): B =
+    fa.flatten.foldLeft(b)(f)
+
+  override def foldRight[A, B](fa: Grid[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+    fa.flatten.foldr[B](lb)(f)
 }
