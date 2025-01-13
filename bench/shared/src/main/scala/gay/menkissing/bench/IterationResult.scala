@@ -31,6 +31,7 @@ case class IterationResult(name: String, stats: ListStatistics, unit: TimeUnit):
     f"""
        |results for $name:
        |  $goodMean%1.3f +-(99.9%%) $goodError%1.3f ${unit.display}/op [Average]
+       |  sample size = ${stats.n}
        |  (min, avg, max) = ($goodMin%1.3f, $goodMean%1.3f, $goodMax%1.3f), stdev = $goodStdDev%1.3f
        |  CI (99.9%%): [$goodCiMin%1.3f, $goodCiMax%1.3f] (assumes normal distribution)
        |""".stripMargin

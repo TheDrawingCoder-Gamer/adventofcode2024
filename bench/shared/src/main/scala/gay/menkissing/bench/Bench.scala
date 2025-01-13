@@ -7,6 +7,7 @@ import gay.menkissing.bench.Blackhole.*
 import java.util.concurrent.TimeUnit
 import scala.collection.mutable as mut
 import scala.concurrent.duration.{Duration, NANOSECONDS}
+import scala.concurrent.duration.*
 import util.*
 
 
@@ -36,17 +37,60 @@ trait Bench:
       val hole = Blackhole.obtainBlackhole()
 
       val times = mut.ListBuffer[Double]()
-      // JavaScript gets upset here if I break this into two loops so i dont
-      (1 to opts.warmup + opts.measurement).foreach: n =>
+
+      val warmupStartTime = System.nanoTime()
+
+
+      (1 to opts.warmup).foreach: n =>
         val time = nanoTimed(body(hole))
         hole.teardown()
-        if n > opts.warmup then
-          times.append(time)
+        if verbosity.ordinal >= Verbosity.Verbose.ordinal then
+          println(f"warmup $n: ${Duration(time, NANOSECONDS).toUnit(opts.unit)}%1.3f ${opts.unit.display}")
+
+        Gc.gc()
+      val warmupEndTime = System.nanoTime()
+      val warmupDuration = (warmupEndTime - warmupStartTime).nanos
+      if warmupDuration < opts.realWarmupTime then
+        if verbosity.ordinal >= Verbosity.Verbose.ordinal then
+          println("warmups were fast, testing more to get more samples")
+        val targetTime = warmupEndTime + (opts.realWarmupTime - warmupDuration).toNanos
+        var n = opts.warmup + 1
+        while System.nanoTime() < targetTime do
+          val time = nanoTimed(body(hole))
+          hole.teardown()
+          if verbosity.ordinal >= Verbosity.Verbose.ordinal then
+            println(f"warmup $n: ${Duration(time, NANOSECONDS).toUnit(opts.unit)}%1.3f ${opts.unit.display}")
+          n += 1
+          Gc.gc()
+
+      val measureStartTime = System.nanoTime()
+      (1 to opts.measurement).foreach: n =>
+        val time = nanoTimed(body(hole))
+        hole.teardown()
+
+        times.append(time)
 
         if (verbosity.ordinal >= Verbosity.Verbose.ordinal)
-          val displayN = if n > opts.warmup then n - opts.warmup else n
-          println(f"${if n > opts.warmup then "iteration" else "warmup"} $displayN: ${Duration(time, NANOSECONDS).toUnit(opts.unit)}%1.3f ${opts.unit.display}")
+          println(f"iteration $n: ${Duration(time, NANOSECONDS).toUnit(opts.unit)}%1.3f ${opts.unit.display}")
         Gc.gc()
+
+      val measureEndTime = System.nanoTime()
+      val measureDuration = (measureEndTime - measureStartTime).nanos
+      if measureDuration < opts.minMeasurementTime then
+        if verbosity.ordinal >= Verbosity.Verbose.ordinal then
+          println("iterations were fast, testing more to get more samples")
+        val targetTime = measureEndTime + (opts.realWarmupTime - measureDuration).toNanos
+        var n = opts.measurement + 1
+        while System.nanoTime() < targetTime do
+          val time = nanoTimed(body(hole))
+          hole.teardown()
+
+          times.append(time)
+
+          if verbosity.ordinal >= Verbosity.Verbose.ordinal then
+            println(f"iteration $n: ${Duration(time, NANOSECONDS).toUnit(opts.unit)}%1.3f ${opts.unit.display}")
+          n += 1
+          Gc.gc()
 
       times.toVector
 
@@ -54,8 +98,11 @@ trait Bench:
                                unit: TimeUnit = unit,
                                warmup: Int = warmup,
                                measurement: Int = measurement,
+                               minMeasurementTime: Duration = 5.seconds,
+                               minWarmupTime: Option[Duration] = None,
                                excludePlatforms: List[PlatformKind] = List()
-                             )
+                             ):
+    val realWarmupTime: Duration = minWarmupTime.getOrElse(minMeasurementTime)
 
   private val benchmarks = mut.ListBuffer[Benchmark]()
 

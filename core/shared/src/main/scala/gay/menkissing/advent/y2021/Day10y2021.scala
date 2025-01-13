@@ -73,5 +73,4 @@ object Day10y2021 extends Problem[List[String], Long]:
 
   def part2(input: List[String]): Long =
     val linesr = input.map(matchLine(_)).flatMap(_.toOption)
-    println(linesr.head)
     median(linesr.map(scoreComplete))
