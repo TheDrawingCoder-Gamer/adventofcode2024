@@ -3,8 +3,9 @@ package y2020
 
 import cats.*
 import cats.implicits.*
+import collection.mutable
 
-object Day10y2020 extends HalfDay[List[Int], Long]:
+object Day10y2020 extends Problem[List[Int], Long]:
   override def parse(str: String): List[Int] =
     str.linesIterator.map(_.toInt).toList
 
@@ -22,35 +23,18 @@ object Day10y2020 extends HalfDay[List[Int], Long]:
 
   def part2(input: List[Int]): Long =
 
-    val maxPlug = input.max
-    val goodInput = input.sorted
-    val possibleSkips = goodInput.sliding4.map:
-      case (x, y, z, w) =>
-        if w - x <= 3 then
-          3
-        else if z - x <= 3 then
-          2
-        else if y - x <= 3 then
-          1
-        else 0
-    val zippedSkips = goodInput.zip(possibleSkips)
-    def isValid(ls: Vector[Int]): Boolean =
-      ls.prepended(0).sliding2.forall:
-        case (l, r) => r - l <= 3
+    val maxPlug = input.max + 3
+    val goodInput = input.sorted.prepended(0)
 
-    def go(curLs: Vector[Int]): Long =
-      curLs.indices.map: idx =>
-        val (l, r) = curLs.splitAt(idx)
-        val next = l ++ r.tail
-        if isValid(next) then
-          1L + go(next)
-        else
-          0L
-      .sum
+    val dict = mutable.HashMap[Int, Long](0 -> 1L).withDefault(_ => 0L)
 
-    go(goodInput.toVector) + 1L
-    ???
+    goodInput.foreach: x =>
+      dict(x+1) += dict(x)
+      dict(x+2) += dict(x)
+      dict(x+3) += dict(x)
+
+    dict(maxPlug)
 
 
-  override lazy val input: String = FileIO.getInput(2020, 10, true)
+  override lazy val input: String = FileIO.getInput(2020, 10)
 

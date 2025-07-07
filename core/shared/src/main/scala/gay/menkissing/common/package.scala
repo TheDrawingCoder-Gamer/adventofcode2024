@@ -279,6 +279,7 @@ def unfoldedMap[A, S](init: S)(f: S => Either[A, S]): A =
     case Right(s) => unfoldedMap(s)(f)
     
 def unfolded[A, S](init: S)(f: S => Option[(A, S)]): A =
+  @tailrec
   def go(state: S, acc: Option[A]): Option[A] =
     f(state) match
       case None => acc
