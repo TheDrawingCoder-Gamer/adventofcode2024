@@ -3,6 +3,13 @@ package gay.menkissing.common
 enum Direction2D {
   case Up, Down, Left, Right
 
+  def digitalDir: Vec2i =
+    this match
+      case Direction2D.Up => Vec2i(0,-1)
+      case Direction2D.Down => Vec2i(0,1)
+      case Direction2D.Left => Vec2i(-1,0)
+      case Direction2D.Right => Vec2i(1,0) 
+  
   def axis = 
     this match
       case Direction2D.Up => Axis2D.Y 
@@ -29,7 +36,14 @@ enum Direction2D {
       case Direction2D.Down => Direction2D.Right
       case Direction2D.Left => Direction2D.Down
       case Direction2D.Right => Direction2D.Up
-      
+
+  def rotate(n: Int): Direction2D =
+    if n < 0 then
+      Iterator.iterate(this)(_.counterClockwise).drop(-n).next()
+    else if n == 0 then
+      this
+    else
+      Iterator.iterate(this)(_.clockwise).drop(n).next()
       
   def reverse: Direction2D = clockwise.clockwise
   

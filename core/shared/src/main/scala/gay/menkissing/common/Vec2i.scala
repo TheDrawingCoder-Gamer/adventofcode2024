@@ -26,6 +26,10 @@ case class Vec2i(x: Int, y: Int) extends Ordered[Vec2i] {
     Vec2i(this.x - that.x, this.y - that.y)
   }
   
+  final def *(that: Int): Vec2i = {
+    Vec2i(this.x * that, this.y * that)
+  }
+  
   final def taxiDistance(that: Vec2i): Int = {
     Math.abs(this.x - that.x) + Math.abs(this.y - that.y)
   }
