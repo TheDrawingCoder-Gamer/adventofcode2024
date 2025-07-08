@@ -17,6 +17,9 @@ extension (self: Int) {
   infix def ceilDiv(that: Int): Int = {
     math.ceil(self.toDouble / that.toDouble).toInt
   }
+  infix def floorDiv(that: Int): Int = {
+    math.floor(self.toDouble / that.toDouble).toInt
+  }
 }
 
 extension (self: Long) {

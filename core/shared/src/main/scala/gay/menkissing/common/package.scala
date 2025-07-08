@@ -8,7 +8,63 @@ import cats.implicits.*
 import cats.data.Kleisli
 
 
+def gcd(ia: Int, ib: Int): Int = {
+  var a = ia
+  var b = ib
+  var d = 0
+  while (a & 1) != 1 && (b & 1) != 1 do
+    a >>= 1
+    b >>= 1
+    d += 1
+  if (a & 1) != 1 then
+    a >>= 1
+  if (b & 1) != 1 then
+    b >>= 1
+  while a != b do
+    if a > b then
+      a -= b
+      while (a & 1) != 1 do
+        a >>= 1
+    else if a < b then
+      b -= a
+      while (b & 1) != 1 do
+        b >>= 1
+  (1 << d) * a
+}
 
+case class ExtendedGCD(bezout: (Int, Int), gcd: Int)
+
+def extendedGCD(a: Int, b: Int): ExtendedGCD =
+  var oldR = a
+  var r = b
+  var oldS = 1
+  var s = 0
+  var oldT = 0
+  var t = 1
+  var quotient = 0
+  while r != 0 do {
+    quotient = oldR / r
+    val daR = r
+    r = oldR - quotient * daR
+    oldR = daR
+    val daS = s
+    s = oldS - quotient * daS
+    oldS = daS
+    val daT = t
+    t = oldT - quotient * daT
+    oldT = daT
+  }
+
+  ExtendedGCD(bezout = (oldS, oldT), gcd = oldR)
+
+def inverseModulo(a: Int, b:Int): Int = extendedGCD(a,b).bezout._1
+
+
+def lcm(a: Int, b: Int): Int =
+  if a == 0 && b == 0 then
+    0
+  else
+    math.abs(math.min(a, b)) * (math.abs(math.max(a, b)) / gcd(a,b))
 
 def equals[A](l: A, r: A): Boolean =
   l.equals(r)
