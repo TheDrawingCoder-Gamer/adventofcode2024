@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ScalaCompilerConfiguration">
-    <profile name="sbt 1" modules="adventofcode2024,adventofcode2024.adventofcode2024,adventofcode2024.adventofcode2024.coreJVM,adventofcode2024.adventofcode2024.coreJVM~1,adventofcode2024.adventofcode2024.rootJVM,adventofcode2024.bench,adventofcode2024.bench.benchJVM,adventofcode2024.benchExec,adventofcode2024.inputHelper,adventofcode2024.root,root,root.adventofcode2024.coreJVM,root.bench" />
+    <option name="separateProdTestSources" value="true" />
+    <profile name="sbt 1" modules="adventofcode2024,adventofcode2024.adventofcode2024,adventofcode2024.adventofcode2024.coreJS,adventofcode2024.adventofcode2024.coreJVM,adventofcode2024.adventofcode2024.coreJVM.main,adventofcode2024.adventofcode2024.coreJVM.test,adventofcode2024.adventofcode2024.coreJVM~1,adventofcode2024.adventofcode2024.coreNative,adventofcode2024.adventofcode2024.rootJVM,adventofcode2024.bench,adventofcode2024.bench.benchJS,adventofcode2024.bench.benchJVM,adventofcode2024.bench.benchJVM.main,adventofcode2024.bench.benchJVM.test,adventofcode2024.bench.benchNative,adventofcode2024.benchExec,adventofcode2024.benchExec.main,adventofcode2024.benchExec.test,adventofcode2024.inputHelper,adventofcode2024.inputHelper.main,adventofcode2024.inputHelper.test,adventofcode2024.main,adventofcode2024.root,adventofcode2024.root.main,adventofcode2024.root.test,adventofcode2024.test,root,root.adventofcode2024.coreJVM,root.bench" />
     <profile name="sbt 2" modules="adventofcode2024.adventofcode2024.rootNative,root.adventofcode2024.coreNative">
       <parameters>
         <parameter value="-P:scalanative:positionRelativizationPaths:/home/bulby/Documents/github/adventofcode2024/.native/src/main/scala;/home/bulby/Documents/github/adventofcode2024/.native/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/.native/src/main/java;/home/bulby/Documents/github/adventofcode2024/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/src/main/scala;/home/bulby/Documents/github/adventofcode2024/.native/target/scala-3.6.2/src_managed/main" />
@@ -10,14 +11,15 @@
         <plugin path="$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-native/nscplugin_3.6.2/0.5.4/nscplugin_3.6.2-0.5.4.jar" />
       </plugins>
     </profile>
-    <profile name="sbt 3" modules="adventofcode2024.adventofcode2024.coreJS,adventofcode2024.adventofcode2024.coreJS~1,adventofcode2024.adventofcode2024.rootJS,adventofcode2024.bench.benchJS,adventofcode2024.timeTesting.timeTestingJS">
+    <profile name="sbt 3" modules="adventofcode2024.adventofcode2024.coreJS.main,adventofcode2024.adventofcode2024.coreJS.test,adventofcode2024.adventofcode2024.coreJS~1,adventofcode2024.adventofcode2024.rootJS,adventofcode2024.bench.benchJS.main,adventofcode2024.bench.benchJS.test,adventofcode2024.timeTesting.timeTestingJS">
       <parameters>
         <parameter value="-scalajs" />
       </parameters>
     </profile>
-    <profile name="sbt 4" modules="adventofcode2024.adventofcode2024.coreNative">
+    <profile name="sbt 4" modules="adventofcode2024.bench.benchNative.test">
       <parameters>
-        <parameter value="-P:scalanative:positionRelativizationPaths:/home/bulby/Documents/github/adventofcode2024/core/native/src/main/scala;/home/bulby/Documents/github/adventofcode2024/core/native/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/core/native/src/main/java;/home/bulby/Documents/github/adventofcode2024/core/js-native/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/core/js-native/src/main/scala;/home/bulby/Documents/github/adventofcode2024/core/jvm-native/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/core/jvm-native/src/main/scala;/home/bulby/Documents/github/adventofcode2024/core/shared/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/core/shared/src/main/scala;/home/bulby/Documents/github/adventofcode2024/core/native/target/scala-3.6.2/src_managed/main" />
+        <parameter value="-P:scalanative:positionRelativizationPaths:/home/bulby/Documents/github/adventofcode2024/bench/native/src/main/scala;/home/bulby/Documents/github/adventofcode2024/bench/native/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/bench/native/src/main/java;/home/bulby/Documents/github/adventofcode2024/bench/js-native/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/bench/js-native/src/main/scala;/home/bulby/Documents/github/adventofcode2024/bench/jvm-native/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/bench/jvm-native/src/main/scala;/home/bulby/Documents/github/adventofcode2024/bench/shared/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/bench/shared/src/main/scala;/home/bulby/Documents/github/adventofcode2024/bench/native/target/scala-3.6.2/src_managed/main" />
+        <parameter value="-P:scalanative:positionRelativizationPaths:/home/bulby/Documents/github/adventofcode2024/bench/native/src/test/scala;/home/bulby/Documents/github/adventofcode2024/bench/native/src/test/scala-3;/home/bulby/Documents/github/adventofcode2024/bench/native/src/test/java;/home/bulby/Documents/github/adventofcode2024/bench/js-native/src/test/scala-3;/home/bulby/Documents/github/adventofcode2024/bench/js-native/src/test/scala;/home/bulby/Documents/github/adventofcode2024/bench/jvm-native/src/test/scala-3;/home/bulby/Documents/github/adventofcode2024/bench/jvm-native/src/test/scala;/home/bulby/Documents/github/adventofcode2024/bench/shared/src/test/scala-3;/home/bulby/Documents/github/adventofcode2024/bench/shared/src/test/scala;/home/bulby/Documents/github/adventofcode2024/bench/native/target/scala-3.6.2/src_managed/test" />
       </parameters>
       <plugins>
         <plugin path="$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-native/nscplugin_3.6.2/0.5.4/nscplugin_3.6.2-0.5.4.jar" />
@@ -31,9 +33,26 @@
         <plugin path="$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-native/nscplugin_3.6.2/0.5.4/nscplugin_3.6.2-0.5.4.jar" />
       </plugins>
     </profile>
-    <profile name="sbt 6" modules="adventofcode2024.bench.benchNative">
+    <profile name="sbt 6" modules="adventofcode2024.bench.benchNative.main">
       <parameters>
         <parameter value="-P:scalanative:positionRelativizationPaths:/home/bulby/Documents/github/adventofcode2024/bench/native/src/main/scala;/home/bulby/Documents/github/adventofcode2024/bench/native/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/bench/native/src/main/java;/home/bulby/Documents/github/adventofcode2024/bench/js-native/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/bench/js-native/src/main/scala;/home/bulby/Documents/github/adventofcode2024/bench/jvm-native/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/bench/jvm-native/src/main/scala;/home/bulby/Documents/github/adventofcode2024/bench/shared/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/bench/shared/src/main/scala;/home/bulby/Documents/github/adventofcode2024/bench/native/target/scala-3.6.2/src_managed/main" />
+      </parameters>
+      <plugins>
+        <plugin path="$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-native/nscplugin_3.6.2/0.5.4/nscplugin_3.6.2-0.5.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 7" modules="adventofcode2024.adventofcode2024.coreNative.test">
+      <parameters>
+        <parameter value="-P:scalanative:positionRelativizationPaths:/home/bulby/Documents/github/adventofcode2024/core/native/src/main/scala;/home/bulby/Documents/github/adventofcode2024/core/native/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/core/native/src/main/java;/home/bulby/Documents/github/adventofcode2024/core/js-native/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/core/js-native/src/main/scala;/home/bulby/Documents/github/adventofcode2024/core/jvm-native/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/core/jvm-native/src/main/scala;/home/bulby/Documents/github/adventofcode2024/core/shared/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/core/shared/src/main/scala;/home/bulby/Documents/github/adventofcode2024/core/native/target/scala-3.6.2/src_managed/main" />
+        <parameter value="-P:scalanative:positionRelativizationPaths:/home/bulby/Documents/github/adventofcode2024/core/native/src/test/scala;/home/bulby/Documents/github/adventofcode2024/core/native/src/test/scala-3;/home/bulby/Documents/github/adventofcode2024/core/native/src/test/java;/home/bulby/Documents/github/adventofcode2024/core/js-native/src/test/scala-3;/home/bulby/Documents/github/adventofcode2024/core/js-native/src/test/scala;/home/bulby/Documents/github/adventofcode2024/core/jvm-native/src/test/scala-3;/home/bulby/Documents/github/adventofcode2024/core/jvm-native/src/test/scala;/home/bulby/Documents/github/adventofcode2024/core/shared/src/test/scala-3;/home/bulby/Documents/github/adventofcode2024/core/shared/src/test/scala;/home/bulby/Documents/github/adventofcode2024/core/native/target/scala-3.6.2/src_managed/test" />
+      </parameters>
+      <plugins>
+        <plugin path="$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-native/nscplugin_3.6.2/0.5.4/nscplugin_3.6.2-0.5.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 8" modules="adventofcode2024.adventofcode2024.coreNative.main">
+      <parameters>
+        <parameter value="-P:scalanative:positionRelativizationPaths:/home/bulby/Documents/github/adventofcode2024/core/native/src/main/scala;/home/bulby/Documents/github/adventofcode2024/core/native/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/core/native/src/main/java;/home/bulby/Documents/github/adventofcode2024/core/js-native/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/core/js-native/src/main/scala;/home/bulby/Documents/github/adventofcode2024/core/jvm-native/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/core/jvm-native/src/main/scala;/home/bulby/Documents/github/adventofcode2024/core/shared/src/main/scala-3;/home/bulby/Documents/github/adventofcode2024/core/shared/src/main/scala;/home/bulby/Documents/github/adventofcode2024/core/native/target/scala-3.6.2/src_managed/main" />
       </parameters>
       <plugins>
         <plugin path="$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-native/nscplugin_3.6.2/0.5.4/nscplugin_3.6.2-0.5.4.jar" />
