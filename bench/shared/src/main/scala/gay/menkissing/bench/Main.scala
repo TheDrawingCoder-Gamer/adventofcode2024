@@ -55,7 +55,12 @@ object Main extends Bench:
     benchmarkFull(7, Day07y2020)
     benchmarkFull(8, Day08y2020)
     benchmarkFull(9, Day09y2020)
-    benchmarkHalf(10, Day10y2020)
+    benchmarkFull(10, Day10y2020)
+    benchmarkFull(11, Day11y2020)
+    benchmarkFull(12, Day12y2020)
+    benchmarkFull(13, Day13y2020)
+    benchmarkFull(14, Day14y2020)
+    benchmarkFull(15, Day15y2020)
   }
 
   {
