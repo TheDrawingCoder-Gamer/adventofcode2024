@@ -14,39 +14,33 @@ object Day15y2020 extends Problem[List[Int], Int]:
     str.split(",").map(_.toInt).toList
 
 
-  enum Memory:
-    case First(idx: Int)
-    case Repeated(old: Int, recent: Int)
-
-    def mostRecent: Int = this match
-      case First(i) => i
-      case Repeated(_, i) => i
-
-  def setMap(map: Map[Int, Memory], num: Int, idx: Int): Map[Int, Memory] =
-    if map.isDefinedAt(num) then
-      map.updated(num, Memory.Repeated(map(num).mostRecent, idx))
-    else
-      map.updated(num, Memory.First(idx))
-
-  def calc(input: List[Int]): Iterator[(Int, Int, Map[Int, Memory])] =
-    val m = input.zipWithIndex.map[(Int, Memory)]((x, i) => (x, Memory.First(i))).toMap
-    Iterator.iterate((input.last, input.length, m)): (lastNum, idx, map) =>
-      map(lastNum) match
-        case Memory.First(_) =>
-          (0, idx + 1, setMap(map, 0, idx))
-        case Memory.Repeated(i, r) =>
-          val n = r - i
-          (n, idx + 1, setMap(map, n, idx))
+  def calc(input: List[Int], n: Int): Int =
+    // ; )
+    val arr = Array.fill[Long](n)(0L)
+    input.zipWithIndex.foreach: (x, i) =>
+      arr(x) = i.toLong + 1L
+    def setArr(num: Int, idx: Int): Unit =
+      arr(num) = (arr(num) << 32) + idx.toLong + 1L
+    var lastNum = input.last
+    (input.length until n).foreach: idx =>
+      val n = arr(lastNum)
+      if n > Int.MaxValue.toLong then
+        val x = (n & Int.MaxValue.toLong) - (n >> 32)
+        lastNum = x.toInt
+        setArr(x.toInt, idx)
+      else
+        lastNum = 0
+        setArr(0, idx)
+    lastNum
 
   override def part1(input: List[Int]): Int = {
-    calc(input).drop(2020 - input.length).next()._1
+    calc(input, 2020)
 
   }
 
-
-  // please optimize me
   def part2(input: List[Int]): Int =
-    calc(input).drop(30000000 - input.length).next()._1
+    calc(input, 30000000)
+
 
 
   override lazy val input: String = FileIO.getInput(2020, 15)
