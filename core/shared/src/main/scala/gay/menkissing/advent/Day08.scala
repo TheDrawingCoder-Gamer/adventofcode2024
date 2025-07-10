@@ -7,7 +7,7 @@ import gay.menkissing.common.GridAxisSystem.*
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
 
-object Day8 extends Problem[Grid[Char], Int]:
+object Day08 extends Problem[Grid[Char], Int]:
   lazy val input = FileIO.getInput(2024, 8)
 
   override def parse(str: String): Grid[Char] =

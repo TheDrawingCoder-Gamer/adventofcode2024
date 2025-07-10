@@ -3,7 +3,7 @@ package gay.menkissing.advent
 import gay.menkissing.advent.Problem
 
 
-object Day3 extends Problem[String, Int]:
+object Day03 extends Problem[String, Int]:
   
   lazy val input: String = FileIO.getInput(2024, 3)
 

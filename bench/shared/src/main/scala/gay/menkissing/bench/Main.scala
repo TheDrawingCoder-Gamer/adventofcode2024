@@ -61,6 +61,7 @@ object Main extends Bench:
     benchmarkFull(13, Day13y2020)
     benchmarkFull(14, Day14y2020)
     benchmarkFull(15, Day15y2020)
+    benchmarkFull(16, Day16y2020)
   }
 
   {
@@ -73,7 +74,7 @@ object Main extends Bench:
     benchmarkFull(3, Day03y2021)
     benchmarkFull(4, Day04y2021)
     benchmarkFull(5, Day05y2021)
-    benchmarkFull(6, Day6y2021)
+    benchmarkFull(6, Day06y2021)
     benchmarkFull(7, Day07y2021)
     benchmarkFull(8, Day08y2021)
     benchmarkFull(9, Day09y2021)
@@ -132,15 +133,15 @@ object Main extends Bench:
   {
     given Year = Year(2024)
 
-    benchmarkFull(1, Day1)
-    benchmarkFull(2, Day2)
-    benchmarkFull(3, Day3)
-    benchmarkFull(4, Day4)
-    benchmarkFull(5, Day5)
-    benchmarkFull(6, Day6)
-    benchmarkFull(7, Day7)
-    benchmarkFull(8, Day8)
-    benchmarkFull(9, Day9)
+    benchmarkFull(1, Day01)
+    benchmarkFull(2, Day02)
+    benchmarkFull(3, Day03)
+    benchmarkFull(4, Day04)
+    benchmarkFull(5, Day05)
+    benchmarkFull(6, Day06)
+    benchmarkFull(7, Day07)
+    benchmarkFull(8, Day08)
+    benchmarkFull(9, Day09)
     benchmarkFull(10, Day10)
     benchmarkFull(11, Day11)
     benchmarkFull(12, Day12)

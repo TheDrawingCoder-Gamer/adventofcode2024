@@ -5,7 +5,7 @@ import gay.menkissing.common.debugTiming
 
 import scala.io.Source
 
-object Day7 extends Problem[List[Day7.Equation], Long]:
+object Day07 extends Problem[List[Day07.Equation], Long]:
   lazy val input = FileIO.getInput(2024, 7)
 
   case class Equation(result: Long, inputs: List[Long]) {

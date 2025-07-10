@@ -3,7 +3,7 @@ package gay.menkissing.advent
 import gay.menkissing.advent.Problem
 
 
-object Day1 extends Problem[(List[Int], List[Int]), Int]:
+object Day01 extends Problem[(List[Int], List[Int]), Int]:
   override lazy val input = FileIO.getInput(2024, 1)
 
   override def parse(str: String): (List[Int], List[Int]) = 

@@ -3,7 +3,7 @@ package y2021
 
 import gay.menkissing.common.*
 
-object Day6y2021 extends Problem[Vector[Int], Long]:
+object Day06y2021 extends Problem[Vector[Int], Long]:
   type FishMap = Map[Int, Long]
 
   def naiveAdvance(fish: Vector[Int]): Vector[Int] =

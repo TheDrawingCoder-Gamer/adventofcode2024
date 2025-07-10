@@ -6,7 +6,7 @@ import gay.menkissing.common.debugTiming
 import scala.collection.mutable as mut
 import scala.io.Source
 
-object Day9 extends Problem[String, Long]:
+object Day09 extends Problem[String, Long]:
   
   lazy val input = FileIO.getInput(2024, 9).trim
 

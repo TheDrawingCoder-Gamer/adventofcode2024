@@ -6,7 +6,7 @@ import cats.*
 import cats.implicits.*
 
 
-object Day5 extends Problem[(List[(Int, Int)], List[List[Int]]), Int]:
+object Day05 extends Problem[(List[(Int, Int)], List[List[Int]]), Int]:
   lazy val input = FileIO.getInput(2024, 5)
 
   override def parse(str: String): (List[(Int, Int)], List[List[Int]]) =

@@ -16,54 +16,54 @@ import java.util.concurrent.TimeUnit
 class Bench:
   @Benchmark
   def day01p1(): Unit =
-    Day1.fullPart1
+    Day01.fullPart1
   @Benchmark
   def day01p2(): Unit =
-    Day1.fullPart2
+    Day01.fullPart2
   @Benchmark
   def day02p1(): Unit =
-    Day2.fullPart1
+    Day02.fullPart1
   @Benchmark
   def day02p2(): Unit =
-    Day2.fullPart2
+    Day02.fullPart2
   @Benchmark
-  def day03p1(): Unit = Day3.fullPart1
+  def day03p1(): Unit = Day03.fullPart1
   @Benchmark
-  def day03p2(): Unit = Day3.fullPart2
+  def day03p2(): Unit = Day03.fullPart2
   @Benchmark
-  def day04p1(): Unit = Day4.fullPart1
+  def day04p1(): Unit = Day04.fullPart1
   @Benchmark
-  def day04p2(): Unit = Day4.fullPart2
+  def day04p2(): Unit = Day04.fullPart2
 
   @Benchmark
-  def day05p1(): Unit = Day5.fullPart1
+  def day05p1(): Unit = Day05.fullPart1
 
   @Benchmark
-  def day05p2(): Unit = Day5.fullPart2
+  def day05p2(): Unit = Day05.fullPart2
 
   @Benchmark
-  def day06p1(): Unit = Day6.fullPart1
+  def day06p1(): Unit = Day06.fullPart1
 
   @Benchmark
-  def day06p2(): Unit = Day6.fullPart2
+  def day06p2(): Unit = Day06.fullPart2
 
   @Benchmark
-  def day07p1(): Unit = Day7.fullPart1
+  def day07p1(): Unit = Day07.fullPart1
 
   @Benchmark
-  def day07p2(): Unit = Day7.fullPart2
+  def day07p2(): Unit = Day07.fullPart2
 
   @Benchmark
-  def day08p1(): Unit = Day8.fullPart1
+  def day08p1(): Unit = Day08.fullPart1
 
   @Benchmark
-  def day08p2(): Unit = Day8.fullPart2
+  def day08p2(): Unit = Day08.fullPart2
 
   @Benchmark
-  def day09p1(): Unit = Day9.fullPart1
+  def day09p1(): Unit = Day09.fullPart1
 
   @Benchmark
-  def day09p2(): Unit = Day9.fullPart2
+  def day09p2(): Unit = Day09.fullPart2
 
   @Benchmark
   def day10p1(): Unit = Day10.fullPart1

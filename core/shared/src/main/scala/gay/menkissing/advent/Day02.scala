@@ -4,7 +4,7 @@ import gay.menkissing.advent.Problem
 
 import scala.io.Source
 
-object Day2 extends Problem[List[List[Int]], Int]:
+object Day02 extends Problem[List[List[Int]], Int]:
   override lazy val input: String = FileIO.getInput(2024, 2)
 
   override def parse(str: String): List[List[Int]] =
