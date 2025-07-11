@@ -21,6 +21,8 @@ lazy val runNode = inputKey[Unit]("Run a node app with arguments.")
 
 lazy val benchAll = inputKey[Unit]("Bench for all platforms.")
 
+lazy val runAlt = inputKey[Unit]("Run an alternate language")
+
 publishTo := {
   val nexus = "https://s01.oss.sonatype.org/"
   if (isSnapshot.value)
@@ -29,10 +31,34 @@ publishTo := {
     Some("releases"  at nexus + "service/local/staging/deploy/maven2")
 }
 
+def paddedDay(n: Int): String =
+  if (n < 10) s"0$n" else n.toString
+
 lazy val root = project.aggregate(core.jvm, core.js, core.native)
                        .settings(
                          publish / skip := true,
+                         runAlt := {
+                           val args = spaceDelimited("<arg>").parsed
 
+                           println(args)
+                           val lang = args.head
+                           val year = args.tail.head.toInt
+                           val day  = args.tail.tail.head.toInt
+
+                           val (cmd, cwd) = lang match {
+                             case "haskell" =>
+                               (Seq[String]("stack", "run", "--cwd", goodDir.getAbsolutePath, "--", year
+                                 .toString, day.toString), goodDir / "alt_langs/haskell")
+                             case "ruby" =>
+                               (Seq[String]("ruby", (goodDir / s"alt_langs/ruby/src/y$year/Day${paddedDay(day)}y$year.rb").getAbsolutePath), goodDir)
+                             case "elixir" =>
+                               (Seq[String]("elixir", (goodDir / s"alt_langs/elixir/src/y$year/Day${paddedDay(day)}y$year.exs").getAbsolutePath), goodDir)
+                             case "haxe" =>
+                               (Seq[String]("haxe", "--class-path", (goodDir / s"alt_langs/haxe/src/").getAbsolutePath, "--main", s"y$year.Day${paddedDay(day)}y$year", "--interp"), goodDir)
+
+                           }
+                           Process(cmd, cwd).run()
+                         }
                        )
 
 lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
