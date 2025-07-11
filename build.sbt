@@ -69,6 +69,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     libraryDependencies += "org.typelevel" %%% "cats-core" % "2.12.0",
     libraryDependencies += "org.typelevel" %%% "cats-parse" % "1.1.0",
     libraryDependencies += "org.typelevel" %%% "cats-collections-core" % "0.9.9",
+    libraryDependencies += "com.github.j-mie6" %%% "parsley" % "4.6.1",
+    libraryDependencies += "com.github.j-mie6" %%% "parsley-cats" % "1.5.0",
     Compile / run / fork := true,
     Compile / run / baseDirectory := goodDir,
   )
