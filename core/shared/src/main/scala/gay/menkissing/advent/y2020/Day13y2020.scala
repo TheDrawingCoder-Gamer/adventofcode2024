@@ -33,7 +33,7 @@ object Day13y2020 extends Problem[(Int, List[Option[Int]]), BigInt]:
     val (is, ms) = ls.unzip
     val m = ms.map(i => BigInt(i)).product
     val mn = ms.map(m / _)
-    val yn = ms.zip(mn).map{case (x, m) => m.modInverse(BigInt(x)) % x }
+    val yn = ms.zip(mn).map{case (x, m) => m.modInverse(BigInt(x)) }
     (is, mn, yn).parMapN((i, m, y) => m * i * y).sum.mod(m)
 
 
@@ -46,7 +46,7 @@ object Day13y2020 extends Problem[(Int, List[Option[Int]]), BigInt]:
     val (_, ids) = input
     val offsets = ids.zipWithIndex.collect:
       // index is how we ge
-      case (Some(v), i) => ((v - (i % v)) % v, v)
+      case (Some(v), i) => ((v - i) rem v, v)
 
     crt(offsets)
 
