@@ -1,12 +1,12 @@
-package gay.menkissing.advent
+package gay.menkissing.advent.y2024
 
-import gay.menkissing.advent.Writeup
+import cats.*
+import cats.implicits.*
+import gay.menkissing.advent.{FileIO, Writeup}
 
 import scala.annotation.{tailrec, targetName}
 import scala.collection.mutable as mut
 import scala.io.Source
-import cats.*
-import cats.implicits.*
 
 object Day15Writeup extends Writeup[Day15Writeup.ProblemState, Long] {
   enum Direction:

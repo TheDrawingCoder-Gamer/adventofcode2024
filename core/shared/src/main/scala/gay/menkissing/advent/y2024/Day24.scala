@@ -1,4 +1,6 @@
-package gay.menkissing.advent
+package gay.menkissing.advent.y2024
+
+import gay.menkissing.advent.{FileIO, ProblemAdv}
 
 import scala.io.Source
 

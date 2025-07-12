@@ -133,6 +133,8 @@ object Main extends Bench:
   {
     given Year = Year(2024)
 
+    import y2024.*
+    
     benchmarkFull(1, Day01)
     benchmarkFull(2, Day02)
     benchmarkFull(3, Day03)

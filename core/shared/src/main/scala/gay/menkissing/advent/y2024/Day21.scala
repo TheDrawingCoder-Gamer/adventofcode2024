@@ -1,15 +1,14 @@
-package gay.menkissing.advent
+package gay.menkissing.advent.y2024
 
-import gay.menkissing.advent.Problem
+import cats.*
+import cats.implicits.*
+import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common
 import gay.menkissing.common.*
 
 import scala.annotation.experimental
 import scala.collection.mutable as mut
 import scala.io.Source
-
-import cats.implicits.*
-import cats.*
 
 object Day21 extends Problem[List[String], Long]:
   override def parse(str: String): List[String] =
