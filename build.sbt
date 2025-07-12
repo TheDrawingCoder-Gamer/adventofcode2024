@@ -94,11 +94,6 @@ lazy val bench = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("
 
   )
   .jvmSettings(
-      Jmh / sourceDirectory := (Compile / sourceDirectory).value,
-      Jmh / classDirectory := (Compile / classDirectory).value,
-      Jmh / dependencyClasspath := (Compile / dependencyClasspath).value,
-      Jmh / compile := (Jmh / compile).dependsOn(Test / compile).value,
-      Jmh / run := (Jmh / run).dependsOn(Jmh / compile).evaluated,
       Compile / run / fork := true
   )
   .nativeSettings(
