@@ -42,6 +42,21 @@ object Main extends Bench:
 
 
   {
+    given Year = Year(2015)
+
+    import y2015.*
+
+    benchmarkFull(1, Day01)
+    benchmarkFull(2, Day02)
+    benchmarkFull(3, Day03)
+    benchmarkFull(4, Day04)
+    benchmarkFull(5, Day05)
+    benchmarkFull(6, Day06)
+    benchmarkFull(7, Day07)
+    benchmarkFull(8, Day08)
+  }
+
+  {
     given Year = Year(2020)
 
     import y2020.*
