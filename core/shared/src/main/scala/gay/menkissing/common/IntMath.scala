@@ -1,5 +1,10 @@
 package gay.menkissing.common
 
+extension (self: Byte)
+  inline def toUInt: Int =
+    // copied implementation of java, but this is inline so better???
+    self & 255
+
 extension (self: Int) {
   def digits: Int = {
     math.log10(self.toDouble).toInt + 1

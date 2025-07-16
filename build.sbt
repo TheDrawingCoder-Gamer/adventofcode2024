@@ -74,7 +74,6 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     Compile / run / fork := true,
     Compile / run / baseDirectory := goodDir,
   )
-
   .nativeSettings(
     nativeConfig ~= { c =>
       c.withMode(releaseFull)
