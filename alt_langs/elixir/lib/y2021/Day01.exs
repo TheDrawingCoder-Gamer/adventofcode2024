@@ -1,4 +1,4 @@
-defmodule Day01y2021 do
+defmodule Day01 do
   def parse_int!(str) do
     case Integer.parse(str) do
       { v, "" } -> v
@@ -22,12 +22,12 @@ defmodule Day01y2021 do
   def parse(str) do
     for line <- String.split(String.trim(str), "\n"), 
       line != "", 
-      do: Day1y2021.parse_int!(String.trim(line))
+      do: Day1.parse_int!(String.trim(line))
   end
 end
 
 input = File.read!("core/shared/src/main/resources/y2021/day01.txt")
 data = Day01y2021.parse(input)
 
-IO.puts(Day01y2021.part1(data))
-IO.puts(Day01y2021.part2(data))
+IO.puts(Day01.part1(data))
+IO.puts(Day01.part2(data))

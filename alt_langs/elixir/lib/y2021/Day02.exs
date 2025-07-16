@@ -1,4 +1,4 @@
-defmodule Day02y2021 do
+defmodule Day02 do
   def parse_int!(str) do
     case Integer.parse(str) do
       {int, ""} -> int
@@ -49,10 +49,10 @@ end
 
 input = File.read("core/shared/src/main/resources/y2021/day02.txt")
 
-data = Day02y2021.parse(input)
+data = Day02.parse(input)
 
-IO.puts Day02y2021.part1(data)
+IO.puts Day02.part1(data)
 
-IO.puts Day02y2021.part2(data)
+IO.puts Day02.part2(data)
 
 

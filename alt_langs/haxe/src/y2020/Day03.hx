@@ -4,7 +4,7 @@ import sys.io.File;
 import haxe.Int64;
 using StringTools;
 
-class Day03y2020 {
+class Day03 {
     static function parse(str: String): Array<Array<Bool>> {
 	
        return [for (line in str.trim().split("\n")) {

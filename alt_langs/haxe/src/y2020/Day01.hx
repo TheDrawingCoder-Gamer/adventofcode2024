@@ -2,7 +2,7 @@ package y2020;
 
 import sys.io.File;
 using StringTools;
-class Day01y2020 {
+class Day01 {
 	static public function part1(ls: Array<Int>): Int {
 		for (xi => x in ls) {
 			for (yi => y in ls) {

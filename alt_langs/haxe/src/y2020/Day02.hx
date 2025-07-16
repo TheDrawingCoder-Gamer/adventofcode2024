@@ -12,7 +12,7 @@ typedef PolicyEntry = {
     var password: String;
 };
 
-class Day02y2020 {
+class Day02 {
 
     static public function parse(str: String): Array<PolicyEntry> {
         var policies: Array<PolicyEntry> = [];

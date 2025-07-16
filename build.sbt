@@ -50,11 +50,11 @@ lazy val root = project.aggregate(core.jvm, core.js, core.native)
                                (Seq[String]("stack", "run", "--cwd", goodDir.getAbsolutePath, "--", year
                                  .toString, day.toString), goodDir / "alt_langs/haskell")
                              case "ruby" =>
-                               (Seq[String]("ruby", (goodDir / s"alt_langs/ruby/src/y$year/Day${paddedDay(day)}y$year.rb").getAbsolutePath), goodDir)
+                               (Seq[String]("ruby", (goodDir / s"alt_langs/ruby/src/y$year/Day${paddedDay(day)}.rb").getAbsolutePath), goodDir)
                              case "elixir" =>
-                               (Seq[String]("elixir", (goodDir / s"alt_langs/elixir/src/y$year/Day${paddedDay(day)}y$year.exs").getAbsolutePath), goodDir)
+                               (Seq[String]("elixir", (goodDir / s"alt_langs/elixir/src/y$year/Day${paddedDay(day)}.exs").getAbsolutePath), goodDir)
                              case "haxe" =>
-                               (Seq[String]("haxe", "--class-path", (goodDir / s"alt_langs/haxe/src/").getAbsolutePath, "--main", s"y$year.Day${paddedDay(day)}y$year", "--interp"), goodDir)
+                               (Seq[String]("haxe", "--class-path", (goodDir / s"alt_langs/haxe/src/").getAbsolutePath, "--main", s"y$year.Day${paddedDay(day)}", "--interp"), goodDir)
 
                            }
                            Process(cmd, cwd).run()
