@@ -54,6 +54,8 @@ object Main extends Bench:
     benchmarkFull(6, Day06)
     benchmarkFull(7, Day07)
     benchmarkFull(8, Day08)
+    benchmarkFull(9, Day09)
+    benchmarkFull(10, Day10)
   }
 
   {
