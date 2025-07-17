@@ -71,6 +71,11 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     libraryDependencies += "org.typelevel" %%% "cats-collections-core" % "0.9.9",
     libraryDependencies += "com.github.j-mie6" %%% "parsley" % "4.6.1",
     libraryDependencies += "com.github.j-mie6" %%% "parsley-cats" % "1.5.0",
+    libraryDependencies ++= Seq(
+      "io.circe" %%% "circe-core",
+      "io.circe" %%% "circe-generic",
+      "io.circe" %%% "circe-parser"
+    ).map(_ % "0.14.14"),
     Compile / run / fork := true,
     Compile / run / baseDirectory := goodDir,
   )
