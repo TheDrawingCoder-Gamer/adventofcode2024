@@ -1,7 +1,7 @@
 package gay.menkissing.advent
 package y2022
 
-import scala.io.Source
+import gay.menkissing.common.ArityN.*
 import cats.parse.*
 import cats.*
 import cats.implicits.*
@@ -57,8 +57,8 @@ object Day13 extends Problem[Vector[Day13.Packet], Int]:
 
 
   def part1(input: Vector[Packet]): Int =
-    input.grouped(2).zipWithIndex.map:
-      case (Vector(l, r), idx) =>
+    input.groupedN[2].zipWithIndex.map:
+      case ((l, r), idx) =>
         if l <= r then
           idx + 1
         else

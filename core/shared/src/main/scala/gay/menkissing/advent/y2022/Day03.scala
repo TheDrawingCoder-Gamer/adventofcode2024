@@ -1,6 +1,8 @@
 package gay.menkissing.advent
 package y2022
 
+import gay.menkissing.common.ArityN.*
+
 object Day03 extends Problem[List[Day03.Rucksack], Int] {
   case class ItemType(underlying: Char) {
     def priority: Int = {
@@ -49,7 +51,7 @@ object Day03 extends Problem[List[Day03.Rucksack], Int] {
     input.map(_.sharedItem.priority).sum
   }
   def part2(input: List[Rucksack]): Int = {
-    val groups = input.grouped(3).map(it => Group(it.head, it(1), it(2)))
+    val groups = input.groupedN[3].map(Group.apply)
     groups.map(_.badge.priority).sum
   }
 
