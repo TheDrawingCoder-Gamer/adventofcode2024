@@ -66,7 +66,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("core"))
   .settings(
     name := "adventofcode2024",
-    libraryDependencies += "org.typelevel" %%% "cats-core" % "2.12.0",
+    libraryDependencies += "org.typelevel" %%% "cats-core" % "2.13.0",
+    libraryDependencies += "org.typelevel" %%% "alleycats-core" % "2.13.0",
     libraryDependencies += "org.typelevel" %%% "cats-parse" % "1.1.0",
     libraryDependencies += "org.typelevel" %%% "cats-collections-core" % "0.9.9",
     libraryDependencies += "com.github.j-mie6" %%% "parsley" % "4.6.1",
@@ -82,7 +83,10 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .nativeSettings(
     nativeConfig ~= { c =>
       c.withMode(releaseFull)
-    }
+    },
+    bspEnabled := false
+  ).jsSettings(
+    bspEnabled := false
   )
 
 

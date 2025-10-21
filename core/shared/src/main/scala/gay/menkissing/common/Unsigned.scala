@@ -5,6 +5,7 @@ object Unsigned:
 
   object UInt:
     inline def fromDouble(d: Double): UInt =
+      // convert to long so that if d > Int.MaxValue result isn't Int.MaxValue
       d.toLong.toInt
       
   extension (d: Double)
