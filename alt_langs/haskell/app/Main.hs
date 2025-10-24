@@ -11,10 +11,10 @@ main :: IO ()
 main = do
     args <- getArgs
     let year = read $ head args :: Int
-    let day  = read $ (args !! 1) :: Int 
+    let day  = read (args !! 1) :: Int 
     let part = fmap read (args !? 2) :: Maybe Int
 
-    input <- readFile ("core/shared/src/main/resources/y" ++ (show year) ++ "/day" ++ (paddedDay day) ++ ".txt")
+    input <- readFile ("core/shared/src/main/resources/y" ++ show year ++ "/day" ++ paddedDay day ++ ".txt")
 
     case part of
         Just p ->
@@ -28,4 +28,4 @@ main = do
 
             case M.lookup (AoCPart year day 2) runMap of
                 Just func2 -> putStrLn $ runAndShowFunc func2 input
-                Nothing -> pure $ ()
+                Nothing -> pure ()

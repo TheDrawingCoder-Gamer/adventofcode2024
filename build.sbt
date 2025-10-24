@@ -13,7 +13,7 @@ import scala.sys.process.*
 ThisBuild / organization := "gay.menkissing"
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
-ThisBuild / scalaVersion := "3.6.2"
+ThisBuild / scalaVersion := "3.7.3"
 
 val goodDir = file(".")
 
