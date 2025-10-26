@@ -23,11 +23,11 @@ object Day07 extends Problem[List[(Day07.Hand, Int)], Int]:
 
   given Order[HandKind] = Order.by(_.ordinal)
 
-  opaque type Hand = String
+  case class Hand(value: String) extends AnyVal
   object Hand:
     def apply(n: String): Hand = 
       assert(n.length == 5)
-      n
+      new Hand(n)
 
     // VALID FULL HOUSES:
     // n.size == 2; 2 or 3 card types, including jonkler. if there were no second non jonkler, then a five of a kind would be chosen instead
@@ -60,9 +60,8 @@ object Day07 extends Problem[List[(Day07.Hand, Int)], Int]:
       jonklers == 0 && n.count(_._2 == 2) == 2
 
     extension (hand: Hand)
-      def underlying: String = hand
       def kindP2: HandKind =
-        val m = hand.groupMapReduce(identity)(_ => 1)(_ + _)
+        val m = hand.value.groupMapReduce(identity)(_ => 1)(_ + _)
         val jonklers = m.getOrElse('J', 0)
         val n = m.removed('J')
         
@@ -83,7 +82,7 @@ object Day07 extends Problem[List[(Day07.Hand, Int)], Int]:
           HandKind.HighCard
 
       def kind: HandKind =
-        val n = hand.groupMapReduce(identity)(_ => 1)(_ + _)
+        val n = hand.value.groupMapReduce(identity)(_ => 1)(_ + _)
         if n.size == 1 then
           HandKind.FiveOfAKind
         else if n.exists(_._2 == 4) then
@@ -137,8 +136,8 @@ object Day07 extends Problem[List[(Day07.Hand, Int)], Int]:
           if r != 0 then
             r
           else
-            val left = x.toList.map(charStrengthP2)
-            val right = y.toList.map(charStrengthP2)
+            val left = x.value.toList.map(charStrengthP2)
+            val right = y.value.toList.map(charStrengthP2)
             left.compare(right)
 
     given orderHand: Order[Hand] with
@@ -147,8 +146,8 @@ object Day07 extends Problem[List[(Day07.Hand, Int)], Int]:
         if r != 0 then
           r
         else
-          val left = x.toList.map(charStrength)
-          val right = y.toList.map(charStrength)
+          val left = x.value.toList.map(charStrength)
+          val right = y.value.toList.map(charStrength)
           left.compare(right)
 
   import Hand.*

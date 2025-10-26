@@ -31,12 +31,12 @@ object Main extends Bench:
 
     def part2Only(opts: BenchmarkOptions) = FullOpts.Separate(BenchmarkOptions(), opts)
 
-  def benchmarkFull[A, B, C](day: Int, p: ProblemAdv[A, B, C], opts: FullOpts = FullOpts.Both(BenchmarkOptions()))(using year: Year): Unit =
+  def benchmarkFull[A, B, C, D](day: Int, p: ProblemSuperAdv[A, B, C, D], opts: FullOpts = FullOpts.Both(BenchmarkOptions()))(using year: Year): Unit =
     benchmark(s"day${day}y${year.n}p1", opts.part1):
       p.fullPart1
     benchmark(s"day${day}y${year.n}p2", opts.part2):
       p.fullPart2
-  def benchmarkHalf[A, B](day: Int, p: HalfDay[A, B], opts: BenchmarkOptions = BenchmarkOptions())(using year: Year): Unit =
+  def benchmarkHalf[A, B](day: Int, p: NewHalfDay[A, B], opts: BenchmarkOptions = BenchmarkOptions())(using year: Year): Unit =
     benchmark(s"day${day}y${year.n}p1", opts):
       p.fullPart1
 
@@ -147,6 +147,9 @@ object Main extends Bench:
     benchmarkFull(2, Day02)
     benchmarkFull(3, Day03)
     benchmarkFull(4, Day04)
+    benchmarkFull(5, Day05)
+    benchmarkFull(6, Day06)
+    benchmarkFull(7, Day07)
   }
 
   {
