@@ -3,6 +3,7 @@ package y2023
 
 import gay.menkissing.common.*
 import cats.syntax.functorFilter.*
+import spire.implicits.IntAlgebra
 
 object Day03 extends Problem[Grid[Char], Int]:
 

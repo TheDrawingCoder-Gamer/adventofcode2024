@@ -5,6 +5,7 @@ import cats.implicits.*
 import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common
 import gay.menkissing.common.*
+import Vec2i.*
 
 import scala.annotation.experimental
 import scala.collection.mutable as mut

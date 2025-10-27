@@ -4,6 +4,8 @@ package y2022
 import gay.menkissing.common.*
 
 import scala.collection.mutable as mut
+import spire.implicits.IntAlgebra
+
 /** 
  * This class is NOT thread safe!
  */

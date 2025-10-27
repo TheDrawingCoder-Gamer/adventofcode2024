@@ -44,6 +44,8 @@ object ArityNMacros:
       }
     }
 
+  
+
   def sharedGroupedNMacro[F[_], A, Size <: Int](fa: Expr[F[A]], step: Expr[Int], foldable: Expr[Foldable[F]])(using Quotes, Type[F], Type[A], Type[Size]): Expr[List[TupleN[A, Size]]] =
     val n = Type.valueOfConstant[Size].get
     val e = '{ (x: Seq[A]) => ${ seqToTupleNMacro('x) }  }

@@ -1,5 +1,7 @@
 package gay.menkissing.common
 
+import spire.implicits.IntAlgebra
+
 trait AxisSystem2D {
   val rightPositive: Boolean
   val downPositive: Boolean

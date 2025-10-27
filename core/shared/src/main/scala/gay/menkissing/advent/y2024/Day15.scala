@@ -2,6 +2,7 @@ package gay.menkissing.advent.y2024
 
 import cats.*
 import cats.implicits.*
+import spire.implicits.IntAlgebra
 import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common.*
 import gay.menkissing.common.GridAxisSystem.*

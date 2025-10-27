@@ -129,11 +129,11 @@ object Day07 extends Problem[Seq[Day07.Command], Int]:
     fsdir.size = fsdir.children.map(_.size).sum
 
   }
-  
+
   def part1(input: Seq[Command]): Int =
     val root = buildDirs(input)
     calcSizes(root)
-    root.size
+    sizesLessThanN(root, 100000).map(_.size).sum
 
   final def sizesLessThanN(fsdir: FSDir, n: Int): Seq[FSDir] = {
     lazy val children =
@@ -173,7 +173,7 @@ object Day07 extends Problem[Seq[Day07.Command], Int]:
   def part2(input: Seq[Command]): Int =
     val root = buildDirs(input)
     calcSizes(root)
-    // sizesLessThanN(root, 100000).map(_.size).sum
+    // 
     val total = 70000000
     val required = 30000000
     val used = root.size

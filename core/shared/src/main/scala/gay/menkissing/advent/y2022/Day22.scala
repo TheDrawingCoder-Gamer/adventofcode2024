@@ -4,6 +4,8 @@ package y2022
 import gay.menkissing.common.*
 import scala.collection.mutable as mut
 import cats.syntax.all.*
+import Vec2i.*
+import spire.implicits.IntAlgebra
 
 object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int] {
   enum GridPos {

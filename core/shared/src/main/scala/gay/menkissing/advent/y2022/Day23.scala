@@ -2,6 +2,7 @@ package gay.menkissing.advent
 package y2022
 
 import gay.menkissing.common.*
+import spire.implicits.IntAlgebra
 
 object Day23 extends Problem[Grid[Boolean], Int] {
   type ElfGrid =  Grid[Boolean]

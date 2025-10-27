@@ -2,6 +2,7 @@ package gay.menkissing.advent
 package y2022
 
 import gay.menkissing.common.*
+import spire.implicits.IntAlgebra
 
 import scala.annotation.tailrec
 import scala.collection.mutable as mut

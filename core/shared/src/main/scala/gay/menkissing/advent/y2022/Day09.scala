@@ -2,8 +2,9 @@ package gay.menkissing.advent
 package y2022
 
 import gay.menkissing.common.*
-import cats.implicits.*
+import cats.implicits.{catsKernelStdOrderForInt => _, *}
 import cats.data.*
+import spire.implicits.IntAlgebra
 
 object Day09 extends Problem[List[Day09.Movement], Int]:
   type Day9State[A] = State[List[Vec2i], A]
