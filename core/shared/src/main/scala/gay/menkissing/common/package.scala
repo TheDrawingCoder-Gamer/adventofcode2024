@@ -2,11 +2,56 @@ package gay.menkissing.common
 
 import scala.annotation.tailrec
 import scala.collection.mutable as mut
+import math.Numeric
 
 import cats.*
 import cats.implicits.*
 import cats.data.Kleisli
 
+
+class ForeverIterator[A](val underlying: Iterator[A]) extends Iterator[A]:
+  private var memoizedAll: Boolean = false
+  private val memoizedValues = mut.ArrayBuffer[A]()
+  private var currentIterator = underlying
+
+  override def hasNext: Boolean = memoizedAll || currentIterator.hasNext
+
+  override def next(): A =
+    if currentIterator.hasNext then
+      val v = currentIterator.next()
+      if !memoizedAll then
+        memoizedValues.append(v)
+        if !currentIterator.hasNext then
+          memoizedAll = true
+      v
+    else if memoizedAll then
+      currentIterator = memoizedValues.iterator
+      currentIterator.next()
+    else
+      throw new NoSuchElementException("Input iterator was empty")
+
+def gcd(ia: Long, ib: Long): Long =
+  var a = ia
+  var b = ib
+  var d = 0
+  while (a & 1) != 1 && (b & 1) != 1 do
+    a >>= 1
+    b >>= 1
+    d += 1
+  if (a & 1) != 1 then
+    a >>= 1
+  if (b & 1) != 1 then
+    b >>= 1
+  while a != b do
+    if a > b then
+      a -= b
+      while (a & 1) != 1 do
+        a >>= 1
+    else if a < b then
+      b -= a
+      while (b & 1) != 1 do
+        b >>= 1
+  (1 << d) * a
 
 def gcd(ia: Int, ib: Int): Int = {
   var a = ia
@@ -59,6 +104,12 @@ def extendedGCD(a: Int, b: Int): ExtendedGCD =
 
 def inverseModulo(a: Int, b:Int): Int = extendedGCD(a,b).bezout._1
 
+
+def lcm(a: Long, b: Long): Long =
+  if a == 0 && b == 0 then
+    0
+  else
+    math.abs(math.min(a, b)) * (math.abs(math.max(a, b)) / gcd(a,b))
 
 def lcm(a: Int, b: Int): Int =
   if a == 0 && b == 0 then
@@ -341,3 +392,6 @@ def unfolded[A, S](init: S)(f: S => Option[(A, S)]): A =
       case None => acc
       case Some((a, v)) => go(v, Some(a))
   go(init, None).get
+
+object whatTheScallop:
+  def ! : Nothing = throw AssertionError("WHAT THE SCALLOP?!?")

@@ -3,7 +3,7 @@ package gay.menkissing.common
 import cats.*
 import cats.syntax.all.*
 
-case class Grid[A] private (values: Vector[Vector[A]]){
+case class Grid[A] private (values: Vector[Vector[A]]) extends PartialFunction[Vec2i, A] {
   val width: Int = values.head.length 
 
   val height: Int = values.length
@@ -18,6 +18,8 @@ case class Grid[A] private (values: Vector[Vector[A]]){
     val (x, y) = nToXY(n)
     isDefinedAt(x, y)
   }
+
+  def isDefinedAt(v: Vec2i): Boolean = isDefinedAt(v.x, v.y)
 
   def get(x: Int, y: Int): Option[A] = {
     if (isDefinedAt(x, y))
@@ -43,7 +45,7 @@ case class Grid[A] private (values: Vector[Vector[A]]){
   }
   def get(p: Vec2i): Option[A] = get(p.x, p.y)
 
-  def getOrElse(p: Vec2i, orElse: => A): A = get(p).getOrElse(orElse)
+  def getOrElse(p: Vec2i, orElse: => A): A = applyOrElse(p, _ => orElse)
 
   def apply(x: Int, y: Int): A = values(y)(x)
 
@@ -112,6 +114,35 @@ case class Grid[A] private (values: Vector[Vector[A]]){
     })
   }
   def flatten: Vector[A] = values.flatten
+  
+  private def combineHorizontal(that: Grid[A]): Grid[A] =
+    assert(this.height == that.height)
+    // YAY I LOVE CATS
+    Grid(values.alignCombine(that.values))
+  
+  private def combineVertical(that: Grid[A]): Grid[A] =
+    assert(this.width == that.width)
+    Grid(values ++ that.values)
+
+  // Requires that all returned grids are the same size
+  def scaleWith[B](f: A => Grid[B]): Grid[B] =
+    val grids = values.map(_.map(f))
+    val w = grids.head.head.width
+    val h = grids.head.head.height
+    require(grids.flatten.forall(it => it.width == w && it.height == h))
+    // I feel like APL had a special operator for doing this kind of stuff on lists
+    grids.map(_.reduce((l, r) => l.combineHorizontal(r))).reduce((l, r) => l.combineVertical(r))
+
+  // Requires that width and height are divisible w and h
+  def scaleDownWith[B](w: Int, h: Int)(f: Grid[A] => B): Grid[B] =
+    require(width % w == 0 && height % h == 0)
+    val xc = width / w
+    val yc = height / h
+    val slices = (0 until yc).flatMap { y =>
+      (0 until xc).map(x => f(this.slice(Vec2i(x * w, y * h), Vec2i(x * w + w - 1, y * h + h - 1)))) 
+    }
+    Grid(slices, xc)
+    
 
   def indices: Seq[(Int, Int)] = {
     for {
@@ -150,25 +181,29 @@ object Grid {
   def fill[A](x: Int, y: Int)(v: => A) = {
     Grid[A](Vector.fill(y, x)(v))
   }
+
+  def fromSparse[A](x: Int, y: Int, map: Map[Vec2i, A])(default: => A) =
+    Grid[A](Vector.tabulate(y, x)((y, x) => map.getOrElse(Vec2i(x, y), default)))
   
   def fromString[A](str: String)(fn: Char => A): Grid[A] = Grid(str.linesIterator.map(_.map(fn)))
-}
-given gridShow[A](using s: Show[A]): Show[Grid[A]] with {
-  def show(t: Grid[A]): String = {
-    t.rows.map(it => it.map(s.show).fold("")(_ + " " + _)).fold[String]("")(_ + "\n" + _) 
+
+  given gridShow[A](using s: Show[A]): Show[Grid[A]] with {
+    def show(t: Grid[A]): String = {
+      t.rows.map(it => it.map(s.show).fold("")(_ + " " + _)).fold[String]("")(_ + "\n" + _) 
+    }
   }
-}
 
-given gridFunctor: Functor[Grid] with {
-  def map[A, B](fa: Grid[A])(f: A => B): Grid[B] = {
-    Grid(fa.values.map(_.map(f.apply)))
+  given gridFunctor: Functor[Grid] with {
+    def map[A, B](fa: Grid[A])(f: A => B): Grid[B] = {
+      Grid(fa.values.map(_.map(f.apply)))
+    }
   }
-}
 
-given gridFoldable: Foldable[Grid] with {
-  override def foldLeft[A, B](fa: Grid[A], b: B)(f: (B, A) => B): B =
-    fa.flatten.foldLeft(b)(f)
+  given gridFoldable: Foldable[Grid] with {
+    override def foldLeft[A, B](fa: Grid[A], b: B)(f: (B, A) => B): B =
+      fa.flatten.foldLeft(b)(f)
 
-  override def foldRight[A, B](fa: Grid[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-    fa.flatten.foldr[B](lb)(f)
+    override def foldRight[A, B](fa: Grid[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+      fa.flatten.foldr[B](lb)(f)
+  }
 }

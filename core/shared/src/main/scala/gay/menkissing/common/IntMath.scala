@@ -1,9 +1,20 @@
 package gay.menkissing.common
 
+import scala.math.Integral.Implicits.*
+
+
+
 extension (self: Byte)
   inline def toUInt: Int =
     // copied implementation of java, but this is inline so better???
     self & 255
+
+extension[T](self: T)(using integral: Integral[T])
+  // eucledian remainder ?
+  infix def erem(that: T): T =
+    val mod = integral.rem(self, that)
+    if integral.compare(mod, integral.zero) < 0 then mod + that else mod
+
 
 extension (self: Int) {
   def digits: Int = {

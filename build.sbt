@@ -77,6 +77,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
       "io.circe" %%% "circe-generic",
       "io.circe" %%% "circe-parser"
     ).map(_ % "0.14.14"),
+    libraryDependencies += "org.typelevel" %%% "spire" % "0.18.0",
     Compile / run / fork := true,
     Compile / run / baseDirectory := goodDir,
   )
