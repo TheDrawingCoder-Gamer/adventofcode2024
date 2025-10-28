@@ -102,12 +102,12 @@ object Day12 extends Problem[Day12.PlantMap, Int] {
     def floodFill(x: Int, y: Int): Region = {
       val q = mut.Queue[(Int, Int)]()
       val char = apply(x, y)
-      val res = mut.ListBuffer[(Int, Int)]()
+      val res = mut.Set[(Int, Int)]()
       q.addOne((x, y))
       while (q.nonEmpty) {
         val n = q.removeHead()
         if (get(n._1, n._2).contains(char) && !res.contains(n)) {
-          res.prepend(n)
+          res += n
           q.addAll(cardinalPositions(n._1, n._2))
         }
       }

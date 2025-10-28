@@ -2,7 +2,7 @@ package gay.menkissing.advent
 package y2023
 
 import gay.menkissing.common.ForeverIterator
-import gay.menkissing.common.lcm
+import spire.implicits.*
 import collection.mutable
 import cats.data.Chain
 
@@ -37,4 +37,4 @@ object Day08 extends Problem[(String, Map[String, (String, String)]), Long]:
     connMap.keys.filter(_.endsWith("A"))
       .map: key =>
         calcTuahThatThang(path, connMap, key, _.endsWith("Z"))
-      .reduce(lcm)
+      .reduce(LongAlgebra.lcm)

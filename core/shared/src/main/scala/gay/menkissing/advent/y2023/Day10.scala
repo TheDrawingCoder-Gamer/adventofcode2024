@@ -11,11 +11,6 @@ object Day10 extends Problem[(Grid[Option[Day10.Pipe]], Vec2i), Int]:
   lazy val input: String = FileIO.getInput(2023, 10)
 
 
-  enum FloodFillTile:
-    case Impassible
-    case Filled
-    case Empty
-
   case class Pipe(conn1: Direction2D, conn2: Direction2D):
     
     def exit(entrance: Direction2D): Direction2D =
