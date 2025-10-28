@@ -31,7 +31,6 @@ class ForeverIterator[A](val underlying: Iterator[A]) extends Iterator[A]:
       throw new NoSuchElementException("Input iterator was empty")
 
 
-
 def equals[A](l: A, r: A): Boolean =
   l.equals(r)
 
@@ -238,21 +237,6 @@ def prettyCharForNum(num: Int): Char = {
 }
 
 def logBaseN(n: Double, base: Double): Double = math.log(n) / math.log(base)
-
-def fix[A, B](f: (A => B, A) => B)(v: A): B =
-  f(fix(f), v)
-
-def oneOf(values: Boolean*): Boolean =
-  @tailrec
-  def go(values: List[Boolean], c: Int): Boolean =
-    if c > 1 then
-      false
-    else
-        values match
-          case head :: next => go(next, c + (if head then 1 else 0))
-          case Nil =>
-            c == 1
-  go(values.toList, 0)
 
 extension[A, B] (map: mut.HashMap[A, B])
   def memo(in: A)(func: => B): B = map.getOrElseUpdate(in, func)

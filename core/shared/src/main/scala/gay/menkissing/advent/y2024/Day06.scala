@@ -2,7 +2,6 @@ package gay.menkissing.advent.y2024
 
 import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common.*
-import gay.menkissing.common.GridAxisSystem.*
 
 import scala.collection.mutable as mut
 import scala.io.Source
@@ -27,7 +26,7 @@ object Day06 extends Problem[(Grid[Boolean], Int), Int]:
     val daPoints = mut.Set(guardPos)
   
     while (grid.isDefinedAt(guardPos.x, guardPos.y)) {
-      val nextPos = guardPos.genOffset(guardDirection)
+      val nextPos = guardPos.offset(guardDirection)
       grid.get(nextPos) match {
         case Some(it) =>
           if (it) {
@@ -51,7 +50,7 @@ object Day06 extends Problem[(Grid[Boolean], Int), Int]:
       val freakyPoints = mut.Set[(Vec2i, Direction2D)]((guardPos, guardDirection))
     
       while (grid2.isDefinedAt(guardPos.x, guardPos.y)) {
-        val nextPos = guardPos.genOffset(guardDirection)
+        val nextPos = guardPos.offset(guardDirection)
         if (grid2.get(nextPos).exists(identity)) {
           guardDirection = guardDirection.clockwise
         }  else {
@@ -77,7 +76,7 @@ object Day06 extends Problem[(Grid[Boolean], Int), Int]:
     val goodPoints: mut.Set[(Vec2i, Direction2D)] = mut.Set()
   
     while (grid.isDefinedAt(guardPos.x, guardPos.y)) {
-      val nextPos = guardPos.genOffset(guardDirection)
+      val nextPos = guardPos.offset(guardDirection)
       grid.get(nextPos) match {
         case Some(it) =>
           if (it) {

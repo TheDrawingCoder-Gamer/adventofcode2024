@@ -2,7 +2,6 @@ package gay.menkissing.advent.y2024
 
 import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common.*
-import gay.menkissing.common.GridAxisSystem.*
 
 import scala.io.Source
 
@@ -23,7 +22,7 @@ object Day16 extends Problem[Day16.ProblemState, Int]:
     def neighbors: List[Reindeer] =
       Direction2D.values.flatMap { d =>
         if (d == dir.clockwise.clockwise)
-          None else Some(Reindeer(pos.genOffset(d), d))
+          None else Some(Reindeer(pos.offset(d), d))
       }.toList
     def edgeScore(that: Reindeer): Double = {
       if (math.abs(this.pos.x - that.pos.x) != 1 && math.abs(this.pos.y - that.pos.y) != 1)

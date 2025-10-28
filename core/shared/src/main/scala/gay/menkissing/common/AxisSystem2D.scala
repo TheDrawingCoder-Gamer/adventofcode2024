@@ -58,7 +58,3 @@ object GridAxisSystem extends AxisSystem2D {
   override val downPositive: Boolean = true 
   override val rightPositive: Boolean = true 
 }
-object HillAxisSystem extends AxisSystem2D {
-  override val downPositive: Boolean = false 
-  override val rightPositive: Boolean = true
-} 

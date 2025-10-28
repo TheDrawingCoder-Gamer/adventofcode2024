@@ -2,7 +2,6 @@ package gay.menkissing.advent.y2024
 
 import gay.menkissing.advent.{FileIO, ProblemAdv}
 import gay.menkissing.common.*
-import gay.menkissing.common.GridAxisSystem.*
 
 import scala.annotation.tailrec
 import scala.io.Source

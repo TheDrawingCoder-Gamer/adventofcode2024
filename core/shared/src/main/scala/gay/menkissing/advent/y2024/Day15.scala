@@ -5,7 +5,6 @@ import cats.implicits.*
 import spire.implicits.IntAlgebra
 import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common.*
-import gay.menkissing.common.GridAxisSystem.*
 
 import scala.annotation.{tailrec, targetName}
 import scala.collection.mutable as mut
@@ -24,7 +23,7 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
     def updatedMove(start: Vec2i, dir: Direction2D): Option[Grid[GridItem]] = {
       @tailrec
       def go(curGrid: Grid[GridItem], start: Vec2i): Option[Grid[GridItem]] =
-        val newPos = start.genOffset(dir)
+        val newPos = start.offset(dir)
         val oldItem = curGrid(start)
         curGrid(newPos) match {
           case GridItem.Wall => None
@@ -34,7 +33,7 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
 
       // prevent weird
       go(grid.updated(start)(GridItem.Empty), start).map: it =>
-        val newPos = start.genOffset(dir)
+        val newPos = start.offset(dir)
         if it.isDefinedAt(newPos.x, newPos.y) then
           it.updated(newPos)(GridItem.Empty)
         else it
@@ -54,12 +53,12 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
     def updatedMove(istart: Vec2i, dir: Direction2D): Option[Grid[GridItemP2]] =
       // ???
       def go(start: Vec2i, movedItems: List[(Vec2i, GridItemP2)]): Eval[Option[List[(Vec2i, GridItemP2)]]] =
-        val newPos = start.genOffset(dir)
+        val newPos = start.offset(dir)
         grid(newPos) match
           case GridItemP2.Wall => Eval.always(None)
           case GridItemP2.Empty => Eval.now(Some(movedItems))
           case GridItemP2.BoxL =>
-            val rPos = newPos.genOffset(Direction2D.Right)
+            val rPos = newPos.offset(Direction2D.Right)
             assert(grid(rPos) == GridItemP2.BoxR)
             val newItems = movedItems.prepended(newPos, GridItemP2.BoxL)
             dir match
@@ -70,7 +69,7 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
                   case Some(it) => go(rPos, it.prepended(rPos, GridItemP2.BoxR))
                   case None => Eval.now(None)
           case GridItemP2.BoxR =>
-            val lPos = newPos.genOffset(Direction2D.Left)
+            val lPos = newPos.offset(Direction2D.Left)
             assert(grid(lPos) == GridItemP2.BoxL)
             val newItems = movedItems.prepended(newPos, GridItemP2.BoxR)
             dir match
@@ -88,7 +87,7 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
           case (g, (p, item)) =>
             if (!alreadyInspected.contains(p))
               alreadyInspected.add(p)
-              g.updated(p)(GridItemP2.Empty).updated(p.genOffset(dir))(item)
+              g.updated(p)(GridItemP2.Empty).updated(p.offset(dir))(item)
             else g
 
   case class ProblemState(grid: Grid[GridItem], robot: Vec2i, remainingMoves: List[Direction2D]):
@@ -96,7 +95,7 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
       remainingMoves match
         case head :: rest =>
           grid.updatedMove(robot, head) match
-            case Some(newGrid) => Some(ProblemState(newGrid, robot.genOffset(head), rest))
+            case Some(newGrid) => Some(ProblemState(newGrid, robot.offset(head), rest))
             case _ => Some(ProblemState(grid, robot, rest))
         case _ => None
 
@@ -124,7 +123,7 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
       remainingMoves match
         case head :: rest =>
           grid.updatedMove(robot, head) match
-            case Some(newGrid) => Some(ProblemStateP2(newGrid, robot.genOffset(head), rest))
+            case Some(newGrid) => Some(ProblemStateP2(newGrid, robot.offset(head), rest))
             case _ => Some(ProblemStateP2(grid, robot, rest))
         case _ => None
 

@@ -30,8 +30,5 @@ object Vec2i:
       }
     }
 
-    def stepsTowards(that: Vec2i): Vector[Direction2D] =
-      val mag = that - self
-      Option.when(mag.x != 0)(if mag.x < 0 then Direction2D.Left else Direction2D.Right).toVector
-        ++ Option.when(mag.y != 0)(if mag.y < 0 then Direction2D.Up else Direction2D.Down)
+    
 

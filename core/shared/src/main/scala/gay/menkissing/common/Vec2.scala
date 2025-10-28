@@ -46,6 +46,10 @@ final case class Vec2[@specialized(Specializable.Bits32AndUp) A](x: A, y: A)(usi
       case Direction2D.Down => this.copy(y = dis.succ(y))
       case Direction2D.Left => this.copy(x = dis.pred(x))
       case Direction2D.Right => this.copy(x = dis.succ(x))
+  
+  def stepsTowards(that: Vec2[A])(using PartialOrder[A]): Vector[Direction2D] =
+      Option.when(this.x =!= that.x)(if this.x > that.x  then Direction2D.Left else Direction2D.Right).toVector
+        ++ Option.when(this.y =!= that.y)(if this.y > that.y then Direction2D.Up else Direction2D.Down)
 
 object Vec2:
   given eqVec2[@specialized(Specializable.Bits32AndUp) A](using Eq[A]): Eq[Vec2[A]] with

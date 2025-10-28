@@ -2,7 +2,6 @@ package gay.menkissing.advent.y2024
 
 import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common.*
-import gay.menkissing.common.GridAxisSystem.*
 
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
