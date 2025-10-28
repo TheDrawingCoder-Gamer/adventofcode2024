@@ -41,10 +41,7 @@ object Day05 extends Problem[List[Day05.Line], Int]:
 
   extension[A, B] (map: Map[A, B])
     def unionWith(that: Map[A, B])(f: (B, B) => B): Map[A, B] =
-      map.padZipWith(that):
-        case (Some(v), None) => v
-        case (None, Some(v)) => v
-        case (Some(v), Some(w)) => f(v, w)
+      map.alignMergeWith(that)(f)
 
   extension (map: mut.HashMap[Vec2i, Int])
     def updateInPlaceField(line: Line): Unit =

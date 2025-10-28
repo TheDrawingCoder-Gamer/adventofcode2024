@@ -4,6 +4,7 @@ package y2022
 import scala.collection.mutable as mut
 import scala.io.Source
 import scala.util.chaining.*
+import gay.menkissing.common.whatTheScallop
 
 object Day07 extends Problem[Seq[Day07.Command], Int]:
 
@@ -78,9 +79,11 @@ object Day07 extends Problem[Seq[Day07.Command], Int]:
         workingOn = parents.head
         parents.dropInPlace(1)
       case Command.Chdir(to) => {
-        workingOn.children.find(_.name == to).tap(_.foreach { case it: FSDir =>
-          parents.prepend(workingOn)
-          workingOn = it
+        workingOn.children.find(_.name == to).tap(_.foreach { 
+          case it: FSDir =>
+            parents.prepend(workingOn)
+            workingOn = it
+          case _ => whatTheScallop.!
         }).getOrElse({
           val newOne = FSDir(0, to, mut.ListBuffer())
           workingOn.children += newOne

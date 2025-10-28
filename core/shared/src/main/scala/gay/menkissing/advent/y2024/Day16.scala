@@ -2,6 +2,7 @@ package gay.menkissing.advent.y2024
 
 import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common.*
+import ArityN.*
 
 import scala.io.Source
 
@@ -14,8 +15,8 @@ object Day16 extends Problem[Day16.ProblemState, Int]:
 
   extension (solution: List[Reindeer])
     def solved: Int =
-      solution.sliding(2).foldLeft(0.0) {
-        case (acc, List(l, r)) =>
+      solution.slidingN[2].foldLeft(0.0) {
+        case (acc, (l, r)) =>
           acc + l.edgeScore(r)
       }.toInt
   case class Reindeer(pos: Vec2i, dir: Direction2D):

@@ -5,6 +5,7 @@ import cats.implicits.*
 import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common
 import gay.menkissing.common.*
+import ArityN.*
 import Vec2i.*
 
 import scala.annotation.experimental
@@ -202,8 +203,8 @@ object Day21 extends Problem[List[String], Long]:
 
     def shortedSolution(seq: Vector[Char], level: Int): Long =
       val pad = if level == 0 then Numpad else ArrowPad
-      ('A' +: seq).map(pad.apply).sliding(2).map:
-        case Vector(src, dst) => shortestMove(src, dst, level)
+      ('A' +: seq).map(pad.apply).slidingN[2].map:
+        case (src, dst) => shortestMove(src, dst, level)
       .sum
 
 

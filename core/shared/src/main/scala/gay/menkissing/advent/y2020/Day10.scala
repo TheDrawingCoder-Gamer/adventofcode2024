@@ -4,6 +4,7 @@ package y2020
 import cats.*
 import cats.implicits.*
 import collection.mutable
+import gay.menkissing.common.*
 
 object Day10 extends Problem[List[Int], Long]:
   override def parse(str: String): List[Int] =
@@ -19,6 +20,7 @@ object Day10 extends Problem[List[Int], Long]:
           case 1 => (d1s + 1L, d3s)
           case 3 => (d1s, d3s + 1L)
           case _ => (d1s, d3s)
+      case _ => whatTheScallop.!
     d1s * (d3s + 1L)
 
   def part2(input: List[Int]): Long =

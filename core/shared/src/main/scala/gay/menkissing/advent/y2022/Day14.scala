@@ -2,6 +2,7 @@ package gay.menkissing.advent
 package y2022
 
 import gay.menkissing.common.*
+import ArityN.*
 import spire.implicits.IntAlgebra
 
 import scala.annotation.tailrec
@@ -19,12 +20,14 @@ object Day14 extends Problem[Day14.SparseCaveGrid, Int]:
   }
   case class Pathway(points: List[Vec2i]) {
     def bake: Set[Vec2i] =
-      points.sliding(2).flatMap { case List(s, e) =>
-        require(s.x == e.x || s.y == e.y)
-        for {
-          y <- s.y ascendsTo e.y
-          x <- s.x ascendsTo e.x
-        } yield Vec2i(x, y)
+      points.slidingN[2].flatMap { 
+        case (s, e) =>
+          require(s.x == e.x || s.y == e.y)
+          for {
+            y <- s.y ascendsTo e.y
+            x <- s.x ascendsTo e.x
+          } yield Vec2i(x, y)
+        
       }.toSet
   }
 

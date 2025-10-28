@@ -308,5 +308,10 @@ extension[A] (self: List[A])
   // haskell's `group`
   def segmented(using eq: Eq[A]): List[List[A]] =
     segmentBy(eq.eqv)
+
+extension[A] (self: Array[A])
+  def collectFirstSome[B](f: A => Option[B]): Option[B] =
+    self.collectFirst(Function.unlift(f))
+
 object whatTheScallop:
   def ! : Nothing = throw AssertionError("WHAT THE SCALLOP?!?")

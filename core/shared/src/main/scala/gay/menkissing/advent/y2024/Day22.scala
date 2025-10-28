@@ -2,6 +2,7 @@ package gay.menkissing.advent.y2024
 
 import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common.*
+import ArityN.*
 
 import scala.io.Source
 
@@ -41,8 +42,8 @@ object Day22 extends Problem[List[Int], Long]:
       } yield Vector(x, y, z, w)
     val diffMap =
       sequences.map: seq =>
-        seq.sliding(5).foldLeft(Map[Vector[Int], Int]()):
-          case (acc, Seq(x, y, z, w, v)) =>
+        seq.slidingN[5].foldLeft(Map[Vector[Int], Int]()):
+          case (acc, (x, y, z, w, v)) =>
             acc.updatedWith(Vector(y - x, z - y, w - z, v - w)):
               case Some(value) => Some(value)
               case None => Some(v)

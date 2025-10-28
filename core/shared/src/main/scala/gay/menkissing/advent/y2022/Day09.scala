@@ -33,15 +33,17 @@ object Day09 extends Problem[List[Day09.Movement], Int]:
       case _ => poses
     }
   }
-  def move(dir: Direction2D): Day9State[List[Vec2i]] = State { case head :: next =>
-    val newHead = dir match {
-      case Direction2D.Down => head.copy(y = head.y - 1)
-      case Direction2D.Left => head.copy(x = head.x - 1)
-      case Direction2D.Right => head.copy(x = head.x + 1)
-      case Direction2D.Up => head.copy(y = head.y + 1)
-    }
-    val r = correctTail(newHead :: next)
-    (r, r)
+  def move(dir: Direction2D): Day9State[List[Vec2i]] = State { 
+    case head :: next =>
+      val newHead = dir match {
+        case Direction2D.Down => head.copy(y = head.y - 1)
+        case Direction2D.Left => head.copy(x = head.x - 1)
+        case Direction2D.Right => head.copy(x = head.x + 1)
+        case Direction2D.Up => head.copy(y = head.y + 1)
+      }
+      val r = correctTail(newHead :: next)
+      (r, r)
+    case _ => whatTheScallop.!
   }
 
   def moveN(dir: Direction2D, n: Int): Day9State[List[List[Vec2i]]] = move(dir).replicateA(n)

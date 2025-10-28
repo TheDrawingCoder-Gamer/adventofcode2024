@@ -19,7 +19,9 @@ object Day09 extends Problem[Vector[Long], Long]:
         Option.when {
           init.combinations(2).forall:
             case Vector(l, r) => l + r != last
+            case _ => whatTheScallop.!
         }(last)
+      case _ => whatTheScallop.!
     .get
 
 

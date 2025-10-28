@@ -4,6 +4,7 @@ import gay.menkissing.advent.{FileIO, ProblemAdv}
 
 import scala.collection.mutable as mut
 import scala.io.Source
+import gay.menkissing.common.whatTheScallop
 
 
 
@@ -45,6 +46,7 @@ object Day14 extends ProblemAdv[List[Day14.Robot], Int, Int] {
           case (-1, -1) => 1
           case (-1,  1) => 2
           case ( 1,  1) => 3
+          case _ => whatTheScallop.!
       .removed(-1).values.map(_.length).product
     def pretty: String = {
       val grid = robots.robotMap
