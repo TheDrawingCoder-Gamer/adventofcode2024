@@ -1,8 +1,7 @@
 package gay.menkissing.advent
 package y2021
 
-import gay.menkissing.common.*
-import gay.menkissing.common.Sys3D.*
+import gay.menkissing.common.*, ArityN.*, Sys3D.*
 
 import scala.annotation.tailrec
 import scala.collection.mutable as mut
@@ -58,10 +57,9 @@ object Day19 extends Problem[List[Set[Vec3i]], Int]{
   }
   def part2(input: List[Set[Vec3i]]): Int = {
     val solved = solve(input)
-    val beegList = solved.scanners.toList.combinations(2).map { 
-      case l :: (r :: _) => 
+    val beegList = solved.scanners.toList.combinationsN[2].map { 
+      case (l, r) => 
         l.manhattanDistance(r)
-      case _ => whatTheScallop.!
     }
     beegList.max
   }

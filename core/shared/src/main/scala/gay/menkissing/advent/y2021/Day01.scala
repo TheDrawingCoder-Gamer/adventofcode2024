@@ -1,13 +1,16 @@
 package gay.menkissing.advent
 package y2021
 
+import cats.implicits.*
+import gay.menkissing.common.ArityN.*
+
 object Day01 extends Problem[List[Int], Int]:
   override def parse(str: String): List[Int] =
     str.linesIterator.map(_.toInt).toList
 
   def measureScans(scans: List[Int]): Int =
-    scans.sliding(2).count: ls =>
-      ls.head < ls.tail.head
+    scans.slidingN[2].count: (l, r) =>
+      l < r
   override def part1(input: List[Int]): Int =
     measureScans(input)
 

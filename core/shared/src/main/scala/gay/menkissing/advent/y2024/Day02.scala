@@ -1,6 +1,7 @@
-package gay.menkissing.advent.y2024
+package gay.menkissing.advent
+package y2024
 
-import gay.menkissing.advent.{FileIO, Problem}
+import gay.menkissing.common.ArityN.*
 
 import scala.io.Source
 
@@ -15,12 +16,11 @@ object Day02 extends Problem[List[List[Int]], Int]:
     if (inc == 0) {
       false
     } else {
-      report.sliding(2).forall {
-        case List(x, y) => {
+      report.slidingN[2].forall {
+        case (x, y) => {
           val diff = y - x
           Math.abs(diff) >= 1 && Math.abs(diff) <= 3 && Integer.signum(diff) == inc
         }
-        case _ => ???
       }
     }
   }

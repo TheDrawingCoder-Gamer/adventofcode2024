@@ -1,12 +1,15 @@
 package gay.menkissing.advent
 package y2022
 
+import cats.implicits.*
+import gay.menkissing.common.*, ArityN.*
+
 object Day06 extends Problem[String, Int]:
   def parse(str: String): String = str
 
   def process(input: String, size: Int): Int =
-    input.sliding(size).indexWhere: it =>
-      it.combinations(2).forall(i => i.charAt(0) != i.charAt(1))
+    input.toVector.sliding(size).indexWhere: it =>
+      it.combinationsN[2].forall(i => i(0) != i(1))
     + size
 
   def part1(str: String): Int = process(str, 4)

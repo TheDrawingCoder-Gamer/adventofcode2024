@@ -4,7 +4,7 @@ package y2020
 import cats.*
 import cats.implicits.*
 import collection.mutable
-import gay.menkissing.common.*
+import gay.menkissing.common.*, ArityN.*
 
 object Day10 extends Problem[List[Int], Long]:
   override def parse(str: String): List[Int] =
@@ -13,14 +13,13 @@ object Day10 extends Problem[List[Int], Long]:
   override def part1(input: List[Int]): Long =
     // Only "correct" way to use all adapters in ascending order is by sorting them
     val goodInput = input.sorted
-    val (d1s, d3s) = goodInput.prepended(0).sliding(2).foldLeft((0L, 0L)):
-      case ((d1s, d3s), List(l, r)) =>
+    val (d1s, d3s) = goodInput.prepended(0).slidingN[2].foldLeft((0L, 0L)):
+      case ((d1s, d3s), (l, r)) =>
         val diff = r - l
         diff match
           case 1 => (d1s + 1L, d3s)
           case 3 => (d1s, d3s + 1L)
           case _ => (d1s, d3s)
-      case _ => whatTheScallop.!
     d1s * (d3s + 1L)
 
   def part2(input: List[Int]): Long =

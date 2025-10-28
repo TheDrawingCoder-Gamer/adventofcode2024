@@ -4,7 +4,7 @@ package y2020
 import cats.implicits.*
 import cats.syntax.all.*
 
-import gay.menkissing.common.*
+import gay.menkissing.common.*, ArityN.*
 
 object Day09 extends Problem[Vector[Long], Long]:
 
@@ -17,9 +17,8 @@ object Day09 extends Problem[Vector[Long], Long]:
     input.sliding(26).findMap:
       case Unsnoc(init, last) =>
         Option.when {
-          init.combinations(2).forall:
-            case Vector(l, r) => l + r != last
-            case _ => whatTheScallop.!
+          init.combinationsN[2].forall:
+            case (l, r) => l + r != last
         }(last)
       case _ => whatTheScallop.!
     .get

@@ -1,7 +1,7 @@
 package gay.menkissing.advent.y2024
 
 import gay.menkissing.advent.{FileIO, Problem}
-import gay.menkissing.common.*
+import gay.menkissing.common.*, ArityN.*
 
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
@@ -18,8 +18,9 @@ object Day08 extends Problem[Grid[Char], Int]:
       grid(x, y) == c
     }.iterator.toSeq
   
-    antennaPoints.combinations(2).flatMap { case Seq((x1, y1), (x2, y2)) =>
-      calcForPoints(grid, Vec2i(x1, y1), Vec2i(x2, y2))
+    antennaPoints.combinationsN[2].flatMap { 
+      case ((x1, y1), (x2, y2)) =>
+        calcForPoints(grid, Vec2i(x1, y1), Vec2i(x2, y2))
     }.toSet
   }
   

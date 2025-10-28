@@ -6,6 +6,7 @@ import scala.quoted.*
 import cats.*
 
 import scala.compiletime.erasedValue
+import scala.reflect.ClassTag
 
 object ArityNMacros:
 
@@ -44,7 +45,7 @@ object ArityNMacros:
       }
     }
 
-  
+
 
   def sharedGroupedNMacro[F[_], A, Size <: Int](fa: Expr[F[A]], step: Expr[Int], foldable: Expr[Foldable[F]])(using Quotes, Type[F], Type[A], Type[Size]): Expr[List[TupleN[A, Size]]] =
     val n = Type.valueOfConstant[Size].get
@@ -64,6 +65,10 @@ object ArityNMacros:
     val n = Type.valueOfConstant[N].get
     sharedGroupedNMacro[F, A, N](fa, Expr(n), foldable)
 
+
+  inline def combinationsN[F[_], A, N <: Int](fa: F[A])(using foldable: Foldable[F], tag: ClassTag[A]): Iterator[TupleN[A, N]] =
+    val ls = foldable.toIterable(fa).toArray
+    ls.combinations(compiletime.constValue[N]).map(it => Tuple.fromArray(it).asInstanceOf[TupleN[A, N]])
 
 
   inline def slidingN[F[_], A, N <: Int](inline fa: F[A])(using foldable: Foldable[F]): List[TupleN[A, N]] =

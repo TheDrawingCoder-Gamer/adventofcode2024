@@ -135,8 +135,8 @@ object Day21 extends Problem[List[String], Long]:
 
 
   def stepArrowPad(str: String): String =
-    str.prepended('A').sliding(2).map: s =>
-      arrowMovementRaw(s(0), s(1))
+    str.prepended('A').toList.slidingN[2].map: (l, r) =>
+      arrowMovementRaw(l, r)
     .foldLeft(List[String]("")): (acc, chunks) =>
       acc.flatMap: s =>
         chunks.map: c =>
