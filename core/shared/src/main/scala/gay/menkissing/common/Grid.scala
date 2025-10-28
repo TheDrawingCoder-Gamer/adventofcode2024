@@ -199,6 +199,10 @@ object Grid {
     }
   }
 
+  given gridEq[A](using Eq[A]): Eq[Grid[A]] with
+    def eqv(x: Grid[A], y: Grid[A]): Boolean =
+      x.values === y.values
+
   given gridFoldable: Foldable[Grid] with {
     override def foldLeft[A, B](fa: Grid[A], b: B)(f: (B, A) => B): B =
       fa.flatten.foldLeft(b)(f)

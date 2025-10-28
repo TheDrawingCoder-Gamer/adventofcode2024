@@ -1,5 +1,7 @@
 package gay.menkissing.common
 
+import cats.*
+
 enum Direction2D {
   case Up, Down, Left, Right
 
@@ -54,3 +56,12 @@ enum Direction2D {
       case Direction2D.Left => Direction2D.Right
       case Direction2D.Right => Direction2D.Left
 }
+
+object Direction2D:
+  given eqDirection2D: Eq[Direction2D] = Eq.fromUniversalEquals
+  given showDirection2D: Show[Direction2D] = it => 
+    it match
+      case Down => "Down"
+      case Left => "Left"
+      case Right => "Right"
+      case Up => "Up"
