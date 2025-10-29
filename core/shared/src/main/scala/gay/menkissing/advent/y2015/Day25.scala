@@ -17,14 +17,23 @@ object Day25 extends HalfDay[Vec2i, Long]:
     else
       (1 to p).sum
 
-
+  // A cursory search (that i didnt do before) for triangle numbers on the OEIS
+  // linked to "Floyd's triangle"
+  // which is exactly what we are working with here.
+  // The "left edge" (the first column) has the lazy caterer's sequence
+  // The "right edge" (the first row) has the triangle numbers (named sumtorial here)
+  // if there was a way to translate X Y (in the puzzle space) to R C (row column in floyd's triangle),
+  // I could trivially get the number.
+  // Based off of a drawing, I think that R will = X - 1 + Y
+  // I think that C will = X
+  // Given R and C, the answer should be sumtorial(R - 1) + C
+  // Sumtorial of R - 1 will give us the very last number of the previous row,
+  // and then we add C to get our current number.
+  
   def xyToN(v: Vec2i): Int =
-    val root = sumtorial(v.y - 1) + 1
-    // if the end of the range is less then the start then it will be empty
-    // and that works for me!
-    // IT JUST WORKS :tm:
-    // dont ask how i derived this (it was staring at the pattern)
-    root + ((v.y + 1) to (v.y + v.x - 1)).sum
+    val r = v.x - 1 + v.y
+    val c = v.x
+    sumtorial(r - 1) + c
 
   def advance(v: Long): Long =
     (v * 252533L) % 33554393L
