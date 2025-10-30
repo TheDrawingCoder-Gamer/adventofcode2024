@@ -2,56 +2,51 @@ package gay.menkissing.common
 
 import scala.annotation.tailrec
 import spire.implicits.IntAlgebra
+import spire.algebra.*
 import cats.*
 import cats.syntax.all.*
+import spire.implicits.{partialOrderOps => _, *}
+import spire.math.ConvertableFrom
+import spire.math.ConvertableTo
 
 object Sys3D {
   object Vec3i {
-    def of(str: String): Vec3i = {
+    def of(str: String): Vec3[Int] = {
       val parts = str.split(',')
-      Vec3i(parts(0).toInt, parts(1).toInt, parts(2).toInt)
+      Vec3(parts(0).toInt, parts(1).toInt, parts(2).toInt)
     }
+
+    
   }
 
-  case class Vec3i(x: Int, y: Int, z: Int) {
+  object Vec3:
+    given vecNVec3: VecN[Vec3] with
+      extension [@specialized(Int, Long) A](self: Vec3[A]) 
+        def axes: List[A] =  List(self.x, self.y, self.z)
+        def zip(that: Vec3[A])(f: (A, A) => A): Vec3[A] =
+          Vec3(f(self.x, that.x), f(self.y, that.y), f(self.z, that.z))
+        def map(f: A => A): Vec3[A] =
+          Vec3(f(self.x), f(self.y), f(self.z))
+  case class Vec3[@specialized(Int, Long) A](x: A, y: A, z: A) {
 
 
-    def offset(dir: Direction3D, n: Int = 1): Vec3i =
+    def offset(dir: Direction3D, n: A)(using add: AdditiveGroup[A]): Vec3[A] =
       val v = 
         dir.axisDirection match
           case AxisDirection.Positive => n
-          case AxisDirection.Negative => -n
+          case AxisDirection.Negative => add.negate(n)
       dir.axis match
-        case Axis3D.X => Vec3i(x + v, y, z)
-        case Axis3D.Y => Vec3i(x, y + v, z)
-        case Axis3D.Z => Vec3i(x, y, z + v)
+        case Axis3D.X => Vec3(x + v, y, z)
+        case Axis3D.Y => Vec3(x, y + v, z)
+        case Axis3D.Z => Vec3(x, y, z + v)
       
+    def offset(dir: Direction3D)(using add: Ring[A]): Vec3[A] =
+      offset(dir, add.one)
 
-    def map(f: Int => Int): Vec3i =
-      Vec3i(f(x), f(y), f(z))
-    
-    def zip(that: Vec3i)(f: (Int, Int) => Int): Vec3i =
-      Vec3i(f(this.x, that.x), f(this.y, that.y), f(this.z, that.z))
 
-    def min(that: Vec3i): Vec3i =
-      zip(that)(_ `min` _)
-    
-    def max(that: Vec3i): Vec3i =
-      zip(that)(_ `max` _)
-
-    def +(o: Vec3i): Vec3i = zip(o)(_ + _)
-
-    def -(o: Vec3i): Vec3i = this + -o
-
-    def unary_- : Vec3i = {
-      val x = -this.x
-      val y = -this.y
-      val z = -this.z
-      Vec3i(x, y, z)
-    }
 
     // facing default North
-    def face(dir: Direction3D): Vec3i = {
+    def face(dir: Direction3D)(using add: AdditiveGroup[A]): Vec3[A] = {
       dir match
         case Direction3D.North => this
         case Direction3D.East => rotate(Axis3D.Y, 1)
@@ -61,7 +56,7 @@ object Sys3D {
         case Direction3D.Down => rotate(Axis3D.X, -1)
     }
 
-    def orient(rotation: Rotation): Vec3i = {
+    def orient(rotation: Rotation)(using add: AdditiveGroup[A]): Vec3[A] = {
       rotation match
         case Rotation.Rot0 => this
         case Rotation.Rot90 => rotate(Axis3D.Z, 1)
@@ -70,7 +65,7 @@ object Sys3D {
     }
 
     @tailrec
-    final def rotate(axis: Axis3D, times: Int): Vec3i = {
+    final def rotate(axis: Axis3D, times: Int)(using add: AdditiveGroup[A]): Vec3[A] = {
       val gTimes = {
         val temp = times % 4
         if (temp < 0)
@@ -85,18 +80,14 @@ object Sys3D {
         axis match {
           case Axis3D.X =>
             // y to z, z to -y
-            Vec3i(x, -z, y).rotate(axis, times - 1)
+            Vec3(x, -z, y).rotate(axis, times - 1)
           case Axis3D.Y =>
             // z to x, x to -z
-            Vec3i(z, y, -x).rotate(axis, times - 1)
+            Vec3(z, y, -x).rotate(axis, times - 1)
           case Axis3D.Z =>
             // y to x, x to -y
-            Vec3i(y, -x, z).rotate(axis, times - 1)
+            Vec3(y, -x, z).rotate(axis, times - 1)
         }
-    }
-
-    def manhattanDistance(o: Vec3i): Int = {
-      (this.x - o.x).abs + (this.y - o.y).abs + (this.z - o.z).abs
     }
 
   }
@@ -207,17 +198,18 @@ object Sys3D {
     }
   }
 
-  case class AABB3D(xs: Dimension[Int], ys: Dimension[Int], zs: Dimension[Int]):
-    infix def intersect(that: AABB3D): Option[AABB3D] =
+  case class AABB3D[@specialized(Int, Long) A](xs: Dimension[A], ys: Dimension[A], zs: Dimension[A]):
+    infix def intersect(that: AABB3D[A])(using ord: Order[A]): Option[AABB3D[A]] =
       for
         xs <- this.xs intersect that.xs
         ys <- this.ys intersect that.ys
         zs <- this.zs intersect that.zs
       yield AABB3D(xs, ys, zs)
 
-    def volume: BigInt = BigInt(1) * xs.length * ys.length * zs.length
+    def volume(using rng: Rng[A], cv: ConvertableFrom[A], ct: ConvertableTo[A]): BigInt = 
+      cv.toBigInt(xs.length) * cv.toBigInt(ys.length) * cv.toBigInt(zs.length)
 
-    def contains(v: Vec3i): Boolean =
+    def contains(v: Vec3[A])(using ord: Order[A]): Boolean =
       v.x >= xs.min
       && v.x <= xs.max
       && v.y >= ys.min
@@ -225,27 +217,27 @@ object Sys3D {
       && v.z >= zs.min
       && v.z <= zs.max
 
-    def grow(n: Int): AABB3D =
+    def grow(n: A)(using add: AdditiveGroup[A], ord: Order[A]): AABB3D[A] =
       AABB3D(xs.min - n dimBy xs.max + n, ys.min - n dimBy ys.max + n, zs.min - n dimBy ys.max + n)
 
-    def fitsIn(that: AABB3D): Boolean =
+    def fitsIn(that: AABB3D[A])(using order: Order[A]): Boolean =
       xs.fitsIn(that.xs) && ys.fitsIn(that.ys) && zs.fitsIn(that.zs)
     
-    def start: Vec3i =
-      Vec3i(xs.min, ys.min, zs.min)
-    def stop: Vec3i =
-      Vec3i(xs.max, ys.max, zs.max)
+    def start: Vec3[A] =
+      Vec3(xs.min, ys.min, zs.min)
+    def stop: Vec3[A] =
+      Vec3(xs.max, ys.max, zs.max)
     
   object AABB3D:
-    given showAABB3D: Show[AABB3D] = box =>
+    given showAABB3D[A](using show: Show[A]): Show[AABB3D[A]] = box =>
       show"x=${box.xs},y=${box.ys},z=${box.zs}"
 
-    def apply(start: Vec3i, stop: Vec3i): AABB3D =
+    def apply[A](start: Vec3[A], stop: Vec3[A])(using order: Order[A]): AABB3D[A] =
       new AABB3D(start.x dimBy stop.x, start.y dimBy stop.y, start.z dimBy stop.z)
 
-    def containingAll(vs: Iterable[Vec3i]): AABB3D =
-      val min = vs.reduce(_ `min` _)
-      val max = vs.reduce(_ `max` _)
+    def containingAll[A](vs: Iterable[Vec3[A]])(using order: Order[A]): AABB3D[A] =
+      val min = vs.reduce(_ min _)
+      val max = vs.reduce(_ max _)
       AABB3D(min, max)
 
     

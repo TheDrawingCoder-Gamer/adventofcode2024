@@ -4,6 +4,8 @@ import cats.*
 import cats.syntax.all.*
 import algebra.ring.*
 import cats.collections.{Discrete, Range}
+import spire.math.ConvertableTo
+import spire.syntax.additiveGroup.*
 
 final case class Dimension[@specialized(Int, Long) A] private (min: A, max: A):
   infix def intersect(t: Dimension[A])(using ord: Order[A]): Option[Dimension[A]] =
@@ -42,7 +44,7 @@ final case class Dimension[@specialized(Int, Long) A] private (min: A, max: A):
   def contains(n: A)(using ord: Order[A]): Boolean =
     n >= min && n <= max
 
-  def length(using rng: Rng[A], discrete: Discrete[A]): A = discrete.succ(rng.minus(max, min))
+  def length(using rng: Rng[A], ct: ConvertableTo[A]): A = rng.minus(max, min) + ct.fromInt(1)
 
   def combine(t: Dimension[A])(using Order[A], Discrete[A]): Set[Dimension[A]] =
     this intersect t match

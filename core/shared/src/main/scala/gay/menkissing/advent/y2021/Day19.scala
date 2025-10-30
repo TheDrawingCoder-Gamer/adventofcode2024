@@ -9,11 +9,12 @@ import scala.io.Source
 
 import cats.syntax.all.*
 import alleycats.std.set.*
+import spire.implicits.IntAlgebra
 
 
 // This code was mostly written in 2022, and ported to fit this new repo's model
-object Day19 extends Problem[List[Set[Vec3i]], Int]{
-  def findTransformIfIntersects(left : Set[Vec3i], right : Set[Vec3i]): Option[Scanner] = {
+object Day19 extends Problem[List[Set[Vec3[Int]]], Int]{
+  def findTransformIfIntersects(left : Set[Vec3[Int]], right : Set[Vec3[Int]]): Option[Scanner] = {
     Direction3D.values.collectFirstSome: (facing : Direction3D) =>
       Rotation.values.collectFirstSome: (rot : Rotation) =>
         // get causes an exception so it's partial
@@ -27,7 +28,7 @@ object Day19 extends Problem[List[Set[Vec3i]], Int]{
             else
               None
   }
-  def parse(input: String): List[Set[Vec3i]] = {
+  def parse(input: String): List[Set[Vec3[Int]]] = {
     input.split("\n\n").map { scanner => 
       scanner.linesIterator
       .drop(1)
@@ -35,9 +36,9 @@ object Day19 extends Problem[List[Set[Vec3i]], Int]{
        .toSet
     }.toList
   }
-  def solve(data: List[Set[Vec3i]]): Solution = {
+  def solve(data: List[Set[Vec3[Int]]]): Solution = {
     val baseSector = mut.Set.from(data.head)
-    val foundScanners = mut.Set(Vec3i(0,0,0))
+    val foundScanners = mut.Set(Vec3(0,0,0))
     val unmappedSector = mut.ListBuffer.from(data.tail)
     while (unmappedSector.nonEmpty) {
       val thisSector = unmappedSector.head 
@@ -51,24 +52,24 @@ object Day19 extends Problem[List[Set[Vec3i]], Int]{
     }
     Solution(foundScanners.toSet, baseSector.toSet)
   }
-  def part1(input: List[Set[Vec3i]]): Int = {
+  def part1(input: List[Set[Vec3[Int]]]): Int = {
     val solved = solve(input)
     solved.beacons.size 
   }
-  def part2(input: List[Set[Vec3i]]): Int = {
+  def part2(input: List[Set[Vec3[Int]]]): Int = {
     val solved = solve(input)
     val beegList = solved.scanners.toList.combinationsN[2].map { 
       case (l, r) => 
-        l.manhattanDistance(r)
+        l.taxiDistance(r)
     }
     beegList.max
   }
 
 
   lazy val input = FileIO.getInput(2021, 19)
-  case class Scanner(pos: Vec3i, detections: Set[Vec3i])
+  case class Scanner(pos: Vec3[Int], detections: Set[Vec3[Int]])
 
-  case class Solution(scanners: Set[Vec3i], beacons: Set[Vec3i])
+  case class Solution(scanners: Set[Vec3[Int]], beacons: Set[Vec3[Int]])
 }
 
 

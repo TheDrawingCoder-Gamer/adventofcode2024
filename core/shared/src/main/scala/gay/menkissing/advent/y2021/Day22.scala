@@ -9,7 +9,7 @@ import cats.syntax.show.*
 import collection.mutable
 
 object Day22 extends Problem[List[Day22.Step], BigInt]:
-  case class Step(command: Command, cuboid: AABB3D)
+  case class Step(command: Command, cuboid: AABB3D[Int])
 
   enum Command:
     case On, Off
@@ -24,13 +24,13 @@ object Day22 extends Problem[List[Day22.Step], BigInt]:
   lazy val input = FileIO.getInput(2021, 22)
 
 
-  def tryAddhole(obj: AABB3D, hole: AABB3D): Set[AABB3D] =
+  def tryAddhole(obj: AABB3D[Int], hole: AABB3D[Int]): Set[AABB3D[Int]] =
     obj intersect hole match
       case Some(realHole) => addHole(obj, realHole)
       case None => Set(obj)
 
-  def addHole(obj: AABB3D, hole: AABB3D): Set[AABB3D] =
-    var daSet = Set.empty[AABB3D]
+  def addHole(obj: AABB3D[Int], hole: AABB3D[Int]): Set[AABB3D[Int]] =
+    var daSet = Set.empty[AABB3D[Int]]
     if obj.xs.min != hole.xs.min then
       daSet += AABB3D(obj.xs.min dimBy hole.xs.min - 1, obj.ys, obj.zs)
     if obj.xs.max != hole.xs.max then
@@ -56,15 +56,15 @@ object Day22 extends Problem[List[Day22.Step], BigInt]:
     v >= min && v <= max
 
 
-  def run(steps: List[Step]): Set[AABB3D] =
-    steps.foldLeft(Set.empty[AABB3D]): (daSet, step) =>
+  def run(steps: List[Step]): Set[AABB3D[Int]] =
+    steps.foldLeft(Set.empty[AABB3D[Int]]): (daSet, step) =>
       val toAdd = if step.command == Command.On then Set(step.cuboid) else Set.empty
       val r = daSet.flatMap(it => tryAddhole(it, step.cuboid)) ++ toAdd
       // println(r.map(_.show))
       // println(score(r))
       r
     
-  def score(s: Set[AABB3D]): BigInt =
+  def score(s: Set[AABB3D[Int]]): BigInt =
     s.toList.map(_.volume).sum
   def part1(input: List[Step]): BigInt =
     val rangeBound = AABB3D(-50 dimBy 50, -50 dimBy 50, -50 dimBy 50)
