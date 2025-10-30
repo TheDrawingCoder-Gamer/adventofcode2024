@@ -1,8 +1,9 @@
 package gay.menkissing.advent
 package y2021
 
-import gay.menkissing.common.{Grid, Vec2i, given}
+import gay.menkissing.common.{Grid, Vec2, given}
 import cats.syntax.all.*
+import spire.implicits.IntAlgebra
 
 import scala.annotation.tailrec
 
@@ -12,7 +13,7 @@ object Day11 extends Problem[Grid[Int], Long]:
   def parse(input: String): Grid[Int] =
     Grid.fromString(input)(_.asDigit)
 
-  def flashElem(grid: Grid[Int], p: Vec2i, v: Int): Int =
+  def flashElem(grid: Grid[Int], p: Vec2[Int], v: Int): Int =
     if v == -1 then
       -1
     else if v >= 10 then

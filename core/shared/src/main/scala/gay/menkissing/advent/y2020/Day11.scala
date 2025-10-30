@@ -1,9 +1,10 @@
 package gay.menkissing.advent
 package y2020
 
-import gay.menkissing.common.{Grid, Vec2i, PrincibleWind2D, given}
+import gay.menkissing.common.{Grid, Vec2, PrincibleWind2D, given}
 import cats.*
-import cats.implicits.*
+import cats.syntax.all.*
+import spire.std.any.IntAlgebra
 
 import scala.collection.mutable
 
@@ -30,7 +31,7 @@ object Day11 extends Problem[Grid[Day11.Seat], Int]:
 
 
   extension (grid: Grid[Seat])
-    def lineIsOccupied(start: Vec2i)(dir: PrincibleWind2D): Boolean =
+    def lineIsOccupied(start: Vec2[Int])(dir: PrincibleWind2D): Boolean =
       var s = start + dir.digitalDir
       while grid.isDefinedAt(s.x, s.y) do
         val r = grid(s.x, s.y)

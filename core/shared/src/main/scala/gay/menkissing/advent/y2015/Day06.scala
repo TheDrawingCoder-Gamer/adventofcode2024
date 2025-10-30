@@ -1,7 +1,7 @@
 package gay.menkissing.advent
 package y2015
 
-import gay.menkissing.common.Vec2i
+import gay.menkissing.common.Vec2
 object Day06 extends Problem[List[Day06.Instruction], Int]:
   enum Op:
     case On, Toggle, Off
@@ -19,7 +19,7 @@ object Day06 extends Problem[List[Day06.Instruction], Int]:
         case Toggle => i + 2
 
 
-  case class Instruction(op: Op, start: Vec2i, stop: Vec2i):
+  case class Instruction(op: Op, start: Vec2[Int], stop: Vec2[Int]):
     def advance(arr: Array[Boolean]): Unit =
       val minX = start.x `min` stop.x
       val maxX = start.x `max` stop.x
@@ -46,9 +46,9 @@ object Day06 extends Problem[List[Day06.Instruction], Int]:
     str.linesIterator.map:
       // matching kind of sucks, sort of a hack
       case s"toggle $x1,$y1 through $x2,$y2" =>
-        Instruction(Op.Toggle, Vec2i(x1.toInt, y1.toInt), Vec2i(x2.toInt, y2.toInt))
+        Instruction(Op.Toggle, Vec2(x1.toInt, y1.toInt), Vec2(x2.toInt, y2.toInt))
       case s"turn $o $x1,$y1 through $x2,$y2" =>
-        Instruction(if o == "off" then Op.Off else Op.On, Vec2i(x1.toInt, y1.toInt), Vec2i(x2.toInt, y2.toInt))
+        Instruction(if o == "off" then Op.Off else Op.On, Vec2(x1.toInt, y1.toInt), Vec2(x2.toInt, y2.toInt))
     .toList
 
 

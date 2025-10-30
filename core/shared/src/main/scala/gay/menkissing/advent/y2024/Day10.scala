@@ -4,6 +4,7 @@ import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common.*
 
 import scala.io.Source
+import spire.implicits.IntAlgebra
 
 
 object Day10 extends Problem[Grid[Int], Int]:
@@ -12,27 +13,27 @@ object Day10 extends Problem[Grid[Int], Int]:
   override def parse(str: String): Grid[Int] =
     Grid[Int](str.linesIterator.map(_.map(_.asDigit)))
 
-  def neighbors(grid: Grid[Int], pos: Vec2i): Seq[Vec2i] = {
+  def neighbors(grid: Grid[Int], pos: Vec2[Int]): Seq[Vec2[Int]] = {
     Direction2D.values.flatMap { dir =>
       val daPos = pos.offset(dir)
       Option.when(grid.isDefinedAt(daPos.x, daPos.y))(daPos)
     }.filter(it => grid(it) - grid(pos) == 1)
   }
   
-  def scoreTrail(grid: Grid[Int], start: Vec2i, endNodes: Seq[Vec2i]): Int = {
+  def scoreTrail(grid: Grid[Int], start: Vec2[Int], endNodes: Seq[Vec2[Int]]): Int = {
     endNodes.collect(Function.unlift { it =>
-      astar[Vec2i](start, it, c => c.taxiDistance(it), (l, r) => if (grid(r) - grid(l) == 1) 1.0 else Double.PositiveInfinity, i => neighbors(grid, i))
+      astar[Vec2[Int]](start, it, c => c.taxiDistance(it), (l, r) => if (grid(r) - grid(l) == 1) 1.0 else Double.PositiveInfinity, i => neighbors(grid, i))
     }).size
   }
   
-  def rateTrailhead(grid: Grid[Int], start: Vec2i, endNodes: Seq[Vec2i]): Int = {
-    def rateSingleTrail(e: Vec2i): Int = {
-      findAllPaths[Vec2i](start, e, it => neighbors(grid, it)).size
+  def rateTrailhead(grid: Grid[Int], start: Vec2[Int], endNodes: Seq[Vec2[Int]]): Int = {
+    def rateSingleTrail(e: Vec2[Int]): Int = {
+      findAllPaths[Vec2[Int]](start, e, it => neighbors(grid, it)).size
     }
     endNodes.map(rateSingleTrail).sum
   }
   
-  def parseZeroNines(data: Grid[Int]): (Seq[Vec2i], Seq[Vec2i]) =
+  def parseZeroNines(data: Grid[Int]): (Seq[Vec2[Int]], Seq[Vec2[Int]]) =
     (data.zipWithIndices.iterator.withFilter(_._1 == 0).map(_._2).toSeq, data.zipWithIndices.withFilter(_._1 == 9).map(_._2).toSeq)
     
   

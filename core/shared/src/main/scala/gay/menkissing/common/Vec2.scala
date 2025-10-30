@@ -3,57 +3,71 @@ package gay.menkissing.common
 import spire.algebra.*
 import spire.implicits.*
 import cats.collections.Discrete
+import cats.collections.Range
 import cats.collections.syntax.range.*
-import cats.kernel.UnboundedEnumerable
 
-final case class Vec2[@specialized(Specializable.Bits32AndUp) A](x: A, y: A)(using ring: Ring[A], signed: Signed[A]):
-  final def +(that: Vec2[A]): Vec2[A] =
-    Vec2(ring.plus(x, that.x), ring.plus(y, that.y))
-
-  final def -(that: Vec2[A]): Vec2[A] =
-    Vec2(ring.minus(this.x, that.x), ring.minus(this.x, that.x))
-  
-  final def *(that: A): Vec2[A] =
-    Vec2(this.x * that, this.y * that)
-  
-  final def taxiDistance(that: Vec2[A]): A =
-    signed.abs((this.x - that.x))
-
-  def cardinalNeighbors(using dis: Discrete[A]): List[Vec2[A]] =
+final case class Vec2[@specialized(Specializable.Bits32AndUp) A](x: A, y: A):
+  def cardinalNeighbors(using ring: Ring[A]): List[Vec2[A]] =
       List(
-        Vec2[A](dis.pred(x), y),
-        Vec2[A](dis.succ(x), y),
-        Vec2[A](x, dis.pred(y)),
-        Vec2[A](x, dis.succ(y))
+        Vec2[A](x - ring.one, y),
+        Vec2[A](x + ring.one, y),
+        Vec2[A](x, y - ring.one),
+        Vec2[A](x, y + ring.one)
       )
-  def allNeighbors(using eq: Eq[A], dis: Discrete[A]): List[Vec2[A]] =
+  def allNeighbors(using eq: Eq[A], ring: Ring[A]): List[Vec2[A]] =
     for
-      x <- List(dis.pred(this.x), this.x, dis.succ(this.x))
-      y <- List(dis.pred(this.y), this.y, dis.succ(this.y))
+      x <- List(this.x - ring.one, this.x, this.x + ring.one)
+      y <- List(this.y - ring.one, this.y, this.y + ring.one)
       if x =!= this.x || y =!= this.y
     yield Vec2(x, y)
   
-  def offset(dir: Direction2D, n: A): Vec2[A] =
+  def offset(dir: Direction2D, n: A)(using AdditiveGroup[A]): Vec2[A] =
     dir match
       case Direction2D.Up => this.copy(y = y - n)
       case Direction2D.Down => this.copy(y = y + n)
       case Direction2D.Left => this.copy(x = x - n)
       case Direction2D.Right => this.copy(x = x + n)
   
-  def offset(dir: Direction2D)(using dis: Discrete[A]): Vec2[A] =
+  def offset(dir: Direction2D)(using ring: Ring[A]): Vec2[A] =
     dir match
-      case Direction2D.Up => this.copy(y = dis.pred(y))
-      case Direction2D.Down => this.copy(y = dis.succ(y))
-      case Direction2D.Left => this.copy(x = dis.pred(x))
-      case Direction2D.Right => this.copy(x = dis.succ(x))
+      case Direction2D.Up => this.copy(y = y - ring.one)
+      case Direction2D.Down => this.copy(y = y + ring.one)
+      case Direction2D.Left => this.copy(x = x - ring.one)
+      case Direction2D.Right => this.copy(x = x + ring.one)
   
   def stepsTowards(that: Vec2[A])(using PartialOrder[A]): Vector[Direction2D] =
       Option.when(this.x =!= that.x)(if this.x > that.x  then Direction2D.Left else Direction2D.Right).toVector
         ++ Option.when(this.y =!= that.y)(if this.y > that.y then Direction2D.Up else Direction2D.Down)
+
+  def straightLine(that: Vec2[A])(using ord: Order[A], dis: Discrete[A], ring: Ring[A]): List[Vec2[A]] = {
+    require(this.x === that.x || this.y === that.y)
+    val shouldReverse = (this.x - that.x > ring.zero) || (this.y - that.y > ring.zero) 
+    def maybeReverse[A](ls: List[A]): List[A] = {
+      if (shouldReverse)
+        ls.reverse 
+      else 
+        ls
+    }
+    if (this.x === that.x) {
+      val minY = this.y `min` that.y 
+      val maxY = this.y `max` that.y 
+      maybeReverse(Range[A](minY, maxY).toList.map(yy => Vec2(x, yy)))
+    } else { 
+      val minX = this.x `min` that.x 
+      val maxX = this.x `max` that.x 
+      maybeReverse(Range(minX, maxX).toList.map(xx => Vec2(xx, y)))
+    }
+  }
 
 object Vec2:
   given eqVec2[@specialized(Specializable.Bits32AndUp) A](using Eq[A]): Eq[Vec2[A]] with
     def eqv(x: Vec2[A], y: Vec2[A]): Boolean =
       x.x === y.x && x.y === y.y
 
-    
+  given vecNVec2: VecN[Vec2] with
+    extension [A](self: Vec2[A]) 
+      def axes: List[A] = List(self.x, self.y)
+      def map(f: A => A): Vec2[A] =
+        Vec2(f(self.x), f(self.y))
+      def zip(that: Vec2[A])(f: (A, A) => A): Vec2[A] =
+        Vec2(f(self.x, that.x), f(self.y, that.y))

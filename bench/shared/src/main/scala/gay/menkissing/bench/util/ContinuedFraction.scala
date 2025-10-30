@@ -1,6 +1,5 @@
 package gay.menkissing.bench.util
 
-import scala.util.boundary
 
 /**
  * Provides a generic means to evaluate continued fractions.  Subclasses simply
@@ -79,7 +78,7 @@ abstract class ContinuedFraction protected
     var cPrev = hPrev
     var hN = hPrev
     
-    boundary {
+    def whileLoop(): Unit =
       while (n < maxIterations) {
         val a = getA(n, x)
         val b = getB(n, x)
@@ -92,13 +91,14 @@ abstract class ContinuedFraction protected
         hN = hPrev * deltaN
         if (hN.isInfinite) throw new Exception(s"Continued Fraction Diverges to +/- infinity for value $x")
         if (hN.isNaN) throw new Exception(s"Continued Fraction diverged to NaN for value $x")
-        if (math.abs(deltaN - 1.0) < epsilon) boundary.break()
+        if (math.abs(deltaN - 1.0) < epsilon) return
         dPrev = dN
         cPrev = cN
         hPrev = hN
         n += 1
       }
-    }
+    
+    whileLoop()
     if (n >= maxIterations) throw new Exception(s"Continued fraction convergents failed to converge (in less than $maxIterations) for value $x")
     hN
   }

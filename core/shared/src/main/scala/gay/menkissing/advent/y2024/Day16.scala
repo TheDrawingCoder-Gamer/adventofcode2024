@@ -3,6 +3,7 @@ package gay.menkissing.advent.y2024
 import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common.*
 import ArityN.*
+import spire.implicits.IntAlgebra
 
 import scala.io.Source
 
@@ -19,7 +20,7 @@ object Day16 extends Problem[Day16.ProblemState, Int]:
         case (acc, (l, r)) =>
           acc + l.edgeScore(r)
       }.toInt
-  case class Reindeer(pos: Vec2i, dir: Direction2D):
+  case class Reindeer(pos: Vec2[Int], dir: Direction2D):
     def neighbors: List[Reindeer] =
       Direction2D.values.flatMap { d =>
         if (d == dir.clockwise.clockwise)
@@ -39,11 +40,11 @@ object Day16 extends Problem[Day16.ProblemState, Int]:
         Double.PositiveInfinity
     }
 
-  case class ProblemState(reindeer: Reindeer, maze: Maze, end: Vec2i):
+  case class ProblemState(reindeer: Reindeer, maze: Maze, end: Vec2[Int]):
     def getSolution: List[Reindeer] =
       astarGeneric[Reindeer](reindeer, _.pos == end, _.pos.taxiDistance(end), _.edgeScore(_), maze.neighbors).get
 
-    def getGoodSeats: Set[Vec2i] =
+    def getGoodSeats: Set[Vec2[Int]] =
       val paths = dijstraAll[Reindeer](reindeer, _.pos == end, _.edgeScore(_), maze.neighbors, (l, r) => l.pos == r.pos)
       paths.map(_.map(_.pos).toSet).reduce(_ ++ _)
 
@@ -54,7 +55,7 @@ object Day16 extends Problem[Day16.ProblemState, Int]:
       val solMap = solution.groupBy(_.pos)
       maze.values.zipWithIndex.map { (line, y) =>
         line.zipWithIndex.map { (wall, x) =>
-          val p = Vec2i(x, y)
+          val p = Vec2(x, y)
           if (wall)
             '#'
           else if (reindeer.pos == p) {
@@ -62,7 +63,7 @@ object Day16 extends Problem[Day16.ProblemState, Int]:
           } else if (end == p)
             'E'
           else
-            solMap.get(Vec2i(x, y)) match
+            solMap.get(Vec2(x, y)) match
               case None => '.'
               case Some(v) =>
                 v.head.dir match
@@ -75,14 +76,14 @@ object Day16 extends Problem[Day16.ProblemState, Int]:
 
 
   override def parse(str: String): ProblemState =
-    var reindeer = Reindeer(Vec2i(0, 0), Direction2D.Right)
-    var end = Vec2i(0, 0)
+    var reindeer = Reindeer(Vec2(0, 0), Direction2D.Right)
+    var end = Vec2(0, 0)
 
     val maze = Grid(str.linesIterator.zipWithIndex.map: (line, y) =>
       line.zipWithIndex.map: (c, x) =>
         c match {
-          case 'E' => end = Vec2i(x, y)
-          case 'S' => reindeer = Reindeer(Vec2i(x, y), Direction2D.Right)
+          case 'E' => end = Vec2(x, y)
+          case 'S' => reindeer = Reindeer(Vec2(x, y), Direction2D.Right)
           case _ =>
         }
         c match {

@@ -3,7 +3,7 @@ package gay.menkissing.common
 import cats.*
 import cats.syntax.all.*
 
-case class Grid[A] private (values: Vector[Vector[A]]) extends PartialFunction[Vec2i, A] {
+case class Grid[A] private (values: Vector[Vector[A]]) extends PartialFunction[Vec2[Int], A] {
   val width: Int = values.head.length 
 
   val height: Int = values.length
@@ -19,7 +19,7 @@ case class Grid[A] private (values: Vector[Vector[A]]) extends PartialFunction[V
     isDefinedAt(x, y)
   }
 
-  def isDefinedAt(v: Vec2i): Boolean = isDefinedAt(v.x, v.y)
+  def isDefinedAt(v: Vec2[Int]): Boolean = isDefinedAt(v.x, v.y)
 
   def get(x: Int, y: Int): Option[A] = {
     if (isDefinedAt(x, y))
@@ -32,7 +32,7 @@ case class Grid[A] private (values: Vector[Vector[A]]) extends PartialFunction[V
     val (x, y) = nToXY(n)
     get(x, y)
   }
-  def indexWhere(f: A => Boolean): Option[Vec2i] = {
+  def indexWhere(f: A => Boolean): Option[Vec2[Int]] = {
     var x = 0  
     val y = values.indexWhere { it => 
       x = it.indexWhere(f)
@@ -41,11 +41,11 @@ case class Grid[A] private (values: Vector[Vector[A]]) extends PartialFunction[V
     if (x == -1 || y == -1) 
       None 
     else 
-      Some(Vec2i(x, y))
+      Some(Vec2(x, y))
   }
-  def get(p: Vec2i): Option[A] = get(p.x, p.y)
+  def get(p: Vec2[Int]): Option[A] = get(p.x, p.y)
 
-  def getOrElse(p: Vec2i, orElse: => A): A = applyOrElse(p, _ => orElse)
+  def getOrElse(p: Vec2[Int], orElse: => A): A = applyOrElse(p, _ => orElse)
 
   def apply(x: Int, y: Int): A = values(y)(x)
 
@@ -54,7 +54,7 @@ case class Grid[A] private (values: Vector[Vector[A]]) extends PartialFunction[V
     apply(x, y)
   }
 
-  def apply(p: Vec2i): A = apply(p.x, p.y)
+  def apply(p: Vec2[Int]): A = apply(p.x, p.y)
 
   def extractRow(y: Int): Seq[A] = values(y).toSeq
 
@@ -73,7 +73,7 @@ case class Grid[A] private (values: Vector[Vector[A]]) extends PartialFunction[V
     val (x, y) = nToXY(n)
     updated(x, y)(v)
   }
-  def updated(p: Vec2i)(v: A): Grid[A] = updated(p.x, p.y)(v)
+  def updated(p: Vec2[Int])(v: A): Grid[A] = updated(p.x, p.y)(v)
   def expand(default: A)(n: Int): Grid[A] = {
     Grid[A](values.map[Vector[A]](
       _.prependedAll(Vector.fill[A](n)(default))
@@ -100,7 +100,7 @@ case class Grid[A] private (values: Vector[Vector[A]]) extends PartialFunction[V
       } yield get(x, y).getOrElse(default)
     Grid(foo, 3)
   }
-  def slice(start: Vec2i, end: Vec2i): Grid[A] = {
+  def slice(start: Vec2[Int], end: Vec2[Int]): Grid[A] = {
     val mxY = start.y `max` end.y 
     val mxX = start.x `max` end.x 
     val mnY = start.y `min` end.y 
@@ -139,7 +139,7 @@ case class Grid[A] private (values: Vector[Vector[A]]) extends PartialFunction[V
     val xc = width / w
     val yc = height / h
     val slices = (0 until yc).flatMap { y =>
-      (0 until xc).map(x => f(this.slice(Vec2i(x * w, y * h), Vec2i(x * w + w - 1, y * h + h - 1)))) 
+      (0 until xc).map(x => f(this.slice(Vec2(x * w, y * h), Vec2(x * w + w - 1, y * h + h - 1)))) 
     }
     Grid(slices, xc)
     
@@ -153,19 +153,19 @@ case class Grid[A] private (values: Vector[Vector[A]]) extends PartialFunction[V
     }
   }
 
-  def zipWithIndices: Seq[(A, Vec2i)] = {
+  def zipWithIndices: Seq[(A, Vec2[Int])] = {
     for {
       y <- 0 until height
       x <- 0 until width
-    } yield (this(x, y), Vec2i(x, y))
+    } yield (this(x, y), Vec2(x, y))
   }
 
   
-  def mapWithIndex(f: (Vec2i, A) => A): Grid[A] =
+  def mapWithIndex(f: (Vec2[Int], A) => A): Grid[A] =
     Grid:
       values.zipWithIndex.map: (row, y) =>
         row.zipWithIndex.map: (p, x) => 
-          f(Vec2i(x, y), p)
+          f(Vec2(x, y), p)
         
 
 }
@@ -182,8 +182,8 @@ object Grid {
     Grid[A](Vector.fill(y, x)(v))
   }
 
-  def fromSparse[A](x: Int, y: Int, map: Map[Vec2i, A])(default: => A) =
-    Grid[A](Vector.tabulate(y, x)((y, x) => map.getOrElse(Vec2i(x, y), default)))
+  def fromSparse[A](x: Int, y: Int, map: Map[Vec2[Int], A])(default: => A) =
+    Grid[A](Vector.tabulate(y, x)((y, x) => map.getOrElse(Vec2(x, y), default)))
   
   def fromString[A](str: String)(fn: Char => A): Grid[A] = Grid(str.linesIterator.map(_.map(fn)))
 

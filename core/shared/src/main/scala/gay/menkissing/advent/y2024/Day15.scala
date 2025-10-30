@@ -1,7 +1,7 @@
 package gay.menkissing.advent.y2024
 
 import cats.*
-import cats.implicits.*
+import cats.syntax.all.*
 import spire.implicits.IntAlgebra
 import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common.*
@@ -20,9 +20,9 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
 
   extension (grid: Grid[GridItem]) {
     @targetName("updatedMoveP1")
-    def updatedMove(start: Vec2i, dir: Direction2D): Option[Grid[GridItem]] = {
+    def updatedMove(start: Vec2[Int], dir: Direction2D): Option[Grid[GridItem]] = {
       @tailrec
-      def go(curGrid: Grid[GridItem], start: Vec2i): Option[Grid[GridItem]] =
+      def go(curGrid: Grid[GridItem], start: Vec2[Int]): Option[Grid[GridItem]] =
         val newPos = start.offset(dir)
         val oldItem = curGrid(start)
         curGrid(newPos) match {
@@ -50,9 +50,9 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
 
   extension (grid: Grid[GridItemP2])
     @targetName("updatedMoveP2")
-    def updatedMove(istart: Vec2i, dir: Direction2D): Option[Grid[GridItemP2]] =
+    def updatedMove(istart: Vec2[Int], dir: Direction2D): Option[Grid[GridItemP2]] =
       // ???
-      def go(start: Vec2i, movedItems: List[(Vec2i, GridItemP2)]): Eval[Option[List[(Vec2i, GridItemP2)]]] =
+      def go(start: Vec2[Int], movedItems: List[(Vec2[Int], GridItemP2)]): Eval[Option[List[(Vec2[Int], GridItemP2)]]] =
         val newPos = start.offset(dir)
         grid(newPos) match
           case GridItemP2.Wall => Eval.always(None)
@@ -82,7 +82,7 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
 
 
       go(istart, List()).value.map:
-        val alreadyInspected = mut.Set[Vec2i]()
+        val alreadyInspected = mut.Set[Vec2[Int]]()
         _.foldLeft(grid.updated(istart)(GridItemP2.Empty)):
           case (g, (p, item)) =>
             if (!alreadyInspected.contains(p))
@@ -90,7 +90,7 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
               g.updated(p)(GridItemP2.Empty).updated(p.offset(dir))(item)
             else g
 
-  case class ProblemState(grid: Grid[GridItem], robot: Vec2i, remainingMoves: List[Direction2D]):
+  case class ProblemState(grid: Grid[GridItem], robot: Vec2[Int], remainingMoves: List[Direction2D]):
     def step: Option[ProblemState] =
       remainingMoves match
         case head :: rest =>
@@ -113,12 +113,12 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
       (grid.values.zipWithIndex.map: (it, y) =>
         (it.zipWithIndex.map: (m, x) =>
           m match
-            case _ if Vec2i(x, y) == robot => '@'
+            case _ if Vec2(x, y) == robot => '@'
             case GridItem.Empty => '.'
             case GridItem.Wall => '#'
             case GridItem.Box => 'O').mkString("", "", "")).mkString("", "\n", "")
 
-  case class ProblemStateP2(grid: Grid[GridItemP2], robot: Vec2i, remainingMoves: List[Direction2D]):
+  case class ProblemStateP2(grid: Grid[GridItemP2], robot: Vec2[Int], remainingMoves: List[Direction2D]):
     def step: Option[ProblemStateP2] =
       remainingMoves match
         case head :: rest =>
@@ -134,14 +134,14 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
       (grid.values.zipWithIndex.map: (it, y) =>
         (it.zipWithIndex.map: (m, x) =>
           m match
-            case _ if Vec2i(x, y) == robot => '@'
+            case _ if Vec2(x, y) === robot => '@'
             case GridItemP2.Empty => '.'
             case GridItemP2.Wall => '#'
             case GridItemP2.BoxL => '['
             case GridItemP2.BoxR => ']').mkString("", "", "")).mkString("", "\n", "")
   override def parse(str: String): ProblemState =
     val sides = str.split("\n\n")
-    var robotPos = Vec2i(-1, -1)
+    var robotPos = Vec2(-1, -1)
     val grid = Grid(sides(0).linesIterator.zipWithIndex.map: (str, y) =>
       str.toVector.zipWithIndex.map: (it, x) =>
         it match
@@ -149,8 +149,8 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
           case 'O' => GridItem.Box
           case '.' => GridItem.Empty
           case '@' =>
-            assert(robotPos == Vec2i(-1, -1))
-            robotPos = Vec2i(x, y)
+            assert(robotPos === Vec2(-1, -1))
+            robotPos = Vec2(x, y)
             GridItem.Empty
           case _ => ???
       )

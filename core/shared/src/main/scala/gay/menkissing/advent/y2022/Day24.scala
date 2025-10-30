@@ -17,17 +17,17 @@ object Day24 extends Problem[Day24.BlizzardMap, Int] {
   case object Wall extends BlizzardMapPoint
   case object Empty extends BlizzardMapPoint  
 
-  case class TimeLocation(time: Int, loc: Vec2i)
+  case class TimeLocation(time: Int, loc: Vec2[Int])
   
   type BlizzardMap = Grid[BlizzardMapPoint]
 
   class State {
     val memo = mut.HashMap[Int, BlizzardMap]()
 
-    def freakstar(start: TimeLocation, goal: Vec2i): Option[List[TimeLocation]] =
+    def freakstar(start: TimeLocation, goal: Vec2[Int]): Option[List[TimeLocation]] =
       astarGeneric[TimeLocation](start, _.loc == goal, _.loc.taxiDistance(goal), (_, _) => 1d, it => neighbors(memo(it.time), it))
 
-    def daAStar(start: Vec2i, goal: Vec2i) = freakstar(TimeLocation(0, start), goal)
+    def daAStar(start: Vec2[Int], goal: Vec2[Int]) = freakstar(TimeLocation(0, start), goal)
     def nextMap(blizzards: BlizzardMap, time: Int): BlizzardMap = {
       if (memo.contains(time))
         return memo(time)
@@ -39,7 +39,7 @@ object Day24 extends Problem[Day24.BlizzardMap, Int] {
           val spot = blizzards(xx, yy)
           spot match
             case BlizzardSpot(blizzards) =>
-              Some(blizzards.map(it => (Vec2i(xx, yy), it)))
+              Some(blizzards.map(it => (Vec2(xx, yy), it)))
             case _ => None
 
         }).flatten.flatten
@@ -123,8 +123,8 @@ object Day24 extends Problem[Day24.BlizzardMap, Int] {
   def part1(data: BlizzardMap): Int = {
     val state = new State
     state.memo.put(0, data)
-    val start = Vec2i(data.rows.head.indexOf(Empty), 0)
-    val end = Vec2i(data.rows.last.indexOf(Empty), data.height - 1)
+    val start = Vec2(data.rows.head.indexOf(Empty), 0)
+    val end = Vec2(data.rows.last.indexOf(Empty), data.height - 1)
     state.daAStar(start, end).get.size - 1
 
   }
@@ -132,8 +132,8 @@ object Day24 extends Problem[Day24.BlizzardMap, Int] {
   def part2(data: BlizzardMap): Int = {
     val state = new State
     state.memo.put(0, data)
-    val start = Vec2i(data.rows.head.indexOf(Empty), 0)
-    val end = Vec2i(data.rows.last.indexOf(Empty), data.height - 1)
+    val start = Vec2(data.rows.head.indexOf(Empty), 0)
+    val end = Vec2(data.rows.last.indexOf(Empty), data.height - 1)
     val firstPath = state.daAStar(start, end).get
     val secondPath = state.freakstar(firstPath.last, start).get
     val thirdPath = state.freakstar(secondPath.last, end).get

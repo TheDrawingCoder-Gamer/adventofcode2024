@@ -1,7 +1,6 @@
 package gay.menkissing.advent
 package y2015
 
-import gay.menkissing.common.{Direction2D, Vec2i}
 
 import java.nio.{ByteBuffer, ByteOrder}
 import scala.collection.mutable

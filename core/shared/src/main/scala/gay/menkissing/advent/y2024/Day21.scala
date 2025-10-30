@@ -1,16 +1,15 @@
 package gay.menkissing.advent.y2024
 
 import cats.*
-import cats.implicits.*
+import cats.syntax.all.*
 import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common
 import gay.menkissing.common.*
 import ArityN.*
-import Vec2i.*
 
 import scala.annotation.experimental
 import scala.collection.mutable as mut
-import scala.io.Source
+import spire.implicits.IntAlgebra
 
 object Day21 extends Problem[List[String], Long]:
   override def parse(str: String): List[String] =
@@ -20,26 +19,26 @@ object Day21 extends Problem[List[String], Long]:
   trait Pad:
     val layout: Vector[String]
 
-    def apply(loc: Vec2i): Char = layout(loc.y)(loc.x)
-    def apply(key: Char): Vec2i
+    def apply(loc: Vec2[Int]): Char = layout(loc.y)(loc.x)
+    def apply(key: Char): Vec2[Int]
 
   object Numpad extends Pad:
     val layout: Vector[String] = Vector("789", "456", "123", " 0A")
 
-    override def apply(key: Char): Vec2i =
+    override def apply(key: Char): Vec2[Int] =
       key match
-        case '7' => Vec2i(0, 0)
-        case '8' => Vec2i(1, 0)
-        case '9' => Vec2i(2, 0)
-        case '4' => Vec2i(0, 1)
-        case '5' => Vec2i(1, 1)
-        case '6' => Vec2i(2, 1)
-        case '1' => Vec2i(0, 2)
-        case '2' => Vec2i(1, 2)
-        case '3' => Vec2i(2, 2)
-        case ' ' => Vec2i(0, 3)
-        case '0' => Vec2i(1, 3)
-        case 'A' => Vec2i(2, 3)
+        case '7' => Vec2(0, 0)
+        case '8' => Vec2(1, 0)
+        case '9' => Vec2(2, 0)
+        case '4' => Vec2(0, 1)
+        case '5' => Vec2(1, 1)
+        case '6' => Vec2(2, 1)
+        case '1' => Vec2(0, 2)
+        case '2' => Vec2(1, 2)
+        case '3' => Vec2(2, 2)
+        case ' ' => Vec2(0, 3)
+        case '0' => Vec2(1, 3)
+        case 'A' => Vec2(2, 3)
         case _ => assert(false)
     def explodes(start: Char, path: String): Boolean =
       val startPos = numpadKeyToPoint(start)
@@ -67,14 +66,14 @@ object Day21 extends Problem[List[String], Long]:
   object ArrowPad extends Pad:
     val layout: Vector[String] = Vector(" ^A", "<v>")
 
-    override def apply(key: Char): Vec2i =
+    override def apply(key: Char): Vec2[Int] =
       key match
-        case ' ' => Vec2i(0, 0)
-        case '^' => Vec2i(1, 0)
-        case 'A' => Vec2i(2, 0)
-        case '<' => Vec2i(0, 1)
-        case 'v' => Vec2i(1, 1)
-        case '>' => Vec2i(2, 1)
+        case ' ' => Vec2(0, 0)
+        case '^' => Vec2(1, 0)
+        case 'A' => Vec2(2, 0)
+        case '<' => Vec2(0, 1)
+        case 'v' => Vec2(1, 1)
+        case '>' => Vec2(2, 1)
         case _ => assert(false)
 
     def explodes(start: Char, path: String): Boolean =
@@ -93,20 +92,20 @@ object Day21 extends Problem[List[String], Long]:
 
       ._1
 
-  def numpadKeyToPoint(key: Char): Vec2i =
+  def numpadKeyToPoint(key: Char): Vec2[Int] =
     key match
-      case '7' => Vec2i(0, 0)
-      case '8' => Vec2i(1, 0)
-      case '9' => Vec2i(2, 0)
-      case '4' => Vec2i(0, 1)
-      case '5' => Vec2i(1, 1)
-      case '6' => Vec2i(2, 1)
-      case '1' => Vec2i(0, 2)
-      case '2' => Vec2i(1, 2)
-      case '3' => Vec2i(2, 2)
-      case ' ' => Vec2i(0, 3)
-      case '0' => Vec2i(1, 3)
-      case 'A' => Vec2i(2, 3)
+      case '7' => Vec2(0, 0)
+      case '8' => Vec2(1, 0)
+      case '9' => Vec2(2, 0)
+      case '4' => Vec2(0, 1)
+      case '5' => Vec2(1, 1)
+      case '6' => Vec2(2, 1)
+      case '1' => Vec2(0, 2)
+      case '2' => Vec2(1, 2)
+      case '3' => Vec2(2, 2)
+      case ' ' => Vec2(0, 3)
+      case '0' => Vec2(1, 3)
+      case 'A' => Vec2(2, 3)
       case _ => assert(false)
 
   def offsetByDirChar(start: Char, key: Char, isArrowPad: Boolean): Char =
@@ -114,23 +113,23 @@ object Day21 extends Problem[List[String], Long]:
     val res = offsetByDirection(sp, key)
     val pad = if isArrowPad then ArrowPad.layout else Numpad.layout
     pad(res.y)(res.x)
-  def offsetByDirection(pos: Vec2i, key: Char): Vec2i =
+  def offsetByDirection(pos: Vec2[Int], key: Char): Vec2[Int] =
     val mag = key match
-      case '^' => Vec2i(0, -1)
-      case 'v' => Vec2i(0, 1)
-      case '>' => Vec2i(1, 0)
-      case '<' => Vec2i(-1, 0)
-      case 'A' => Vec2i(0, 0)
+      case '^' => Vec2(0, -1)
+      case 'v' => Vec2(0, 1)
+      case '>' => Vec2(1, 0)
+      case '<' => Vec2(-1, 0)
+      case 'A' => Vec2(0, 0)
       case _ => assert(false)
     pos + mag
-  def arrowKeyToPoint(key: Char): Vec2i =
+  def arrowKeyToPoint(key: Char): Vec2[Int] =
     key match
-      case ' ' => Vec2i(0, 0)
-      case '^' => Vec2i(1, 0)
-      case 'A' => Vec2i(2, 0)
-      case '<' => Vec2i(0, 1)
-      case 'v' => Vec2i(1, 1)
-      case '>' => Vec2i(2, 1)
+      case ' ' => Vec2(0, 0)
+      case '^' => Vec2(1, 0)
+      case 'A' => Vec2(2, 0)
+      case '<' => Vec2(0, 1)
+      case 'v' => Vec2(1, 1)
+      case '>' => Vec2(2, 1)
       case _ => assert(false)
 
 
@@ -183,8 +182,8 @@ object Day21 extends Problem[List[String], Long]:
 
 
   def processCode(code: String, n: Int = 2): Long =
-    val solveCache = mut.HashMap[(Vec2i, Vec2i, Int), Long]()
-    def shortestMove(start: Vec2i, end: Vec2i, level: Int): Long = solveCache.memo((start, end, level)):
+    val solveCache = mut.HashMap[(Vec2[Int], Vec2[Int], Int), Long]()
+    def shortestMove(start: Vec2[Int], end: Vec2[Int], level: Int): Long = solveCache.memo((start, end, level)):
       given Monoid[Long] = new Monoid[Long] {
         def empty: Long = Long.MaxValue
         def combine(x: Long, y: Long): Long = x min y

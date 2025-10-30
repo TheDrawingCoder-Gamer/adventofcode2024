@@ -18,39 +18,39 @@ object Day14 extends Problem[Day14.SparseCaveGrid, Int]:
       s to e
     }
   }
-  case class Pathway(points: List[Vec2i]) {
-    def bake: Set[Vec2i] =
+  case class Pathway(points: List[Vec2[Int]]) {
+    def bake: Set[Vec2[Int]] =
       points.slidingN[2].flatMap { 
         case (s, e) =>
           require(s.x == e.x || s.y == e.y)
           for {
             y <- s.y ascendsTo e.y
             x <- s.x ascendsTo e.x
-          } yield Vec2i(x, y)
+          } yield Vec2(x, y)
         
       }.toSet
   }
 
-  val source = Vec2i(500, 0)
+  val source = Vec2(500, 0)
 
 
   enum CavePoint {
     case Rock, Sand, Air
   }
 
-  case class SparseCaveGrid(points: Map[Vec2i, CavePoint], source: Vec2i) {
-    val lowestPoint: Vec2i = points.maxBy( (p, c) => if (c == CavePoint.Rock) p.y else 0)._1
+  case class SparseCaveGrid(points: Map[Vec2[Int], CavePoint], source: Vec2[Int]) {
+    val lowestPoint: Vec2[Int] = points.maxBy( (p, c) => if (c == CavePoint.Rock) p.y else 0)._1
 
     val floor = lowestPoint.y + 2
-    def apply(p: Vec2i) =
+    def apply(p: Vec2[Int]) =
       points.getOrElse(p, if (p.y >= floor) CavePoint.Rock else CavePoint.Air)
 
-    def getP1(p: Vec2i) =
+    def getP1(p: Vec2[Int]) =
       points.getOrElse(p, CavePoint.Air)
 
 
     @tailrec
-    final def genericMove(p: Vec2i, get: Vec2i => CavePoint, rejectWhen: Vec2i => Boolean): Option[Vec2i] =
+    final def genericMove(p: Vec2[Int], get: Vec2[Int] => CavePoint, rejectWhen: Vec2[Int] => Boolean): Option[Vec2[Int]] =
       if p.y > floor || rejectWhen(p) then
         None
       else
@@ -75,13 +75,13 @@ object Day14 extends Problem[Day14.SparseCaveGrid, Int]:
           else
             Some(p)
 
-    def moveSandP1(p: Vec2i) = genericMove(p, getP1, p => p.y > lowestPoint.y)
+    def moveSandP1(p: Vec2[Int]) = genericMove(p, getP1, p => p.y > lowestPoint.y)
     def withSandP1: Option[SparseCaveGrid] =
       moveSandP1(source).map: it =>
         SparseCaveGrid(points.updated(it, CavePoint.Sand), source)
 
 
-    def moveSand(p: Vec2i) = genericMove(p, apply, _ => false)
+    def moveSand(p: Vec2[Int]) = genericMove(p, apply, _ => false)
     def withSand: Option[SparseCaveGrid] =
       moveSand(source).map { it =>
         SparseCaveGrid(points.updated(it, CavePoint.Sand), source)
@@ -97,7 +97,7 @@ object Day14 extends Problem[Day14.SparseCaveGrid, Int]:
         (for {
           x <- leftBound to rightBound
         } yield
-          apply(Vec2i(x, y)) match
+          apply(Vec2(x, y)) match
             case CavePoint.Rock => '#'
             case CavePoint.Sand => 'o'
             case CavePoint.Air => '.'
@@ -106,14 +106,14 @@ object Day14 extends Problem[Day14.SparseCaveGrid, Int]:
     }
   }
   object SparseCaveGrid {
-    def apply(rock: Set[Vec2i], source: Vec2i): SparseCaveGrid = {
+    def apply(rock: Set[Vec2[Int]], source: Vec2[Int]): SparseCaveGrid = {
       SparseCaveGrid(Map.from(rock.zip(Vector.fill(rock.size)(CavePoint.Rock))), source)
     }
   }
   def parse(input: String): SparseCaveGrid = {
     val data = input.linesIterator.map { it =>
       Pathway(it.split("->").map(_.trim).map {
-        case s"$l,$r" => Vec2i(l.toInt, r.toInt)
+        case s"$l,$r" => Vec2(l.toInt, r.toInt)
       }.toList)
     }.toVector
     val goodData = data.flatMap(_.bake).toSet

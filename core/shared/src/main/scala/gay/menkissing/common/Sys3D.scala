@@ -14,12 +14,18 @@ object Sys3D {
   }
 
   case class Vec3i(x: Int, y: Int, z: Int) {
-    def offset(o: Vec3i): Vec3i = {
-      val x = this.x + o.x
-      val y = this.y + o.y
-      val z = this.z + o.z
-      Vec3i(x, y, z)
-    }
+
+
+    def offset(dir: Direction3D, n: Int = 1): Vec3i =
+      val v = 
+        dir.axisDirection match
+          case AxisDirection.Positive => n
+          case AxisDirection.Negative => -n
+      dir.axis match
+        case Axis3D.X => Vec3i(x + v, y, z)
+        case Axis3D.Y => Vec3i(x, y + v, z)
+        case Axis3D.Z => Vec3i(x, y, z + v)
+      
 
     def map(f: Int => Int): Vec3i =
       Vec3i(f(x), f(y), f(z))
@@ -33,9 +39,9 @@ object Sys3D {
     def max(that: Vec3i): Vec3i =
       zip(that)(_ `max` _)
 
-    def +(o: Vec3i): Vec3i = offset(o)
+    def +(o: Vec3i): Vec3i = zip(o)(_ + _)
 
-    def -(o: Vec3i): Vec3i = offset(-o)
+    def -(o: Vec3i): Vec3i = this + -o
 
     def unary_- : Vec3i = {
       val x = -this.x
@@ -152,6 +158,16 @@ object Sys3D {
       }
     }
 
+    def reverse: Direction3D =
+      this match
+        case North => South
+        case East => West
+        case South => North
+        case West => East
+        case Up => Down
+        case Down => Up
+      
+
     @tailrec
     final def rotate(axis: Axis3D, clockwise: Boolean, times: Int): Direction3D = {
       val times2 = times % 4
@@ -201,12 +217,36 @@ object Sys3D {
 
     def volume: BigInt = BigInt(1) * xs.length * ys.length * zs.length
 
+    def contains(v: Vec3i): Boolean =
+      v.x >= xs.min
+      && v.x <= xs.max
+      && v.y >= ys.min
+      && v.y <= ys.max
+      && v.z >= zs.min
+      && v.z <= zs.max
+
+    def grow(n: Int): AABB3D =
+      AABB3D(xs.min - n dimBy xs.max + n, ys.min - n dimBy ys.max + n, zs.min - n dimBy ys.max + n)
+
     def fitsIn(that: AABB3D): Boolean =
       xs.fitsIn(that.xs) && ys.fitsIn(that.ys) && zs.fitsIn(that.zs)
+    
+    def start: Vec3i =
+      Vec3i(xs.min, ys.min, zs.min)
+    def stop: Vec3i =
+      Vec3i(xs.max, ys.max, zs.max)
     
   object AABB3D:
     given showAABB3D: Show[AABB3D] = box =>
       show"x=${box.xs},y=${box.ys},z=${box.zs}"
+
+    def apply(start: Vec3i, stop: Vec3i): AABB3D =
+      new AABB3D(start.x dimBy stop.x, start.y dimBy stop.y, start.z dimBy stop.z)
+
+    def containingAll(vs: Iterable[Vec3i]): AABB3D =
+      val min = vs.reduce(_ `min` _)
+      val max = vs.reduce(_ `max` _)
+      AABB3D(min, max)
 
     
 }

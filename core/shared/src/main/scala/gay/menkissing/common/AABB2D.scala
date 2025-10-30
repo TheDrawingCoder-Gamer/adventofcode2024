@@ -1,3 +1,3 @@
 package gay.menkissing.common
 
-case class AABB2D(start: Vec2i, stop: Vec2i)
+case class AABB2D[A](start: Vec2[A], stop: Vec2[A])

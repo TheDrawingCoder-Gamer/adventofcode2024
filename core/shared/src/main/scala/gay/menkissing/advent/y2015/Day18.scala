@@ -2,7 +2,8 @@ package gay.menkissing.advent
 package y2015
 
 import gay.menkissing.common.*
-import cats.implicits.*
+import cats.syntax.all.*
+import spire.std.any.IntAlgebra
 
 object Day18 extends Problem[Grid[Boolean], Int]:
   lazy val input: String = FileIO.getInput(2015, 18)

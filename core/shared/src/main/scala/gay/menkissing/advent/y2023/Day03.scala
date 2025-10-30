@@ -13,17 +13,17 @@ object Day03 extends Problem[Grid[Char], Int]:
     Grid(input.linesIterator.map(_.iterator))
 
 
-  case class Number(n: Int, size: Int, point: Vec2i)
+  case class Number(n: Int, size: Int, point: Vec2[Int])
   extension (grid: Grid[Char])
-    def gears: Seq[Vec2i] =
+    def gears: Seq[Vec2[Int]] =
       grid.indices.mapFilter: (x, y) =>
-        Option.when(grid(Vec2i(x, y)) == '*')(Vec2i(x, y))
+        Option.when(grid(Vec2(x, y)) == '*')(Vec2(x, y))
 
-    def symbols: Seq[(Char, Vec2i)] =
+    def symbols: Seq[(Char, Vec2[Int])] =
       grid.zipWithIndices.filter((c, _) => !c.isDigit && c != '.')
 
-    def numberAt(pos: Vec2i): Option[Number] =
-      def go(p: Vec2i, goingLeft: Boolean): Option[Number] =
+    def numberAt(pos: Vec2[Int]): Option[Number] =
+      def go(p: Vec2[Int], goingLeft: Boolean): Option[Number] =
         grid.get(p) match
           case Some(v) if v.isDigit =>
             val r = v - '0'

@@ -7,19 +7,19 @@ import spire.implicits.IntAlgebra
 object Day23 extends Problem[Grid[Boolean], Int] {
   type ElfGrid =  Grid[Boolean]
 
-  case class Elf(current: Vec2i, proposal: Option[Vec2i])
+  case class Elf(current: Vec2[Int], proposal: Option[Vec2[Int]])
 
   val order: Vector[Direction2D] = Vector(Direction2D.Up, Direction2D.Down, Direction2D.Left, Direction2D.Right)
 
-  def propose(grid: ElfGrid, moveOffset: Int, pos: Vec2i): (Vec2i, Vec2i) = {
+  def propose(grid: ElfGrid, moveOffset: Int, pos: Vec2[Int]): (Vec2[Int], Vec2[Int]) = {
     if (!grid(pos)) return pos -> pos
     if (!pos.allNeighbors.exists(p => grid.getOrElse(p, false))) return pos -> pos
 
-    val noe = grid.getOrElse(Vec2i(pos.x + 1, pos.y - 1), false)
+    val noe = grid.getOrElse(Vec2(pos.x + 1, pos.y - 1), false)
     val n = grid.getOrElse(pos.copy(y = pos.y - 1), false)
-    val nw = grid.getOrElse(Vec2i(pos.x - 1, pos.y - 1), false)
-    val sw = grid.getOrElse(Vec2i(pos.x - 1, pos.y + 1), false)
-    val se = grid.getOrElse(Vec2i(pos.x + 1, pos.y + 1), false)
+    val nw = grid.getOrElse(Vec2(pos.x - 1, pos.y - 1), false)
+    val sw = grid.getOrElse(Vec2(pos.x - 1, pos.y + 1), false)
+    val se = grid.getOrElse(Vec2(pos.x + 1, pos.y + 1), false)
     val s = grid.getOrElse(pos.copy( y = pos.y + 1), false)
     val e = grid.getOrElse(pos.copy(x = pos.x + 1), false)
     val w = grid.getOrElse(pos.copy(x = pos.x - 1), false)
@@ -42,7 +42,7 @@ object Day23 extends Problem[Grid[Boolean], Int] {
         y <- 0 until grid.height
         x <- 0 until grid.width if grid(x, y)
       } yield {
-        propose(grid, moveOffset, Vec2i(x, y))
+        propose(grid, moveOffset, Vec2(x, y))
       }
     val daProposals = elfs.filter((x, y) => x != y).groupBy(_._2)
     val goodPositions = daProposals.filter(_._2.lengthCompare(1) == 0).map((x, y) => y.head)
@@ -53,7 +53,7 @@ object Day23 extends Problem[Grid[Boolean], Int] {
       for {
         (from, to) <- goodPositions
       } do {
-        daGrid = daGrid.updated(from + Vec2i(1, 1))(false).updated(to + Vec2i(1, 1))(true)
+        daGrid = daGrid.updated(from + Vec2(1, 1))(false).updated(to + Vec2(1, 1))(true)
       }
 
       (daGrid, false)
@@ -74,7 +74,7 @@ object Day23 extends Problem[Grid[Boolean], Int] {
       val leftBound = cols.indexWhere (_.exists (identity) )
 
       // println(prettyShowBoolGrid(resGrid))
-      elfGrid.slice(Vec2i(leftBound, topBound), Vec2i(rightBound, botBound))
+      elfGrid.slice(Vec2(leftBound, topBound), Vec2(rightBound, botBound))
 
   def part1(grid: ElfGrid): Int = {
     //println(prettyShowBoolGrid(grid))

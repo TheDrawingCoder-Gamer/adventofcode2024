@@ -3,7 +3,8 @@ package y2023
 
 import gay.menkissing.common.*
 import cats.*
-import cats.implicits.*
+import cats.syntax.all.*
+import spire.implicits.{IntAlgebra, LongAlgebra}
 
 object Day11 extends Problem[Grid[Boolean], Long] {
   lazy val input = FileIO.getInput(2023, 11)
@@ -32,10 +33,10 @@ object Day11 extends Problem[Grid[Boolean], Long] {
     val cols = numGrid.values.map(seq => if seq.forall(_.isDefined) then seq.as(Some(1_000_000L)) else seq).transpose
     val rows = numGrid.values.transpose.map(seq => if seq.forall(_.isDefined) then seq.as(Some(1_000_000L)) else seq).transpose
     val points = numGrid.zipWithIndices.filter((v, idx) => v.isEmpty).map(_._2)
-    def calculateNewPoint(p: Vec2i): Vec2l =
+    def calculateNewPoint(p: Vec2[Int]): Vec2[Long] =
       val newX = rows(p.y).take(p.x).map(_.getOrElse(1L)).sum
       val newY = cols(p.x).take(p.y).map(_.getOrElse(1L)).sum
-      Vec2l(newX, newY)
+      Vec2(newX, newY)
     val newPoints = points.map(calculateNewPoint)
     newPoints.toSet.subsets(2).map: s =>
       val l = s.head

@@ -7,12 +7,12 @@ import cats.data.*
 import spire.implicits.IntAlgebra
 
 object Day09 extends Problem[List[Day09.Movement], Int]:
-  type Day9State[A] = State[List[Vec2i], A]
-  def minDistance(a: Vec2i, b: Vec2i) = Math.min(Math.abs(a.x - b.x), Math.abs(a.y - b.y))
-  def maxDistance(a: Vec2i, b: Vec2i) = Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y))
-  def minAxis(a: Vec2i, b: Vec2i) = List((Math.abs(a.x - b.x), Axis2D.X), (Math.abs(a.y - b.y), Axis2D.Y)).maxBy(_._1)._2
+  type Day9State[A] = State[List[Vec2[Int]], A]
+  def minDistance(a: Vec2[Int], b: Vec2[Int]) = Math.min(Math.abs(a.x - b.x), Math.abs(a.y - b.y))
+  def maxDistance(a: Vec2[Int], b: Vec2[Int]) = Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y))
+  def minAxis(a: Vec2[Int], b: Vec2[Int]) = List((Math.abs(a.x - b.x), Axis2D.X), (Math.abs(a.y - b.y), Axis2D.Y)).maxBy(_._1)._2
   // @annotation.tailrec
-  final def correctTail(poses: List[Vec2i]): List[Vec2i] = {
+  final def correctTail(poses: List[Vec2[Int]]): List[Vec2[Int]] = {
     poses match {
       case head :: (tail :: next) if maxDistance(head, tail) <= 1 => head :: correctTail(poses.tail)
       case head :: (tail :: next) =>
@@ -26,14 +26,14 @@ object Day09 extends Problem[List[Day09.Movement], Int]:
             } else {
               val x = if (head.x > tail.x) 1 else -1
               val y = if (head.y > tail.y) 1 else -1
-              Vec2i(tail.x + x, tail.y + y)
+              Vec2(tail.x + x, tail.y + y)
             }
           head :: correctTail(newTail :: next)
 
       case _ => poses
     }
   }
-  def move(dir: Direction2D): Day9State[List[Vec2i]] = State { 
+  def move(dir: Direction2D): Day9State[List[Vec2[Int]]] = State { 
     case head :: next =>
       val newHead = dir match {
         case Direction2D.Down => head.copy(y = head.y - 1)
@@ -46,10 +46,10 @@ object Day09 extends Problem[List[Day09.Movement], Int]:
     case _ => whatTheScallop.!
   }
 
-  def moveN(dir: Direction2D, n: Int): Day9State[List[List[Vec2i]]] = move(dir).replicateA(n)
+  def moveN(dir: Direction2D, n: Int): Day9State[List[List[Vec2[Int]]]] = move(dir).replicateA(n)
 
   case class Movement(dir: Direction2D, n: Int) {
-    val execute: Day9State[List[List[Vec2i]]] = moveN(dir, n)
+    val execute: Day9State[List[List[Vec2[Int]]]] = moveN(dir, n)
   }
 
   def parse(input: String): List[Movement] = {
@@ -71,7 +71,7 @@ object Day09 extends Problem[List[Day09.Movement], Int]:
   lazy val input = FileIO.getInput(2022, 9)
 
   def runWithLength(movements: List[Movement], length: Int): Int =
-    movements.traverse(_.execute).map(_.flatten).map(_.map(_.tail)).runA(List.fill(length)(Vec2i(0, 0))).value.map(_.last).toSet.size
+    movements.traverse(_.execute).map(_.flatten).map(_.map(_.tail)).runA(List.fill(length)(Vec2(0, 0))).value.map(_.last).toSet.size
 
   def part1(input: List[Movement]): Int =
     runWithLength(input, 2)

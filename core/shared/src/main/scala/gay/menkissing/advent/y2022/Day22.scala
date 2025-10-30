@@ -4,7 +4,6 @@ package y2022
 import gay.menkissing.common.*
 import scala.collection.mutable as mut
 import cats.syntax.all.*
-import Vec2i.*
 import spire.implicits.IntAlgebra
 
 object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int] {
@@ -17,14 +16,14 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
       s.dropWhile(_ == GNil).takeWhile(_ != GNil)
     }
   }
-  extension (regionMap: Map[Int, Vec2i])
+  extension (regionMap: Map[Int, Vec2[Int]])
     def pretty: String =
       val buff = Array.fill(5, 5)('.')
       regionMap.foreach:
-        case (region, Vec2i(x, y)) =>
+        case (region, Vec2(x, y)) =>
           buff(y)(x) = region.toString.head
       buff.map(_.mkString).mkString("\n")
-  val netConnections: List[(Map[Int, Vec2i], List[ConnectionInfo])] =
+  val netConnections: List[(Map[Int, Vec2[Int]], List[ConnectionInfo])] =
     List(
       // Shape
       // .12
@@ -249,12 +248,12 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
         case ConnectionInfo(sd, ed, s, e, f) =>
           ConnectionInfo(sd.clockwise, ed.clockwise, s, e, f)
       (newNet, newList)
-    def fullParsed(net: List[String], list: List[ConnectionInfo]): (Map[Int, Vec2i], List[ConnectionInfo]) =
+    def fullParsed(net: List[String], list: List[ConnectionInfo]): (Map[Int, Vec2[Int]], List[ConnectionInfo]) =
       val regionMap = net.zipWithIndex.flatMap: (line, y) =>
         line.zipWithIndex.flatMap: (c, x) =>
-          Option.when(c.isDigit)(c.asDigit -> Vec2i(x, y))
+          Option.when(c.isDigit)(c.asDigit -> Vec2(x, y))
       (regionMap.toMap, list)
-    def parse(net: List[String], list: List[String]): List[(Map[Int, Vec2i], List[ConnectionInfo])] =
+    def parse(net: List[String], list: List[String]): List[(Map[Int, Vec2[Int]], List[ConnectionInfo])] =
       val baseList =
         list.map: str =>
           val start = str(0).asDigit
@@ -285,7 +284,7 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
 
 
 
-  case class CompleteGrid(regionMap: Map[Int, Vec2i], connections: List[ConnectionInfo], grid: Grid[GridPos]) {
+  case class CompleteGrid(regionMap: Map[Int, Vec2[Int]], connections: List[ConnectionInfo], grid: Grid[GridPos]) {
     val faceWidth = math.min(grid.rows.map(_.trimPos.size).min, grid.columns.map(_.trimPos.size).min)
     val reverseRegionMap = regionMap.map((x, y) => (y, x))
     val connMap: Map[(Int, Direction2D), (Int, Direction2D, Boolean)] =
@@ -294,9 +293,9 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
           (startPos, exitDir) -> (endPos, arriveDir, flipOffset)
       .toMap
 
-    def move(pos: Vec2i, dir: Direction2D, n: Int): (Vec2i, Direction2D) =
+    def move(pos: Vec2[Int], dir: Direction2D, n: Int): (Vec2[Int], Direction2D) =
       moveHelper(pos, dir, n) { (poses, lastPos) =>
-        val lastRegionPos = Vec2i(lastPos.x / faceWidth, lastPos.y / faceWidth)
+        val lastRegionPos = Vec2(lastPos.x / faceWidth, lastPos.y / faceWidth)
         val lastRegion = reverseRegionMap(lastRegionPos)
         val (nextRegion, arrivalDir, flipOffset) = connMap(lastRegion, dir)
 
@@ -315,10 +314,10 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
 
         val newPos =
           arrivalDir match
-            case Direction2D.Up => Vec2i((regionPos.x * faceWidth) + newOffset, (regionPos.y + 1) * faceWidth - 1)
-            case Direction2D.Down => Vec2i((regionPos.x * faceWidth) + newOffset, regionPos.y * faceWidth)
-            case Direction2D.Left => Vec2i((regionPos.x + 1) * faceWidth - 1, (regionPos.y * faceWidth) + newOffset)
-            case Direction2D.Right => Vec2i(regionPos.x * faceWidth, (regionPos.y * faceWidth) + newOffset)
+            case Direction2D.Up => Vec2((regionPos.x * faceWidth) + newOffset, (regionPos.y + 1) * faceWidth - 1)
+            case Direction2D.Down => Vec2((regionPos.x * faceWidth) + newOffset, regionPos.y * faceWidth)
+            case Direction2D.Left => Vec2((regionPos.x + 1) * faceWidth - 1, (regionPos.y * faceWidth) + newOffset)
+            case Direction2D.Right => Vec2(regionPos.x * faceWidth, (regionPos.y * faceWidth) + newOffset)
         assert(newPos != GNil)
         if grid(newPos) != Open then
           (lastPos, dir)
@@ -329,7 +328,7 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
 
       }
 
-    final def moveHelper(pos: Vec2i, dir: Direction2D, n: Int)(handleOff: (Seq[Vec2i], Vec2i) => (Vec2i, Direction2D)): (Vec2i, Direction2D) = {
+    final def moveHelper(pos: Vec2[Int], dir: Direction2D, n: Int)(handleOff: (Seq[Vec2[Int]], Vec2[Int]) => (Vec2[Int], Direction2D)): (Vec2[Int], Direction2D) = {
       require(grid.getOrElse(pos, GNil) == Open)
       if (n == 0) return (pos, dir)
       val newPos = pos.offset(dir, n)
@@ -355,13 +354,13 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
 
 
   case class ForbiddenGrid(grid: Grid[GridPos]) extends AnyVal {
-    def regions: List[Vec2i] = {
+    def regions: List[Vec2[Int]] = {
       val faceWidth = math.min(grid.rows.map(_.trimPos.size).min, grid.columns.map(_.trimPos.size).min)
       val height = grid.height / faceWidth
       val width = grid.width / faceWidth
       (0 until width).flatMap: x =>
         (0 until height).flatMap: y =>
-          Option.when(grid(x * faceWidth, y * faceWidth) != GNil)(Vec2i(x, y))
+          Option.when(grid(x * faceWidth, y * faceWidth) != GNil)(Vec2(x, y))
       .toList
     }
 
@@ -376,7 +375,7 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
 
    // helper means no recursion is accessable
     // @annotation.tailrec 
-    final def move(pos: Vec2i, dir: Direction2D, n: Int): Vec2i = {
+    final def move(pos: Vec2[Int], dir: Direction2D, n: Int): Vec2[Int] = {
       def getGood(rowOrCol: Seq[GridPos]): Option[GridPos] = {
         dir.axisDirection match {
           case Axis2D.Direction.Positive => rowOrCol.find(_ != GNil)
@@ -424,7 +423,7 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
           }
       }
     }
-    final def moveHelper(pos: Vec2i, dir: Direction2D, n: Int)(handleOff: (Seq[Vec2i], Vec2i) => Vec2i): Vec2i = {
+    final def moveHelper(pos: Vec2[Int], dir: Direction2D, n: Int)(handleOff: (Seq[Vec2[Int]], Vec2[Int]) => Vec2[Int]): Vec2[Int] = {
       require(grid.getOrElse(pos, GNil) == Open)
       if (n == 0) return pos
       val newPos = pos.offset(dir, n)
@@ -492,7 +491,7 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
   def part1(input: (ForbiddenGrid, List[Instruction])): Int = {
     val (map, instr) = input
     val x = map.grid.rows.head.indexOf(Open)
-    var pos = Vec2i(x, 0)
+    var pos = Vec2(x, 0)
     var facing = Direction2D.Right 
     instr.foreach {
       case Instruction.Clockwise => facing = facing.clockwise
@@ -515,7 +514,7 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
     val completeGrid = map.completeGrid
 
     val x = map.grid.rows.head.indexOf(Open)
-    var pos = Vec2i(x, 0)
+    var pos = Vec2(x, 0)
     var facing = Direction2D.Right
     instr.foreach {
       case Instruction.Clockwise => facing = facing.clockwise

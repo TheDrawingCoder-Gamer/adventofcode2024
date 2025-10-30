@@ -7,6 +7,8 @@ import scala.annotation.tailrec
 import scala.collection.mutable as mut
 import scala.io.Source
 
+import spire.implicits.LongAlgebra
+
 
 
 
@@ -23,11 +25,11 @@ object Day13 extends Problem[List[Day13.CraneMachine], Long] {
       val s"Button A: X+$xa, Y+$ya" = lines(0): @unchecked
       val s"Button B: X+$xb, Y+$yb" = lines(1): @unchecked
       val s"Prize: X=$xp, Y=$yp" = lines(2): @unchecked
-      CraneMachine(Vec2l(xa.toLong, ya.toLong), Vec2l(xb.toLong, yb.toLong), Vec2l(xp.toLong, yp.toLong))
+      CraneMachine(Vec2(xa.toLong, ya.toLong), Vec2(xb.toLong, yb.toLong), Vec2(xp.toLong, yp.toLong))
     }
   }
   
-  case class CraneMachine(buttonA: Vec2l, buttonB: Vec2l, prize: Vec2l) {
+  case class CraneMachine(buttonA: Vec2[Long], buttonB: Vec2[Long], prize: Vec2[Long]) {
     // Test if it's even worth trying to solve this
     // IDK Figure this out later
     def isPossiblySolvable: Boolean = true
@@ -36,7 +38,7 @@ object Day13 extends Problem[List[Day13.CraneMachine], Long] {
       // 1000 test cases : (
       (0 to 100).flatMap { a =>
         (0 to 100).filter { b =>
-          Vec2l(buttonA.x * a + buttonB.x * b, buttonA.y * a + buttonB.y * b) == prize
+          Vec2(buttonA.x * a + buttonB.x * b, buttonA.y * a + buttonB.y * b) == prize
         }.map(b => a * 3 + b)
       }.minOption.map(_.toLong)
     }
@@ -53,7 +55,7 @@ object Day13 extends Problem[List[Day13.CraneMachine], Long] {
       } yield (a * 3 + b)
     }
 
-    def correctUnitError: CraneMachine = copy(prize = prize + Vec2l(10000000000000L, 10000000000000L))
+    def correctUnitError: CraneMachine = copy(prize = prize + Vec2(10000000000000L, 10000000000000L))
   }
   
   override def parse(str: String): List[CraneMachine] = str.split("\n\n").map(CraneMachine.parse).toList

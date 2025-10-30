@@ -1,16 +1,24 @@
 package gay.menkissing.common
 
 import cats.*
+import spire.math.*
+import spire.implicits.IntAlgebra
 
 enum Direction2D {
   case Up, Down, Left, Right
 
-  def digitalDir: Vec2i =
+  def genericDigitalDir[@specialized(Specializable.Integral) A](using integral: Integral[A]): Vec2[A] =
+    lazy val neg1 = integral.fromInt(-1)
+    inline def zero = integral.zero
+    inline def one = integral.one
     this match
-      case Direction2D.Up => Vec2i(0,-1)
-      case Direction2D.Down => Vec2i(0,1)
-      case Direction2D.Left => Vec2i(-1,0)
-      case Direction2D.Right => Vec2i(1,0) 
+      case Up => Vec2(zero, neg1)
+      case Down => Vec2(zero, one)
+      case Left => Vec2(neg1, zero)
+      case Right => Vec2(one, zero)
+    
+
+  def digitalDir: Vec2[Int] = genericDigitalDir[Int]
   
   def axis = 
     this match

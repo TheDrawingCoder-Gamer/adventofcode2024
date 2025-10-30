@@ -1,6 +1,8 @@
 package gay.menkissing.advent
 package y2021
 
+import gay.menkissing.common.IntSequences
+
 object Day07 extends Problem[List[Int], Int]:
   lazy val input = FileIO.getInput(2021, 7)
 
@@ -27,11 +29,7 @@ object Day07 extends Problem[List[Int], Int]:
   def part1(input: List[Int]): Int =
     sumDistance(input, median(input))
 
-  final def sumtorial(p: Int): Int =
-    if p < 0 then
-      0
-    else
-      (1 to p).sum
+  final def sumtorial(p: Int): Int = IntSequences.triangleNumber(p).toInt
 
   def distanceP2(crabs: List[Int], pt: Int): Int =
     crabs.map(it => sumtorial(math.abs(it - pt))).sum

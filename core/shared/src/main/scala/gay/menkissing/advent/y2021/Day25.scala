@@ -4,6 +4,7 @@ package y2021
 import gay.menkissing.common.*, ArityN.*
 import cats.syntax.all.*
 import cats.*
+import spire.implicits.IntAlgebra
 
 object Day25 extends HalfDay[Grid[Option[Direction2D]], Int]:
   lazy val input = FileIO.getInput(2021, 25)
@@ -16,8 +17,8 @@ object Day25 extends HalfDay[Grid[Option[Direction2D]], Int]:
       case _ => whatTheScallop.!
   
   extension (self: Grid[?])
-    def wrapVec2i(p: Vec2i): Vec2i =
-      Vec2i(p.x rem self.width, p.y rem self.height)
+    def wrapVec2i(p: Vec2[Int]): Vec2[Int] =
+      Vec2(p.x rem self.width, p.y rem self.height)
 
   def step(grid: Grid[Option[Direction2D]]): Grid[Option[Direction2D]] =
     def stepInner(dir: Direction2D)(cur: Grid[Option[Direction2D]]): Grid[Option[Direction2D]] =

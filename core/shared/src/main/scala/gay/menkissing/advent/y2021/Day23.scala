@@ -3,7 +3,7 @@ package y2021
 
 import gay.menkissing.common.*
 import cats.implicits.*
-import Vec2i.*
+// import Vec2.*
 
 import scala.collection.mutable
 
@@ -26,16 +26,16 @@ object Day23 extends ProblemUniqueInputs[Day23.State, Day23.State, Int]:
         case _ => None
 
   val hallwayPoses = List(
-    Vec2i(1, 1),
-    Vec2i(2, 1),
-    Vec2i(4, 1),
-    Vec2i(6, 1),
-    Vec2i(8, 1),
-    Vec2i(10, 1),
-    Vec2i(11, 1)
+    Vec2(1, 1),
+    Vec2(2, 1),
+    Vec2(4, 1),
+    Vec2(6, 1),
+    Vec2(8, 1),
+    Vec2(10, 1),
+    Vec2(11, 1)
   )
 
-  case class State(amphipods: Map[Vec2i, Amphipod], roomSize: Int):
+  case class State(amphipods: Map[Vec2[Int], Amphipod], roomSize: Int):
     def isGoal: Boolean =
       amphipods.forall((pos, amphipod) => pos.x == amphipod.room)
 
@@ -52,20 +52,20 @@ object Day23 extends ProblemUniqueInputs[Day23.State, Day23.State, Int]:
 
     private def roomFree(amphipod: Amphipod): Boolean =
       (2 to roomSize + 1)
-        .flatMap(y => amphipods.get(Vec2i(amphipod.room, y)))
+        .flatMap(y => amphipods.get(Vec2(amphipod.room, y)))
         .forall(_ == amphipod)
 
 
-    private def getPath(start: Vec2i, stop: Vec2i): Seq[Vec2i] =
+    private def getPath(start: Vec2[Int], stop: Vec2[Int]): Seq[Vec2[Int]] =
       val hallway =
         if start.x < stop.x
-        then (start.x + 1).to(stop.x).map(Vec2i(_, 1))
-        else (start.x - 1).to(stop.x, step = -1).map(Vec2i(_, 1))
-      val startRoom = (start.y - 1).to(1, step = -1).map(Vec2i(start.x, _))
-      val stopRoom = 2.to(stop.y).map(Vec2i(stop.x, _))
+        then (start.x + 1).to(stop.x).map(Vec2(_, 1))
+        else (start.x - 1).to(stop.x, step = -1).map(Vec2(_, 1))
+      val startRoom = (start.y - 1).to(1, step = -1).map(Vec2(start.x, _))
+      val stopRoom = 2.to(stop.y).map(Vec2(stop.x, _))
       startRoom ++ hallway ++ stopRoom
 
-    private def validMovesFor(from: Vec2i, kind: Amphipod): Seq[Vec2i] =
+    private def validMovesFor(from: Vec2[Int], kind: Amphipod): Seq[Vec2[Int]] =
       // if amphipod is in its room 
       if from.x == kind.room then 
         // and it doesn't need to move to free space, it stays
@@ -75,7 +75,7 @@ object Day23 extends ProblemUniqueInputs[Day23.State, Day23.State, Int]:
       // if amphipod is in the hallway it can go to its destination
       else if from.y == 1 then
         if roomFree(kind) then
-          2.to(roomSize + 1).map(y => Vec2i(kind.room, y)).findLast(it => !amphipods.contains(it)).toSeq
+          2.to(roomSize + 1).map(y => Vec2(kind.room, y)).findLast(it => !amphipods.contains(it)).toSeq
         else Seq.empty
       // otherwise it can go to the hallway
       else hallwayPoses
@@ -113,7 +113,7 @@ object Day23 extends ProblemUniqueInputs[Day23.State, Day23.State, Int]:
         (line, y) <- input.linesIterator.zipWithIndex
         (char, x) <- line.zipWithIndex
         amphipod <- Amphipod.tryFromChar(char)
-      yield Vec2i(x, y) -> amphipod
+      yield Vec2(x, y) -> amphipod
     State(amphipods.toMap, roomSize)
   def parseP1(str: String): State =
     parseShared(str, 2)

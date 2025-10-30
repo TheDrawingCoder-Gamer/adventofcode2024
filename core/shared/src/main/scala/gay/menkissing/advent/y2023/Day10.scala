@@ -4,10 +4,11 @@ package y2023
 import gay.menkissing.common.{*, given}
 import scala.collection.mutable
 import cats.*
-import cats.implicits.*
+import cats.syntax.all.*
 import cats.data.*
+import spire.implicits.IntAlgebra
 
-object Day10 extends Problem[(Grid[Option[Day10.Pipe]], Vec2i), Int]:
+object Day10 extends Problem[(Grid[Option[Day10.Pipe]], Vec2[Int]), Int]:
   lazy val input: String = FileIO.getInput(2023, 10)
 
 
@@ -33,7 +34,7 @@ object Day10 extends Problem[(Grid[Option[Day10.Pipe]], Vec2i), Int]:
         case (Direction2D.Down, Direction2D.Left) => "7"
         case (Direction2D.Down, Direction2D.Right) => "F"
         case _ => whatTheScallop.!
-  def parse(str: String): (Grid[Option[Day10.Pipe]], Vec2i) =
+  def parse(str: String): (Grid[Option[Day10.Pipe]], Vec2[Int]) =
     val grid = 
       Grid.fromString(str):
         case '.' => None
@@ -49,10 +50,10 @@ object Day10 extends Problem[(Grid[Option[Day10.Pipe]], Vec2i), Int]:
     (grid, grid.indexWhere(_ == null).getOrElse(whatTheScallop.!))
 
   // LOOP TUAH THAT THANG!!!!!!
-  def searchLoop(grid: Grid[Option[Pipe]], start: Vec2i): Map[Vec2i, Int] =
-    val visited = mutable.Map[Vec2i, Int]()
+  def searchLoop(grid: Grid[Option[Pipe]], start: Vec2[Int]): Map[Vec2[Int], Int] =
+    val visited = mutable.Map[Vec2[Int], Int]()
     val dirs = grid(start).getOrElse(whatTheScallop.!)
-    def advance(cur: Vec2i, enteredFrom: Direction2D, i: Int): Option[(Vec2i, Direction2D, Int)] =
+    def advance(cur: Vec2[Int], enteredFrom: Direction2D, i: Int): Option[(Vec2[Int], Direction2D, Int)] =
       visited.updateWith(cur):
         case Some(v) => Some(math.min(v, i))
         case None => Some(i)
@@ -64,7 +65,7 @@ object Day10 extends Problem[(Grid[Option[Day10.Pipe]], Vec2i), Int]:
     val _ = Monad[Option].iterateForeverM((start, dirs.conn2, 0))(advance.tupled)
     visited.toMap
 
-  def getStartGrid(grid: Grid[Option[Pipe]], start: Vec2i): Grid[Option[Pipe]] =
+  def getStartGrid(grid: Grid[Option[Pipe]], start: Vec2[Int]): Grid[Option[Pipe]] =
     val dirs = 
       Direction2D.values.toList
         .map: it => 
@@ -73,18 +74,18 @@ object Day10 extends Problem[(Grid[Option[Day10.Pipe]], Vec2i), Int]:
     assert(dirs.size == 2)
     grid.updated(start)(Some(Pipe(dirs(0)._1, dirs(1)._1)))
 
-  def part1(input: (Grid[Option[Pipe]], Vec2i)): Int =
+  def part1(input: (Grid[Option[Pipe]], Vec2[Int])): Int =
     val (grid, start) = input
     val goodGrid = getStartGrid(grid, start)
 
     searchLoop(goodGrid, start).maxBy(_._2)._2
 
   extension (self: Grid[Boolean])
-    def floodFill(x: Int, y: Int): Set[Vec2i] = {
-      val q = mutable.Queue[Vec2i]()
+    def floodFill(x: Int, y: Int): Set[Vec2[Int]] = {
+      val q = mutable.Queue[Vec2[Int]]()
       val start = self(x, y)
-      val res = mutable.Set[Vec2i]()
-      q.addOne(Vec2i(x, y))
+      val res = mutable.Set[Vec2[Int]]()
+      q.addOne(Vec2(x, y))
       while (q.nonEmpty) {
         val n = q.removeHead()
         if (self.get(n).contains(start) && !res.contains(n)) {
@@ -95,7 +96,7 @@ object Day10 extends Problem[(Grid[Option[Day10.Pipe]], Vec2i), Int]:
       res.toSet
     }
 
-  def part2(input: (Grid[Option[Pipe]], Vec2i)): Int =
+  def part2(input: (Grid[Option[Pipe]], Vec2[Int])): Int =
     val (grid, start) = input
     val goodGrid = getStartGrid(grid, start)
     val map = searchLoop(goodGrid, start).as(true)

@@ -1,7 +1,9 @@
 package gay.menkissing.common
 
-import scala.math.Integral.Implicits.*
-
+// import spire.implicits.*
+import spire.math.Integral
+import spire.syntax.all.*
+import algebra.ring.TruncatedDivision
 
 
 extension (self: Byte)
@@ -11,9 +13,20 @@ extension (self: Byte)
 
 extension[T](self: T)(using integral: Integral[T])
   // eucledian remainder ?
-  infix def erem(that: T): T =
-    val mod = integral.rem(self, that)
-    if integral.compare(mod, integral.zero) < 0 then mod + that else mod
+  // infix def erem(that: T): T = integral.emod(self, that)
+
+  def fallingFactorial(n: T): T =
+    if n == integral.zero then
+      integral.one
+    else
+      var r = integral.one
+      var i = integral.zero
+      while i < n do
+        r *= self - i
+        i += integral.one
+      r
+
+
 
 def choose(n: Int, k: Int): Int =
   n.fallingFactorial(k) / k.!
