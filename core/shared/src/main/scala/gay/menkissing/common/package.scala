@@ -127,7 +127,7 @@ def reconstructPath[A](cameFrom: Map[A, A], p: A): List[A] = {
  * @param start the start point
  * @param isGoal test for end point
  * @param h the heuristic function. Represents how long it is assumed to take to go from the point supplied to the end.
- * * For a derived astar to be admissible the heuristic function must be admissable. Put simply, h must NEVER return a result greater 
+ * For a derived astar to be admissible the heuristic function must be admissable. Put simply, h must NEVER return a result greater 
  * than the actual value. 
  * @param d The edge function. Returns how much it costs to take an edge. Is a double to represent edges that aren't existant (use
  * [[scala.Double.PositiveInfinity]] for this case). If the edge weight depends on direction, the first parameter represents the start node 

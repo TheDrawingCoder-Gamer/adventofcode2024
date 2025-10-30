@@ -4,6 +4,8 @@ import gay.menkissing.common.debugTiming
 
 trait Problem[Input, +Output] extends ProblemAdv[Input, Output, Output]
 
+trait NewProblem[Input, +Output] extends ProblemSuperAdv[Input, Input, Output, Output]
+
 trait ParseP1[Input] {
   def parseP1(str: String): Input
 }

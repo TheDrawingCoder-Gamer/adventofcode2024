@@ -1,6 +1,9 @@
 package gay.menkissing.common
 
 import scala.annotation.tailrec
+import spire.implicits.IntAlgebra
+import cats.*
+import cats.syntax.all.*
 
 object Sys3D {
   object Vec3i {
@@ -17,6 +20,18 @@ object Sys3D {
       val z = this.z + o.z
       Vec3i(x, y, z)
     }
+
+    def map(f: Int => Int): Vec3i =
+      Vec3i(f(x), f(y), f(z))
+    
+    def zip(that: Vec3i)(f: (Int, Int) => Int): Vec3i =
+      Vec3i(f(this.x, that.x), f(this.y, that.y), f(this.z, that.z))
+
+    def min(that: Vec3i): Vec3i =
+      zip(that)(_ `min` _)
+    
+    def max(that: Vec3i): Vec3i =
+      zip(that)(_ `max` _)
 
     def +(o: Vec3i): Vec3i = offset(o)
 
@@ -175,4 +190,23 @@ object Sys3D {
       } yield Orientation3D(f, r)).toSeq
     }
   }
+
+  case class AABB3D(xs: Dimension[Int], ys: Dimension[Int], zs: Dimension[Int]):
+    infix def intersect(that: AABB3D): Option[AABB3D] =
+      for
+        xs <- this.xs intersect that.xs
+        ys <- this.ys intersect that.ys
+        zs <- this.zs intersect that.zs
+      yield AABB3D(xs, ys, zs)
+
+    def volume: BigInt = BigInt(1) * xs.length * ys.length * zs.length
+
+    def fitsIn(that: AABB3D): Boolean =
+      xs.fitsIn(that.xs) && ys.fitsIn(that.ys) && zs.fitsIn(that.zs)
+    
+  object AABB3D:
+    given showAABB3D: Show[AABB3D] = box =>
+      show"x=${box.xs},y=${box.ys},z=${box.zs}"
+
+    
 }
