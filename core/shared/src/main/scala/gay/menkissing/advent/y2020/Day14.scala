@@ -22,7 +22,7 @@ object Day14 extends Problem[List[Day14.Op], Long]:
 
 
 
-  override def part1(input: List[Op]): Long = {
+  override def part1(input: List[Op]): Long =
     input.foldLeft(((1L << 36L) - 1L, 0L, Vector.fill(65565)(0L))):
       case ((andM, orM, mem), op) =>
         op match
@@ -32,8 +32,6 @@ object Day14 extends Problem[List[Day14.Op], Long]:
             (andM, orM, mem.updated(idx, (value & andM) | orM))
     ._3.sum
 
-  }
-
   def padLeft(str: String, to: Int, c: Char): String =
     if str.length < to then
       (c.toString * (to - str.length)) + str
@@ -41,7 +39,7 @@ object Day14 extends Problem[List[Day14.Op], Long]:
       str
 
   // lobotomy victim
-  def part2(input: List[Op]): Long = {
+  def part2(input: List[Op]): Long =
     var mask = ""
     val mem = mutable.HashMap[Long, Long]()
     input.foreach:
@@ -68,7 +66,6 @@ object Day14 extends Problem[List[Day14.Op], Long]:
           mem(idx) = value
 
     mem.values.sum
-  }
 
 
   override lazy val input: String = FileIO.getInput(2020, 14)

@@ -19,21 +19,25 @@ object Day13 extends Problem[(Int, List[Option[Int]]), BigInt]:
   def leastMultipleGreaterThan(threshold: Int, multiplier: Int): Int =
     Iterator.iterate(multiplier)(_ + multiplier).find(threshold < _).get
 
-  override def part1(input: (Int, List[Option[Int]])): BigInt = {
+  override def part1(input: (Int, List[Option[Int]])): BigInt =
     val (start, ids) = input
     val normalIds = ids.flatten
     val res = normalIds.zip(normalIds.map(it => leastMultipleGreaterThan(start, it))).minBy(_._2)
     BigInt(res._1 * (res._2 - start))
-  }
+
 
 
 
   // woke comes to scala...
+  // this actually stands for chinese remainder theroem. thanks past me for not
+  // documenting that...
   def crt(ls: List[(Int, Int)]): BigInt =
     val (is, ms) = ls.unzip
     val m = ms.map(i => BigInt(i)).product
     val mn = ms.map(m / _)
-    val yn = ms.zip(mn).map{case (x, m) => m.modInverse(BigInt(x)) }
+    val yn = 
+      ms.zip(mn).map:
+        case (x, m) => m.modInverse(BigInt(x))
     (is, mn, yn).parMapN((i, m, y) => m * i * y).sum.mod(m)
 
 

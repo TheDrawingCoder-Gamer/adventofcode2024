@@ -1,7 +1,7 @@
 package gay.menkissing.advent
 package y2020
 
-import gay.menkissing.common.{Grid, Vec2, PrincibleWind2D, given}
+import gay.menkissing.common.{*, given}
 import cats.*
 import cats.syntax.all.*
 import spire.std.any.IntAlgebra
@@ -13,18 +13,17 @@ object Day11 extends Problem[Grid[Day11.Seat], Int]:
     case Floor, Occupied, Empty
 
     def isSeat: Boolean = this != Floor
-  given Show[Seat] = {
+  given Show[Seat] =
     case Seat.Floor => "."
     case Seat.Occupied => "#"
     case Seat.Empty => "L"
-  }
 
   override def parse(str: String): Grid[Seat] =
-    Grid(str.linesIterator.map(_.map:
+    Grid.fromString(str):
       case '.' => Seat.Floor
       case 'L' => Seat.Empty
       case '#' => Seat.Occupied
-    ))
+      case _ => whatTheScallop.!
 
 
 
@@ -39,7 +38,7 @@ object Day11 extends Problem[Grid[Day11.Seat], Int]:
           return r == Seat.Occupied
         s += dir.digitalDir
       false
-    def next(): Option[Grid[Seat]] = {
+    def next(): Option[Grid[Seat]] =
       var updated = false
       val res = grid.mapWithIndex: (index, x) =>
         val nOccupied = grid.valuesAround(Seat.Empty)(index.x, index.y).updated(1,1)(Seat.Floor).foldLeft(0)((a, s) => a + (if s == Seat.Occupied then 1 else 0))
@@ -52,8 +51,7 @@ object Day11 extends Problem[Grid[Day11.Seat], Int]:
             Seat.Empty
           case y => y
       Option.when(updated)(res)
-    }
-    def nextP2(): Option[Grid[Seat]] = {
+    def nextP2(): Option[Grid[Seat]] =
       var updated = false
       val res = grid.mapWithIndex: (index, x) =>
         val nOccupied = PrincibleWind2D.values.count(grid.lineIsOccupied(index))
@@ -66,18 +64,16 @@ object Day11 extends Problem[Grid[Day11.Seat], Int]:
             Seat.Empty
           case y => y
       Option.when(updated)(res)
-    }
 
 
 
-  override def part1(input: Grid[Seat]): Int = {
+  override def part1(input: Grid[Seat]): Int =
     Iterator.unfold(input): x =>
       x.next().map(y => (y,y))
     .toList.last.flatten.map:
       case Seat.Occupied => 1
       case _ => 0
     .sum
-  }
 
 
   def part2(input: Grid[Seat]): Int =

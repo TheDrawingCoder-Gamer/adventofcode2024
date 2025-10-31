@@ -30,7 +30,7 @@ object Day12 extends Problem[List[(Char, Int)], Int]:
         case _ => this
   case class DaStateP2(ship: Vec2[Int] = Vec2(0, 0), waypointRelative: Vec2[Int] = Vec2(10, -1)):
     def advance(action: Char, value: Int): DaStateP2 =
-      action match {
+      action match
         case 'N' => copy(waypointRelative = waypointRelative + Vec2(0, -value))
         case 'S' => copy(waypointRelative = waypointRelative + Vec2(0, value))
         case 'E' => copy(waypointRelative = waypointRelative + Vec2(value, 0))
@@ -38,17 +38,15 @@ object Day12 extends Problem[List[(Char, Int)], Int]:
         case 'L' => copy(waypointRelative = waypointRelative.rotate(-(value / 90)))
         case 'R' => copy(waypointRelative = waypointRelative.rotate(value / 90))
         case 'F' => copy(ship = ship + waypointRelative * value)
-      }
 
   extension(self: Vec2[Int])
     // specific to our coord system
     def rotate(by: Int): Vec2[Int] =
-      by rem 4 match {
+      by rem 4 match
         case 0 => self
         case 1 => Vec2(-self.y, self.x)
         case 2 => Vec2(-self.x, -self.y)
         case 3 => Vec2(self.y, -self.x)
-      }
 
 
   override def parse(str: String): List[(Char, Int)] =
@@ -59,13 +57,12 @@ object Day12 extends Problem[List[(Char, Int)], Int]:
 
 
 
-  override def part1(input: List[(Char, Int)]): Int = {
+  override def part1(input: List[(Char, Int)]): Int =
     val res = input.foldLeft(DaState()):
       case (s, (a, v)) =>
         s.advance(a,v)
 
     math.abs(res.x) + math.abs(res.y)
-  }
 
 
   def part2(input: List[(Char, Int)]): Int =

@@ -24,18 +24,16 @@ object Day16 extends Problem[Day16.DaInput, Long]:
     DaInput(rangeMap, goodTicket.toList, goodTickets.toList)
 
 
-  override def part1(input: DaInput): Long = {
+  override def part1(input: DaInput): Long =
     input.tickets.flatten.filter: x =>
-      input.validRanges.values.forall((a, b) => !a.contains(x) && !b.contains(x))
+      input.validRanges.values.forall(!_.contains(x) && !_.contains(x))
     .sum.toLong
-
-  }
 
   def part2(input: DaInput): Long =
     val goodTickets =
       input.tickets.filter: ticket =>
         ticket.forall: x =>
-          input.validRanges.values.exists((a, b) => a.contains(x) || b.contains(x))
+          input.validRanges.values.exists(_.contains(x) || _.contains(x))
 
     val ordered = goodTickets.prepended(input.ourTicket).transpose.map: xs =>
       input.validRanges.filter:

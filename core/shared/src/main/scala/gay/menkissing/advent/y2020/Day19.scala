@@ -42,19 +42,14 @@ object Day19 extends Problem[(Map[Int, Day19.RawRule], List[String]), Int]:
     go(k)
 
 
-  override def part1(input: (Map[Int, RawRule], List[String])): Int = {
+  override def part1(input: (Map[Int, RawRule], List[String])): Int =
     val (rules, messages) = input
-
-
-
-
 
     val valid = getRule(rules, 0)
     // println(valid)
     val r = messages.intersect(valid)
     // println(r)
     r.size
-  }
 
   def part2(input: (Map[Int, RawRule], List[String])): Int =
     import parsley.combinator.*

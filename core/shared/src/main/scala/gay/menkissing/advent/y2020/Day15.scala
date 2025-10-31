@@ -33,10 +33,8 @@ object Day15 extends Problem[List[Int], Int]:
         setArr(0, idx)
     lastNum
 
-  override def part1(input: List[Int]): Int = {
+  override def part1(input: List[Int]): Int =
     calc(input, 2020)
-
-  }
 
   def part2(input: List[Int]): Int =
     calc(input, 30000000)

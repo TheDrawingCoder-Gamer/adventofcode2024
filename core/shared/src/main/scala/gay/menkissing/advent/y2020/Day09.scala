@@ -16,10 +16,7 @@ object Day09 extends Problem[Vector[Long], Long]:
   def weakNum(input: Vector[Long]): Long =
     input.sliding(26).findMap:
       case Unsnoc(init, last) =>
-        Option.when {
-          init.combinationsN[2].forall:
-            case (l, r) => l + r != last
-        }(last)
+        Option.when(init.combinationsN[2].forall(_ + _ != last))(last)
       case _ => whatTheScallop.!
     .get
 
