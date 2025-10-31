@@ -1,10 +1,9 @@
-package gay.menkissing.advent.y2024
+package gay.menkissing.advent
+package y2024
 
 import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common.*
 import ArityN.*
-
-import scala.io.Source
 
 object Day22 extends Problem[List[Int], Long]:
   override def parse(str: String): List[Int] =

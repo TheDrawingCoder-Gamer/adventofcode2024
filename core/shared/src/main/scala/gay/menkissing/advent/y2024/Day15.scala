@@ -1,26 +1,25 @@
-package gay.menkissing.advent.y2024
+package gay.menkissing.advent
+package y2024
 
 import cats.*
 import cats.syntax.all.*
 import spire.implicits.IntAlgebra
-import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common.*
 
 import scala.annotation.{tailrec, targetName}
 import scala.collection.mutable as mut
-import scala.io.Source
 
 
-object Day15 extends Problem[Day15.ProblemState, Long] {
+object Day15 extends Problem[Day15.ProblemState, Long]:
   enum GridItem:
     case Empty, Wall, Box
 
   enum GridItemP2:
     case Empty, Wall, BoxL, BoxR
 
-  extension (grid: Grid[GridItem]) {
+  extension (grid: Grid[GridItem])
     @targetName("updatedMoveP1")
-    def updatedMove(start: Vec2[Int], dir: Direction2D): Option[Grid[GridItem]] = {
+    def updatedMove(start: Vec2[Int], dir: Direction2D): Option[Grid[GridItem]] =
       @tailrec
       def go(curGrid: Grid[GridItem], start: Vec2[Int]): Option[Grid[GridItem]] =
         val newPos = start.offset(dir)
@@ -37,7 +36,7 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
         if it.isDefinedAt(newPos.x, newPos.y) then
           it.updated(newPos)(GridItem.Empty)
         else it
-    }
+    
     def pretty: String =
       grid.values.map: it =>
         it.map:
@@ -46,7 +45,6 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
           case GridItem.Box => 'O'
         .mkString("", "", "")
       .mkString("", "\n", "")
-  }
 
   extension (grid: Grid[GridItemP2])
     @targetName("updatedMoveP2")
@@ -189,4 +187,3 @@ object Day15 extends Problem[Day15.ProblemState, Long] {
     res.gpsCalc
 
   override lazy val input: String = FileIO.getInput(2024, 15)
-}

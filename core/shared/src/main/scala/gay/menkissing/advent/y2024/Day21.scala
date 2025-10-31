@@ -1,8 +1,8 @@
-package gay.menkissing.advent.y2024
+package gay.menkissing.advent
+package y2024
 
 import cats.*
 import cats.syntax.all.*
-import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common
 import gay.menkissing.common.*
 import ArityN.*

@@ -1,14 +1,12 @@
-package gay.menkissing.advent.y2024
+package gay.menkissing.advent
+package y2024
 
-import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common.*
 import ArityN.*
 import spire.implicits.IntAlgebra
 import cats.*
 
 import cats.derived.*
-
-import scala.io.Source
 
 object Day16 extends Problem[Day16.ProblemState, Int]:
   type Maze = Grid[Boolean]
@@ -19,22 +17,21 @@ object Day16 extends Problem[Day16.ProblemState, Int]:
 
   extension (solution: List[Reindeer])
     def solved: Int =
-      solution.slidingN[2].foldLeft(0.0) {
+      solution.slidingN[2].foldLeft(0.0):
         case (acc, (l, r)) =>
           acc + l.edgeScore(r)
-      }.toInt
+      .toInt
   case class Reindeer(pos: Vec2[Int], dir: Direction2D) derives Eq:
     def neighbors: List[Reindeer] =
-      Direction2D.values.flatMap { d =>
-        if (d == dir.clockwise.clockwise)
-          None else Some(Reindeer(pos.offset(d), d))
-      }.toList
+      Direction2D.values.flatMap: d =>
+        Option.unless(d == dir.reverse)(Reindeer(pos.offset(d), d))
+      .toList
     def edgeScore(that: Reindeer): Double = {
-      if (math.abs(this.pos.x - that.pos.x) != 1 && math.abs(this.pos.y - that.pos.y) != 1)
+      if math.abs(this.pos.x - that.pos.x) != 1 && math.abs(this.pos.y - that.pos.y) != 1 then
         Double.PositiveInfinity
-      else if (this.dir == that.dir)
+      else if this.dir == that.dir then
         1.0
-      else if (this.dir.clockwise == that.dir || this.dir.counterClockwise == that.dir)
+      else if this.dir.clockwise == that.dir || this.dir.counterClockwise == that.dir then
         1001.0
       else
         // hopefully this is never attempted
@@ -56,8 +53,8 @@ object Day16 extends Problem[Day16.ProblemState, Int]:
 
     def prettySolution(solution: List[Reindeer]): String =
       val solMap = solution.groupBy(_.pos)
-      maze.values.zipWithIndex.map { (line, y) =>
-        line.zipWithIndex.map { (wall, x) =>
+      maze.values.zipWithIndex.map: (line, y) =>
+        line.zipWithIndex.map: (wall, x) =>
           val p = Vec2(x, y)
           if (wall)
             '#'
@@ -74,25 +71,27 @@ object Day16 extends Problem[Day16.ProblemState, Int]:
                   case Direction2D.Right => ">"
                   case Direction2D.Down => "v"
                   case Direction2D.Left => "<"
-        }.mkString("", "", "")
-      }.mkString("", "\n", "")
+        .mkString("", "", "")
+      .mkString("", "\n", "")
 
 
   override def parse(str: String): ProblemState =
     var reindeer = Reindeer(Vec2(0, 0), Direction2D.Right)
     var end = Vec2(0, 0)
 
-    val maze = Grid(str.linesIterator.zipWithIndex.map: (line, y) =>
-      line.zipWithIndex.map: (c, x) =>
-        c match {
-          case 'E' => end = Vec2(x, y)
-          case 'S' => reindeer = Reindeer(Vec2(x, y), Direction2D.Right)
-          case _ =>
-        }
-        c match {
-          case '#' => true
-          case _ => false
-        })
+    val maze = 
+      Grid(
+        str.linesIterator.zipWithIndex.map: (line, y) =>
+          line.zipWithIndex.map: (c, x) =>
+            c match
+              case 'E' => end = Vec2(x, y)
+              case 'S' => reindeer = Reindeer(Vec2(x, y), Direction2D.Right)
+              case _ => ()
+            
+            c match
+              case '#' => true
+              case _ => false
+      )
 
     ProblemState(reindeer, maze, end)
 

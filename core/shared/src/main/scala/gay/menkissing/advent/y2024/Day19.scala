@@ -1,8 +1,5 @@
-package gay.menkissing.advent.y2024
-
-import gay.menkissing.advent.{FileIO, Problem}
-
-import scala.io.Source
+package gay.menkissing.advent
+package y2024
 
 object Day19 extends Problem[(List[String], List[String]), Long]:
 

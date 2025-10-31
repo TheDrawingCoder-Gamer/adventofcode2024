@@ -1,8 +1,5 @@
-package gay.menkissing.advent.y2024
-
-import gay.menkissing.advent.{FileIO, ProblemAdv}
-
-import scala.io.Source
+package gay.menkissing.advent
+package y2024
 
 object Day24 extends ProblemAdv[Day24.Machine, Long, String]:
 

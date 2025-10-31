@@ -1,6 +1,5 @@
-package gay.menkissing.advent.y2024
-
-import gay.menkissing.advent.{FileIO, HalfDay}
+package gay.menkissing.advent
+package y2024
 
 object Day25 extends HalfDay[List[Day25.KeyOrLock], Long]:
   case class KeyOrLock(isKey: Boolean, pinHeights: Vector[Int]):

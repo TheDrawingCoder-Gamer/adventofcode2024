@@ -1,10 +1,9 @@
-package gay.menkissing.advent.y2024
+package gay.menkissing.advent
+package y2024
 
-import gay.menkissing.advent.{FileIO, ProblemAdv}
 import gay.menkissing.common.*
 
 import scala.annotation.tailrec
-import scala.io.Source
 import spire.implicits.IntAlgebra
 
 object Day18 extends ProblemAdv[List[Vec2[Int]], Int, Vec2[Int]]:
@@ -12,9 +11,9 @@ object Day18 extends ProblemAdv[List[Vec2[Int]], Int, Vec2[Int]]:
 
 
   override def parse(str: String): List[Vec2[Int]] =
-    str.linesIterator.map {
+    str.linesIterator.map:
       case s"$x,$y" => Vec2(x.toInt, y.toInt)
-    }.toList
+    .toList
 
   override def part1(input: List[Vec2[Int]]): Int =
     val bytes = input.take(bytesFallen)
@@ -25,7 +24,7 @@ object Day18 extends ProblemAdv[List[Vec2[Int]], Int, Vec2[Int]]:
     path - 1
 
 
-  extension[A] (ls: List[A]) {
+  extension[A] (ls: List[A])
     @tailrec
     def foldLeftCollect[Z, R](start: Z)(func: (Z, A) => Either[R, Z]): Option[R] =
       ls match
@@ -34,7 +33,7 @@ object Day18 extends ProblemAdv[List[Vec2[Int]], Int, Vec2[Int]]:
             case Left(result) => Some(result)
             case Right(acc) => rest.foldLeftCollect(acc)(func)
         case Nil => None
-  }
+
 
   override def part2(input: List[Vec2[Int]]): Vec2[Int] =
     val daGrid = Grid.fill(gridSize.x, gridSize.y)(false)

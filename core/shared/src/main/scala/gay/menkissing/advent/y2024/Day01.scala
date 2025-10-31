@@ -1,6 +1,5 @@
-package gay.menkissing.advent.y2024
-
-import gay.menkissing.advent.{FileIO, Problem}
+package gay.menkissing.advent
+package y2024
 
 
 object Day01 extends Problem[(List[Int], List[Int]), Int]:

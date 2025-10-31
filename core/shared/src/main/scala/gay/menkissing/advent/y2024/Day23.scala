@@ -1,12 +1,11 @@
-package gay.menkissing.advent.y2024
+package gay.menkissing.advent
+package y2024
 
-import gay.menkissing.advent.{FileIO, ProblemAdv}
 import gay.menkissing.common.*
 
 import scala.annotation.tailrec
 import scala.collection.immutable.BitSet
 import scala.collection.{AbstractIterator, mutable as mut}
-import scala.io.Source
 
 object Day23 extends ProblemAdv[Day23.LANConnections, Long, String]:
   override def parse(str: String): Day23.LANConnections =

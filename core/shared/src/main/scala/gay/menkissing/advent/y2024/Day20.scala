@@ -1,6 +1,6 @@
-package gay.menkissing.advent.y2024
+package gay.menkissing.advent
+package y2024
 
-import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common.*
 
 import scala.collection.mutable as mut

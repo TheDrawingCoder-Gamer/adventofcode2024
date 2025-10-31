@@ -1,11 +1,10 @@
-package gay.menkissing.advent.y2024
-
-import gay.menkissing.advent.{FileIO, ProblemAdv}
+package gay.menkissing.advent
+package y2024
 
 import scala.annotation.tailrec
 import scala.collection.mutable as mut
-import scala.io.Source
 
+// do not format this...
 object Day18Writeup extends ProblemAdv[(Int, Int, List[Day18Writeup.Vec2i]), Int, Day18Writeup.Vec2i]:
   case class Vec2i(x: Int, y: Int):
     def cardinalNeighbors: List[Vec2i] =

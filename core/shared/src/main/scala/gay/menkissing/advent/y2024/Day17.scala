@@ -1,10 +1,9 @@
-package gay.menkissing.advent.y2024
+package gay.menkissing.advent
+package y2024
 
-import gay.menkissing.advent.{FileIO, ProblemAdv}
 import gay.menkissing.common.*
 
 import scala.annotation.tailrec
-import scala.io.Source
 
 object Day17 extends ProblemAdv[Day17.ComputerState, String, Long]:
   case class ComputerState(ip: Int, program: Vector[Byte], regA: Long, regB: Long, regC: Long, outputs: List[Byte]):
@@ -23,14 +22,15 @@ object Day17 extends ProblemAdv[Day17.ComputerState, String, Long]:
     final def completeP2: Boolean =
       @tailrec
       def go(i: ComputerState): Boolean =
-        if (i.ip < i.program.size)
+        if i.ip < i.program.size then
           i.stepP2 match
             case Some(x) => go(x)
             case None => false
         else
           i.outputs.reverse.toVector == i.program
 
-      if ((regA.binaryDigits ceilDiv 3) != program.size)
+
+      if (regA.binaryDigits ceilDiv 3) != program.size then
         false
       else
         go(this)
@@ -57,8 +57,8 @@ object Day17 extends ProblemAdv[Day17.ComputerState, String, Long]:
           case 4 => regA
           case 5 => regB
           case 6 => regC
-          case 7 => assert(false)
-          case _ => ???
+          case 7 => whatTheScallop.!
+          case _ => whatTheScallop.!
       opcode match
         // adv
         // this is the only place that regA gets set :thinking:
@@ -80,9 +80,10 @@ object Day17 extends ProblemAdv[Day17.ComputerState, String, Long]:
 
   override def parse(str: String): ComputerState =
     val Array(regs, program) = str.split("\n\n")
-    val List(regA, regB, regC) = regs.linesIterator.map:
-      case s"Register $_: $a" => a.toLong
-    .toList
+    val List(regA, regB, regC) = 
+      regs.linesIterator.map:
+        case s"Register $_: $a" => a.toLong
+      .toList
     val s"Program: $programStr" = program.trim : @unchecked
 
     ComputerState(0, programStr.split(',').map(_.toByte).toVector, regA, regB, regC, List())
@@ -92,41 +93,7 @@ object Day17 extends ProblemAdv[Day17.ComputerState, String, Long]:
 
   override def part2(input: ComputerState): Long =
     Iterator.iterate(1L): a =>
-      if (input.program.endsWith(input.copy(regA = a).complete)) a << 3 else if (a % 8 < 7) a + 1 else (a >> 3) + 1
+      if input.program.endsWith(input.copy(regA = a).complete) then a << 3 else if a % 8 < 7 then a + 1 else (a >> 3) + 1
     .find(it => input.copy(regA = it).completeP2).get
 
   override lazy val input: String = FileIO.getInput(2024, 17)
-  /*
-  def testPrograms(): Unit = {
-    {
-      val data = ComputerState(0, Vector(2, 6), 0, 0, 9, List())
-      assert(data.completeState.regB == 1)
-    }
-    {
-      val data = ComputerState(0, Vector(5,0,5,1,5,4), 10, 0, 0, List())
-      assert(data.complete == List(0, 1, 2))
-    }
-    {
-      val data = ComputerState(0, Vector(0, 1, 5, 4, 3, 0), 2024, 0, 0, List())
-      val finalState = data.completeState
-      assert(finalState.outputs == List(4,2,5,6,7,7,7,7,3,1,0))
-      // assert(finalState.regA == 0)
-    }
-    {
-      val data = ComputerState(0, Vector(1, 7), 0, 29, 0, List())
-      // assert(data.completeState.regB == 26)
-    }
-    {
-      val data = ComputerState(0, Vector(4, 0), 0, 2024, 43690, List())
-      // assert(data.completeState.regB == 44354)
-    }
-
-  }
-  */
-
-/*
-@main def main(): Unit =
-  // Day17.testPrograms()
-  Day17.debugAndTimeP1()
-  Day17.debugAndTimeP2()
-*/

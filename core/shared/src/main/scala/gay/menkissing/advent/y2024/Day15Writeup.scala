@@ -1,13 +1,13 @@
-package gay.menkissing.advent.y2024
+package gay.menkissing.advent
+package y2024
 
 import cats.*
 import cats.implicits.*
-import gay.menkissing.advent.{FileIO, Writeup}
 
 import scala.annotation.{tailrec, targetName}
 import scala.collection.mutable as mut
-import scala.io.Source
 
+// this is a writeup so im just gonna leave the formatting untouched
 object Day15Writeup extends Writeup[Day15Writeup.ProblemState, Long] {
   enum Direction:
     case Up, Down, Left, Right
