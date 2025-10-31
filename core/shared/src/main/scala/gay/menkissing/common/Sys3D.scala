@@ -9,15 +9,11 @@ import spire.implicits.{partialOrderOps => _, *}
 import spire.math.ConvertableFrom
 import spire.math.ConvertableTo
 
-object Sys3D {
-  object Vec3i {
-    def of(str: String): Vec3[Int] = {
+object Sys3D:
+  object Vec3i:
+    def of(str: String): Vec3[Int] =
       val parts = str.split(',')
       Vec3(parts(0).toInt, parts(1).toInt, parts(2).toInt)
-    }
-
-    
-  }
 
   object Vec3:
 
@@ -51,7 +47,7 @@ object Sys3D {
             case 0 => self.copy(x = v)
             case 1 => self.copy(y = v)
             case 2 => self.copy(z = v)
-  case class Vec3[@specialized(Int, Long) A](x: A, y: A, z: A) {
+  case class Vec3[@specialized(Int, Long) A](x: A, y: A, z: A):
 
 
     def offset(dir: Direction3D, n: A)(using add: AdditiveGroup[A]): Vec3[A] =
@@ -70,7 +66,7 @@ object Sys3D {
 
 
     // facing default North
-    def face(dir: Direction3D)(using add: AdditiveGroup[A]): Vec3[A] = {
+    def face(dir: Direction3D)(using add: AdditiveGroup[A]): Vec3[A] =
       dir match
         case Direction3D.North => this
         case Direction3D.East => rotate(Axis3D.Y, 1)
@@ -78,30 +74,26 @@ object Sys3D {
         case Direction3D.West => rotate(Axis3D.Y, 3)
         case Direction3D.Up => rotate(Axis3D.X, 1)
         case Direction3D.Down => rotate(Axis3D.X, -1)
-    }
 
-    def orient(rotation: Rotation)(using add: AdditiveGroup[A]): Vec3[A] = {
+    def orient(rotation: Rotation)(using add: AdditiveGroup[A]): Vec3[A] =
       rotation match
         case Rotation.Rot0 => this
         case Rotation.Rot90 => rotate(Axis3D.Z, 1)
         case Rotation.Rot180 => rotate(Axis3D.Z, 2)
         case Rotation.Rot270 => rotate(Axis3D.Z, 3)
-    }
 
     @tailrec
-    final def rotate(axis: Axis3D, times: Int)(using add: AdditiveGroup[A]): Vec3[A] = {
-      val gTimes = {
+    final def rotate(axis: Axis3D, times: Int)(using add: AdditiveGroup[A]): Vec3[A] =
+      val gTimes =
         val temp = times % 4
-        if (temp < 0)
+        if temp < 0 then
           (4 + temp) % 4
         else
           temp
-
-      }
-      if (gTimes == 0)
+      if gTimes == 0 then
         this
       else
-        axis match {
+        axis match
           case Axis3D.X =>
             // y to z, z to -y
             Vec3(x, -z, y).rotate(axis, times - 1)
@@ -111,67 +103,55 @@ object Sys3D {
           case Axis3D.Z =>
             // y to x, x to -y
             Vec3(y, -x, z).rotate(axis, times - 1)
-        }
-    }
-
-  }
 
   // it's like minecraft all over again :frown:
-  enum Direction3D {
+  enum Direction3D:
     case North, East, South, West, Up, Down
-    lazy val axis: Axis3D = {
-      this match {
+    lazy val axis: Axis3D =
+      this match
         case North => Axis3D.Z
         case South => Axis3D.Z
         case East => Axis3D.X
         case West => Axis3D.X
         case Up => Axis3D.Y
         case Down => Axis3D.Y
-      }
-    }
-    lazy val axisDirection: AxisDirection = {
-      this match {
+    lazy val axisDirection: AxisDirection =
+      this match
         case North => AxisDirection.Positive
         case East => AxisDirection.Positive
         case Up => AxisDirection.Positive
         case South => AxisDirection.Negative
         case West => AxisDirection.Negative
         case Down => AxisDirection.Negative
-      }
-    }
+      
 
-    def next(axis: Axis3D): Direction3D = {
-      if (this.axis == axis)
+    def next(axis: Axis3D): Direction3D =
+      if this.axis == axis then
         this
-      else {
-        axis match {
+      else
+        axis match
           case Axis3D.X =>
-            this match {
+            this match
               case North => Up
               case Up => South
               case South => Down
               case Down => North
               case _ => this
-            }
           case Axis3D.Y =>
-            this match {
+            this match
               case North => East
               case East => South
               case South => West
               case West => East
               case _ => this
-            }
           case Axis3D.Z =>
-            this match {
+            this match
               case Up => East
               case East => Down
               case Down => West
               case West => Up
               case _ => this
-            }
-        }
-      }
-    }
+            
 
     def reverse: Direction3D =
       this match
@@ -184,43 +164,37 @@ object Sys3D {
       
 
     @tailrec
-    final def rotate(axis: Axis3D, clockwise: Boolean, times: Int): Direction3D = {
+    final def rotate(axis: Axis3D, clockwise: Boolean, times: Int): Direction3D =
       val times2 = times % 4
       // magic
       val gTimes = if (times2 < 0) 4 + times2 else times2
       val ggTimes = (if (clockwise) gTimes else 4 - gTimes) % 4
       if (ggTimes == 0) this
       else this.next(axis).rotate(axis, true, ggTimes - 1)
-    }
-  }
 
-  object Direction3D {
+
+  object Direction3D:
     val horizontal: Seq[Direction3D] = Seq(North, East, South, West)
     val zplane: Seq[Direction3D] = Seq(Up, East, Down, West)
-  }
 
-  enum Axis3D {
+  enum Axis3D:
     case X, Y, Z
-  }
 
-  enum AxisDirection {
+  enum AxisDirection:
     case Positive, Negative
-  }
 
-  enum Rotation {
+  enum Rotation:
     case Rot0, Rot90, Rot180, Rot270
-  }
 
   case class Orientation3D(facing: Direction3D, rot: Rotation)
 
-  object Orientation3D {
-    val orientations: Seq[Orientation3D] = {
-      (for {
-        f <- Direction3D.values
+  object Orientation3D:
+    val orientations: Seq[Orientation3D] =
+      for
+        f <- Direction3D.values.toSeq
         r <- Rotation.values
-      } yield Orientation3D(f, r)).toSeq
-    }
-  }
+      yield Orientation3D(f, r)
+    
 
   case class AABB3D[@specialized(Int, Long) A](xs: Dimension[A], ys: Dimension[A], zs: Dimension[A]):
     infix def intersect(that: AABB3D[A])(using ord: Order[A]): Option[AABB3D[A]] =
@@ -264,5 +238,4 @@ object Sys3D {
       val max = vs.reduce(_ max _)
       AABB3D(min, max)
 
-    
-}
+

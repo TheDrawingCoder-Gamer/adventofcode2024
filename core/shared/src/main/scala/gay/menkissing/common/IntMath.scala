@@ -31,10 +31,9 @@ extension[T](self: T)(using integral: Integral[T])
 def choose(n: Int, k: Int): Int =
   n.fallingFactorial(k) / k.!
 
-extension (self: Int) {
-  def digits: Int = {
+extension (self: Int)
+  def digits: Int =
     math.log10(self.toDouble).toInt + 1
-  }
 
   // do not trust the factorial. it will hurt you if u try to do any number that is like...
   // idk, double digits? LOL
@@ -50,40 +49,28 @@ extension (self: Int) {
     else
       (0 until n).map(f => self - f).product
 
-  def binaryDigits: Int = {
+  def binaryDigits: Int =
     logBaseN(self.toDouble, 2.0).toInt
-  }
 
-  infix def rem(that: Int): Int = {
+  infix def rem(that: Int): Int =
     val mod = self % that
     if mod < 0 then mod + that else mod
-  }
   
-  infix def ceilDiv(that: Int): Int = {
+  infix def ceilDiv(that: Int): Int =
     math.ceil(self.toDouble / that.toDouble).toInt
-  }
-  infix def floorDiv(that: Int): Int = {
-    math.floor(self.toDouble / that.toDouble).toInt
-  }
-}
+  infix def floorDiv(that: Int): Int =
+    math.floorDiv(self, that)
 
-extension (self: Long) {
-  def digits: Int = {
+extension (self: Long)
+  def digits: Int =
     math.log10(self.toDouble).toInt + 1
-  }
-  def binaryDigits: Int = {
+  def binaryDigits: Int =
     logBaseN(self.toDouble, 2.0).toInt
-  }
-  infix def rem(that: Long): Long = {
+  infix def rem(that: Long): Long =
     self - math.abs(that) * math.floorDiv(self, math.abs(that))
-  }
-}
 
-object Digits {
-  def unapply(s: Long): Option[Int] = {
+object Digits:
+  def unapply(s: Long): Option[Int] =
     Some(s.digits)
-  }
-  def unapply(s: Int): Option[Int] = {
+  def unapply(s: Int): Option[Int] =
     Some(s.digits)
-  }
-}

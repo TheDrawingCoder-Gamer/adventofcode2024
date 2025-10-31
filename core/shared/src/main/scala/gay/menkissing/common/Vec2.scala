@@ -39,25 +39,23 @@ final case class Vec2[@specialized(Specializable.Bits32AndUp) A](x: A, y: A):
       Option.when(this.x =!= that.x)(if this.x > that.x  then Direction2D.Left else Direction2D.Right).toVector
         ++ Option.when(this.y =!= that.y)(if this.y > that.y then Direction2D.Up else Direction2D.Down)
 
-  def straightLine(that: Vec2[A])(using ord: Order[A], dis: Discrete[A], ring: Ring[A]): List[Vec2[A]] = {
+  def straightLine(that: Vec2[A])(using ord: Order[A], dis: Discrete[A], ring: Ring[A]): List[Vec2[A]] =
     require(this.x === that.x || this.y === that.y)
     val shouldReverse = (this.x - that.x > ring.zero) || (this.y - that.y > ring.zero) 
-    def maybeReverse[A](ls: List[A]): List[A] = {
-      if (shouldReverse)
+    def maybeReverse[A](ls: List[A]): List[A] =
+      if shouldReverse then
         ls.reverse 
-      else 
+      else
         ls
-    }
-    if (this.x === that.x) {
+    if this.x === that.x then
       val minY = this.y `min` that.y 
       val maxY = this.y `max` that.y 
       maybeReverse(Range[A](minY, maxY).toList.map(yy => Vec2(x, yy)))
-    } else { 
+    else
       val minX = this.x `min` that.x 
       val maxX = this.x `max` that.x 
       maybeReverse(Range(minX, maxX).toList.map(xx => Vec2(xx, y)))
-    }
-  }
+    
 
 object Vec2:
   given eqVec2[@specialized(Specializable.Bits32AndUp) A](using Eq[A]): Eq[Vec2[A]] with

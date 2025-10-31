@@ -29,9 +29,8 @@ def astarScore[A](start: A, goal: A, h: A => Double, d: (A, A) => Double, neighb
  * @return An Option containing the shortest path taken to reach the end node. This path includes the start and end node.
  * @note If h = `_ => 0.0`, [[dijstraBy]] will be a more optimized version of this function.
  */
-def astarGeneric[A](start: A, isGoal: A => Boolean, h: A => Double, d: (A, A) => Double, neighbors: A => IterableOnce[A])(using Eq[A]): Option[List[A]] = {
+def astarGeneric[A](start: A, isGoal: A => Boolean, h: A => Double, d: (A, A) => Double, neighbors: A => IterableOnce[A])(using Eq[A]): Option[List[A]] =
   astarByReturning[A, List[A]](start, isGoal, h, d, neighbors, (map, cur, _) => SearchReturns.reconstructPath(map, cur))
-}
 
 def astarByReturning[A, R](start: A, isGoal: A => Boolean, h: A => Double, d: (A, A) => Double, neighbors: A => IterableOnce[A], returning: (mutable.Map[A, A], A, Double) => R)(using Eq[A]): Option[R] =
   val cameFrom = mutable.HashMap[A, A]()
@@ -111,92 +110,77 @@ def dijstraScore[A](start: A, goal: A, d: (A, A) => Double, neighbors: A => Iter
 def equals[A](l: A, r: A): Boolean =
   l.equals(r)
 
-def dijstraAll[A](start: A, isGoal: A => Boolean, d: (A, A) => Double, neighbors: A => IterableOnce[A], eqv: (A, A) => Boolean = equals): List[List[A]] = {
+def dijstraAll[A](start: A, isGoal: A => Boolean, d: (A, A) => Double, neighbors: A => IterableOnce[A], eqv: (A, A) => Boolean = equals): List[List[A]] =
   val visited = mutable.Set.empty[A]
 
   val queue = mutable.PriorityQueue((0d, start, List(start)))(using Ordering.by[(Double, A, List[A]), Double](it => it._1).reverse)
-  while (!isGoal(queue.head._2)) {
+  while !isGoal(queue.head._2) do
     val (score, current, path) = queue.dequeue()
 
-    for (neighbor <- neighbors(current).iterator.filterNot(visited)) {
+    for neighbor <- neighbors(current).iterator.filterNot(visited) do
       val nscore = score + d(current, neighbor)
       val npath = path.prepended(neighbor)
 
       queue.addOne((nscore, neighbor, npath))
-    }
     visited.addOne(current)
-  }
 
 
   val (shortestScore, s, path) = queue.dequeue()
   val paths = mutable.ListBuffer[List[A]](path)
-  while (queue.head._1 == shortestScore) {
+  while queue.head._1 == shortestScore do
     val next = queue.dequeue()
-    if (eqv(next._2, s)) paths.prepend(next._3)
-  }
+    if eqv(next._2, s) then paths.prepend(next._3)
 
   paths.toList
-}
 
-def findAllPathsNoRetraverse[A](start: A, isGoal: A => Boolean, neighbors: A => IterableOnce[A]): List[List[A]] = {
+def findAllPathsNoRetraverse[A](start: A, isGoal: A => Boolean, neighbors: A => IterableOnce[A]): List[List[A]] =
   val paths = mutable.ListBuffer.empty[List[A]]
 
-  def dfs(src: A, daPath: List[A]): Eval[List[List[A]]] = {
-    if (isGoal(src)) {
+  def dfs(src: A, daPath: List[A]): Eval[List[List[A]]] =
+    if isGoal(src) then
       Eval.now(List(daPath.reverse))
-    } else {
+    else
       val ns = neighbors(src).iterator.toList
-      ns match {
+      ns match
         case Nil => Eval.now(List())
         case ls =>
-          ls.foldLeft(Eval.now(List[List[A]]())) { (acc, adjNode) =>
-            if (!daPath.contains(adjNode)) {
-              acc.flatMap { c =>
-                dfs(adjNode, daPath.prepended(adjNode)).map { cs =>
+          ls.foldLeft(Eval.now(List[List[A]]())): (acc, adjNode) =>
+            if (!daPath.contains(adjNode)) then
+              acc.flatMap: c =>
+                dfs(adjNode, daPath.prepended(adjNode)).map: cs =>
                   c ++ cs
-                }
-              }
-            } else {
+              
+            else
               Eval.now(List())
-            }
-          }
-      }
-    }
-  }
+          
 
   dfs(start, List(start)).value
-}
 
-def findAllPathsGeneric[A](start: A, isGoal: A => Boolean, neighbors: A => IterableOnce[A]): List[List[A]] = {
+def findAllPathsGeneric[A](start: A, isGoal: A => Boolean, neighbors: A => IterableOnce[A]): List[List[A]] =
   val paths = mutable.ListBuffer.empty[List[A]]
    
-  def dfs(src: A, daPath: List[A]): Unit = {
-    if (isGoal(src)) {
+  def dfs(src: A, daPath: List[A]): Unit =
+    if isGoal(src) then
       paths.prepend(daPath.reverse)
-    } else {
-      neighbors(src).iterator.foreach { adjNode =>
+    else
+      neighbors(src).iterator.foreach: adjNode =>
         dfs(adjNode, daPath.prepended(adjNode))
-      }
-    }
-  }
+      
   dfs(start, List(start))
   
   paths.toList
-}
 
 def findAllPaths[A](start: A, dest: A, neighbors: A => IterableOnce[A]): List[List[A]] = findAllPathsGeneric[A](start, _ == dest, neighbors)
 
 object SearchReturns:
-  def reconstructPath[A](cameFrom: mutable.Map[A, A], p: A): List[A] = {
+  def reconstructPath[A](cameFrom: mutable.Map[A, A], p: A): List[A] =
 
     val totalPath = mutable.ListBuffer[A](p)
     var current = p
-    while (cameFrom.contains(current)) {
+    while cameFrom.contains(current) do
       current = cameFrom(current)
       totalPath.prepend(current)
-    }
     totalPath.toList
-  }
 
   def lengthFromPath[A](cameFrom: mutable.Map[A, A], p: A, score: Double): Int =
     var c = 1

@@ -4,7 +4,7 @@ import cats.*
 import spire.math.*
 import spire.implicits.IntAlgebra
 
-enum Direction2D {
+enum Direction2D:
   case Up, Down, Left, Right
 
   def genericDigitalDir[@specialized(Specializable.Integral) A](using integral: Integral[A]): Vec2[A] =
@@ -63,7 +63,6 @@ enum Direction2D {
       case Direction2D.Down => Direction2D.Down
       case Direction2D.Left => Direction2D.Right
       case Direction2D.Right => Direction2D.Left
-}
 
 object Direction2D:
   given eqDirection2D: Eq[Direction2D] = Eq.fromUniversalEquals

@@ -4,7 +4,7 @@ import spire.algebra.*
 import spire.math.*
 import spire.implicits.IntAlgebra
 
-enum PrincibleWind2D {
+enum PrincibleWind2D:
   case UpLeft, Up, UpRight, Right, DownRight, Down, DownLeft, Left
 
   def genericDigitalDir[@specialized(Specializable.Bits32AndUp) A](using integral: Integral[A]): Vec2[A] =
@@ -23,4 +23,3 @@ enum PrincibleWind2D {
     
 
   def digitalDir: Vec2[Int] = genericDigitalDir[Int]
-}

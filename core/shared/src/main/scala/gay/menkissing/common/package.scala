@@ -35,12 +35,10 @@ def topologicalSort[A](a: List[A])(using pord: PartialOrder[A]): Option[List[A]]
   var unsorted = a.toBuffer
   val sorted = mut.Buffer[A]()
   
-  def hasIncomingNode(n: A): Boolean = {
+  def hasIncomingNode(n: A): Boolean =
     unsorted.exists(it => pord.lt(it, n))
-  }
-  def nodeEnters(inc: A, n: A): Boolean = {
+  def nodeEnters(inc: A, n: A): Boolean =
     pord.lt(inc, n)
-  }
   
   val startNodes: mut.Set[A] = a.filterNot(hasIncomingNode).iterator.to(mut.Set.iterableFactory)
   
@@ -98,9 +96,8 @@ private def bfsImpl[A, B, C](a: A, z: C, append: (C, B) => C)(f: A => Either[Ite
 def bfsFoldl[A, B](a: A)(f: A => Either[Iterable[A], B])(using M: Monoid[B]): B =
   bfsImpl(a, M.empty, M.combine)(f)
   
-extension[A] (set: scala.collection.Set[A]) {
+extension[A] (set: scala.collection.Set[A])
   def ⊆(that: scala.collection.Set[A]): Boolean = set.subsetOf(that)
-}
 
 extension[A] (self: Iterable[A])
   def findMap[B](f: A => Option[B]): Option[B] = self.collectFirst(f.unlift)
