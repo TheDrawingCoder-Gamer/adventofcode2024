@@ -5,6 +5,7 @@ import gay.menkissing.common.*
 
 import scala.collection.mutable as mut
 import spire.implicits.IntAlgebra
+import cats.syntax.all.*
 
 object Day20 extends Problem[Day20.RaceTrack, Int]:
   extension (grid: Grid[Boolean])
@@ -19,21 +20,22 @@ object Day20 extends Problem[Day20.RaceTrack, Int]:
         totalPath.toList
       }
       val cameFrom = mut.HashMap[Vec2[Int], Vec2[Int]]()
-      val dist = mut.HashMap[Vec2[Int], Double](start -> 0d)
+      val dist = mut.HashMap[Vec2[Int], Int](start -> 0)
 
-      val q = mut.PriorityQueue(start -> 0d)(using Ordering.by[(Vec2[Int], Double), Double](_._2).reverse)
+      val q = MinBinaryHeap[Vec2[Int], Int]()
+      q.insert(start, 0)
 
-      while q.nonEmpty && q.head._1 != goal do
-        val (current, score) = q.dequeue()
+      while q.nonEmpty && q.head =!= goal do
+        val (current, score) = q.extractWithPriority()
 
         current.cardinalNeighbors.filter(grid.get(_).contains(false)).foreach: neighbor =>
-          val alt = score + 1d
-          if alt < dist.getOrElse(neighbor, Double.PositiveInfinity) then
+          val alt = score + 1
+          if dist.get(neighbor).forall(alt < _) then
             cameFrom(neighbor) = current
             dist(neighbor) = alt
-            q.addOne(neighbor -> alt)
+            q.updatePriority(neighbor, alt)
 
-      q.headOption.map: (p, _) =>
+      q.headOption.map: p =>
         reconstructPath(cameFrom.toMap, p)
 
   case class RaceTrack(start: Vec2[Int], end: Vec2[Int], grid: Grid[Boolean]):

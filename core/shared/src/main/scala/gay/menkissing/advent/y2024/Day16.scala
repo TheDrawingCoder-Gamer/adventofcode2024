@@ -45,7 +45,7 @@ object Day16 extends Problem[Day16.ProblemState, Int]:
 
   case class ProblemState(reindeer: Reindeer, maze: Maze, end: Vec2[Int]):
     def getSolution: List[Reindeer] =
-      astarGeneric[Reindeer](reindeer, _.pos == end, _.pos.taxiDistance(end), _.edgeScore(_), maze.neighbors).get
+      astarGeneric[Reindeer](reindeer, _.pos == end, _.pos.taxiDistance(end).toDouble, _.edgeScore(_), maze.neighbors).get
 
     def getGoodSeats: Set[Vec2[Int]] =
       val paths = dijstraAll[Reindeer](reindeer, _.pos == end, _.edgeScore(_), maze.neighbors, (l, r) => l.pos == r.pos)

@@ -38,26 +38,28 @@ def astarByReturning[A, R](start: A, isGoal: A => Boolean, h: A => Double, d: (A
 
   val gscore = mutable.HashMap(start -> 0d)
 
+  // ts is broken in someway but im lowk too stupid to snow how
   val fscore = mutable.HashMap(start -> h(start))
 
-  val openSet = MinBinaryHeap[A]()
-  openSet.insert(start, h(start).toInt)
-  while (openSet.nonEmpty) {
-    val current = openSet.extract
-    val curScore = gscore(current)
+  val openSet = MinBinaryHeap[A, Double]()
+  openSet.insert(start, h(start))
+  while openSet.nonEmpty do
+    val (current, priority) = openSet.extractWithPriority()
+    
+    // if this is the shortest path found
+    if priority <= fscore(current) then
+      if isGoal(current) then
+        return Some(returning(cameFrom, current, gscore(current)))
+      neighbors(current).foreach: neighbor =>
+        val stinkyGScore = gscore(current) + d(current, neighbor)
+        if gscore.get(neighbor).forall(stinkyGScore < _) then
+          cameFrom(neighbor) = current 
+          gscore(neighbor) = stinkyGScore
+          val daFScore = stinkyGScore + h(neighbor)
+          fscore(neighbor) = daFScore
+          // let the filter above handle the case where its already in the queue
+          openSet.updatePriority(neighbor, daFScore)
 
-    if (isGoal(current)) 
-      return Some(returning(cameFrom, current, curScore))
-    for (neighbor <- neighbors(current)) {
-      val stinkyGScore = curScore + d(current, neighbor)
-      if (gscore.get(neighbor).forall(stinkyGScore < _)) {
-        cameFrom(neighbor) = current 
-        gscore(neighbor) = stinkyGScore
-        fscore(neighbor) = stinkyGScore + h(neighbor)
-        openSet.updatePriority(neighbor, BigInt(stinkyGScore.toLong))
-      }
-    }
-  }
 
   None
 
@@ -66,20 +68,22 @@ def dijstraByReturning[A, R](start: A, isGoal: A => Boolean, d: (A, A) => Double
 
   val gscore = mutable.HashMap(start -> 0d)
 
-  val openSet = MinBinaryHeap[A]()
-  openSet.insert(start, BigInt(0))
+  val openSet = MinBinaryHeap[A, Double]()
+  openSet.insert(start, 0d)
   
   while openSet.nonEmpty do
-    val current = openSet.extract
+    val (current, priority) = openSet.extractWithPriority()
     val curScore = gscore(current)
-    if isGoal(current) then
-      return Some(returning(cameFrom, current, curScore))
-    neighbors(current).foreach: neighbor =>
-      val stinkyGScore = curScore + d(current, neighbor)
-      if gscore.get(neighbor).forall(stinkyGScore < _) then
-        cameFrom(neighbor) = current
-        gscore(neighbor) = stinkyGScore
-        openSet.updatePriority(neighbor, BigInt(stinkyGScore.toLong))
+    
+    if curScore == priority then
+      if isGoal(current) then
+        return Some(returning(cameFrom, current, curScore))
+      neighbors(current).foreach: neighbor =>
+        val stinkyGScore = curScore + d(current, neighbor)
+        if gscore.get(neighbor).forall(stinkyGScore < _) then
+          cameFrom(neighbor) = current
+          gscore(neighbor) = stinkyGScore
+          openSet.updatePriority(neighbor, stinkyGScore)
 
   None
 

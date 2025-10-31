@@ -20,9 +20,9 @@ object Day18 extends ProblemAdv[List[Vec2[Int]], Int, Vec2[Int]]:
     val bytes = input.take(bytesFallen)
     val daGrid = bytes.foldLeft(Grid.fill(gridSize.x, gridSize.y)(false))((g, p) => g.updated(p)(true))
     val daEnd = Vec2(gridSize.x - 1, gridSize.y - 1)
-    val path = astar[Vec2[Int]](Vec2(0, 0), daEnd, _.taxiDistance(daEnd), (_, _) => 1d, _.cardinalNeighbors.filter(p => daGrid.get(p).contains(false))).get
+    val path = astarByReturning(Vec2(0, 0), _ == daEnd, _.taxiDistance(daEnd), (_, _) => 1d, _.cardinalNeighbors.filter(p => daGrid.get(p).contains(false)), SearchReturns.lengthFromPath).get
 
-    path.size - 1
+    path - 1
 
 
   extension[A] (ls: List[A]) {

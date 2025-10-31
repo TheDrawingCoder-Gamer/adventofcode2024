@@ -3,6 +3,8 @@ package y2021
 
 import gay.menkissing.common.*
 import cats.implicits.*
+import cats.derived.*
+import cats.*
 // import Vec2.*
 
 import scala.collection.mutable
@@ -11,7 +13,7 @@ import scala.collection.mutable
 // this weird type param list is so we don't have a `parse` method,
 // just `parseP1` and `parseP2`
 object Day23 extends ProblemUniqueInputs[Day23.State, Day23.State, Int]:
-  enum Amphipod(val cost: Int, val room: Int):
+  enum Amphipod(val cost: Int, val room: Int) derives Eq:
     case A extends Amphipod(1, 3)
     case B extends Amphipod(10, 5)
     case C extends Amphipod(100, 7)
@@ -35,7 +37,7 @@ object Day23 extends ProblemUniqueInputs[Day23.State, Day23.State, Int]:
     Vec2(11, 1)
   )
 
-  case class State(amphipods: Map[Vec2[Int], Amphipod], roomSize: Int):
+  case class State(amphipods: Map[Vec2[Int], Amphipod], roomSize: Int) derives Eq:
     def isGoal: Boolean =
       amphipods.forall((pos, amphipod) => pos.x == amphipod.room)
 
@@ -89,20 +91,22 @@ object Day23 extends ProblemUniqueInputs[Day23.State, Day23.State, Int]:
 
     val gscore = mutable.HashMap(start -> 0)
 
-    val openSet = mutable.PriorityQueue((start, 0))(using Ordering.by[(State, Int), Int](_._2).reverse)
+    val openSet = MinBinaryHeap[State, Int]()
+    openSet.insert(start, 0)
     while (openSet.nonEmpty) {
-      val (current, curEnergy) = openSet.dequeue()
-
+      val (current, curEnergy) = openSet.extractWithPriority()
       if (current.isGoal) 
-        return Some(curEnergy)
-      for ((neighbor, nEnergy) <- current.neighbors) {
-        val stinkyGScore = curEnergy + nEnergy
-        if (stinkyGScore < gscore.getOrElse(neighbor, Int.MaxValue)) {
-          gscore(neighbor) = stinkyGScore
-          if (!openSet.exists(_._1 == neighbor)) 
-            openSet.enqueue((neighbor, stinkyGScore))
+        return Some(gscore(current))
+      // if no shorter path was found yet
+      if curEnergy == gscore(current) then
+        for ((neighbor, nEnergy) <- current.neighbors) {
+          val stinkyGScore = curEnergy + nEnergy
+          if (stinkyGScore < gscore.getOrElse(neighbor, Int.MaxValue)) {
+            gscore(neighbor) = stinkyGScore
+            // `updatePriority` is VERY expensive, so try to avoid using it by checking earlier
+            openSet.insert(neighbor, stinkyGScore)
+          }
         }
-      }
     }
 
     None

@@ -38,8 +38,6 @@ object Day12 extends Problem[(Vec2[Int], Vec2[Int], Day12.MountainMap), Int] {
     def zipWithIndex: Seq[(Byte, Vec2[Int])] = grid.zipWithIndices
   }
 
-  def manhattanDistance(v1: Vec2[Int], v2: Vec2[Int]) = Math.abs(v1.x - v2.x) + Math.abs(v1.y - v2.y)
-
 
   def neighbors(p: Vec2[Int]): List[Vec2[Int]] = 
     Direction2D.values.map(it => p.offset(it)).toList
@@ -77,12 +75,12 @@ object Day12 extends Problem[(Vec2[Int], Vec2[Int], Day12.MountainMap), Int] {
   lazy val input = FileIO.getInput(2022, 12)
   def part1(input: (Vec2[Int], Vec2[Int], MountainMap)): Int =
     val (start, end, graph) = input
-    astar(start, end, it => manhattanDistance(end, it), (_, _) => 1.0, graph.neighborVerts).get.length - 1
+    astar(start, end, _.taxiDistance(end), (_, _) => 1.0, graph.neighborVerts).get.length - 1
 
   def part2(input: (Vec2[Int], Vec2[Int], MountainMap)): Int = {
     val (_, end, graph) = input
     val starts = graph.zipWithIndex.flatMap((i, p) => Option.when(i == 0)(p))
-    starts.flatMap(start => astar[Vec2[Int]](start, end, it => manhattanDistance(end, it), (_, _) => 1.0, graph.neighborVerts).map(_.length)).min - 1
+    starts.flatMap(start => astar[Vec2[Int]](start, end, _.taxiDistance(end), (_, _) => 1.0, graph.neighborVerts).map(_.length)).min - 1
 
   }
 }

@@ -6,8 +6,8 @@ import cats.syntax.all.*
 
 import annotation.tailrec
 
-final class MinBinaryHeap[A]:
-  val backing: mutable.ArrayBuffer[(A, BigInt)] = mutable.ArrayBuffer()
+final class MinBinaryHeap[A, @specialized(Specializable.AllNumeric) S](using ord: Order[S]):
+  val backing: mutable.ArrayBuffer[(A, S)] = mutable.ArrayBuffer()
 
   @tailrec
   private def bubbleUp(p: Int): Unit =
@@ -36,18 +36,19 @@ final class MinBinaryHeap[A]:
       backing(smallest) = backing(p)
       backing(p) = v
       siftDown(smallest)
-  def insert(n: A, priority: BigInt): this.type =
+      
+  def insert(n: A, priority: S): this.type =
     // first, append that thang :joy:
     backing.append((n, priority))
     // then bubble up that thang :joy:
     bubbleUp(backing.length - 1)
     this
 
-  def extract: A =
+  def extractWithPriority(): (A, S) =
     // for degenerate case of backing.length == 1
     if backing.length == 1 then
       val r = backing.remove(0)
-      r._1
+      r
     else
       // first, get the last element & the head
       val last = backing.remove(backing.length - 1)
@@ -56,14 +57,19 @@ final class MinBinaryHeap[A]:
       backing.prepend(last)
       // then sift down to preserve the heap property
       siftDown(0)
-      head._1
-
-  def updatePriority(n: A, value: BigInt)(using Eq[A]): this.type =
+      head
+  def extract(): A =
+    extractWithPriority()._1
+  def head: A =
+    backing(0)._1
+  def headOption: Option[A] =
+    Option.when(backing.nonEmpty)(backing(0)._1)
+  def updatePriority(n: A, value: S)(using Eq[A]): this.type =
     val p = backing.indexWhere(_._1 === n)
     if p < 0 then
       return insert(n, value)
     val (q, realScore) = backing(p)
-    if value == realScore then
+    if value === realScore then
       ()
     else if value < realScore then
       // in a min heap, when decreasing a key, we bubble up

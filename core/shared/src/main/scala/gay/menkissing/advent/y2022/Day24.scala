@@ -26,8 +26,8 @@ object Day24 extends Problem[Day24.BlizzardMap, Int] {
   class State {
     val memo = mut.HashMap[Int, BlizzardMap]()
 
-    def freakstar(start: TimeLocation, goal: Vec2[Int]): Option[List[TimeLocation]] =
-      astarGeneric[TimeLocation](start, _.loc == goal, _.loc.taxiDistance(goal), (_, _) => 1d, it => neighbors(memo(it.time), it))
+    def freakstar(start: TimeLocation, goal: Vec2[Int]): Option[TimeLocation] =
+      astarByReturning(start, _.loc == goal, _.loc.taxiDistance(goal), (_, _) => 1d, it => neighbors(memo(it.time), it), (_, cur, _) => cur)
 
     def daAStar(start: Vec2[Int], goal: Vec2[Int]) = freakstar(TimeLocation(0, start), goal)
     def nextMap(blizzards: BlizzardMap, time: Int): BlizzardMap = {
@@ -127,7 +127,7 @@ object Day24 extends Problem[Day24.BlizzardMap, Int] {
     state.memo.put(0, data)
     val start = Vec2(data.rows.head.indexOf(Empty), 0)
     val end = Vec2(data.rows.last.indexOf(Empty), data.height - 1)
-    state.daAStar(start, end).get.size - 1
+    state.daAStar(start, end).get.time
 
   }
 
@@ -136,9 +136,9 @@ object Day24 extends Problem[Day24.BlizzardMap, Int] {
     state.memo.put(0, data)
     val start = Vec2(data.rows.head.indexOf(Empty), 0)
     val end = Vec2(data.rows.last.indexOf(Empty), data.height - 1)
-    val firstPath = state.daAStar(start, end).get
-    val secondPath = state.freakstar(firstPath.last, start).get
-    val thirdPath = state.freakstar(secondPath.last, end).get
-    (firstPath.size - 1) + (secondPath.size - 1) + (thirdPath.size - 1)
+    val firstEnd = state.daAStar(start, end).get
+    val secondEnd = state.freakstar(firstEnd, start).get
+    val thirdEnd = state.freakstar(secondEnd, end).get
+    thirdEnd.time
   }
 }

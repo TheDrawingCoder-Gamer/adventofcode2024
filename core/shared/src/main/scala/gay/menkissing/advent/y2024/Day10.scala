@@ -22,7 +22,7 @@ object Day10 extends Problem[Grid[Int], Int]:
   
   def scoreTrail(grid: Grid[Int], start: Vec2[Int], endNodes: Seq[Vec2[Int]]): Int = {
     endNodes.collect(Function.unlift { it =>
-      astar[Vec2[Int]](start, it, c => c.taxiDistance(it), (l, r) => if (grid(r) - grid(l) == 1) 1.0 else Double.PositiveInfinity, i => neighbors(grid, i))
+      astar[Vec2[Int]](start, it, _.taxiDistance(it), (l, r) => if (grid(r) - grid(l) == 1) 1.0 else Double.PositiveInfinity, i => neighbors(grid, i))
     }).size
   }
   
