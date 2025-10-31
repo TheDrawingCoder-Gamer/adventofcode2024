@@ -11,11 +11,9 @@ object Day11 extends Problem[String, String]:
     val ls = input.toList.zipWithIndex.sliding2.flatMap:
       case ((a, i), (b, j)) =>
         Option.when(a == b)(a.toString + b.toString, List(i, j))
-    input.forall {
-      case 'i' | 'o' | 'l' => false
-      case _ => true
-    } && ls.exists((a, i) => ls.exists((b, j) => a != b && i.intersect(j).isEmpty))
-      && input.toList.sliding3.exists: (a, b, c) =>
+    input.forall("iol".contains)
+    && ls.exists((a, i) => ls.exists((b, j) => a != b && i.intersect(j).isEmpty))
+    && input.toList.sliding3.exists: (a, b, c) =>
         c - b == 1 && b - a == 1
   def advance(input: String): String =
     val arr = input.getBytes("US-ASCII")

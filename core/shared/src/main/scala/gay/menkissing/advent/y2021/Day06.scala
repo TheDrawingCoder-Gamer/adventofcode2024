@@ -7,7 +7,7 @@ object Day06 extends Problem[Vector[Int], Long]:
   type FishMap = Map[Int, Long]
 
   def naiveAdvance(fish: Vector[Int]): Vector[Int] =
-    fish.map {
+    fish.map:
       case 0 => 6
       case 1 => 0
       case 2 => 1
@@ -18,7 +18,7 @@ object Day06 extends Problem[Vector[Int], Long]:
       case 7 => 6
       case 8 => 7
       case _ => assert(false)
-    }.prependedAll(List.fill(fish.count(_ == 0))(8))
+    .prependedAll(List.fill(fish.count(_ == 0))(8))
 
   override def parse(str: String): Vector[Int] =
     str.split(",").map(_.toInt).toVector

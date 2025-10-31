@@ -21,6 +21,8 @@ object Day14 extends Problem[List[Day14.Reindeer], Int]:
   object ReindeerState:
     def apply(reindeer: Reindeer): ReindeerState =
       ReindeerState(0, reindeer.active, 0, reindeer)
+    
+    def advanced(self: ReindeerState): ReindeerState = self.advance
 
   def parse(str: String): List[Day14.Reindeer] =
     str.linesIterator.map:
@@ -35,11 +37,11 @@ object Day14 extends Problem[List[Day14.Reindeer], Int]:
 
   def part1(input: List[Reindeer]): Int =
     val states = input.map(ReindeerState.apply)
-    states.map( { (it: ReindeerState) => it.advance}.repeated(2503) ).maxBy(_.pos).pos
+    states.map(ReindeerState.advanced.repeated(2503)).maxBy(_.pos).pos
 
   def part2(input: List[Reindeer]): Int =
     val states = input.map(ReindeerState.apply)
-    val fun = { (it: List[ReindeerState]) => updateMaxes(it.map(_.advance))}
+    val fun = (it: List[ReindeerState]) => updateMaxes(it.map(_.advance))
     fun.repeated(2503)(states).maxBy(_.point).point
 
 

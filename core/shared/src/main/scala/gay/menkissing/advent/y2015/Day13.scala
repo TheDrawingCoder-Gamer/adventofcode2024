@@ -20,11 +20,12 @@ object Day13 extends Problem[List[((String, String), Int)], Int]:
     var i = 0
 
     def getID(s: String): Int =
-      seen.getOrElseUpdate(s, {
-        val hold = i
-        i += 1
-        hold
-      })
+      seen.getOrElseUpdate(s,
+        locally:
+          val hold = i
+          i += 1
+          hold
+      )
 
     val x =
       in.map:
