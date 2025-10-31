@@ -1,7 +1,7 @@
 package gay.menkissing.advent
 package y2023
 
-object Day06 extends ProblemUniqueInputs[List[(Long, Long)], (Long, Long), Long] {
+object Day06 extends ProblemUniqueInputs[List[(Long, Long)], (Long, Long), Long]:
 
   override lazy val input: String = FileIO.getInput(2023, 6)
 
@@ -38,4 +38,4 @@ object Day06 extends ProblemUniqueInputs[List[(Long, Long)], (Long, Long), Long]
     val (time, distance) = input
     // IT JUST WORKS:tm:
     naiveFindBounds(time, distance)
-}
+

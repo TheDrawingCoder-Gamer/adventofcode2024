@@ -17,10 +17,11 @@ object Day05 extends Problem[(List[Long], NonEmptyList[NonEmptyList[Day05.MapRan
         r.map(g).reduce.addLeft(l)
 
   case class MapRange(destStart: Long, srcStart: Long, len: Long):
-    val single: PartialFunction[Long, Long] = {
+    val single: PartialFunction[Long, Long] =
+      // ok i geniunely didnt know u could drop the brackets around partial functions
+      // the more you know?
       case x if x >= srcStart && x < (srcStart + len) =>
         (x - srcStart) + destStart
-    }
     val singleOpt = single.lift
     // Left represents mapped, Right is unmapped
     def range(t: (Long, Long)): RangeResult =

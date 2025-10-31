@@ -39,11 +39,11 @@ object Day03 extends Problem[Grid[Char], Int]:
           case _ => None
       val left = go(pos.copy(x = pos.x - 1), true)
       val right = go(pos, false)
-      right.map { r =>
-        left match
-          case None => r
-          case Some(Number(lv, ls, lp)) => Number(lv * math.pow(10, r.size).toInt + r.n, ls + r.size, lp)
-      }
+      left match
+        case None => right
+        case Some(Number(lv, ls, lp)) =>
+          right.map: r =>
+            Number(lv * math.pow(10, r.size).toInt + r.n, ls + r.size, lp)
 
   def part1(input: Grid[Char]): Int =
     input.symbols.flatMap: (_, p) =>

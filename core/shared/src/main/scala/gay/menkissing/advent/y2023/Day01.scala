@@ -5,6 +5,8 @@ import cats.*
 import cats.syntax.all.*
 import scala.io.Source
 import scala.util.matching.Regex
+import gay.menkissing.common.*
+
 object Day01 extends Problem[Vector[String], Int]:
 
 
@@ -19,7 +21,7 @@ object Day01 extends Problem[Vector[String], Int]:
     .sum
 
   def nameToInt(name: String) =
-    name match {
+    name match
       case "one" => 1
       case "two" => 2
       case "three" => 3
@@ -30,15 +32,12 @@ object Day01 extends Problem[Vector[String], Int]:
       case "eight" => 8
       case "nine" => 9
       case _ => ???
-    }
   // sinful
   extension (regex: Regex)
-    def findLastMatchIn(line: String) = {
+    def findLastMatchIn(line: String) =
       // :troll:
-      (1 to line.length).collectFirst({ (n: Int) =>
+      (1 to line.length).iterator.findMap: n =>
         regex.findFirstMatchIn(line.takeRight(n))
-      }.unlift)
-    }
   val regex = "(one|two|three|four|five|six|seven|eight|nine|[1-9])".r
 
   def part2(input: Vector[String]): Int =
