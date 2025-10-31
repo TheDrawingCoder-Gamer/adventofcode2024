@@ -7,15 +7,19 @@ import scala.collection.mutable as mut
 import spire.implicits.IntAlgebra
 import cats.*
 import cats.derived.*
+import cats.syntax.all.*
 
 /** 
  * This class is NOT thread safe!
  */
-object Day24 extends Problem[Day24.BlizzardMap, Int] {
+object Day24 extends Problem[Day24.BlizzardMap, Int]:
   lazy val input = FileIO.getInput(2022, 24)
 
   sealed trait BlizzardMapPoint
-  case class BlizzardSpot(blizzards: List[Direction2D]) extends BlizzardMapPoint 
+  case class BlizzardSpot(blizzards: List[Direction2D]) extends BlizzardMapPoint
+  object BlizzardSpot:
+    def one(dir: Direction2D): BlizzardSpot = BlizzardSpot(List(dir))
+
   case object Wall extends BlizzardMapPoint
   case object Empty extends BlizzardMapPoint  
 
@@ -23,33 +27,28 @@ object Day24 extends Problem[Day24.BlizzardMap, Int] {
   
   type BlizzardMap = Grid[BlizzardMapPoint]
 
-  class State {
+  class State:
     val memo = mut.HashMap[Int, BlizzardMap]()
 
     def freakstar(start: TimeLocation, goal: Vec2[Int]): Option[TimeLocation] =
       astarByReturning(start, _.loc == goal, _.loc.taxiDistance(goal), (_, _) => 1d, it => neighbors(memo(it.time), it), (_, cur, _) => cur)
 
     def daAStar(start: Vec2[Int], goal: Vec2[Int]) = freakstar(TimeLocation(0, start), goal)
-    def nextMap(blizzards: BlizzardMap, time: Int): BlizzardMap = {
-      if (memo.contains(time))
+    def nextMap(blizzards: BlizzardMap, time: Int): BlizzardMap =
+      if memo.contains(time) then
         return memo(time)
       val daThingie =
-        (for {
-          yy <- 0 until blizzards.height
-          xx <- 0 until blizzards.width
-        } yield {
-          val spot = blizzards(xx, yy)
+        blizzards.zipWithIndices.map: (spot, v) =>
           spot match
             case BlizzardSpot(blizzards) =>
-              Some(blizzards.map(it => (Vec2(xx, yy), it)))
+              Some(blizzards.map(it => (v, it)))
             case _ => None
-
-        }).flatten.flatten
+        .flatten.flatten
       val newPoses =
-        daThingie.map { (pos, dir) =>
+        daThingie.map: (pos, dir) =>
           val newPos = pos.offset(dir)
           val goodPos =
-            if (blizzards.getOrElse(newPos, Wall) == Wall)
+            if blizzards.getOrElse(newPos, Wall) == Wall then
               dir match
                 case Direction2D.Up =>
                   newPos.copy(y = blizzards.extractColumn(pos.x).lastIndexWhere(_ != Wall))
@@ -57,81 +56,61 @@ object Day24 extends Problem[Day24.BlizzardMap, Int] {
                   newPos.copy(y = blizzards.extractColumn(pos.x).indexWhere(_ != Wall))
                 case Direction2D.Left =>
                   newPos.copy(x = blizzards.extractRow(pos.y).lastIndexWhere(_ != Wall))
-
                 case Direction2D.Right =>
                   newPos.copy(x = blizzards.extractRow(pos.y).indexWhere(_ != Wall))
             else
               newPos
           (goodPos, dir)
-        }
       val daMap = newPoses.groupMap(_._1)(_._2).mapValues(_.toList)
-      var newGrid = Grid(blizzards.flatten.map {
-        case BlizzardSpot(blizzards) => Empty
-        case self => self
-      }, blizzards.width)
-      for {
-        (k, v) <- daMap
-      } {
+      var newGrid = 
+        blizzards.map:
+          case BlizzardSpot(_) => Empty
+          case self => self
+      daMap.foreach: (k, v) =>
         val cur = newGrid(k)
         val newSpot = cur match
           case BlizzardSpot(blizzards) => BlizzardSpot(blizzards ++ v)
           case Wall => ???
           case Empty => BlizzardSpot(v)
-
+        
         newGrid = newGrid.updated(k)(newSpot)
-      }
+
       memo.put(time, newGrid)
       newGrid
-    }
 
-    def neighbors(blizzards: BlizzardMap, pos: TimeLocation) = {
+    def neighbors(blizzards: BlizzardMap, pos: TimeLocation) =
       val newMap = nextMap(blizzards, pos.time + 1)
-      val daDirs = (for {
-        p <- Direction2D.values.map(it => pos.loc.offset(it)).toList.prepended(pos.loc)
-      } yield {
-        newMap.get(p).flatMap {
-          case Empty => Some(pos.copy(loc = p, time = pos.time + 1))
-          case _ => None
-        }
-
-      }).flatten
-
+      val daDirs = 
+        pos.loc.cardinalNeighbors.prepended(pos.loc).flatMap: p =>
+          newMap.get(p).flatMap:
+            case Empty => Some(pos.copy(loc = p, time = pos.time + 1))
+            case _ => None
       daDirs
 
-    }
-  }
 
 
 
 
 
 
+  def parse(input: String): BlizzardMap =
+    Grid.fromString(input):
+      case '.' => Empty
+      case '#' => Wall
+      case '^' => BlizzardSpot.one(Direction2D.Up)
+      case 'v' => BlizzardSpot.one(Direction2D.Down)
+      case '<' => BlizzardSpot.one(Direction2D.Left)
+      case '>' => BlizzardSpot.one(Direction2D.Right)
+      case _ => whatTheScallop.!
 
-  def parse(input: String): BlizzardMap = {
-    val points = input.linesIterator.map {
-      _.map {
-        case '.' => Empty 
-        case '#' => Wall 
-        case '^' => BlizzardSpot(List(Direction2D.Up))
-        case 'v' => BlizzardSpot(List(Direction2D.Down))
-        case '<' => BlizzardSpot(List(Direction2D.Left))
-        case '>' => BlizzardSpot(List(Direction2D.Right))
-        case _ => ???
-      }
-    }
-    Grid(points)
-  }
-
-  def part1(data: BlizzardMap): Int = {
+  def part1(data: BlizzardMap): Int =
     val state = new State
     state.memo.put(0, data)
     val start = Vec2(data.rows.head.indexOf(Empty), 0)
     val end = Vec2(data.rows.last.indexOf(Empty), data.height - 1)
     state.daAStar(start, end).get.time
 
-  }
-
-  def part2(data: BlizzardMap): Int = {
+  def part2(data: BlizzardMap): Int =
     val state = new State
     state.memo.put(0, data)
     val start = Vec2(data.rows.head.indexOf(Empty), 0)
@@ -140,5 +119,4 @@ object Day24 extends Problem[Day24.BlizzardMap, Int] {
     val secondEnd = state.freakstar(firstEnd, start).get
     val thirdEnd = state.freakstar(secondEnd, end).get
     thirdEnd.time
-  }
-}
+

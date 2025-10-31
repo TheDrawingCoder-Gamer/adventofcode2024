@@ -5,15 +5,14 @@ import gay.menkissing.advent.FileIO
 import gay.menkissing.common.*
 
 import scala.collection.mutable as mut
-import scala.io.Source
 import cats.*
 import cats.syntax.all.*
 
 object Day16 extends Problem[Day16.ValveMap, Int]:
   val fullTimeP2 = 26
-  case class ValveRoom(room: String, flowRate: Int, connectsTo: Vector[String]) {
+  // valve?
+  case class ValveRoom(room: String, flowRate: Int, connectsTo: Vector[String]):
     def value(time: Int, fullTime: Int) = flowRate * (fullTime - time )
-  }
 
   type ValveMap = Map[String, ValveRoom]
 
@@ -22,15 +21,13 @@ object Day16 extends Problem[Day16.ValveMap, Int]:
   lazy val input = FileIO.getInput(2022, 16)
 
   def parse(input: String): ValveMap =
-    input.trim.linesIterator.map { it =>
-      it.trim match {
-        case s"Valve $room has flow rate=$n; tunnel$_ lead$_ to valve$_ $rest" =>
-          val goodRest = rest.split(",").map(_.trim).toVector
-          ValveRoom(room, n.toInt, goodRest)
+    input.trim.linesIterator.map:
+      case s"Valve $room has flow rate=$n; tunnel$_ lead$_ to valve$_ $rest" =>
+        val goodRest = rest.split(",").map(_.trim).toVector
+        ValveRoom(room, n.toInt, goodRest)
 
-        case _ => assert(false)
-      }
-    }.map(it => (it.room, it)).toMap
+      case _ => whatTheScallop.!
+    .map(it => (it.room, it)).toMap
 
   private val distanceMemo = mut.HashMap[String, Int]()
 
@@ -49,21 +46,18 @@ object Day16 extends Problem[Day16.ValveMap, Int]:
   def importantRooms(rooms: ValveMap, on: List[String]) = rooms.filter((k, v) => v.flowRate != 0 && !on.contains(k)).values.toVector
 
 
-  def graphAStar(start: String, goal: String, graph: ValveMap): Option[Int] = {
+  def graphAStar(start: String, goal: String, graph: ValveMap): Option[Int] =
     dijstraByReturning(start, _ === goal, (_, _) => 1d, it => graph(it).connectsTo, SearchReturns.lengthFromPath)
-  }
 
-  def runP1(data: Map[String, ValveRoom], rooms: Set[ValveRoom], curPos: ValveRoom, fullTime: Int, time: Int, pressure: Int): Int = {
-    val res = rooms.flatMap { room =>
+  def runP1(data: Map[String, ValveRoom], rooms: Set[ValveRoom], curPos: ValveRoom, fullTime: Int, time: Int, pressure: Int): Int =
+    val res = rooms.flatMap: room =>
       // includes current, and nodes to get there. no minus 1 because of valve turning
       val timeTaken = data.distance(curPos.room, room.room)
       val goodTime = time + timeTaken
-      Option.when(goodTime <= fullTime) {
+      Option.when(goodTime <= fullTime):
         runP1(data, rooms - room, room, fullTime, goodTime, pressure + room.value(goodTime, fullTime))
-      }
-    }.maxOption
+    .maxOption
     res.getOrElse(pressure)
-  }
 
 
   def part1(input: ValveMap): Int =
@@ -79,7 +73,7 @@ object Day16 extends Problem[Day16.ValveMap, Int]:
       .map(_.toSet)
 
     val allPaths =
-      for va <- valvesA yield
+      valvesA.map: va =>
         val vb = importantSet -- va
         val scoreA = runP1(input, va, input.startRoom, 26, 0, 0)
         val scoreB = runP1(input, vb, input.startRoom, 26, 0, 0)

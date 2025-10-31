@@ -4,16 +4,16 @@ package y2022
 import gay.menkissing.common.*
 import spire.implicits.IntAlgebra
 
-object Day23 extends Problem[Grid[Boolean], Int] {
+object Day23 extends Problem[Grid[Boolean], Int]:
   type ElfGrid =  Grid[Boolean]
 
   case class Elf(current: Vec2[Int], proposal: Option[Vec2[Int]])
 
   val order: Vector[Direction2D] = Vector(Direction2D.Up, Direction2D.Down, Direction2D.Left, Direction2D.Right)
 
-  def propose(grid: ElfGrid, moveOffset: Int, pos: Vec2[Int]): (Vec2[Int], Vec2[Int]) = {
-    if (!grid(pos)) return pos -> pos
-    if (!pos.allNeighbors.exists(p => grid.getOrElse(p, false))) return pos -> pos
+  def propose(grid: ElfGrid, moveOffset: Int, pos: Vec2[Int]): (Vec2[Int], Vec2[Int]) =
+    if !grid(pos) then return pos -> pos
+    if !pos.allNeighbors.exists(p => grid.getOrElse(p, false)) then return pos -> pos
 
     val noe = grid.getOrElse(Vec2(pos.x + 1, pos.y - 1), false)
     val n = grid.getOrElse(pos.copy(y = pos.y - 1), false)
@@ -27,43 +27,36 @@ object Day23 extends Problem[Grid[Boolean], Int] {
     val southValid = !se && !s && !sw 
     val eastValid = !se && !e && !noe 
     val westValid = !sw && !w && !nw
-    (0 until 4).map(order.access(moveOffset)).find { it =>
+    (0 until 4).map(order.access(moveOffset)).find: it =>
       it match
         case Direction2D.Up => northValid 
         case Direction2D.Down => southValid 
         case Direction2D.Left => westValid 
-        case Direction2D.Right => eastValid 
-      
-    }.map(i => pos -> pos.offset(i)).getOrElse(pos -> pos)
-  }
-  def round(grid: ElfGrid, moveOffset: Int): (ElfGrid, Boolean) = {
+        case Direction2D.Right => eastValid   
+    .map(i => pos -> pos.offset(i)).getOrElse(pos -> pos)
+  def round(grid: ElfGrid, moveOffset: Int): (ElfGrid, Boolean) =
     val elfs =
-      for {
+      for
         y <- 0 until grid.height
         x <- 0 until grid.width if grid(x, y)
-      } yield {
-        propose(grid, moveOffset, Vec2(x, y))
-      }
-    val daProposals = elfs.filter((x, y) => x != y).groupBy(_._2)
+      yield propose(grid, moveOffset, Vec2(x, y))
+      
+    val daProposals = elfs.filter(_ != _).groupBy(_._2)
     val goodPositions = daProposals.filter(_._2.lengthCompare(1) == 0).map((x, y) => y.head)
     if goodPositions.isEmpty then
       (grid, true)
     else
       var daGrid = grid.expand(false)(1)
-      for {
-        (from, to) <- goodPositions
-      } do {
-        daGrid = daGrid.updated(from + Vec2(1, 1))(false).updated(to + Vec2(1, 1))(true)
-      }
+      goodPositions.foreach: 
+        case (from, to) =>
+          daGrid = daGrid.updated(from + Vec2(1, 1))(false).updated(to + Vec2(1, 1))(true)
 
       (daGrid, false)
-  }
-  def parse(input: String): ElfGrid = {
-    Grid[Boolean](input.linesIterator.map(_.map {
-      case '#' => true 
-      case _ => false 
-    }))
-  }
+  def parse(input: String): ElfGrid =
+    Grid.fromString(input):
+      case '#' => true
+      case '.' => false
+      case _ => whatTheScallop.!
   extension (elfGrid: ElfGrid)
     def sliced: Grid[Boolean] =
       val rows = elfGrid.rows
@@ -76,7 +69,7 @@ object Day23 extends Problem[Grid[Boolean], Int] {
       // println(prettyShowBoolGrid(resGrid))
       elfGrid.slice(Vec2(leftBound, topBound), Vec2(rightBound, botBound))
 
-  def part1(grid: ElfGrid): Int = {
+  def part1(grid: ElfGrid): Int =
     //println(prettyShowBoolGrid(grid))
     
     val (resGrid, _) = (0 until 10).foldLeft((grid, 0)):
@@ -87,24 +80,20 @@ object Day23 extends Problem[Grid[Boolean], Int] {
 
     
     resGrid.sliced.flatten.count(!_)
-  }
 
   extension (order: Vector[Direction2D])
     def access(offset: Int)(idx: Int): Direction2D = order((idx + offset) % 4)
 
-  def part2(grid:ElfGrid): Int = {
+  def part2(grid:ElfGrid): Int =
     Iterator.iterate((grid, 0, false)): (grid, offset, _) =>
       val (newGrid, didntMove) = round(grid, offset)
       (newGrid, (offset + 1) % 4, didntMove)
     .indexWhere(_._3)
-  }
 
-  def prettyShowBoolGrid(grid: Grid[Boolean]): String = {
-    grid.rows.map { it => 
-      it.map(if (_) '#' else '.').mkString 
-    }.foldLeft("")(_ + "\n" + _)
-  }
+  def prettyShowBoolGrid(grid: Grid[Boolean]): String =
+    grid.rows.map: it => 
+      it.map(if _ then '#' else '.').mkString 
+    .foldLeft("")(_ + "\n" + _)
 
   override lazy val input: String = FileIO.getInput(2022, 23)
 
-}

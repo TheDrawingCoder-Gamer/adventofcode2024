@@ -12,28 +12,21 @@ import spire.implicits.IntAlgebra
 
 // TODO: Unacceptably slow on JS
 object Day15 extends Problem[Set[Day15.SensorRanged], Long]:
-  case class SensorRanged(pos: Vec2[Int], beacon: Vec2[Int]) {
+  case class SensorRanged(pos: Vec2[Int], beacon: Vec2[Int]):
     val range = pos `taxiDistance` beacon
 
-    def rangeForRow(row: Int): Option[Range[Int]] = {
+    def rangeForRow(row: Int): Option[Range[Int]] =
       val diff = math.abs(pos.y - row)
       val newRange = range - diff
-      if (newRange <= 0)
-        None
-      else
-        Some(Range(pos.x - newRange, pos.x + newRange))
-    }
+      Option.unless(newRange <= 0)(Range(pos.x - newRange, pos.x + newRange))
 
-  }
-
-  class RangeGrid(values: Set[SensorRanged]) {
-    def getRow(row: Int): Diet[Int] = {
+  class RangeGrid(values: Set[SensorRanged]):
+    def getRow(row: Int): Diet[Int] =
       values.foldLeft(Diet.empty[Int]):
         case (acc, ls) =>
           ls.rangeForRow(row) match
             case Some(v) => acc + v
             case _ => acc
-    }
 
     private def trivialEmptySpotsDiet(row: Int): Diet[Int] =
       var diet = Diet.fromRange(Range(0, max))
@@ -46,7 +39,7 @@ object Day15 extends Problem[Set[Day15.SensorRanged], Long]:
     def beaconsOnLine(row: Int): Set[Int] =
       values.withFilter(_.beacon.y == row).map(_.beacon.x)
 
-    def findValidPos(max: Int): Option[Vec2[Int]] = {
+    def findValidPos(max: Int): Option[Vec2[Int]] =
       (0 to max).findMap: y =>
         // by never calling `getRow`, i save like 16s
         // because that is VERY expensive
@@ -59,18 +52,17 @@ object Day15 extends Problem[Set[Day15.SensorRanged], Long]:
 
         else
           None
-    }
-  }
+
 
   lazy val input = FileIO.getInput(2022, 15)
 
 
   def parse(input: String): Set[SensorRanged] =
-    input.linesIterator.map {
+    input.linesIterator.map:
       case s"Sensor at x=$sx, y=$sy: closest beacon is at x=$bx, y=$by" => SensorRanged(Vec2(sx.toInt, sy
         .toInt), Vec2(bx.toInt, by.toInt))
-      case _ => assert(false)
-    }.toSet
+      case _ => whatTheScallop.!
+    .toSet
 
   val max = 4000000
 

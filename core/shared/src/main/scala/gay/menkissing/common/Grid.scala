@@ -185,6 +185,9 @@ object Grid {
   def fromSparse[A](x: Int, y: Int, map: Map[Vec2[Int], A])(default: => A) =
     Grid[A](Vector.tabulate(y, x)((y, x) => map.getOrElse(Vec2(x, y), default)))
   
+  def fromStringWithIndex[A](str: String)(fn: (Vec2[Int], Char) => A): Grid[A] =
+    Grid(str.linesIterator.zipWithIndex.map((s, y) => s.zipWithIndex.map((c, x) => fn(Vec2(x, y), c))))
+
   def fromString[A](str: String)(fn: Char => A): Grid[A] = Grid(str.linesIterator.map(_.map(fn)))
 
   given gridShow[A](using s: Show[A]): Show[Grid[A]] with {

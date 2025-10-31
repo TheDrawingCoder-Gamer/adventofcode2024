@@ -58,7 +58,7 @@ object Day10 extends ProblemAdv[List[Day10.Operation], Int, String]:
     (newCpu, newCpu)
   }
 
-  def getCycle(cpus: Vector[CPU])(c: Int): CPU = {
+  def getCycle(cpus: Vector[CPU])(c: Int): CPU =
 
     lazy val firstIndex = cpus.indexWhere(_.tick >= c)
 
@@ -66,11 +66,10 @@ object Day10 extends ProblemAdv[List[Day10.Operation], Int, String]:
       cpus.last
     else
       cpus.get(firstIndex - 1).getOrElse(CPU(0, 1))
-  }
-  def getAndNormalize(cpus: Vector[CPU])(c: Int): CPU = {
+
+  def getAndNormalize(cpus: Vector[CPU])(c: Int): CPU =
     val cpu = getCycle(cpus)(c)
     cpu.copy(tick = c)
-  }
   def signalStrengthPart1(cycle: Int)(cpu: CPU): Int =
     cycle * cpu.register
 
@@ -91,22 +90,20 @@ object Day10 extends ProblemAdv[List[Day10.Operation], Int, String]:
   // This works. Why.
   def part2(input: List[Operation]): String =
     val cpus = generateCpus(input)
-    val normalizedCpus = {
+    val normalizedCpus =
       val lastCycle = cpus.last.tick
       (1 to math.min(lastCycle, 240)).map(getAndNormalize(cpus)).toVector
-    }
     val solved2 = normalizedCpus.traverse(processCPU).map(_.last)
     val crt = solved2.runA(Grid[Boolean](List.fill(6, 40)(false))).value
     prettyShowBoolGrid(crt)
-  def processCPU(cpu: CPU): State[CRT, CRT] = State { crt =>
-    val zeroTick = cpu.tick - 1
-    val good = (cpu.register - 1 to cpu.register + 1).contains(zeroTick % crt.width)
-    val newCrt = crt.updated(zeroTick)(good)
-    (newCrt, newCrt)
-  }
+  def processCPU(cpu: CPU): State[CRT, CRT] = 
+    State: crt =>
+      val zeroTick = cpu.tick - 1
+      val good = (cpu.register - 1 to cpu.register + 1).contains(zeroTick % crt.width)
+      val newCrt = crt.updated(zeroTick)(good)
+      (newCrt, newCrt)
 
-  def prettyShowBoolGrid(grid: Grid[Boolean]): String = {
-    grid.rows.map { it =>
+  def prettyShowBoolGrid(grid: Grid[Boolean]): String =
+    grid.rows.map: it =>
       it.map(if (_) '#' else '.').mkString
-    }.mkString("\n")
-  }
+    .mkString("\n")

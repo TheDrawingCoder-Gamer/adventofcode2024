@@ -10,17 +10,15 @@ import scala.collection.mutable as mut
 import scala.io.Source
 
 object Day14 extends Problem[Day14.SparseCaveGrid, Int]:
-  extension (a: Int) {
-    infix def ascendsTo(b: Int): Range = {
+  extension (a: Int)
+    infix def ascendsTo(b: Int): Range =
       val s = a `min` b
       val e = b `max` a
 
       s to e
-    }
-  }
-  case class Pathway(points: List[Vec2[Int]]) {
+  case class Pathway(points: List[Vec2[Int]]):
     def bake: Set[Vec2[Int]] =
-      points.slidingN[2].flatMap { 
+      points.slidingN[2].flatMap:
         case (s, e) =>
           require(s.x == e.x || s.y == e.y)
           for {
@@ -28,17 +26,15 @@ object Day14 extends Problem[Day14.SparseCaveGrid, Int]:
             x <- s.x ascendsTo e.x
           } yield Vec2(x, y)
         
-      }.toSet
-  }
+      .toSet
 
   val source = Vec2(500, 0)
 
 
-  enum CavePoint {
+  enum CavePoint:
     case Rock, Sand, Air
-  }
 
-  case class SparseCaveGrid(points: Map[Vec2[Int], CavePoint], source: Vec2[Int]) {
+  case class SparseCaveGrid(points: Map[Vec2[Int], CavePoint], source: Vec2[Int]):
     val lowestPoint: Vec2[Int] = points.maxBy( (p, c) => if (c == CavePoint.Rock) p.y else 0)._1
 
     val floor = lowestPoint.y + 2
@@ -83,51 +79,44 @@ object Day14 extends Problem[Day14.SparseCaveGrid, Int]:
 
     def moveSand(p: Vec2[Int]) = genericMove(p, apply, _ => false)
     def withSand: Option[SparseCaveGrid] =
-      moveSand(source).map { it =>
+      moveSand(source).map: it =>
         SparseCaveGrid(points.updated(it, CavePoint.Sand), source)
-      }
-    def show: String = {
+    def show: String =
       val rightBound = points.maxBy( (p, _) => p.x)._1.x
       val leftBound = points.minBy( (p, _) => p.x)._1.x
       val topBound = 0
       val bottomBound = floor
-      (for {
-        y <- topBound to bottomBound
-      } yield {
-        (for {
-          x <- leftBound to rightBound
-        } yield
+      (topBound to bottomBound).map: y =>
+        (leftBound to rightBound).map: x =>
           apply(Vec2(x, y)) match
             case CavePoint.Rock => '#'
             case CavePoint.Sand => 'o'
             case CavePoint.Air => '.'
-        ).mkString
-      }).mkString("", "\n", "")
-    }
-  }
-  object SparseCaveGrid {
-    def apply(rock: Set[Vec2[Int]], source: Vec2[Int]): SparseCaveGrid = {
+        .mkString
+      .mkString("\n")
+    
+  object SparseCaveGrid:
+    def apply(rock: Set[Vec2[Int]], source: Vec2[Int]): SparseCaveGrid =
       SparseCaveGrid(Map.from(rock.zip(Vector.fill(rock.size)(CavePoint.Rock))), source)
-    }
-  }
-  def parse(input: String): SparseCaveGrid = {
-    val data = input.linesIterator.map { it =>
-      Pathway(it.split("->").map(_.trim).map {
-        case s"$l,$r" => Vec2(l.toInt, r.toInt)
-      }.toList)
-    }.toVector
+
+  def parse(input: String): SparseCaveGrid =
+    val data = input.linesIterator.map: it =>
+      Pathway:
+        it.split("->").map(_.trim).map:
+          case s"$l,$r" => Vec2(l.toInt, r.toInt)
+        .toList
+    .toVector
     val goodData = data.flatMap(_.bake).toSet
     SparseCaveGrid(goodData, source)
-  }
 
   lazy val input = FileIO.getInput(2022, 14)
 
 
 
   def part1(input: SparseCaveGrid): Int =
-    Iterator.iterate(Option(input))(_.flatMap(_.withSandP1)).takeWhile(_.isDefined).size - 1
+    Iterator.iterate(Option(input))(_.flatMap(_.withSandP1)).countWhile(_.isDefined) - 1
 
   def part2(input: SparseCaveGrid): Int =
-    Iterator.iterate(Option(input))(_.flatMap(_.withSand)).takeWhile(_.isDefined).size - 1
+    Iterator.iterate(Option(input))(_.flatMap(_.withSand)).countWhile(_.isDefined) - 1
 
 

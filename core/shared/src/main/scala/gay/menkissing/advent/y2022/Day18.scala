@@ -6,29 +6,25 @@ import collection.mutable
 import spire.implicits.IntAlgebra
 
 object Day18 extends NewProblem[Map[Vec3[Int], Day18.Cube], Int]:
-  def parse(input: String, default: Boolean): Map[Vec3[Int], Cube] = {
-    input.linesIterator.map {
-      case s"$x,$y,$z" => {
+  def parse(input: String, default: Boolean): Map[Vec3[Int], Cube] =
+    input.linesIterator.map:
+      case s"$x,$y,$z" =>
         val pos = Vec3(x.toInt, y.toInt, z.toInt)
         pos -> Cube(pos, default, default, default, default, default, default)
-      }
-    }.toMap
-  }
+    .toMap
 
   def parseP1(str: String): Map[Vec3[Int], Cube] = parse(str, true)
   def parseP2(str: String): Map[Vec3[Int], Cube] = parse(str, false)
-  def neighbors(pos: Vec3[Int]): Iterable[Vec3[Int]] = {
+  def neighbors(pos: Vec3[Int]): Iterable[Vec3[Int]] =
     Direction3D.values.toList.map(v => pos.offset(v))
-  }
-  case class Cube(pos: Vec3[Int], north: Boolean, east: Boolean, south: Boolean, west: Boolean, up: Boolean, down: Boolean) {
-    def surfaceArea: Int = {
-      (if (north) 1 else 0)
-      + (if (east) 1 else 0)
-      + (if (south) 1 else 0)
-      + (if (west) 1 else 0)
-      + (if (up) 1 else 0)
-      + (if (down) 1 else 0)
-    }
+  case class Cube(pos: Vec3[Int], north: Boolean, east: Boolean, south: Boolean, west: Boolean, up: Boolean, down: Boolean):
+    def surfaceArea: Int =
+      (if north then 1 else 0)
+      + (if east then 1 else 0)
+      + (if south then 1 else 0)
+      + (if west then 1 else 0)
+      + (if up then 1 else 0)
+      + (if down then 1 else 0)
     def updated(dir: Direction3D, v: Boolean): Cube =
       dir match
         case Direction3D.North => copy(north = v)
@@ -38,7 +34,7 @@ object Day18 extends NewProblem[Map[Vec3[Int], Day18.Cube], Int]:
         case Direction3D.Up => copy(up = v)
         case Direction3D.Down => copy(down = v)
       
-    def updateFaces(map: Map[Vec3[Int], Cube]) = {
+    def updateFaces(map: Map[Vec3[Int], Cube]) =
       val (cube, resMap) =
         Direction3D.values.foldLeft((this, map)):
           case ((curCube, map), dir) =>
@@ -49,9 +45,7 @@ object Day18 extends NewProblem[Map[Vec3[Int], Day18.Cube], Int]:
               case None =>
                 (curCube, map)
       resMap.updated(pos, cube)
-            
-    }
-  }
+
 
   lazy val input = FileIO.getInput(2022, 18)
 
@@ -62,9 +56,9 @@ object Day18 extends NewProblem[Map[Vec3[Int], Day18.Cube], Int]:
 
   def part1(input: Map[Vec3[Int], Cube]): Int =
     val goodInput = 
-      input.foldLeft(input) { case (m, (_, c)) =>
-        c.updateFaces(m)
-      }
+      input.foldLeft(input):
+        case (m, (_, c)) =>
+          c.updateFaces(m)
     goodInput.map((_, c) => c.surfaceArea).sum
 
 
@@ -74,19 +68,17 @@ object Day18 extends NewProblem[Map[Vec3[Int], Day18.Cube], Int]:
   // it will be less than part 1
   //
 
-  def floodFill(start: Vec3[Int], map: Map[Vec3[Int], Cube], bounds: AABB3D[Int]): Set[Vec3[Int]] = {
+  def floodFill(start: Vec3[Int], map: Map[Vec3[Int], Cube], bounds: AABB3D[Int]): Set[Vec3[Int]] =
     assert(!map.contains(start))
-    val q = mutable.Queue[Vec3[Int]](start);
-    val items = mutable.Set[Vec3[Int]]();
-    while (q.nonEmpty) {
-      val n = q.removeHead();
-      if (spotIsAir(map, n) && !items.contains(n)) {
+    val q = mutable.Queue[Vec3[Int]](start)
+    val items = mutable.Set[Vec3[Int]]()
+    while q.nonEmpty do
+      val n = q.removeHead()
+      if spotIsAir(map, n) && !items.contains(n) then
         q.addAll(neighbors(n).filter(bounds.contains))
         items += n
-      }
-    }
+
     items.toSet
-  }
 
   def part2(input: Map[Vec3[Int], Cube]): Int =
     // TODO: why do i need to grow this so much to get the correct answer? what is wrong with my flood fill implementation???

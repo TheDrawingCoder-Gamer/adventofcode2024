@@ -4,9 +4,8 @@ package y2022
 import gay.menkissing.common.*
 
 
-object Day20 extends Problem[Vector[Long], Long] {
-  def mix(pos: Int, n: Long, dataSize: Int): Int = {
-
+object Day20 extends Problem[Vector[Long], Long]:
+  def mix(pos: Int, n: Long, dataSize: Int): Int =
     val r =
       if n == 0 then pos
       else
@@ -17,9 +16,7 @@ object Day20 extends Problem[Vector[Long], Long] {
     if dataSize < 20 then
       println(s"$n moved from $pos to $r")
 
-
     r
-  }
 
   // Using this reduces performance LOL
   // when the programming is functional....
@@ -59,11 +56,11 @@ object Day20 extends Problem[Vector[Long], Long] {
   lazy val input = FileIO.getInput(2022, 20)
   def parse(input: String): Vector[Long] =
     input.linesIterator.map(_.toLong).toVector
-  def part1(input: Vector[Long]): Long = {
+  def part1(input: Vector[Long]): Long =
     val dataSize = input.size
     val goodData = input.mixNumbersImm
     val zeroIndex = goodData.indexOf(0L)
-    if (dataSize < 20)
+    if dataSize < 20 then
       println(goodData)
     val xIdx = (zeroIndex + 1000) % dataSize
     val yIdx = (zeroIndex + 2000) % dataSize
@@ -71,19 +68,17 @@ object Day20 extends Problem[Vector[Long], Long] {
 
 
     goodData(xIdx) + goodData(yIdx) + goodData(zIdx)
-  }
-  def part2(input: Vector[Long]): Long = {
+  def part2(input: Vector[Long]): Long =
     val data = input.map(_ * 811589153L)
     val dataSize = data.size
     val goodData = mixNumbersReal.repeated(10)(data.zipWithIndex).map(_._1)
 
     val zeroIndex = goodData.indexOf(0L)
-    if (dataSize < 20)
+    if dataSize < 20 then
       println(goodData)
     val xIdx = (zeroIndex + 1000) % dataSize
     val yIdx = (zeroIndex + 2000) % dataSize
     val zIdx = (zeroIndex + 3000) % dataSize
 
     goodData(xIdx) + goodData(yIdx) + goodData(zIdx)
-  }
-}
+  

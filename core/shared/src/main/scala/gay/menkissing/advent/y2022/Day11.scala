@@ -6,29 +6,27 @@ import gay.menkissing.common.repeat
 import scala.collection.mutable as mut
 import scala.io.Source
 import scala.math.BigInt
+import gay.menkissing.common.whatTheScallop
 
 // I totally forgot why this works - figure it out later!
 object Day11 extends Problem[Vector[Day11.Monkey], Long]:
   class Monkey(val n: Int, val items: mut.ListBuffer[Long], val op: MonkeyOp, val divisor: Int, val throwTrue: Int, val throwFalse: Int, var inspected: Long = 0)
 
-  enum MonkeyOp(l: Option[Long], r: Option[Long]) {
+  enum MonkeyOp(l: Option[Long], r: Option[Long]):
     case Addition(l: Option[Long], r: Option[Long]) extends MonkeyOp(l, r)
     case Multiply(l: Option[Long], r: Option[Long]) extends MonkeyOp(l, r)
 
-    def apply(worry: Long): Long = {
+    def apply(worry: Long): Long =
       val gl = l.getOrElse(worry)
       val gr = r.getOrElse(worry)
-      this match {
+      this match
         case Addition(_, _) => gl + gr
         case Multiply(_, _) => gl * gr
-      }
-    }
 
-  }
   lazy val input = FileIO.getInput(2022, 11)
 
   def parse(str: String): Vector[Monkey] =
-    str.split("\n\n").map { it =>
+    str.split("\n\n").map: it =>
       val xs = it.trim.linesIterator.toVector
       xs.map(_.trim) match
         case Vector(s"Monkey $name:",
@@ -40,18 +38,16 @@ object Day11 extends Problem[Vector[Day11.Monkey], Long]:
           val goodOp =
             operation.trim match
               case s"$l $op $r" =>
-
                 val cons = op match
                   case "*" => MonkeyOp.Multiply.apply
                   case "+" => MonkeyOp.Addition.apply
-                  case _ => assert(false)
+                  case _ => whatTheScallop.!
                 cons(l.toLongOption, r.toLongOption)
-              case _ => assert(false)
+              case _ => whatTheScallop.!
 
           Monkey(name.toInt, startingItems.split(',').map(_.trim.toLong).to(mut.ListBuffer), goodOp, div.toInt, trueMonkey.toInt, falseMonkey.toInt)
-        case _ => assert(false)
-
-    }.toVector
+        case _ => whatTheScallop.!
+    .toVector
 
 
 
@@ -63,12 +59,12 @@ object Day11 extends Problem[Vector[Day11.Monkey], Long]:
           val res = m.op(i)
           val res2 = (res / sanityLoss) % modulus
           val bool = res2 % m.divisor == 0
-          val thingie = if (bool) m.throwTrue else m.throwFalse
+          val thingie = if bool then m.throwTrue else m.throwFalse
           m.inspected += 1
           monkeys(thingie).items.prepend(res2)
         m.items.clear()
     val monkeySums = monkeys.map(_.inspected)
-    val List(l: Long, r: Long) = monkeySums.sorted.takeRight(2).toList : @unchecked
+    val Vector(l, r) = monkeySums.sorted.takeRight(2) : @unchecked
     l * r
 
   override def part1(input: Vector[Monkey]): Long = calculate(input, 3, 20)

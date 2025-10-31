@@ -6,16 +6,13 @@ import scala.collection.mutable as mut
 import cats.syntax.all.*
 import spire.implicits.IntAlgebra
 
-object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int] {
-  enum GridPos {
+object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int]:
+  enum GridPos:
     case Solid, Open, GNil 
-  }
   import GridPos.* 
-  extension (s: Seq[GridPos]) {
-    def trimPos: Seq[GridPos] = {
+  extension (s: Seq[GridPos])
+    def trimPos: Seq[GridPos] =
       s.dropWhile(_ == GNil).takeWhile(_ != GNil)
-    }
-  }
   extension (regionMap: Map[Int, Vec2[Int]])
     def pretty: String =
       val buff = Array.fill(5, 5)('.')
@@ -284,7 +281,7 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
 
 
 
-  case class CompleteGrid(regionMap: Map[Int, Vec2[Int]], connections: List[ConnectionInfo], grid: Grid[GridPos]) {
+  case class CompleteGrid(regionMap: Map[Int, Vec2[Int]], connections: List[ConnectionInfo], grid: Grid[GridPos]):
     val faceWidth = math.min(grid.rows.map(_.trimPos.size).min, grid.columns.map(_.trimPos.size).min)
     val reverseRegionMap = regionMap.map((x, y) => (y, x))
     val connMap: Map[(Int, Direction2D), (Int, Direction2D, Boolean)] =
@@ -294,7 +291,7 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
       .toMap
 
     def move(pos: Vec2[Int], dir: Direction2D, n: Int): (Vec2[Int], Direction2D) =
-      moveHelper(pos, dir, n) { (poses, lastPos) =>
+      moveHelper(pos, dir, n): (poses, lastPos) =>
         val lastRegionPos = Vec2(lastPos.x / faceWidth, lastPos.y / faceWidth)
         val lastRegion = reverseRegionMap(lastRegionPos)
         val (nextRegion, arrivalDir, flipOffset) = connMap(lastRegion, dir)
@@ -326,35 +323,32 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
           val restCount = n - countUntilEdge
           move(newPos, arrivalDir, restCount)
 
-      }
 
-    final def moveHelper(pos: Vec2[Int], dir: Direction2D, n: Int)(handleOff: (Seq[Vec2[Int]], Vec2[Int]) => (Vec2[Int], Direction2D)): (Vec2[Int], Direction2D) = {
+    final def moveHelper(pos: Vec2[Int], dir: Direction2D, n: Int)
+              (handleOff: (Seq[Vec2[Int]], Vec2[Int]) => (Vec2[Int], Direction2D)): (Vec2[Int], Direction2D) =
       require(grid.getOrElse(pos, GNil) == Open)
-      if (n == 0) return (pos, dir)
+      if n == 0 then return (pos, dir)
       val newPos = pos.offset(dir, n)
       val line = pos `straightLine` newPos
 
-      if (line.forall(it => grid.getOrElse(it, GNil) != Solid)) {
-        if (line.forall(it => grid.getOrElse(it, GNil) != GNil)) {
+      if line.forall(it => grid.getOrElse(it, GNil) != Solid) then
+        if line.forall(it => grid.getOrElse(it, GNil) != GNil) then
           // simply return new pos
           (newPos, dir)
-        } else {
+        else
           handleOff(line, line.findLast(it => grid.getOrElse(it, GNil) != GNil).get)
-        }
-      } else {
+      else
         assert(grid.getOrElse(line.head, GNil) != Solid)
         val solidIdx = line.indexWhere(it => grid.getOrElse(it, GNil) == Solid)
         val openIdx = solidIdx - 1
         val openPos = line(openIdx)
         assert(grid.get(openPos).isDefined && grid(openPos) == Open)
         (openPos, dir)
-      }
-    }
-  }
+  
 
 
-  case class ForbiddenGrid(grid: Grid[GridPos]) extends AnyVal {
-    def regions: List[Vec2[Int]] = {
+  case class ForbiddenGrid(grid: Grid[GridPos]) extends AnyVal:
+    def regions: List[Vec2[Int]] =
       val faceWidth = math.min(grid.rows.map(_.trimPos.size).min, grid.columns.map(_.trimPos.size).min)
       val height = grid.height / faceWidth
       val width = grid.width / faceWidth
@@ -362,7 +356,7 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
         (0 until height).flatMap: y =>
           Option.when(grid(x * faceWidth, y * faceWidth) != GNil)(Vec2(x, y))
       .toList
-    }
+
 
     def completeGrid: CompleteGrid =
       val regions = this.regions.toSet
@@ -375,25 +369,23 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
 
    // helper means no recursion is accessable
     // @annotation.tailrec 
-    final def move(pos: Vec2[Int], dir: Direction2D, n: Int): Vec2[Int] = {
-      def getGood(rowOrCol: Seq[GridPos]): Option[GridPos] = {
-        dir.axisDirection match {
+    final def move(pos: Vec2[Int], dir: Direction2D, n: Int): Vec2[Int] =
+      def getGood(rowOrCol: Seq[GridPos]): Option[GridPos] =
+        dir.axisDirection match
           case Axis2D.Direction.Positive => rowOrCol.find(_ != GNil)
           case Axis2D.Direction.Negative => rowOrCol.findLast(_ != GNil)
-        }
-      }
-      def getPos(rowOrCol: Seq[GridPos]): Int = {
-        dir.axisDirection match {
+        
+      def getPos(rowOrCol: Seq[GridPos]): Int =
+        dir.axisDirection match
           case Axis2D.Direction.Positive => rowOrCol.indexWhere(_ != GNil)
           case Axis2D.Direction.Negative => rowOrCol.lastIndexWhere(_ != GNil)
-        }
-      }
-      moveHelper(pos, dir, n) { (line, lastPos) =>
+        
+      moveHelper(pos, dir, n): (line, lastPos) =>
         val countUntilEdge = line.indexWhere(it => grid.getOrElse(it, GNil) == GNil)
         val restCount = n - countUntilEdge
         lazy val solidEnd = line.findLast(it => grid.getOrElse(it, GNil) != GNil)
         
-        dir.axis match {
+        dir.axis match
             case Axis2D.X => 
               val row = grid.extractRow(pos.y)
               val goodX = getGood(row) 
@@ -412,92 +404,77 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
             case Axis2D.Y => 
               val col = grid.extractColumn(pos.x)
               val goodY = getGood(col)
-              goodY match {
+              goodY match
                 case Some(Solid) => solidEnd.get
                 case Some(Open) => 
                   val y = getPos(col)
                   assert(y != -1)
                   move(pos.copy(y = y), dir, restCount)
                 case _ => assert(false)
-              }
-          }
-      }
-    }
-    final def moveHelper(pos: Vec2[Int], dir: Direction2D, n: Int)(handleOff: (Seq[Vec2[Int]], Vec2[Int]) => Vec2[Int]): Vec2[Int] = {
+    final def moveHelper(pos: Vec2[Int], dir: Direction2D, n: Int)(handleOff: (Seq[Vec2[Int]], Vec2[Int]) => Vec2[Int]): Vec2[Int] =
       require(grid.getOrElse(pos, GNil) == Open)
-      if (n == 0) return pos
+      if n == 0 then return pos
       val newPos = pos.offset(dir, n)
       val line = pos `straightLine` newPos
 
-      if (line.forall(it => grid.getOrElse(it, GNil) != Solid)) {
-        if (line.forall(it => grid.getOrElse(it, GNil) != GNil)) {
+      if line.forall(it => grid.getOrElse(it, GNil) != Solid) then
+        if line.forall(it => grid.getOrElse(it, GNil) != GNil) then
           // simply return new pos 
           newPos 
-        } else {
+        else
           handleOff(line, line.findLast( it => grid.getOrElse(it, GNil) != GNil).get)
-        }
-      } else {
+      else
         assert(grid.getOrElse(line.head, GNil) != Solid)
         val solidIdx = line.indexWhere(it => grid.getOrElse(it, GNil) == Solid)
         val openIdx = solidIdx - 1
         val openPos = line(openIdx)
         assert(grid.get(openPos).isDefined && grid(openPos) == Open)
         openPos
-      } 
-    }
-  } 
-  enum Instruction {
+    
+  enum Instruction:
     case Clockwise
     case Counterclockwise
     case Move(n: Int)
-  }
   lazy val input = FileIO.getInput(2022, 22)
-  def parseInstructions(input: String): List[Instruction] = {
+  def parseInstructions(input: String): List[Instruction] =
     @annotation.tailrec 
-    def helper(i: String, accum: List[Instruction]): List[Instruction] = {
-      i match {
+    def helper(i: String, accum: List[Instruction]): List[Instruction] =
+      i match
         case "" => accum.reverse 
         case _ => 
-          i.head match {
+          i.head match
             case 'R' => helper(i.tail, accum.prepended(Instruction.Clockwise))
             case 'L' => helper(i.tail, accum.prepended(Instruction.Counterclockwise))
             case _ => 
               val n = i.takeWhile(_.isDigit)
               val r = i.dropWhile(_.isDigit)
               helper(r, accum.prepended(Instruction.Move(n.toInt)))
-          }
-      }
-    }
     helper(input.strip, List()) 
-  }
-  def parseMap(input: String): ForbiddenGrid = {
+  def parseMap(input: String): ForbiddenGrid =
     val lines = 
-      input.linesIterator.map { line => 
-        line.map { 
+      input.linesIterator.map: line => 
+        line.map:
           case ' ' => GNil 
           case '.' => Open 
           case '#' => Solid 
-        }.toList 
-      }.toList
+        .toList 
+      .toList
     val width = lines.maxBy(_.length).length 
     val good = lines.map(_.padTo(width, GNil))
     ForbiddenGrid(Grid(good))
-  }
-  def parse(input: String): (ForbiddenGrid, List[Instruction]) = {
+  def parse(input: String): (ForbiddenGrid, List[Instruction]) =
     val List(l, r) = input.split("\n\n").toList: @unchecked 
     (parseMap(l), parseInstructions(r))
-  }
 
-  def part1(input: (ForbiddenGrid, List[Instruction])): Int = {
+  def part1(input: (ForbiddenGrid, List[Instruction])): Int =
     val (map, instr) = input
     val x = map.grid.rows.head.indexOf(Open)
     var pos = Vec2(x, 0)
     var facing = Direction2D.Right 
-    instr.foreach {
+    instr.foreach:
       case Instruction.Clockwise => facing = facing.clockwise
       case Instruction.Counterclockwise => facing = facing.counterClockwise
       case Instruction.Move(n) => pos = map.move(pos, facing, n)
-    }
     val facingN = 
       facing match
         case Direction2D.Up => 3
@@ -507,23 +484,21 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
     val rowN = (pos.y + 1) * 1000
     val colN = (pos.x + 1) * 4
     rowN + colN + facingN
-  }
 
-  def part2(input: (ForbiddenGrid, List[Instruction])): Int = {
+  def part2(input: (ForbiddenGrid, List[Instruction])): Int =
     val (map, instr) = input
     val completeGrid = map.completeGrid
 
     val x = map.grid.rows.head.indexOf(Open)
     var pos = Vec2(x, 0)
     var facing = Direction2D.Right
-    instr.foreach {
+    instr.foreach:
       case Instruction.Clockwise => facing = facing.clockwise
       case Instruction.Counterclockwise => facing = facing.counterClockwise
       case Instruction.Move(n) =>
         val (newPos, newFacing) = completeGrid.move(pos, facing, n)
         pos = newPos
         facing = newFacing
-    }
     val facingN =
       facing match
         case Direction2D.Up => 3
@@ -534,7 +509,3 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
     val colN = (pos.x + 1) * 4
     rowN + colN + facingN
 
-
-  }
-
-}
