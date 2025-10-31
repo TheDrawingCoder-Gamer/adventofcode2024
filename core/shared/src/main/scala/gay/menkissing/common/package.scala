@@ -31,13 +31,7 @@ class ForeverIterator[A](val underlying: Iterator[A]) extends Iterator[A]:
       throw new NoSuchElementException("Input iterator was empty")
 
 
-
-
-
-
-
-
-def topologicalSort[A](a: List[A])(using pord: PartialOrder[A]): Option[List[A]] = {
+def topologicalSort[A](a: List[A])(using pord: PartialOrder[A]): Option[List[A]] =
   var unsorted = a.toBuffer
   val sorted = mut.Buffer[A]()
   
@@ -50,59 +44,42 @@ def topologicalSort[A](a: List[A])(using pord: PartialOrder[A]): Option[List[A]]
   
   val startNodes: mut.Set[A] = a.filterNot(hasIncomingNode).iterator.to(mut.Set.iterableFactory)
   
-  while (startNodes.nonEmpty) {
+  while (startNodes.nonEmpty) do
     val n = startNodes.head
     startNodes.remove(n)
     sorted.append(n)
     unsorted = unsorted.filterNot(_ == n)
-    unsorted.filter(it => nodeEnters(n, it)).foreach { m =>
-      if (!hasIncomingNode(m)) {
+    unsorted.withFilter(it => nodeEnters(n, it)).foreach: m =>
+      if !hasIncomingNode(m) then
         startNodes.add(m)
-      }
-    }
-  }
-  
-  if (unsorted.nonEmpty) {
-    None
-  } else {
-    Some(sorted.toList)
-  }
-}
 
-def debugTiming[A](func: => A): A = {
+  Option.when(unsorted.isEmpty)(sorted.toList)
+
+
+def debugTiming[A](func: => A): A =
   val start = System.nanoTime()
   val res = func
   val end = System.nanoTime()
-  println(s"Elapsed: ${(end - start).toDouble / 1000000.0}")
+  println(s"Elapsed: ${(end - start).toDouble / 1000000.0}ms")
   res
-}
 
-extension[A](f: A => A) {
-  def repeated(n: Int): A => A = { (x: A) =>
-    // MonoidK[Endo].algebra[A].combineN(f, n)
-    Iterator.iterate(x)(f).drop(n).next()
-  }
-}
+extension[A](f: A => A)
+  def repeated(n: Int): A => A =
+    Iterator.iterate(_)(f).drop(n).next()
 
 def repeat(times: Int)(block: => Unit): Unit =
   (0 until times).foreach(_ => block)
 
-extension[A, G[_]](f: A => G[A])(using Monad[G]) {
-  def flatRepeated(n: Int): A => G[A] = {
+extension[A, G[_]](f: A => G[A])(using Monad[G])
+  def flatRepeated(n: Int): A => G[A] =
     Kleisli.endoMonoidK[G].algebra[A].combineN(Kleisli[G, A, A](f), n).run
-  }
-}
 
 // may not be unique
-def prettyCharForNum(num: Int): Char = {
-  if (num < 10) {
-    ('0' + num).toChar
-  } else if (num < 10 + 26) {
-    ('a' + num - 10).toChar
-  } else if (num < 10 + 26 + 26) {
-    ('A' + num - 10 - 26).toChar
-  } else '?'
-}
+def prettyCharForNum(num: Int): Char =
+  if num < 10 then ('0' + num).toChar
+  else if num < 10 + 26 then ('a' + num - 10).toChar
+  else if num < 10 + 26 + 26 then ('A' + num - 10 - 26).toChar
+  else '?'
 
 def logBaseN(n: Double, base: Double): Double = math.log(n) / math.log(base)
 
