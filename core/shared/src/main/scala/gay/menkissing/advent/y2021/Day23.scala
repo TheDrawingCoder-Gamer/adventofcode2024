@@ -87,30 +87,25 @@ object Day23 extends ProblemUniqueInputs[Day23.State, Day23.State, Int]:
 
   // its amazing how much faster it is when you have a sensible ordering for your priority queue
   // (and dont reconstruct your path every time)
-  def search[A](start: State): Option[Int] = {
-
+  def search[A](start: State): Option[Int] =
     val gscore = mutable.HashMap(start -> 0)
 
     val openSet = MinBinaryHeap[State, Int]()
     openSet.insert(start, 0)
-    while (openSet.nonEmpty) {
+    while openSet.nonEmpty do
       val (current, curEnergy) = openSet.extractWithPriority()
       if (current.isGoal) 
         return Some(gscore(current))
       // if no shorter path was found yet
       if curEnergy == gscore(current) then
-        for ((neighbor, nEnergy) <- current.neighbors) {
+        for (neighbor, nEnergy) <- current.neighbors do
           val stinkyGScore = curEnergy + nEnergy
-          if (stinkyGScore < gscore.getOrElse(neighbor, Int.MaxValue)) {
+          if stinkyGScore < gscore.getOrElse(neighbor, Int.MaxValue) then
             gscore(neighbor) = stinkyGScore
             // `updatePriority` is VERY expensive, so try to avoid using it by checking earlier
             openSet.insert(neighbor, stinkyGScore)
-          }
-        }
-    }
 
     None
-  }
 
   def parseShared(input: String, roomSize: Int): State =
     val amphipods =

@@ -31,12 +31,12 @@ object Day08 extends Problem[List[(List[Int], List[Int])], Int]:
 
 
   def parse(input: String): List[(List[Int], List[Int])] =
-    input.linesIterator.map {
+    input.linesIterator.map:
       case s"$l | $r" => (l.split(' ').map(parseSegment).toList, r.split(' ').map(parseSegment).toList)
-    }.toList
+    .toList
 
-  def digitCouldBe(n: Int): List[Int] = {
-    bitCount(n) match {
+  def digitCouldBe(n: Int): List[Int] =
+    bitCount(n) match
       case 2 => List(1)
       case 3 => List(7)
       case 4 => List(4)
@@ -44,8 +44,6 @@ object Day08 extends Problem[List[(List[Int], List[Int])], Int]:
       case 6 => List(0, 6, 9)
       case 7 => List(8)
       case _ => assert(false)
-    }
-  }
 
   def bitCount(n: Int): Int = List(aBit, bBit, cBit, dBit, eBit, fBit, gBit).count(it => (it & n) != 0)
 
@@ -60,7 +58,7 @@ object Day08 extends Problem[List[(List[Int], List[Int])], Int]:
   def calcDigit(mapping: Vector[Int], digit: Int): Int =
     mapping.indexWhere(_ == digit)
 
-  def calcDigits(uniqueDigits: List[Int], displayed: List[Int]): Int = {
+  def calcDigits(uniqueDigits: List[Int], displayed: List[Int]): Int =
     val n1 = uniqueDigits.find(bitCount.andThen(_ == 2)).get
     val n4 = uniqueDigits.find(bitCount.andThen(_ == 4)).get
     val n7 = uniqueDigits.find(bitCount.andThen(_ == 3)).get
@@ -78,7 +76,6 @@ object Day08 extends Problem[List[(List[Int], List[Int])], Int]:
     val mapping = Vector(n0, n1, n2, n3, n4, n5, n6, n7, n8, n9)
     displayed.map(it => calcDigit(mapping, it)).foldLeft(0):
       case (acc, num) => (acc * 10) + num
-  }
 
   def part1(input: List[(List[Int], List[Int])]): Int =
     val realDigits = input.flatMap(_._2)

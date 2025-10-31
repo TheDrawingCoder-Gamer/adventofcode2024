@@ -196,6 +196,9 @@ object Grid {
     }
   }
 
+  val showBooleanGrid: Show[Grid[Boolean]] =
+    _.rows.map(_.map(if _ then '#' else '.').mkString).mkString("\n")
+
   given gridFunctor: Functor[Grid] with {
     def map[A, B](fa: Grid[A])(f: A => B): Grid[B] = {
       Grid(fa.values.map(_.map(f.apply)))

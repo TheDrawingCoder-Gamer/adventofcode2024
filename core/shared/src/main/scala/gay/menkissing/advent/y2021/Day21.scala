@@ -52,9 +52,10 @@ object Day21 extends Problem[Day21.ProblemState, BigInt]:
   lazy val input = FileIO.getInput(2021, 21)
   
   override def parse(str: String): ProblemState =
-    val List(player1, player2) = str.linesIterator.map { it =>
-      Player(0, it.dropWhile(_ != ':').drop(1).trim.toInt)
-    }.toList
+    val List(player1, player2) = 
+      str.linesIterator.map: 
+        case s"Player $_ starting position: $n" => Player(0, n.toInt)
+      .toList
     ProblemState(0, 0, player1, player2)
   
   override def part1(input: ProblemState): BigInt =
@@ -68,15 +69,15 @@ object Day21 extends Problem[Day21.ProblemState, BigInt]:
   
   case class P2State(pState: ProblemState, universeCount: BigInt)
   
-  val dieCombos: List[(Int, BigInt)] = {
+  val dieCombos: List[(Int, BigInt)] =
+    
     val possibleRolls =
-      (for {
+      for
         x <- 1 to 3
         y <- 1 to 3
         z <- 1 to 3
-      } yield x + y + z).toList
+      yield x + y + z
     possibleRolls.groupMapReduce(identity)(_ => BigInt(1))(_ + _).toList
-  }
   
   type P2Func[B] = Kleisli[List, P2State, B]
   def playerTurnP2(accessor: ProblemState => Player, setter: (ProblemState, Player) => ProblemState): P2Func[(P2State, Option[BigInt])] =

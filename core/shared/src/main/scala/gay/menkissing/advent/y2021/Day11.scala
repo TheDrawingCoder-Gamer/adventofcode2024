@@ -1,7 +1,7 @@
 package gay.menkissing.advent
 package y2021
 
-import gay.menkissing.common.{Grid, Vec2, given}
+import gay.menkissing.common.*
 import cats.syntax.all.*
 import spire.implicits.IntAlgebra
 

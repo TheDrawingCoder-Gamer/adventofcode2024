@@ -38,14 +38,16 @@ object Day12 extends Problem[List[(Day12.Node, Day12.Node)], Long]:
       case Node.End => true
       case Node.Big(_) => true
       case Node.Small(sm) =>
-        lazy val smalls = stack.collect { case Node.Small(sm2) => sm2 }
+        lazy val smalls = 
+          stack.collect: 
+            case Node.Small(sm2) => sm2
         !stack.contains(node) || smalls.groupBy(identity).values.forall(_.sizeIs <= smallMax)
 
   def followNodes(smallMax: Int)(nodes: List[(Node, Node)]): Chain[List[Node]] =
     val chainNodes = Chain.fromSeq(nodes)
     def go(stack: List[Node]): Chain[List[Node]] =
       val pos = stack.head
-      val connections = {
+      val connections =
         chainNodes.mapFilter: (x, y) =>
           if x == pos then
             Some(y)
@@ -55,7 +57,7 @@ object Day12 extends Problem[List[(Day12.Node, Day12.Node)], Long]:
             None
         .filter: y =>
           checkPath(smallMax - 1)(stack, y)
-      }
+
       pos match
         case Node.Start | Node.Big(_) | Node.Small(_) => connections.flatMap(y => go(y :: stack)).hashDistinct
         case Node.End => Chain.one(stack)
