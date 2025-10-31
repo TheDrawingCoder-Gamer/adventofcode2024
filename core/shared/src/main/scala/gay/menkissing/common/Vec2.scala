@@ -65,7 +65,28 @@ object Vec2:
       x.x === y.x && x.y === y.y
 
   given vecNVec2: VecN[Vec2] with
-    extension [A](self: Vec2[A]) 
+    def dimensions: Int = 2
+
+    def axis[A](i: Int)(using ring: Ring[A]): Vec2[A] =
+      i match
+        case 0 => Vec2(ring.one, ring.zero)
+        case 1 => Vec2(ring.zero, ring.one)
+        case _ => whatTheScallop.!
+
+    extension [A](self: Vec2[A])
+
+      def coord(i: Int): A =
+        i match
+          case 0 => self.x
+          case 1 => self.y
+          case _ => whatTheScallop.!
+      
+      def withCoord(i: Int, v: A): Vec2[A]  =
+        i match
+          case 0 => self.copy(x = v)
+          case 1 => self.copy(y = v)
+          case _ => whatTheScallop.!
+
       def axes: List[A] = List(self.x, self.y)
       def map(f: A => A): Vec2[A] =
         Vec2(f(self.x), f(self.y))

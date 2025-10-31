@@ -5,6 +5,8 @@ import gay.menkissing.common.*
 
 import scala.collection.mutable as mut
 import spire.implicits.IntAlgebra
+import cats.*
+import cats.derived.*
 
 /** 
  * This class is NOT thread safe!
@@ -17,7 +19,7 @@ object Day24 extends Problem[Day24.BlizzardMap, Int] {
   case object Wall extends BlizzardMapPoint
   case object Empty extends BlizzardMapPoint  
 
-  case class TimeLocation(time: Int, loc: Vec2[Int])
+  case class TimeLocation(time: Int, loc: Vec2[Int]) derives Eq
   
   type BlizzardMap = Grid[BlizzardMapPoint]
 

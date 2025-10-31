@@ -20,13 +20,37 @@ object Sys3D {
   }
 
   object Vec3:
+
     given vecNVec3: VecN[Vec3] with
+      def dimensions: Int = 3
+
+
+      def axis[A](i: Int)(using ring: Ring[A]): Vec3[A] =
+        i match
+          case 0 => Vec3(ring.one, ring.zero, ring.zero)
+          case 1 => Vec3(ring.zero, ring.one, ring.zero)
+          case 2 => Vec3(ring.zero, ring.zero, ring.one)
+          case _ => whatTheScallop.!
+
       extension [@specialized(Int, Long) A](self: Vec3[A]) 
         def axes: List[A] =  List(self.x, self.y, self.z)
         def zip(that: Vec3[A])(f: (A, A) => A): Vec3[A] =
           Vec3(f(self.x, that.x), f(self.y, that.y), f(self.z, that.z))
         def map(f: A => A): Vec3[A] =
           Vec3(f(self.x), f(self.y), f(self.z))
+
+        def coord(i: Int): A =
+          i match
+            case 0 => self.x
+            case 1 => self.y
+            case 2 => self.z
+            case _ => whatTheScallop.!
+        
+        def withCoord(i: Int, v: A): Vec3[A] =
+          i match
+            case 0 => self.copy(x = v)
+            case 1 => self.copy(y = v)
+            case 2 => self.copy(z = v)
   case class Vec3[@specialized(Int, Long) A](x: A, y: A, z: A) {
 
 

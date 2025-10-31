@@ -84,6 +84,7 @@ object Day23 extends ProblemUniqueInputs[Day23.State, Day23.State, Int]:
 
 
   // its amazing how much faster it is when you have a sensible ordering for your priority queue
+  // (and dont reconstruct your path every time)
   def search[A](start: State): Option[Int] = {
 
     val gscore = mutable.HashMap(start -> 0)
@@ -98,7 +99,7 @@ object Day23 extends ProblemUniqueInputs[Day23.State, Day23.State, Int]:
         val stinkyGScore = curEnergy + nEnergy
         if (stinkyGScore < gscore.getOrElse(neighbor, Int.MaxValue)) {
           gscore(neighbor) = stinkyGScore
-          if (!openSet.exists(_ == neighbor)) 
+          if (!openSet.exists(_._1 == neighbor)) 
             openSet.enqueue((neighbor, stinkyGScore))
         }
       }

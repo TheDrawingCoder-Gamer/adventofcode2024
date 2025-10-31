@@ -4,6 +4,9 @@ import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common.*
 import ArityN.*
 import spire.implicits.IntAlgebra
+import cats.*
+
+import cats.derived.*
 
 import scala.io.Source
 
@@ -20,7 +23,7 @@ object Day16 extends Problem[Day16.ProblemState, Int]:
         case (acc, (l, r)) =>
           acc + l.edgeScore(r)
       }.toInt
-  case class Reindeer(pos: Vec2[Int], dir: Direction2D):
+  case class Reindeer(pos: Vec2[Int], dir: Direction2D) derives Eq:
     def neighbors: List[Reindeer] =
       Direction2D.values.flatMap { d =>
         if (d == dir.clockwise.clockwise)
