@@ -1,4 +1,4 @@
-{-# Language ImportQualifiedPost, MultiWayIf #-}
+{-# Language ImportQualifiedPost #-}
 
 module Day10 (parse, part1, part2) where
 
@@ -79,13 +79,13 @@ parse = lines
 part1 ::  [String] -> Int
 part1 daLines =
     let 
-        linesl = mapMaybe lefts $ map ((flip matchLine) []) daLines 
+        linesl = mapMaybe (lefts . flip matchLine []) daLines 
     in foldl' (\a p -> a + score p) 0 linesl
 
 part2 :: [String] -> Int
 part2 daLines =
     let 
-        linesr = mapMaybe rights $ map ((flip matchLine) []) daLines
+        linesr = mapMaybe (rights . flip matchLine []) daLines
     in
     median $ map scoreComplete linesr
     

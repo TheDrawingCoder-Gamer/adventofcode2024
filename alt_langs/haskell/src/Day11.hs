@@ -1,4 +1,4 @@
-{-# Language ImportQualifiedPost, MultiWayIf #-}
+{-# Language ImportQualifiedPost #-}
 
 module Day11 (parse, part1, part2) where
 
@@ -73,6 +73,6 @@ part1 :: MX.Matrix Int -> Int
 part1 mx = runSim mx 100
 
 part2 :: MX.Matrix Int -> Int
-part2 mx = findSync mx
+part2 = findSync
     
 

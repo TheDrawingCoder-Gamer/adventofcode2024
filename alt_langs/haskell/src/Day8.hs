@@ -107,7 +107,7 @@ calcDigits uniqueDigits displayed =
 
     
 part1 :: [([String], [String])] -> Int
-part1 input = sum $ map countUnique $ map snd input
+part1 input = sum $ map (countUnique . snd) input
 
 part2 :: [([String], [String])] -> Int
 part2 input = sum $ map (uncurry calcDigits) input

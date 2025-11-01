@@ -1,4 +1,4 @@
-{-# Language ImportQualifiedPost, MultiWayIf, DeriveGeneric, DeriveAnyClass #-}
+{-# Language ImportQualifiedPost, DeriveGeneric, DeriveAnyClass #-}
 
 module Day12 (parse, part1, part2) where
 
@@ -67,7 +67,7 @@ checkSmall :: Int -> [Node] -> Node -> Bool
 checkSmall maxSmall stack p@(Small _)= 
     let sorted = sort $ filter isSmall stack
         grouped = group sorted in 
-            p `notElem` stack || all ((<= EQ) . (flip compareLength $ maxSmall - 1)) grouped
+            p `notElem` stack || all ((<= EQ) . flip compareLength (maxSmall - 1)) grouped
 
 
 checkSmall _ _ _ = undefined 

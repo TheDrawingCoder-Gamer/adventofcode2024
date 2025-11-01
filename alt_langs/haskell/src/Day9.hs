@@ -26,10 +26,10 @@ parse input =
 data Direction = DUp | DDown | DLeft | DRight
 neighbor mx (x, y) dir = 
     case dir of 
-        DUp -> if y - 1 <= 0 then Nothing else Just ((MX.getElem x (y - 1) mx), (x, y - 1))
-        DDown -> if y + 1 > MX.ncols mx then Nothing else Just ((MX.getElem x (y + 1) mx), (x, y + 1))
-        DLeft -> if x - 1 <= 0 then Nothing else Just ((MX.getElem (x - 1) y mx), (x -1, y))
-        DRight -> if x + 1 > MX.nrows mx then Nothing else Just ((MX.getElem (x + 1) y mx), (x + 1, y))
+        DUp -> if y - 1 <= 0 then Nothing else Just (MX.getElem x (y - 1) mx, (x, y - 1))
+        DDown -> if y + 1 > MX.ncols mx then Nothing else Just (MX.getElem x (y + 1) mx, (x, y + 1))
+        DLeft -> if x - 1 <= 0 then Nothing else Just (MX.getElem (x - 1) y mx, (x -1, y))
+        DRight -> if x + 1 > MX.nrows mx then Nothing else Just (MX.getElem (x + 1) y mx, (x + 1, y))
 neighbors mx (x, y) =
     let neighbor' = neighbor mx (x, y) in 
         [neighbor' DUp, neighbor' DRight, neighbor' DDown, neighbor' DLeft]
@@ -51,7 +51,7 @@ part2 :: MX.Matrix Int -> Int
 part2 mx = 
     let basinPos = MX.mapPos (\p v -> snd $ followBasin mx p v) mx
         basinCounts = map length $ group $ sort $ filter (/= (0,0)) $ MX.toList basinPos in 
-            product $ take 3 (reverse $ sort basinCounts)
+            product $ take 3 sortBy Comparing.Ord.Down basinCounts
                 
 
 lowPoints mx = 
