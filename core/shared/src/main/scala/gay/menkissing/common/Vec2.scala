@@ -5,6 +5,8 @@ import spire.implicits.*
 import cats.collections.Discrete
 import cats.collections.Range
 import cats.collections.syntax.range.*
+import cats.*
+import cats.syntax.show.*
 
 final case class Vec2[A](x: A, y: A):
   def cardinalNeighbors(using ring: Ring[A]): List[Vec2[A]] =
@@ -63,6 +65,9 @@ final case class Vec2[A](x: A, y: A):
 object Vec2:
   given eqVec2[A](using Eq[A]): Eq[Vec2[A]] with
     def eqv(x: Vec2[A], y: Vec2[A]): Boolean = x.x === y.x && x.y === y.y
+
+  given showVec2[A](using Show[A]): Show[Vec2[A]] with
+    def show(t: Vec2[A]): String = show"Vec2(${t.x}, ${t.y})"
 
   given vecNVec2: VecN[Vec2] with
     def dimensions: Int = 2

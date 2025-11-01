@@ -7,7 +7,11 @@ import gay.menkissing.common.{*, given}
 
 import scala.collection.mutable
 
-object Day14 extends Problem[List[Day14.Op], Long]:
+object Day14 extends Problem:
+  type Input = List[Op]
+  type Output = Long
+  def showOutput: Show[Long] = summon
+
   enum Op:
     case Mask(str: String)
     case Mem(idx: Int, value: Long)

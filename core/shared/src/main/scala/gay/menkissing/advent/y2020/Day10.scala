@@ -6,7 +6,11 @@ import cats.implicits.*
 import collection.mutable
 import gay.menkissing.common.*, ArityN.*
 
-object Day10 extends Problem[List[Int], Long]:
+object Day10 extends Problem:
+  type Input = List[Int]
+  type Output = Long
+  def showOutput: Show[Long] = summon
+
   override def parse(str: String): List[Int] =
     str.linesIterator.map(_.toInt).toList
 

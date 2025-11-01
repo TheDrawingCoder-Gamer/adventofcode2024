@@ -6,7 +6,11 @@ import collection.mutable
 import cats.*
 import cats.syntax.all.*
 
-object Day13 extends Problem[List[((String, String), Int)], Int]:
+object Day13 extends Problem:
+  type Input = List[((String, String), Int)]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   def parse(str: String): List[((String, String), Int)] =
     str.trim.linesIterator.map:
       case s"$p1 would gain $n happiness units by sitting next to $p2." =>

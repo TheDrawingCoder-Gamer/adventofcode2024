@@ -6,8 +6,13 @@ import cats.syntax.all.*
 import spire.implicits.IntAlgebra
 
 import scala.annotation.tailrec
+import cats.Show
 
-object Day11 extends Problem[Grid[Int], Long]:
+object Day11 extends Problem:
+  type Input = Grid[Int]
+  type Output = Long
+  def showOutput: Show[Long] = summon
+
   lazy val input = FileIO.getInput(2021, 11)
 
   def parse(input: String): Grid[Int] = Grid.fromString(input)(_.asDigit)

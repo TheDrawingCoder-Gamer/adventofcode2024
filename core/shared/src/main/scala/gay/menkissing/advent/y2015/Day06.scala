@@ -2,7 +2,12 @@ package gay.menkissing.advent
 package y2015
 
 import gay.menkissing.common.Vec2
-object Day06 extends Problem[List[Day06.Instruction], Int]:
+import cats.Show
+object Day06 extends Problem:
+  type Input = List[Instruction]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   enum Op:
     case On, Toggle, Off
 

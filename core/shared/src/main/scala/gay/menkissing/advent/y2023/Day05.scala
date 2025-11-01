@@ -4,10 +4,13 @@ package y2023
 import cats.data.{NonEmptyList, NonEmptyChain, Ior}
 import cats.syntax.all.*
 import gay.menkissing.common.ArityN.*
+import cats.Show
 
-object Day05 extends Problem[Day05.Input, Long]:
-
+object Day05 extends Problem:
+  // was already here and declared as input so it ALL WORKS OUT : )
   type Input = (List[Long], NonEmptyList[NonEmptyList[MapRange]])
+  type Output = Long
+  def showOutput: Show[Long] = summon
 
   type RangeResult =
     Ior[NonEmptyChain[(Long, Long)], NonEmptyChain[(Long, Long)]]

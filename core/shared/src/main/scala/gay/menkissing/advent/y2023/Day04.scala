@@ -2,8 +2,13 @@ package gay.menkissing.advent
 package y2023
 
 import scala.collection.mutable as mut
+import cats.Show
 
-object Day04 extends Problem[List[Day04.Scratchcard], Int]:
+object Day04 extends Problem:
+  type Input = List[Scratchcard]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   lazy val input = FileIO.getInput(2023, 4)
 
   case class Scratchcard(winningNumbers: Set[Int], numbers: List[Int]):

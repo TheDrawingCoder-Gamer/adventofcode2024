@@ -1,7 +1,13 @@
 package gay.menkissing.advent
 package y2015
 
-object Day08 extends Problem[List[String], Int]:
+import cats.Show
+
+object Day08 extends Problem:
+  type Input = List[String]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   def parse(str: String): List[String] = str.linesIterator.toList
 
   def part1(input: List[String]): Int =

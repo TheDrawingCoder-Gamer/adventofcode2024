@@ -7,9 +7,14 @@ import scala.collection.mutable as mut
 import scala.io.Source
 import scala.math.BigInt
 import gay.menkissing.common.whatTheScallop
+import cats.Show
 
 // I totally forgot why this works - figure it out later!
-object Day11 extends Problem[Vector[Day11.Monkey], Long]:
+object Day11 extends Problem:
+  type Input = Vector[Monkey]
+  type Output = Long
+  def showOutput: Show[Long] = summon
+
   class Monkey
     (
       val n: Int,

@@ -2,8 +2,13 @@ package gay.menkissing.advent
 package y2021
 
 import gay.menkissing.common.*
+import cats.Show
 
-object Day06 extends Problem[Vector[Int], Long]:
+object Day06 extends Problem:
+  type Input = Vector[Int]
+  type Output = Long
+  def showOutput: Show[Long] = summon
+
   type FishMap = Map[Int, Long]
 
   def naiveAdvance(fish: Vector[Int]): Vector[Int] =

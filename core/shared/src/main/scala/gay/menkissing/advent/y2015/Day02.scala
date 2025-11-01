@@ -1,7 +1,15 @@
 package gay.menkissing.advent
 package y2015
 
-object Day02 extends Problem[List[(Int, Int, Int)], Int]:
+import cats.Show
+
+object Day02 extends Problem:
+  type Input = List[(Int, Int, Int)]
+
+  type Output = Int
+
+  def showOutput: Show[Int] = summon
+
   def parse(str: String): List[(Int, Int, Int)] =
     str.linesIterator.map:
       case s"${x}x${y}x${z}" => (x.toInt, y.toInt, z.toInt)

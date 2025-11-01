@@ -10,9 +10,14 @@ import scala.io.Source
 import cats.syntax.all.*
 import alleycats.std.set.*
 import spire.implicits.IntAlgebra
+import cats.Show
 
 // This code was mostly written in 2022, and ported to fit this new repo's model
-object Day19 extends Problem[List[Set[Vec3[Int]]], Int]:
+object Day19 extends Problem:
+  type Input = List[Set[Vec3[Int]]]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   def findTransformIfIntersects
     (
       left: Set[Vec3[Int]],

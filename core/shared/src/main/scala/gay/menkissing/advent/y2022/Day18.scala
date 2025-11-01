@@ -4,8 +4,13 @@ package y2022
 import gay.menkissing.common.*, Sys3D.*
 import collection.mutable
 import spire.implicits.IntAlgebra
+import cats.Show
 
-object Day18 extends NewProblem[Map[Vec3[Int], Day18.Cube], Int]:
+object Day18 extends NewProblem:
+  type Input = Map[Vec3[Int], Cube]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   def parse(input: String, default: Boolean): Map[Vec3[Int], Cube] =
     input.linesIterator.map:
       case s"$x,$y,$z" =>

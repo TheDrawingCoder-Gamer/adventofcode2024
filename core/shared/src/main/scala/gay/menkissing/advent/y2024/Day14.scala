@@ -3,8 +3,12 @@ package y2024
 
 import scala.collection.mutable as mut
 import gay.menkissing.common.*
+import cats.Show
 
-object Day14 extends ProblemAdv[List[Day14.Robot], Int, Int]:
+object Day14 extends Problem:
+  type Input = List[Robot]
+  type Output = Int
+  def showOutput: Show[Int] = summon
 
   case class Robot(pos: Vec2[Int], velocity: Vec2[Int]):
     def stepN(n: Int = 1): Robot =

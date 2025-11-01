@@ -5,8 +5,12 @@ import cats.implicits.*
 import cats.syntax.all.*
 
 import gay.menkissing.common.*, ArityN.*
+import cats.Show
 
-object Day09 extends Problem[Vector[Long], Long]:
+object Day09 extends Problem:
+  type Input = Vector[Long]
+  type Output = Long
+  def showOutput: Show[Long] = summon
 
   lazy val input = FileIO.getInput(2020, 9)
 

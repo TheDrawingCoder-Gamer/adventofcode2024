@@ -11,7 +11,11 @@ import alleycats.std.set.*
 import scala.collection.mutable
 import scala.annotation.tailrec
 
-object Day19 extends Problem[(Map[String, List[String]], String), Int]:
+object Day19 extends Problem:
+  type Input = (Map[String, List[String]], String)
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   lazy val input = FileIO.getInput(2015, 19)
 
   def splitElements(str: String): List[String] =

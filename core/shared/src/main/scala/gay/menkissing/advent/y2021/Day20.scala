@@ -4,8 +4,13 @@ package y2021
 import gay.menkissing.common.*
 
 import scala.io.Source
+import cats.Show
 
-object Day20 extends Problem[(Vector[Boolean], Day20.Image), Int]:
+object Day20 extends Problem:
+  type Input = (Vector[Boolean], Image)
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   lazy val input = FileIO.getInput(2021, 20)
 
   case class Image(grid: Grid[Boolean], oobPixel: Boolean):

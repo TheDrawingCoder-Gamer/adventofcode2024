@@ -8,8 +8,13 @@ import spire.implicits.IntAlgebra
 import scala.annotation.tailrec
 import scala.collection.mutable as mut
 import scala.io.Source
+import cats.Show
 
-object Day14 extends Problem[Day14.SparseCaveGrid, Int]:
+object Day14 extends Problem:
+  type Input = SparseCaveGrid
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   extension (a: Int)
     infix def ascendsTo(b: Int): Range =
       val s = a `min` b

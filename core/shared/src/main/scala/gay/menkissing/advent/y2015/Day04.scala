@@ -3,9 +3,13 @@ package y2015
 
 import java.nio.{ByteBuffer, ByteOrder}
 import scala.collection.mutable
+import cats.Show
 
 // this should not have been this hard???
-object Day04 extends Problem[String, Int]:
+object Day04 extends Problem:
+  type Input = String
+  type Output = Int
+  def showOutput: Show[Int] = summon
   def parse(str: String): String = str.trim
 
   // NEVER roll your own crypto

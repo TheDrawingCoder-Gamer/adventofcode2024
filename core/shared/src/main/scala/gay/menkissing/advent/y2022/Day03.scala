@@ -2,8 +2,13 @@ package gay.menkissing.advent
 package y2022
 
 import gay.menkissing.common.ArityN.*
+import cats.Show
 
-object Day03 extends Problem[List[Day03.Rucksack], Int]:
+object Day03 extends Problem:
+  type Input = List[Rucksack]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   case class ItemType(underlying: Char):
     def priority: Int =
       if underlying.isUpper then underlying - 'A' + 27

@@ -1,8 +1,13 @@
 package gay.menkissing.advent
 package y2023
 
-object Day06
-    extends ProblemUniqueInputs[List[(Long, Long)], (Long, Long), Long]:
+import cats.Show
+
+object Day06 extends ProblemUniqueInputs:
+  type InputP1 = List[(Long, Long)]
+  type InputP2 = (Long, Long)
+  type Output = Long
+  def showOutput: Show[Long] = summon
 
   override lazy val input: String = FileIO.getInput(2023, 6)
 

@@ -4,8 +4,14 @@ package y2015
 import scala.util.matching.Regex
 import gay.menkissing.common.*
 import io.circe.*
+import cats.Show
 
-object Day12 extends Problem[String, Int]:
+object Day12 extends Problem:
+  type Input = String
+  type Output = Int
+
+  def showOutput: Show[Int] = summon
+
   def parse(str: String): String = str.trim
 
   def part1(input: String): Int =

@@ -5,7 +5,11 @@ import gay.menkissing.common.ArityN.*
 import cats.*
 import cats.syntax.all.*
 
-object Day09 extends Problem[List[List[Int]], Int]:
+object Day09 extends Problem:
+  type Input = List[List[Int]]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   lazy val input = FileIO.getInput(2023, 9)
 
   def parse(str: String): List[List[Int]] =

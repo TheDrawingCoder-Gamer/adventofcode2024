@@ -3,8 +3,13 @@ package y2021
 
 import cats.implicits.*
 import cats.syntax.all.*
+import cats.Show
 
-object Day08 extends Problem[List[(List[Int], List[Int])], Int]:
+object Day08 extends Problem:
+  type Input = List[(List[Int], List[Int])]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   lazy val input = FileIO.getInput(2021, 8)
 
   val aBit: Byte = 0b1000000

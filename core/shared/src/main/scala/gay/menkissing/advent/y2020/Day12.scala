@@ -9,7 +9,11 @@ import spire.implicits.IntAlgebra
 
 import scala.collection.mutable
 
-object Day12 extends Problem[List[(Char, Int)], Int]:
+object Day12 extends Problem:
+  type Input = List[(Char, Int)]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   case class DaState
     (
       x: Int = 0,

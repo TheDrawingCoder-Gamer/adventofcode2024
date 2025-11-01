@@ -5,8 +5,13 @@ import gay.menkissing.common.*
 import cats.syntax.all.*
 
 import scala.collection.mutable as mut
+import cats.Show
 
-object Day05 extends Problem[List[Day05.Line], Int]:
+object Day05 extends Problem:
+  type Input = List[Line]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   lazy val input = FileIO.getInput(2021, 5)
 
   case class Line(start: Vec2[Int], end: Vec2[Int]):

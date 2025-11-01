@@ -4,8 +4,13 @@ package y2015
 import gay.menkissing.common.*
 import cats.syntax.all.*
 import spire.std.any.IntAlgebra
+import cats.Show
 
-object Day18 extends Problem[Grid[Boolean], Int]:
+object Day18 extends Problem:
+  type Input = Grid[Boolean]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   lazy val input: String = FileIO.getInput(2015, 18)
 
   def parse(str: String): Grid[Boolean] =

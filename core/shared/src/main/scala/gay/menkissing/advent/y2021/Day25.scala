@@ -6,7 +6,11 @@ import cats.syntax.all.*
 import cats.*
 import spire.implicits.IntAlgebra
 
-object Day25 extends HalfDay[Grid[Option[Direction2D]], Int]:
+object Day25 extends HalfDay:
+  type Input = Grid[Option[Direction2D]]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   lazy val input = FileIO.getInput(2021, 25)
 
   def parse(str: String): Grid[Option[Direction2D]] =

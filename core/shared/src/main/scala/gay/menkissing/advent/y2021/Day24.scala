@@ -4,8 +4,13 @@ package y2021
 import gay.menkissing.common.*
 import cats.implicits.*
 import cats.data.Chain
+import cats.Show
 
-object Day24 extends Problem[Vector[Day24.Instruction], BigInt]:
+object Day24 extends Problem:
+  type Input = Vector[Instruction]
+  type Output = BigInt
+  def showOutput: Show[BigInt] = summon
+
   lazy val input = FileIO.getInput(2021, 24)
 
   enum Variable:

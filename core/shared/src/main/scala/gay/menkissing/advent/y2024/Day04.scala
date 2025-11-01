@@ -2,8 +2,13 @@ package gay.menkissing.advent
 package y2024
 
 import gay.menkissing.common.*
+import cats.Show
 
-object Day04 extends Problem[Grid[Char], Int]:
+object Day04 extends Problem:
+  type Input = Grid[Char]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   lazy val input = FileIO.getInput(2024, 4)
 
   override def parse(str: String): Grid[Char] =

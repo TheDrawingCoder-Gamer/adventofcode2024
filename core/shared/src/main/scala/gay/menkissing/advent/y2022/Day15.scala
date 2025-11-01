@@ -9,9 +9,14 @@ import cats.collections.syntax.range.*
 import cats.syntax.all.*
 import cats.data.Chain
 import spire.implicits.IntAlgebra
+import cats.Show
 
 // TODO: Unacceptably slow on JS
-object Day15 extends Problem[Set[Day15.SensorRanged], Long]:
+object Day15 extends Problem:
+  type Input = Set[SensorRanged]
+  type Output = Long
+  def showOutput: Show[Long] = summon
+
   case class SensorRanged(pos: Vec2[Int], beacon: Vec2[Int]):
     val range = pos `taxiDistance` beacon
 

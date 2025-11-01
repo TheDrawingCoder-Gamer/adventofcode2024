@@ -6,7 +6,11 @@ import cats.parse.*
 import cats.*
 import cats.implicits.*
 
-object Day13 extends Problem[Vector[Day13.Packet], Int]:
+object Day13 extends Problem:
+  type Input = Vector[Packet]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   sealed trait Packet extends Ordered[Packet]:
     def compare(that: Packet): Int =
       (this, that) match

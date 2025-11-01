@@ -2,8 +2,13 @@ package gay.menkissing.advent
 package y2015
 
 import gay.menkissing.common.*
+import cats.Show
 
-object Day25 extends HalfDay[Vec2[Int], Long]:
+object Day25 extends HalfDay:
+  type Input = Vec2[Int]
+  type Output = Long
+  def showOutput: Show[Long] = summon
+
   lazy val input: String = FileIO.getInput(2015, 25)
 
   def parse(str: String): Vec2[Int] =

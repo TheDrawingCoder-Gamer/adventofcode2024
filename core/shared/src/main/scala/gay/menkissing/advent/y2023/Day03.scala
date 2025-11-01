@@ -4,8 +4,12 @@ package y2023
 import gay.menkissing.common.*
 import cats.syntax.functorFilter.*
 import spire.implicits.IntAlgebra
+import cats.Show
 
-object Day03 extends Problem[Grid[Char], Int]:
+object Day03 extends Problem:
+  type Input = Grid[Char]
+  type Output = Int
+  def showOutput: Show[Int] = summon
 
   lazy val input = FileIO.getInput(2023, 3)
 

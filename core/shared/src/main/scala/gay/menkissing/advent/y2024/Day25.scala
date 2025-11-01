@@ -1,7 +1,12 @@
 package gay.menkissing.advent
 package y2024
 
-object Day25 extends HalfDay[List[Day25.KeyOrLock], Long]:
+object Day25 extends HalfDay:
+  type Input = List[KeyOrLock]
+  type Output = Long
+
+  def showOutput = summon
+
   case class KeyOrLock(isKey: Boolean, pinHeights: Vector[Int]):
     def compatibleWith(that: KeyOrLock): Boolean =
       assert(this.isKey ^ that.isKey)

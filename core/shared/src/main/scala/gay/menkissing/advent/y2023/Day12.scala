@@ -3,8 +3,13 @@ package y2023
 
 import gay.menkissing.common.*
 import cats.implicits.*
+import cats.Show
 
-object Day12 extends Problem[List[(List[Option[Boolean]], List[Int])], Long]:
+object Day12 extends Problem:
+  type Input = List[(List[Option[Boolean]], List[Int])]
+  type Output = Long
+  def showOutput: Show[Long] = summon
+
   lazy val input = FileIO.getInput(2023, 12)
 
   def parse(str: String): List[(List[Option[Boolean]], List[Int])] =

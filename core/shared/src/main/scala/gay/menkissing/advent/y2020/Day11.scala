@@ -8,7 +8,11 @@ import spire.std.any.IntAlgebra
 
 import scala.collection.mutable
 
-object Day11 extends Problem[Grid[Day11.Seat], Int]:
+object Day11 extends Problem:
+  type Input = Grid[Seat]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   enum Seat:
     case Floor, Occupied, Empty
 

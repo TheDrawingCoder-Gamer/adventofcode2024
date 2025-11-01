@@ -1,7 +1,13 @@
 package gay.menkissing.advent
 package y2020
 
-object Day04 extends Problem[List[Day04.Passport], Int]:
+import cats.Show
+
+object Day04 extends Problem:
+  type Input = List[Passport]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   case class Passport
     (
       byr: Option[Int],

@@ -2,8 +2,13 @@ package gay.menkissing.advent
 package y2021
 
 import scala.annotation.tailrec
+import cats.Show
 
-object Day10 extends Problem[List[String], Long]:
+object Day10 extends Problem:
+  type Input = List[String]
+  type Output = Long
+  def showOutput: Show[Long] = summon
+
   lazy val input = FileIO.getInput(2021, 10)
 
   @tailrec

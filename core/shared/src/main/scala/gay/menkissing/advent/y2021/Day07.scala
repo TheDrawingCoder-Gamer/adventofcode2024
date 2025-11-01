@@ -2,8 +2,13 @@ package gay.menkissing.advent
 package y2021
 
 import gay.menkissing.common.IntSequences
+import cats.Show
 
-object Day07 extends Problem[List[Int], Int]:
+object Day07 extends Problem:
+  type Input = List[Int]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   lazy val input = FileIO.getInput(2021, 7)
 
   def parse(input: String): List[Int] =

@@ -1,7 +1,13 @@
 package gay.menkissing.advent
 package y2020
 
-object Day02 extends Problem[List[Day02.PolicyEntry], Int]:
+import cats.Show
+
+object Day02 extends Problem:
+  type Input = List[PolicyEntry]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   case class PolicyEntry(left: Int, right: Int, of: Char, password: String)
 
   override def parse(str: String): List[PolicyEntry] =

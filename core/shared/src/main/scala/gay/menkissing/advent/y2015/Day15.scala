@@ -5,7 +5,11 @@ import gay.menkissing.common.*
 import cats.*, cats.syntax.all.*
 import alleycats.std.set.*
 
-object Day15 extends Problem[Vector[Day15.Ingredient], Int]:
+object Day15 extends Problem:
+  type Input = Vector[Ingredient]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   case class Ingredient
     (
       capacity: Int,

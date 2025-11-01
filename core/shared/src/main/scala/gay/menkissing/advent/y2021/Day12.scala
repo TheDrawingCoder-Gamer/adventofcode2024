@@ -7,7 +7,11 @@ import cats.*
 
 import gay.menkissing.common.LetterString
 
-object Day12 extends Problem[List[(Day12.Node, Day12.Node)], Long]:
+object Day12 extends Problem:
+  type Input = List[(Node, Node)]
+  type Output = Long
+  def showOutput: Show[Long] = summon
+
   lazy val input = FileIO.getInput(2021, 12)
 
   enum Node:

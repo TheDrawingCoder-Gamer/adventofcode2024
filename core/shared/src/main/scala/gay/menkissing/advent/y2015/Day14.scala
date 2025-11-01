@@ -3,8 +3,12 @@ package y2015
 
 import gay.menkissing.common.*
 import scala.collection.mutable
+import cats.Show
 
-object Day14 extends Problem[List[Day14.Reindeer], Int]:
+object Day14 extends Problem:
+  type Input = List[Reindeer]
+  type Output = Int
+  def showOutput: Show[Int] = summon
 
   case class Reindeer(speed: Int, active: Int, rest: Int)
   case class ReindeerState

@@ -12,7 +12,11 @@ import cats.syntax.all.*
 /**
  * This class is NOT thread safe!
  */
-object Day24 extends Problem[Day24.BlizzardMap, Int]:
+object Day24 extends Problem:
+  type Input = BlizzardMap
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   lazy val input = FileIO.getInput(2022, 24)
 
   sealed trait BlizzardMapPoint

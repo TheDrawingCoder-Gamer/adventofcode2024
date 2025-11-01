@@ -6,7 +6,10 @@ import cats.*
 import cats.syntax.all.*
 import spire.implicits.{IntAlgebra, LongAlgebra}
 
-object Day11 extends Problem[Grid[Boolean], Long]:
+object Day11 extends Problem:
+  type Input = Grid[Boolean]
+  type Output = Long
+  def showOutput: Show[Long] = summon
   lazy val input = FileIO.getInput(2023, 11)
 
   def parse(str: String): Grid[Boolean] =

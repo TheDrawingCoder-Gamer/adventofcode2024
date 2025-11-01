@@ -7,8 +7,13 @@ import spire.compat.*
 import cats.implicits.*
 
 import scala.collection.mutable
+import cats.Show
 
-object Day20 extends Problem[Int, Int]:
+object Day20 extends Problem:
+  type Input = Int
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   lazy val input = FileIO.getInput(2015, 20)
 
   def parse(str: String): Int = str.trim.toInt

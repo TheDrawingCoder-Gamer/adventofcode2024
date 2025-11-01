@@ -1,7 +1,14 @@
 package gay.menkissing.advent
 package y2022
 
-object Day04 extends Problem[List[Day04.Jobs], Int]:
+import cats.Show
+
+object Day04 extends Problem:
+  type Input = List[Jobs]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
+  // j*bs...
   case class Jobs(left: Range, right: Range):
     def useless: Boolean =
       val size = symdiff(left.toSet, right.toSet).size

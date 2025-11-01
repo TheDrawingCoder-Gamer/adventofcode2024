@@ -7,7 +7,11 @@ import cats.*
 
 import gay.menkissing.common.*
 
-object Day21 extends Problem[Day21.ProblemState, BigInt]:
+object Day21 extends Problem:
+  type Input = ProblemState
+  type Output = BigInt
+  def showOutput: Show[BigInt] = summon
+
   case class Player(score: Int, space: Int):
     def move(n: Int): Player =
       val daSpace = (space + n) % 10

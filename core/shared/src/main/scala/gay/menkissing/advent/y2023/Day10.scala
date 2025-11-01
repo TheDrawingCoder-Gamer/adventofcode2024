@@ -8,7 +8,11 @@ import cats.syntax.all.*
 import cats.data.*
 import spire.implicits.IntAlgebra
 
-object Day10 extends Problem[(Grid[Option[Day10.Pipe]], Vec2[Int]), Int]:
+object Day10 extends Problem:
+  type Input = (Grid[Option[Pipe]], Vec2[Int])
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   lazy val input: String = FileIO.getInput(2023, 10)
 
   case class Pipe(conn1: Direction2D, conn2: Direction2D):

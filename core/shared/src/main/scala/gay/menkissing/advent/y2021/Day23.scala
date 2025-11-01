@@ -9,9 +9,11 @@ import cats.*
 
 import scala.collection.mutable
 
-// this weird type param list is so we don't have a `parse` method,
-// just `parseP1` and `parseP2`
-object Day23 extends ProblemUniqueInputs[Day23.State, Day23.State, Int]:
+object Day23 extends NewProblem:
+  type Input = State
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   enum Amphipod(val cost: Int, val room: Int) derives Eq:
     case A extends Amphipod(1, 3)
     case B extends Amphipod(10, 5)

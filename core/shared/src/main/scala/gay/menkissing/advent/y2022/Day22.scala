@@ -5,9 +5,13 @@ import gay.menkissing.common.*
 import scala.collection.mutable as mut
 import cats.syntax.all.*
 import spire.implicits.IntAlgebra
+import cats.Show
 
-object Day22
-    extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int]:
+object Day22 extends Problem:
+
+  type Input = (ForbiddenGrid, List[Instruction])
+  type Output = Int
+  def showOutput: Show[Int] = summon
   enum GridPos:
     case Solid, Open, GNil
   import GridPos.*

@@ -3,8 +3,13 @@ package y2020
 
 import collection.mutable as mut
 import gay.menkissing.common.*
+import cats.Show
 
-object Day08 extends Problem[Vector[Day08.Instruction], Int]:
+object Day08 extends Problem:
+  type Input = Vector[Instruction]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   enum Instruction:
     case Acc(n: Int)
     case Jmp(n: Int)

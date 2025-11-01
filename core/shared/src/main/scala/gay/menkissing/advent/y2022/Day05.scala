@@ -2,8 +2,13 @@ package gay.menkissing.advent
 package y2022
 
 import scala.collection.mutable as mut
+import cats.Show
 
-object Day05 extends Problem[(Day05.Palettes, List[Day05.CraneMove]), String]:
+object Day05 extends Problem:
+  type Input = (Palettes, List[CraneMove])
+  type Output = String
+  def showOutput: Show[String] = summon
+
   lazy val input = FileIO.getInput(2022, 5)
 
   def parsePalletes(input: String): Palettes =

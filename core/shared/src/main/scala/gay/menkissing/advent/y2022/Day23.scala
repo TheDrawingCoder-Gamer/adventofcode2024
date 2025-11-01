@@ -3,8 +3,13 @@ package y2022
 
 import gay.menkissing.common.*
 import spire.implicits.IntAlgebra
+import cats.Show
 
-object Day23 extends Problem[Grid[Boolean], Int]:
+object Day23 extends Problem:
+  type Input = ElfGrid
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   type ElfGrid = Grid[Boolean]
 
   case class Elf(current: Vec2[Int], proposal: Option[Vec2[Int]])

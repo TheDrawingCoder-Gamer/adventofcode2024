@@ -5,7 +5,12 @@ import gay.menkissing.advent.{FileIO, Problem}
 import gay.menkissing.common.*
 import ArityN.*
 
-object Day22 extends Problem[List[Int], Long]:
+object Day22 extends Problem:
+  type Input = List[Int]
+  type Output = Long
+
+  def showOutput = summon
+
   override def parse(str: String): List[Int] =
     str.linesIterator.map(_.toInt).toList
 

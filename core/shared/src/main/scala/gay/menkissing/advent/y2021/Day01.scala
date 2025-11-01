@@ -3,8 +3,12 @@ package y2021
 
 import cats.implicits.*
 import gay.menkissing.common.ArityN.*
+import cats.Show
 
-object Day01 extends Problem[List[Int], Int]:
+object Day01 extends Problem:
+  type Input = List[Int]
+  type Output = Int
+  def showOutput: Show[Int] = summon
   override def parse(str: String): List[Int] =
     str.linesIterator.map(_.toInt).toList
 

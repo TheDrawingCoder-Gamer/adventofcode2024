@@ -3,14 +3,17 @@ package y2024
 
 import scala.annotation.tailrec
 import scala.collection.mutable as mut
+import cats.derived.*
+import cats.*
 
-object Day18Writeup
-    extends ProblemAdv[
-      (Int, Int, List[Day18Writeup.Vec2i]),
-      Int,
-      Day18Writeup.Vec2i
-    ]:
-  case class Vec2i(x: Int, y: Int):
+object Day18Writeup extends ProblemAdv:
+  type Input = (Int, Int, List[Vec2i])
+  type OutputP1 = Int
+  type OutputP2 = Vec2i
+
+  def showOutputP1 = summon
+  def showOutputP2 = summon
+  case class Vec2i(x: Int, y: Int) derives Show:
     def cardinalNeighbors: List[Vec2i] =
       List(Vec2i(x - 1, y), Vec2i(x + 1, y), Vec2i(x, y - 1), Vec2i(x, y + 1))
 

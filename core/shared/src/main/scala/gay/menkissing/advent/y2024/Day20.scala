@@ -7,7 +7,12 @@ import scala.collection.mutable as mut
 import spire.implicits.IntAlgebra
 import cats.syntax.all.*
 
-object Day20 extends Problem[Day20.RaceTrack, Int]:
+object Day20 extends Problem:
+  type Input = RaceTrack
+  type Output = Int
+
+  def showOutput = summon
+
   extension (grid: Grid[Boolean])
     def pathfind(start: Vec2[Int], goal: Vec2[Int]): Option[List[Vec2[Int]]] =
       def reconstructPath

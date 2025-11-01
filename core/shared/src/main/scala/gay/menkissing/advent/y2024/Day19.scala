@@ -1,7 +1,11 @@
 package gay.menkissing.advent
 package y2024
 
-object Day19 extends Problem[(List[String], List[String]), Long]:
+object Day19 extends Problem:
+  type Input = (List[String], List[String])
+  type Output = Long
+
+  def showOutput = summon
 
   override def parse(str: String): (List[String], List[String]) =
     val Array(towelsStr, designStr) = str.split("\n\n")

@@ -3,8 +3,13 @@ package y2022
 
 import cats.implicits.*
 import gay.menkissing.common.*, ArityN.*
+import cats.Show
 
-object Day06 extends Problem[String, Int]:
+object Day06 extends Problem:
+  type Input = String
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   def parse(str: String): String = str
 
   def process(input: String, size: Int): Int =

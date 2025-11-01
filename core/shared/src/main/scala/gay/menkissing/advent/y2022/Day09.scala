@@ -5,8 +5,13 @@ import gay.menkissing.common.*
 import cats.implicits.{catsKernelStdOrderForInt as _, *}
 import cats.data.*
 import spire.implicits.IntAlgebra
+import cats.Show
 
-object Day09 extends Problem[List[Day09.Movement], Int]:
+object Day09 extends Problem:
+  type Input = List[Movement]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   type Day9State[A] = State[List[Vec2[Int]], A]
   def minDistance(a: Vec2[Int], b: Vec2[Int]) =
     Math.min(Math.abs(a.x - b.x), Math.abs(a.y - b.y))

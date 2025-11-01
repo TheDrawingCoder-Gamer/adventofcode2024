@@ -5,8 +5,12 @@ import scala.collection.mutable as mut
 import scala.io.Source
 import scala.util.chaining.*
 import gay.menkissing.common.whatTheScallop
+import cats.Show
 
-object Day07 extends Problem[Seq[Day07.Command], Int]:
+object Day07 extends Problem:
+  type Input = Seq[Command]
+  type Output = Int
+  def showOutput: Show[Int] = summon
 
   lazy val input = FileIO.getInput(2022, 7)
   enum Command:

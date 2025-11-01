@@ -1,7 +1,12 @@
 package gay.menkissing.advent
 package y2022
 
-object Day21 extends Problem[Day21.Context, Long]:
+import cats.Show
+
+object Day21 extends Problem:
+  type Input = Context
+  type Output = Long
+  def showOutput: Show[Long] = summon
 
   val testInput =
     """|root: pppw + sjmn

@@ -2,8 +2,13 @@ package gay.menkissing.advent
 package y2022
 
 import gay.menkissing.common.*
+import cats.Show
 
-object Day20 extends Problem[Vector[Long], Long]:
+object Day20 extends Problem:
+  type Input = Vector[Long]
+  type Output = Long
+  def showOutput: Show[Long] = summon
+
   def mix(pos: Int, n: Long, dataSize: Int): Int =
     val r =
       if n == 0 then pos

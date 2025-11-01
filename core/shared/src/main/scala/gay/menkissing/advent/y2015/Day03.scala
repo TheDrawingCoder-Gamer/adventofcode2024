@@ -6,8 +6,12 @@ import gay.menkissing.common.Direction2D
 import scala.collection.mutable
 import gay.menkissing.common.Vec2
 import spire.implicits.IntAlgebra
+import cats.Show
 
-object Day03 extends Problem[String, Int]:
+object Day03 extends Problem:
+  type Input = String
+  type Output = Int
+  def showOutput: Show[Int] = summon
   def parse(str: String): String = str
 
   def part1(input: String): Int =

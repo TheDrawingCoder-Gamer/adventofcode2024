@@ -3,8 +3,13 @@ package y2021
 
 import gay.menkissing.common.{*, given}
 import cats.syntax.all.*
+import cats.Show
 
-object Day04 extends Problem[(List[Int], List[Day04.BingoCard]), Int]:
+object Day04 extends Problem:
+  type Input = (List[Int], List[BingoCard])
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   type BingoCard = Grid[Int]
   type RealBingoCard = Grid[(Int, Boolean)]
 

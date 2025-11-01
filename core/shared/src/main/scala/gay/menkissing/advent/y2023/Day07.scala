@@ -4,7 +4,11 @@ package y2023
 import cats.*
 import cats.syntax.all.*
 
-object Day07 extends Problem[List[(Day07.Hand, Int)], Int]:
+object Day07 extends Problem:
+  type Input = List[(Hand, Int)]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   lazy val input: String = FileIO.getInput(2023, 7)
 
   override def parse(str: String): List[(Hand, Int)] =

@@ -8,7 +8,11 @@ import spire.implicits.IntAlgebra
 import cats.*
 import cats.syntax.all.*
 
-object Day06 extends Problem[(Grid[Boolean], Int), Int]:
+object Day06 extends Problem:
+  type Input = (Grid[Boolean], Int)
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   lazy val input = FileIO.getInput(2024, 6)
 
   override def parse(str: String): (Grid[Boolean], Int) =

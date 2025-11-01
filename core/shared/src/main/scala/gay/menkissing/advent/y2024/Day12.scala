@@ -2,8 +2,13 @@ package gay.menkissing.advent
 package y2024
 
 import scala.collection.mutable as mut
+import cats.Show
 
-object Day12 extends Problem[Day12.PlantMap, Int]:
+object Day12 extends Problem:
+  type Input = PlantMap
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   type Region = Vector[(Int, Int)]
   def cardinalPositions(x: Int, y: Int): List[(Int, Int)] =
     List((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1))

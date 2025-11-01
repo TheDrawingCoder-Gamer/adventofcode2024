@@ -9,7 +9,11 @@ import gay.menkissing.common.*
 import scala.annotation.{tailrec, targetName}
 import scala.collection.mutable as mut
 
-object Day15 extends Problem[Day15.ProblemState, Long]:
+object Day15 extends Problem:
+  type Input = ProblemState
+  type Output = Long
+  def showOutput: Show[Long] = summon
+
   enum GridItem:
     case Empty, Wall, Box
 

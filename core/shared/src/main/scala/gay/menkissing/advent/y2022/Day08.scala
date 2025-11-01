@@ -5,8 +5,13 @@ import gay.menkissing.common.*
 
 import scala.io.Source
 import scala.math.Ordering
+import cats.Show
 
-object Day08 extends Problem[Grid[Int], Int]:
+object Day08 extends Problem:
+  type Input = Grid[Int]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   lazy val input = FileIO.getInput(2022, 8)
 
   override def parse(str: String): Grid[Int] =

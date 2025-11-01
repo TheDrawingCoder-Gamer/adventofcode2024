@@ -6,12 +6,18 @@ import gay.menkissing.common.repeated
 import scala.annotation.tailrec
 
 import collection.mutable
+import cats.Show
 
-object Day10 extends Problem[String, Int]:
+object Day10 extends Problem:
+  type Input = String
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   def parse(str: String): String = str.trim
 
   // stupid science...
   // i can't be assed to do this all manually
+  // ^ yet i did anyway. classic
 
   val elements =
     Map(

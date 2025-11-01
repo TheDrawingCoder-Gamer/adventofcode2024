@@ -5,7 +5,11 @@ import cats.*
 import cats.syntax.all.*
 import gay.menkissing.common.bfsFoldl
 
-object Day09 extends Problem[Map[(String, String), Int], Int]:
+object Day09 extends Problem:
+  type Input = Map[(String, String), Int]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   def parse(str: String): Map[(String, String), Int] =
     str.linesIterator.map:
       case s"$x to $y = $n" => ((x, y), n.toInt)

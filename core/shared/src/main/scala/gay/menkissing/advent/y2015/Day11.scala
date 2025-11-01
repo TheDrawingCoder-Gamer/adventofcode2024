@@ -4,7 +4,12 @@ package y2015
 import cats.*
 import cats.syntax.all.*
 
-object Day11 extends Problem[String, String]:
+object Day11 extends Problem:
+  type Input = String
+  type Output = String
+
+  def showOutput: Show[String] = summon
+
   def parse(str: String): String = str.trim
 
   def test(input: String): Boolean =

@@ -7,7 +7,14 @@ import scala.annotation.tailrec
 import scala.collection.immutable.BitSet
 import scala.collection.{AbstractIterator, mutable as mut}
 
-object Day23 extends ProblemAdv[Day23.LANConnections, Long, String]:
+object Day23 extends ProblemAdv:
+  type Input = LANConnections
+  type OutputP1 = Long
+  type OutputP2 = String
+
+  def showOutputP1 = summon
+  def showOutputP2 = summon
+
   override def parse(str: String): Day23.LANConnections =
     LANConnections:
       str.trim.linesIterator.map:

@@ -3,8 +3,13 @@ package y2022
 
 import scala.annotation.tailrec
 import gay.menkissing.common.whatTheScallop
+import cats.Show
 
-object Day25 extends HalfDay[List[Long], String]:
+object Day25 extends HalfDay:
+  type Input = List[Long]
+  type Output = String
+  def showOutput: Show[String] = summon
+
   def snafuToDec(input: String): Long =
     @tailrec
     def helper(input: List[Char], accum: Long): Long =

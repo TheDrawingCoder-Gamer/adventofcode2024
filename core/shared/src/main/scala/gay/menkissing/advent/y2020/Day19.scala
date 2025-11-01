@@ -8,7 +8,10 @@ import parsley.*
 
 import scala.collection.mutable
 
-object Day19 extends Problem[(Map[Int, Day19.RawRule], List[String]), Int]:
+object Day19 extends Problem:
+  type Input = (Map[Int, RawRule], List[String])
+  type Output = Int
+  def showOutput: Show[Int] = summon
 
   enum RawRule:
     case AChar(x: Char)

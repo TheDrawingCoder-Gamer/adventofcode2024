@@ -3,10 +3,15 @@ package y2022
 
 import gay.menkissing.common.*
 import spire.implicits.IntAlgebra
+import cats.Show
 
 // import cats.collections.*
 // import cats.collections.syntax.all.*
-object Day12 extends Problem[(Vec2[Int], Vec2[Int], Day12.MountainMap), Int]:
+object Day12 extends Problem:
+  type Input = (Vec2[Int], Vec2[Int], MountainMap)
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   case class MountainMap(grid: Grid[Byte]) extends AnyVal:
     def verticies: Vector[Vec2[Int]] = (0 until grid.width)
       .flatMap(x => 0.until(grid.height).map(y => Vec2(x, y))).toVector

@@ -1,7 +1,13 @@
 package gay.menkissing.advent
 package y2024
 
-object Day24 extends ProblemAdv[Day24.Machine, Long, String]:
+object Day24 extends ProblemAdv:
+  type Input = Machine
+  type OutputP1 = Long
+  type OutputP2 = String
+
+  def showOutputP1 = summon
+  def showOutputP2 = summon
 
   case class Machine
     (

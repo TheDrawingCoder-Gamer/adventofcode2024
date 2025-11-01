@@ -8,7 +8,11 @@ import scala.collection.mutable as mut
 import cats.*
 import cats.syntax.all.*
 
-object Day16 extends Problem[Day16.ValveMap, Int]:
+object Day16 extends Problem:
+  type Input = ValveMap
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   val fullTimeP2 = 26
   // valve?
   case class ValveRoom(room: String, flowRate: Int, connectsTo: Vector[String]):

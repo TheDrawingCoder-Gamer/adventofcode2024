@@ -1,7 +1,13 @@
 package gay.menkissing.advent
 package y2020
 
-object Day06 extends Problem[List[List[Set[Char]]], Int]:
+import cats.Show
+
+object Day06 extends Problem:
+  type Input = List[List[Set[Char]]]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   override def parse(str: String): List[List[Set[Char]]] =
     str.split("\n\n").map: block =>
       block.linesIterator.map(_.toSet).toList

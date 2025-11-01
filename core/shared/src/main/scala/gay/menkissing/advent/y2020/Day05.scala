@@ -3,8 +3,13 @@ package y2020
 
 import cats.syntax.all.*
 import gay.menkissing.common.ArityN.*
+import cats.Show
 
-object Day05 extends Problem[List[Int], Int]:
+object Day05 extends Problem:
+  type Input = List[Int]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   override def parse(str: String): List[Int] =
     str.linesIterator.map: line =>
       line.foldLeft(0):

@@ -6,7 +6,14 @@ import gay.menkissing.common.*
 import scala.annotation.tailrec
 import spire.implicits.IntAlgebra
 
-object Day18 extends ProblemAdv[List[Vec2[Int]], Int, Vec2[Int]]:
+object Day18 extends ProblemAdv:
+  type Input = List[Vec2[Int]]
+  type OutputP1 = Int
+  type OutputP2 = Vec2[Int]
+
+  def showOutputP1 = summon
+  def showOutputP2 = summon
+
   case class GridSize(x: Int, y: Int)
 
   override def parse(str: String): List[Vec2[Int]] =

@@ -5,7 +5,11 @@ import cats.*
 import cats.implicits.*
 import gay.menkissing.common.*
 
-object Day05 extends Problem[(List[(Int, Int)], List[List[Int]]), Int]:
+object Day05 extends Problem:
+  type Input = (List[(Int, Int)], List[List[Int]])
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   lazy val input = FileIO.getInput(2024, 5)
 
   override def parse(str: String): (List[(Int, Int)], List[List[Int]]) =

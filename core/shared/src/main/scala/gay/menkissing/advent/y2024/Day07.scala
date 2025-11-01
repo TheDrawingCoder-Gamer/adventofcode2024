@@ -2,8 +2,13 @@ package gay.menkissing.advent
 package y2024
 
 import gay.menkissing.common.*
+import cats.Show
 
-object Day07 extends Problem[List[Day07.Equation], Long]:
+object Day07 extends Problem:
+  type Input = List[Equation]
+  type Output = Long
+  def showOutput: Show[Long] = summon
+
   lazy val input = FileIO.getInput(2024, 7)
 
   case class Equation(result: Long, inputs: List[Long]):

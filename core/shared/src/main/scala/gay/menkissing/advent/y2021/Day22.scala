@@ -7,8 +7,13 @@ import spire.implicits.IntAlgebra
 import cats.syntax.show.*
 
 import collection.mutable
+import cats.Show
 
-object Day22 extends Problem[List[Day22.Step], BigInt]:
+object Day22 extends Problem:
+  type Input = List[Step]
+  type Output = BigInt
+  def showOutput: Show[BigInt] = summon
+
   case class Step(command: Command, cuboid: AABB3D[Int])
 
   enum Command:

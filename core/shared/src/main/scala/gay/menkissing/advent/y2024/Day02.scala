@@ -2,8 +2,13 @@ package gay.menkissing.advent
 package y2024
 
 import gay.menkissing.common.ArityN.*
+import cats.Show
 
-object Day02 extends Problem[List[List[Int]], Int]:
+object Day02 extends Problem:
+
+  type Input = List[List[Int]]
+  type Output = Int
+  def showOutput: Show[Int] = summon
   override lazy val input: String = FileIO.getInput(2024, 2)
 
   override def parse(str: String): List[List[Int]] =

@@ -3,8 +3,13 @@ package y2015
 
 import gay.menkissing.common.*, ArityN.*
 import cats.implicits.*
+import cats.Show
 
-object Day21 extends Problem[Day21.Actor, Int]:
+object Day21 extends Problem:
+  type Input = Actor
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   case class Actor(hp: Int, damage: Int, armor: Int):
     def diesIn(dmg: Int): Int =
       val realDmg = math.max(1, dmg - armor)

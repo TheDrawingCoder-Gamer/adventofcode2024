@@ -5,7 +5,14 @@ import gay.menkissing.common.*
 
 import scala.annotation.tailrec
 
-object Day17 extends ProblemAdv[Day17.ComputerState, String, Long]:
+object Day17 extends ProblemAdv:
+  type Input = ComputerState
+  type OutputP1 = String
+  type OutputP2 = Long
+
+  def showOutputP1 = summon
+  def showOutputP2 = summon
+
   case class ComputerState
     (
       ip: Int,

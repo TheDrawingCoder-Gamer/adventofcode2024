@@ -2,8 +2,13 @@ package gay.menkissing.advent
 package y2021
 
 import gay.menkissing.common.*
+import cats.Show
 
-object Day18 extends Problem[Day18.SnailfishNum, Long]:
+object Day18 extends Problem:
+  type Input = SnailfishNum
+  type Output = Long
+  def showOutput: Show[Long] = summon
+
   sealed trait SnailfishNum:
     def +(that: SnailfishNum): SnailfishNum = SnailfishGroup(this, that)
     def dfsMapFirst(f: SnailfishNum => Option[SnailfishNum]): SnailfishNum =

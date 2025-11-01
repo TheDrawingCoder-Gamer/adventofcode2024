@@ -4,8 +4,13 @@ package y2021
 import cats.syntax.all.*
 
 import scala.annotation.tailrec
+import cats.Show
 
-object Day02 extends Problem[List[(Day02.Dir, Int)], Int]:
+object Day02 extends Problem:
+  type Input = List[(Dir, Int)]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   lazy val input = FileIO.getInput(2021, 2)
 
   enum Dir:

@@ -5,7 +5,11 @@ import cats.implicits.*
 import cats.syntax.functorFilter.*
 import cats.*
 
-object Day02 extends Problem[List[Day02.Game], Int]:
+object Day02 extends Problem:
+  type Input = List[Game]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   case class Pull(r: Int, g: Int, b: Int):
     def +(that: Pull) = zipWith(_ + _)(that)
 

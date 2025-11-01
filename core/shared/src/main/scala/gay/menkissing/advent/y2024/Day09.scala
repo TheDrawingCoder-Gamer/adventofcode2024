@@ -4,8 +4,12 @@ package y2024
 import gay.menkissing.common.*
 
 import scala.collection.mutable as mut
+import cats.Show
 
-object Day09 extends Problem[String, Long]:
+object Day09 extends Problem:
+  type Input = String
+  type Output = Long
+  def showOutput: Show[Long] = summon
 
   lazy val input = FileIO.getInput(2024, 9).trim
 

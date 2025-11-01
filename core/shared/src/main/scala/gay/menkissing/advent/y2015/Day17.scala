@@ -1,7 +1,13 @@
 package gay.menkissing.advent
 package y2015
 
-object Day17 extends Problem[List[Int], Int]:
+import cats.Show
+
+object Day17 extends Problem:
+  type Input = List[Int]
+  type Output = Int
+  def showOutput: Show[Int] = summon
+
   lazy val input = FileIO.getInput(2015, 17)
 
   // yes WE are giving our classes identity
