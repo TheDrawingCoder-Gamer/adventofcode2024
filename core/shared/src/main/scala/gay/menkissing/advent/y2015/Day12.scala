@@ -25,7 +25,9 @@ object Day12 extends Problem[String, Int]:
         // ignore strings (red standalone/in array does nothing)
         _ => 0,
         arr => arr.map(go).sum,
-        obj => if obj.values.exists(it => it.asString.contains("red")) then 0 else obj.values.map(go).sum
+        obj =>
+          if obj.values.exists(it => it.asString.contains("red")) then 0
+          else obj.values.map(go).sum
       )
 
     go(freakyObj)

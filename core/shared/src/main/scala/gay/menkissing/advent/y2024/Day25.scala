@@ -9,7 +9,8 @@ object Day25 extends HalfDay[List[Day25.KeyOrLock], Long]:
 
   override def parse(str: String): List[KeyOrLock] =
     str.split("\n\n").map: str =>
-      val goodGrid: Vector[Vector[Char]] = str.linesIterator.map(_.toVector).toVector
+      val goodGrid: Vector[Vector[Char]] =
+        str.linesIterator.map(_.toVector).toVector
       val isKey = goodGrid(0)(0) != '#'
       val pinHeights = goodGrid.transpose.map(_.count(_ == '#') - 1)
       KeyOrLock(isKey, pinHeights)
@@ -24,5 +25,3 @@ object Day25 extends HalfDay[List[Day25.KeyOrLock], Long]:
     .size
 
   override lazy val input: String = FileIO.getInput(2024, 25)
-
-

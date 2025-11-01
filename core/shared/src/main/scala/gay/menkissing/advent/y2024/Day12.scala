@@ -1,7 +1,6 @@
 package gay.menkissing.advent
 package y2024
 
-
 import scala.collection.mutable as mut
 
 object Day12 extends Problem[Day12.PlantMap, Int]:
@@ -9,8 +8,8 @@ object Day12 extends Problem[Day12.PlantMap, Int]:
   def cardinalPositions(x: Int, y: Int): List[(Int, Int)] =
     List((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1))
 
-  def neighborPositions(ix: Int, iy: Int): List[(Int, Int)] =
-    (ix - 1 to ix + 1).flatMap { x =>
+  def neighborPositions(ix: Int, iy: Int): List[(Int, Int)] = (ix - 1 to ix + 1)
+    .flatMap { x =>
       (iy - 1 to iy + 1).flatMap { y =>
         Option.when(x != ix || y != iy)((x, y))
       }
@@ -36,22 +35,31 @@ object Day12 extends Problem[Day12.PlantMap, Int]:
       PlantMap(res.map(_.mkString("", "", "")).toVector)
 
     def inflate: Region =
-      region.flatMap((x, y) => List((x * 2, y * 2), (x * 2 + 1, y * 2), (x * 2, y * 2 + 1), (x * 2 + 1, y * 2 + 1)))
+      region.flatMap((x, y) =>
+        List(
+          (x * 2, y * 2),
+          (x * 2 + 1, y * 2),
+          (x * 2, y * 2 + 1),
+          (x * 2 + 1, y * 2 + 1)
+        )
+      )
 
     def sides: Int =
       val bigRegion = region.inflate
       val regionMap = bigRegion.asPlantMap
       bigRegion.count: (x, y) =>
-        val neighborCount = regionMap.optionalNeighbors(x, y).count(_.contains('#'))
+        val neighborCount =
+          regionMap.optionalNeighbors(x, y).count(_.contains('#'))
         neighborCount match
           case 3 | 4 | 7 => true
-          case _ => false
+          case _         => false
 
     def area: Int = region.size
     def perimeter: Int =
       val regionMap = region.asPlantMap
-      region.map((x, y) => regionMap.optionalCardinalNeighbors(x, y).count(_.forall(_ != '#'))).sum
-
+      region.map((x, y) =>
+        regionMap.optionalCardinalNeighbors(x, y).count(_.forall(_ != '#'))
+      ).sum
 
   case class PlantMap(plants: Vector[String]):
     val height: Int = plants.size
@@ -59,8 +67,7 @@ object Day12 extends Problem[Day12.PlantMap, Int]:
     // Length should be equal
     assert(plants.forall(_.length == width))
 
-    def apply(x: Int, y: Int): Char =
-      plants(y)(x)
+    def apply(x: Int, y: Int): Char = plants(y)(x)
 
     def get(x: Int, y: Int): Option[Char] =
       Option.when(isDefinedAt(x, y))(apply(x, y))
@@ -68,15 +75,11 @@ object Day12 extends Problem[Day12.PlantMap, Int]:
     def isDefinedAt(x: Int, y: Int): Boolean =
       x >= 0 && x < width && y >= 0 && y < height
 
-    def indices: Vector[(Int, Int)] =
-      (0 until height)
-        .flatMap(y => (0 until width)
-        .map(x => (x, y)))
-        .toVector
+    def indices: Vector[(Int, Int)] = (0 until height)
+      .flatMap(y => (0 until width).map(x => (x, y))).toVector
 
     def optionalCardinalNeighbors(x: Int, y: Int): List[Option[Char]] =
       cardinalPositions(x, y).map(get)
-
 
     def optionalNeighbors(x: Int, y: Int): List[Option[Char]] =
       neighborPositions(x, y).map(get)
@@ -100,17 +103,12 @@ object Day12 extends Problem[Day12.PlantMap, Int]:
           val points = floodFill(head._1, head._2)
           (points, acc.diff(points))
 
-
-
-  def parse(str: String): PlantMap =
-    PlantMap(str.linesIterator.toVector)
-
+  def parse(str: String): PlantMap = PlantMap(str.linesIterator.toVector)
 
   def part1(plants: PlantMap): Int =
     plants.regions.map(r => r.area * r.perimeter).sum
 
   def part2(plants: PlantMap): Int =
     plants.regions.map(r => r.area * r.sides).sum
-
 
   override lazy val input: String = FileIO.getInput(2024, 12)

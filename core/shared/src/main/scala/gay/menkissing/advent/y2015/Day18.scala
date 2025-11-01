@@ -12,24 +12,22 @@ object Day18 extends Problem[Grid[Boolean], Int]:
     Grid.fromString(str):
       case '.' => false
       case '#' => true
-      case _ => whatTheScallop.!
-  
+      case _   => whatTheScallop.!
+
   def setCorners(grid: Grid[Boolean]): Grid[Boolean] =
-    grid.updated(0, 0)(true)
-      .updated(grid.width - 1, 0)(true)
+    grid.updated(0, 0)(true).updated(grid.width - 1, 0)(true)
       .updated(0, grid.height - 1)(true)
       .updated(grid.width - 1, grid.height - 1)(true)
 
   def step(grid: Grid[Boolean]): Grid[Boolean] =
     grid.mapWithIndex: (p, v) =>
       val c = p.allNeighbors.count(it => grid.getOrElse(it, false))
-      if v then
-        c == 2 || c == 3
-      else
-        c == 3
+      if v then c == 2 || c == 3
+      else c == 3
 
   def part1(input: Grid[Boolean]): Int =
     step.repeated(100)(input).count(identity).toInt
 
   def part2(input: Grid[Boolean]): Int =
-    setCorners(setCorners.andThen(step).repeated(100)(input)).count(identity).toInt
+    setCorners(setCorners.andThen(step).repeated(100)(input)).count(identity)
+      .toInt

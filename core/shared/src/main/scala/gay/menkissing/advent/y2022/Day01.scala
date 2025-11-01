@@ -2,7 +2,7 @@ package gay.menkissing.advent
 package y2022
 
 object Day01 extends Problem[List[List[Int]], Int]:
-  def parse(str : String) : List[List[Int]] =
+  def parse(str: String): List[List[Int]] =
     str.split("\n\n").map: block =>
       block.linesIterator.map(_.toInt).toList
     .toList

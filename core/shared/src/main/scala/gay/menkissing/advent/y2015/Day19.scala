@@ -5,7 +5,6 @@ import cats.*
 import cats.implicits.*
 import cats.data.Chain
 
-
 import gay.menkissing.common.*
 import alleycats.std.set.*
 
@@ -24,40 +23,43 @@ object Day19 extends Problem[(Map[String, List[String]], String), Int]:
       cur = rest
     builder.result()
 
-
   def parse(str: String): (Map[String, List[String]], String) =
-    val Array(mapLines, pat) = str.split("\n\n").array : @unchecked
-    val daMap = 
+    val Array(mapLines, pat) = str.split("\n\n").array: @unchecked
+    val daMap =
       mapLines.linesIterator.map:
         case s"$k => $v" => (k, v)
       .toList.groupMap(_._1)(_._2)
     (daMap, pat.trim)
 
-  
-  def uniqueReplacements(str: String, replace: String, withValue: String): Set[String] =
+  def uniqueReplacements
+    (
+      str: String,
+      replace: String,
+      withValue: String
+    ): Set[String] =
 
     @tailrec def go(prev: String, rest: String, acc: Set[String]): Set[String] =
-      if rest.isEmpty then
-        acc
+      if rest.isEmpty then acc
       else if rest.startsWith(replace) then
-        go(prev + rest.head, rest.tail, acc + (prev + withValue + rest.drop(replace.length)))
-      else
-        go(prev + rest.head, rest.tail, acc)
+        go(
+          prev + rest.head,
+          rest.tail,
+          acc + (prev + withValue + rest.drop(replace.length))
+        )
+      else go(prev + rest.head, rest.tail, acc)
     go("", str, Set.empty)
-
 
   def part1(input: (Map[String, List[String]], String)): Int =
     val (daMap, pattern) = input
 
-    val values = 
-      daMap.map: (k, v) => 
-        v.map: value => 
+    val values =
+      daMap.map: (k, v) =>
+        v.map: value =>
           uniqueReplacements(pattern, k, value)
         .reduce(_ ++ _)
       .reduce(_ ++ _)
-      
-    values.size
 
+    values.size
 
   def part2(input: (Map[String, List[String]], String)): Int =
     val (_, pattern) = input
@@ -78,7 +80,7 @@ object Day19 extends Problem[(Map[String, List[String]], String), Int]:
     // our test input violates our first rule, so its not particularly useful for this
     // Here we are basically doing the opposite of this, but we only really care about
     // the count of steps.
-    // We start with 2 elements from `e`, and with T => TT operations we add 1 element 
+    // We start with 2 elements from `e`, and with T => TT operations we add 1 element
     // each step.
     // Inverting this, we can remove one element every step.
     // So AAAAA => AAAA => AAA => AA => A
@@ -88,9 +90,7 @@ object Day19 extends Problem[(Map[String, List[String]], String), Int]:
     // In this case, we can just ignore the parens and only count elements, and apply our previous rule.
     // T => T(T,T)
     // A(A(A,A),A(A,A)) => A(A(A,A),A) => A(A,A) => A
-    // As always, we can ignore parens. Elems: 7, commas: 3. 
+    // As always, we can ignore parens. Elems: 7, commas: 3.
     // We subtract commas from our elems count, as each extra argument in an application lets us take 2 tokens, one of them being the comma.
     // Equivilantly, we can do total tokens - parens - 2 * commas - 1.
     elems.size - (lParen + rParen) - 2 * commas - 1
-
-

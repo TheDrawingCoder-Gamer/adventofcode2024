@@ -8,5 +8,4 @@ object Gc:
   @JSGlobal("gc")
   def jsGc(minorGc: Boolean): Unit = js.native
 
-
   def gc(): Unit = jsGc(false)

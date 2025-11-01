@@ -52,6 +52,4 @@ object Day03 extends Problem[String, Int]:
 
     set.size
 
-
-
   lazy val input: String = FileIO.getInput(2015, 3)

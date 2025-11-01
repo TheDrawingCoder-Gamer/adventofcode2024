@@ -13,10 +13,11 @@ object Day08 extends Problem[Grid[Int], Int]:
     Grid:
       str.linesIterator.map:
         _.map(_.toInt - '0')
-        
+
   def isVisible(grid: Grid[Int])(x: Int, y: Int): Boolean =
     val v = grid(x, y)
-    val isEdge = (x == 0 || x == grid.width - 1) || (y == 0 || y == grid.height - 1)
+    val isEdge =
+      (x == 0 || x == grid.width - 1) || (y == 0 || y == grid.height - 1)
     lazy val right = grid.rows(y).drop(x + 1).forall(_ < v)
     lazy val left = grid.rows(y).take(x).forall(_ < v)
     lazy val col = grid.columns(x)
@@ -35,15 +36,12 @@ object Day08 extends Problem[Grid[Int], Int]:
     val uedge = y == 0
     val dedge = y == grid.height - 1
     val isEdge = ledge || redge || uedge || dedge
-    if isEdge then
-      0
+    if isEdge then 0
     else
       def edgeView(part: Seq[Int]): Int =
         val r = part.countWhile(_ < v)
-        if part.lengthIs == r then
-          r
-        else
-          r + 1
+        if part.lengthIs == r then r
+        else r + 1
       val row = grid.rows(y)
       val right = edgeView(row.drop(x + 1))
       val left = edgeView(row.take(x).reverse)

@@ -17,23 +17,29 @@ object Day18 extends NewProblem[Map[Vec3[Int], Day18.Cube], Int]:
   def parseP2(str: String): Map[Vec3[Int], Cube] = parse(str, false)
   def neighbors(pos: Vec3[Int]): Iterable[Vec3[Int]] =
     Direction3D.values.toList.map(v => pos.offset(v))
-  case class Cube(pos: Vec3[Int], north: Boolean, east: Boolean, south: Boolean, west: Boolean, up: Boolean, down: Boolean):
+  case class Cube
+    (
+      pos: Vec3[Int],
+      north: Boolean,
+      east: Boolean,
+      south: Boolean,
+      west: Boolean,
+      up: Boolean,
+      down: Boolean
+    ):
     def surfaceArea: Int =
-      (if north then 1 else 0)
-      + (if east then 1 else 0)
-      + (if south then 1 else 0)
-      + (if west then 1 else 0)
-      + (if up then 1 else 0)
-      + (if down then 1 else 0)
+      (if north then 1 else 0) + (if east then 1 else 0) +
+        (if south then 1 else 0) + (if west then 1 else 0) +
+        (if up then 1 else 0) + (if down then 1 else 0)
     def updated(dir: Direction3D, v: Boolean): Cube =
       dir match
         case Direction3D.North => copy(north = v)
-        case Direction3D.East => copy(east = v)
+        case Direction3D.East  => copy(east = v)
         case Direction3D.South => copy(south = v)
-        case Direction3D.West => copy(west = v)
-        case Direction3D.Up => copy(up = v)
-        case Direction3D.Down => copy(down = v)
-      
+        case Direction3D.West  => copy(west = v)
+        case Direction3D.Up    => copy(up = v)
+        case Direction3D.Down  => copy(down = v)
+
     def updateFaces(map: Map[Vec3[Int], Cube]) =
       val (cube, resMap) =
         Direction3D.values.foldLeft((this, map)):
@@ -41,26 +47,20 @@ object Day18 extends NewProblem[Map[Vec3[Int], Day18.Cube], Int]:
             val daPos = pos.offset(dir, 1)
             map.get(daPos) match
               case Some(daCube) =>
-                (curCube.updated(dir, false), map.updated(daPos, daCube.updated(dir.reverse, false)))
-              case None =>
-                (curCube, map)
+                (
+                  curCube.updated(dir, false),
+                  map.updated(daPos, daCube.updated(dir.reverse, false))
+                )
+              case None => (curCube, map)
       resMap.updated(pos, cube)
-
 
   lazy val input = FileIO.getInput(2022, 18)
 
-
-
-
-
-
   def part1(input: Map[Vec3[Int], Cube]): Int =
-    val goodInput = 
+    val goodInput =
       input.foldLeft(input):
-        case (m, (_, c)) =>
-          c.updateFaces(m)
+        case (m, (_, c)) => c.updateFaces(m)
     goodInput.map((_, c) => c.surfaceArea).sum
-
 
   def spotIsAir(map: Map[Vec3[Int], Cube], v: Vec3[Int]): Boolean =
     !map.contains(v)
@@ -68,7 +68,12 @@ object Day18 extends NewProblem[Map[Vec3[Int], Day18.Cube], Int]:
   // it will be less than part 1
   //
 
-  def floodFill(start: Vec3[Int], map: Map[Vec3[Int], Cube], bounds: AABB3D[Int]): Set[Vec3[Int]] =
+  def floodFill
+    (
+      start: Vec3[Int],
+      map: Map[Vec3[Int], Cube],
+      bounds: AABB3D[Int]
+    ): Set[Vec3[Int]] =
     assert(!map.contains(start))
     val q = mutable.Queue[Vec3[Int]](start)
     val items = mutable.Set[Vec3[Int]]()
@@ -91,7 +96,7 @@ object Day18 extends NewProblem[Map[Vec3[Int], Day18.Cube], Int]:
         Direction3D.values.foldLeft(map): (m2, dir) =>
           val p = it.offset(dir)
           m2.updatedWith(p):
-            case None => None
+            case None    => None
             case Some(c) => Some(c.updated(dir.reverse, true))
     // println(resMap)
     resMap.map(_._2.surfaceArea).sum

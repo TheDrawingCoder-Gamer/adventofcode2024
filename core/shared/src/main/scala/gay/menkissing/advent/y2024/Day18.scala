@@ -9,7 +9,6 @@ import spire.implicits.IntAlgebra
 object Day18 extends ProblemAdv[List[Vec2[Int]], Int, Vec2[Int]]:
   case class GridSize(x: Int, y: Int)
 
-
   override def parse(str: String): List[Vec2[Int]] =
     str.linesIterator.map:
       case s"$x,$y" => Vec2(x.toInt, y.toInt)
@@ -17,41 +16,59 @@ object Day18 extends ProblemAdv[List[Vec2[Int]], Int, Vec2[Int]]:
 
   override def part1(input: List[Vec2[Int]]): Int =
     val bytes = input.take(bytesFallen)
-    val daGrid = bytes.foldLeft(Grid.fill(gridSize.x, gridSize.y)(false))((g, p) => g.updated(p)(true))
+    val daGrid =
+      bytes.foldLeft(Grid.fill(gridSize.x, gridSize.y)(false))((g, p) =>
+        g.updated(p)(true)
+      )
     val daEnd = Vec2(gridSize.x - 1, gridSize.y - 1)
-    val path = astarByReturning(Vec2(0, 0), _ == daEnd, _.taxiDistance(daEnd), (_, _) => 1d, _.cardinalNeighbors.filter(p => daGrid.get(p).contains(false)), SearchReturns.lengthFromPath).get
+    val path =
+      astarByReturning(
+        Vec2(0, 0),
+        _ == daEnd,
+        _.taxiDistance(daEnd),
+        (_, _) => 1d,
+        _.cardinalNeighbors.filter(p => daGrid.get(p).contains(false)),
+        SearchReturns.lengthFromPath
+      ).get
 
     path - 1
 
-
-  extension[A] (ls: List[A])
+  extension [A](ls: List[A])
     @tailrec
-    def foldLeftCollect[Z, R](start: Z)(func: (Z, A) => Either[R, Z]): Option[R] =
+    def foldLeftCollect[Z, R]
+      (
+        start: Z
+      )
+      (func: (Z, A) => Either[R, Z]): Option[R] =
       ls match
         case head :: rest =>
           func(start, head) match
             case Left(result) => Some(result)
-            case Right(acc) => rest.foldLeftCollect(acc)(func)
+            case Right(acc)   => rest.foldLeftCollect(acc)(func)
         case Nil => None
-
 
   override def part2(input: List[Vec2[Int]]): Vec2[Int] =
     val daGrid = Grid.fill(gridSize.x, gridSize.y)(false)
     val daEnd = Vec2(gridSize.x - 1, gridSize.y - 1)
 
     def testPath(g: Grid[Boolean]): Boolean =
-      astar[Vec2[Int]](Vec2(0, 0), daEnd, _.taxiDistance(daEnd), (_, _) => 1d, _.cardinalNeighbors.filter(p => g.get(p).contains(false))).isDefined
+      astar[Vec2[Int]](
+        Vec2(0, 0),
+        daEnd,
+        _.taxiDistance(daEnd),
+        (_, _) => 1d,
+        _.cardinalNeighbors.filter(p => g.get(p).contains(false))
+      ).isDefined
 
-    val res = input.foldLeftCollect[Grid[Boolean], Vec2[Int]](daGrid): (grid, p) =>
-      val newGrid = grid.updated(p)(true)
-      val openNeighbors = p.cardinalNeighbors.map(newGrid.get).count(_.contains(false))
-      if openNeighbors == 2 && !testPath(newGrid) then
-        Left(p)
-      else
-        Right(newGrid)
+    val res =
+      input.foldLeftCollect[Grid[Boolean], Vec2[Int]](daGrid): (grid, p) =>
+        val newGrid = grid.updated(p)(true)
+        val openNeighbors =
+          p.cardinalNeighbors.map(newGrid.get).count(_.contains(false))
+        if openNeighbors == 2 && !testPath(newGrid) then Left(p)
+        else Right(newGrid)
 
     res.get
-
 
   val test = false
 

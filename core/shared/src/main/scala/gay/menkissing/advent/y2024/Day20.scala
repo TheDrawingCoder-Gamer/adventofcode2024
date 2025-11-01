@@ -10,15 +10,17 @@ import cats.syntax.all.*
 object Day20 extends Problem[Day20.RaceTrack, Int]:
   extension (grid: Grid[Boolean])
     def pathfind(start: Vec2[Int], goal: Vec2[Int]): Option[List[Vec2[Int]]] =
-      def reconstructPath(cameFrom: Map[Vec2[Int], Vec2[Int]], p: Vec2[Int]): List[Vec2[Int]] = {
+      def reconstructPath
+        (
+          cameFrom: Map[Vec2[Int], Vec2[Int]],
+          p: Vec2[Int]
+        ): List[Vec2[Int]] =
         val totalPath = mut.ListBuffer[Vec2[Int]](p)
         var current = p
-        while (cameFrom.contains(current)) {
+        while cameFrom.contains(current) do
           current = cameFrom(current)
           totalPath.prepend(current)
-        }
         totalPath.toList
-      }
       val cameFrom = mut.HashMap[Vec2[Int], Vec2[Int]]()
       val dist = mut.HashMap[Vec2[Int], Int](start -> 0)
 
@@ -28,12 +30,13 @@ object Day20 extends Problem[Day20.RaceTrack, Int]:
       while q.nonEmpty && q.head =!= goal do
         val (current, score) = q.extractWithPriority()
 
-        current.cardinalNeighbors.filter(grid.get(_).contains(false)).foreach: neighbor =>
-          val alt = score + 1
-          if dist.get(neighbor).forall(alt < _) then
-            cameFrom(neighbor) = current
-            dist(neighbor) = alt
-            q.updatePriority(neighbor, alt)
+        current.cardinalNeighbors.filter(grid.get(_).contains(false)).foreach:
+          neighbor =>
+            val alt = score + 1
+            if dist.get(neighbor).forall(alt < _) then
+              cameFrom(neighbor) = current
+              dist(neighbor) = alt
+              q.updatePriority(neighbor, alt)
 
       q.headOption.map: p =>
         reconstructPath(cameFrom.toMap, p)
@@ -45,15 +48,16 @@ object Day20 extends Problem[Day20.RaceTrack, Int]:
       basePath.zipWithIndex.flatMap: (lp, li) =>
         basePath.zipWithIndex.drop(li).flatMap: (rp, ri) =>
           val dist = lp.taxiDistance(rp)
-          Option.when(dist <= limit && (dist < ri - li))(Cheat(lp, rp, (ri - li) - dist))
-
+          Option.when(dist <= limit && (dist < ri - li))(
+            Cheat(lp, rp, (ri - li) - dist)
+          )
 
   case class Cheat(start: Vec2[Int], end: Vec2[Int], saved: Int)
-  
-
 
   override def parse(str: String): RaceTrack =
-    val goodGrid = mut.ArrayBuffer.fill(str.linesIterator.length, str.linesIterator.next().length)(false)
+    val goodGrid =
+      mut.ArrayBuffer
+        .fill(str.linesIterator.length, str.linesIterator.next().length)(false)
     var start = Vec2(0, 0)
     var end = Vec2(0, 0)
     str.linesIterator.zipWithIndex.foreach: (line, y) =>
@@ -61,10 +65,10 @@ object Day20 extends Problem[Day20.RaceTrack, Int]:
         char match
           case 'S' => start = Vec2(x, y)
           case 'E' => end = Vec2(x, y)
-          case _ => ()
+          case _   => ()
         char match
           case '#' => goodGrid(y)(x) = true
-          case _ => ()
+          case _   => ()
     RaceTrack(start, end, Grid(goodGrid))
 
   override def part1(input: RaceTrack): Int =

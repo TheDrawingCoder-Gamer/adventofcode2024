@@ -17,17 +17,16 @@ object Day22 extends Problem[List[Day22.Step], BigInt]:
   object Command:
     def parse(v: String): Command =
       v match
-        case "on" => On
+        case "on"  => On
         case "off" => Off
-        case _ => whatTheScallop.!
+        case _     => whatTheScallop.!
 
   lazy val input = FileIO.getInput(2021, 22)
-
 
   def tryAddhole(obj: AABB3D[Int], hole: AABB3D[Int]): Set[AABB3D[Int]] =
     obj intersect hole match
       case Some(realHole) => addHole(obj, realHole)
-      case None => Set(obj)
+      case None           => Set(obj)
 
   def addHole(obj: AABB3D[Int], hole: AABB3D[Int]): Set[AABB3D[Int]] =
     var daSet = Set.empty[AABB3D[Int]]
@@ -43,32 +42,36 @@ object Day22 extends Problem[List[Day22.Step], BigInt]:
       daSet += AABB3D(hole.xs, hole.ys, obj.zs.min dimBy hole.zs.min - 1)
     if obj.zs.max != hole.zs.max then
       daSet += AABB3D(hole.xs, hole.ys, hole.zs.max + 1 dimBy obj.zs.max)
-    
+
     daSet
   def parse(str: String): List[Step] =
     str.linesIterator.map:
       case s"$cmd x=$lx..$rx,y=$ly..$ry,z=$lz..$rz" =>
         val command = Command.parse(cmd)
-        Step(command, AABB3D(lx.toInt dimBy rx.toInt, ly.toInt dimBy ry.toInt, lz.toInt dimBy rz.toInt))
+        Step(
+          command,
+          AABB3D(
+            lx.toInt dimBy rx.toInt,
+            ly.toInt dimBy ry.toInt,
+            lz.toInt dimBy rz.toInt
+          )
+        )
     .toList
-  
-  def fitsBound(min: Int, max: Int)(v: Int): Boolean = 
-    v >= min && v <= max
 
+  def fitsBound(min: Int, max: Int)(v: Int): Boolean = v >= min && v <= max
 
   def run(steps: List[Step]): Set[AABB3D[Int]] =
     steps.foldLeft(Set.empty[AABB3D[Int]]): (daSet, step) =>
-      val toAdd = if step.command == Command.On then Set(step.cuboid) else Set.empty
+      val toAdd =
+        if step.command == Command.On then Set(step.cuboid) else Set.empty
       val r = daSet.flatMap(it => tryAddhole(it, step.cuboid)) ++ toAdd
       // println(r.map(_.show))
       // println(score(r))
       r
-    
-  def score(s: Set[AABB3D[Int]]): BigInt =
-    s.toList.map(_.volume).sum
+
+  def score(s: Set[AABB3D[Int]]): BigInt = s.toList.map(_.volume).sum
   def part1(input: List[Step]): BigInt =
     val rangeBound = AABB3D(-50 dimBy 50, -50 dimBy 50, -50 dimBy 50)
     score(run(input.takeWhile(_.cuboid.fitsIn(rangeBound))))
-  
-  def part2(input: List[Step]): BigInt =
-    score(run(input))
+
+  def part2(input: List[Step]): BigInt = score(run(input))

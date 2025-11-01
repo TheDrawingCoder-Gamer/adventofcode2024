@@ -12,7 +12,6 @@ object Day03 extends Problem[Grid[Char], Int]:
   def parse(input: String): Grid[Char] =
     Grid(input.linesIterator.map(_.iterator))
 
-
   case class Number(n: Int, size: Int, point: Vec2[Int])
   extension (grid: Grid[Char])
     def gears: Seq[Vec2[Int]] =
@@ -30,17 +29,19 @@ object Day03 extends Problem[Grid[Char], Int]:
             Some:
               if goingLeft then
                 go(p.copy(x = p.x - 1), goingLeft) match
-                  case None => Number(r, 1, p)
-                  case Some(Number(r2, s2, p2)) => Number(r2 * 10 + r, s2 + 1, p2)
+                  case None                     => Number(r, 1, p)
+                  case Some(Number(r2, s2, p2)) =>
+                    Number(r2 * 10 + r, s2 + 1, p2)
               else
                 go(p.copy(x = p.x + 1), goingLeft) match
-                  case None => Number(r, 1, p)
-                  case Some(Number(r2, s2, p2)) => Number(r * math.pow(10, s2).toInt + r2, s2 + 1, p)
+                  case None                     => Number(r, 1, p)
+                  case Some(Number(r2, s2, p2)) =>
+                    Number(r * math.pow(10, s2).toInt + r2, s2 + 1, p)
           case _ => None
       val left = go(pos.copy(x = pos.x - 1), true)
       val right = go(pos, false)
       left match
-        case None => right
+        case None                     => right
         case Some(Number(lv, ls, lp)) =>
           right.map: r =>
             Number(lv * math.pow(10, r.size).toInt + r.n, ls + r.size, lp)
@@ -49,13 +50,11 @@ object Day03 extends Problem[Grid[Char], Int]:
     input.symbols.flatMap: (_, p) =>
       p.allNeighbors.flatMap(input.numberAt)
     .distinctBy(_.point).foldLeft(0):
-      case (acc, Number(n, _, _)) =>
-        acc + n
-
+      case (acc, Number(n, _, _)) => acc + n
 
   def part2(input: Grid[Char]): Int =
     input.gears.flatMap: p =>
       p.allNeighbors.flatMap(input.numberAt).distinct.toList match
         case List(x, y) => Some(x.n * y.n)
-        case _ => None
+        case _          => None
     .sum

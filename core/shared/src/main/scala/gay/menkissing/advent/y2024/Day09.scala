@@ -6,7 +6,7 @@ import gay.menkissing.common.*
 import scala.collection.mutable as mut
 
 object Day09 extends Problem[String, Long]:
-  
+
   lazy val input = FileIO.getInput(2024, 9).trim
 
   override def parse(str: String): String = str
@@ -15,19 +15,15 @@ object Day09 extends Problem[String, Long]:
     var freakyNum: Long = 0
     Disk(str.zipWithIndex.flatMap: (s, i) =>
       if i % 2 == 0 then Iterator.fill(s.asDigit)((i / 2).toLong)
-      else Iterator.fill(s.asDigit)(-1L)
-      
-    )
+      else Iterator.fill(s.asDigit)(-1L))
 
-  def unpackP2(str: String): Vector[Chunk] = {
+  def unpackP2(str: String): Vector[Chunk] =
     str.zipWithIndex.map { (s, i) =>
-      if (i % 2 == 0) File(s.asDigit, i / 2) else Free(s.asDigit)
+      if i % 2 == 0 then File(s.asDigit, i / 2) else Free(s.asDigit)
     }.toVector
-  }
-  
 
   sealed trait Chunk
-  
+
   case class File(size: Int, id: Long) extends Chunk
   case class Free(size: Int) extends Chunk
 
@@ -35,71 +31,58 @@ object Day09 extends Problem[String, Long]:
     override def toString: String =
       disk.map:
         case -1 => '.'
-        case c => prettyCharForNum(c.toInt)
-          
+        case c  => prettyCharForNum(c.toInt)
       .mkString("")
-
 
     def checksum: Long =
       disk.zipWithIndex.filterNot(_._1 == -1).foldLeft(0L): (acc, r) =>
         acc + (r._1 * r._2)
-      
-  
+
     def part1: Disk =
       val sorted = disk.toArray
       val countFilled = sorted.count(_ != -1)
-  
+
       while sorted.indexWhere(_ == -1) < countFilled do
         val lastIdx = sorted.lastIndexWhere(_ != -1)
         val lastBlock = sorted(lastIdx)
         sorted.update(lastIdx, -1)
         val startIdx = sorted.indexWhere(_ == -1)
         sorted.update(startIdx, lastBlock)
-      
+
       Disk(sorted.toSeq)
 
-  
-
-
-
-
   def flattenChunkList(chunks: Iterable[Chunk]): Disk =
-    Disk(
-      chunks.flatMap:
-        case File(size, id) => Iterator.fill(size)(id)
-        case Free(size) => Iterator.fill(size)(-1L)
-      .toList)
-  
-
+    Disk(chunks.flatMap:
+      case File(size, id) => Iterator.fill(size)(id)
+      case Free(size)     => Iterator.fill(size)(-1L)
+    .toList)
 
   def calculateP2(chunks: Vector[Chunk]): Vector[Chunk] =
     val data = chunks.iterator.to(mut.ArrayBuffer.iterableFactory[Chunk])
-    var curId = chunks.findLast(_.isInstanceOf[File]).get.asInstanceOf[File].id + 1
-  
+    var curId =
+      chunks.findLast(_.isInstanceOf[File]).get.asInstanceOf[File].id + 1
+
     while curId >= 0 do
-      val curIdx = data.lastIndexWhere:
-        case File(size, id) => id < curId
-        case _ => false
+      val curIdx =
+        data.lastIndexWhere:
+          case File(size, id) => id < curId
+          case _              => false
       if curIdx >= 0 then
         val curFile = data(curIdx).asInstanceOf[File]
         curId = curFile.id
-        val freespace = data.indexWhere:
-          case Free(size) => size >= curFile.size
-          case _ => false
+        val freespace =
+          data.indexWhere:
+            case Free(size) => size >= curFile.size
+            case _          => false
         if freespace < curIdx && freespace > 0 then
           val curFreespace = data(freespace).asInstanceOf[Free]
           data(freespace) = curFile
           data(curIdx) = Free(curFile.size)
           if curFile.size < curFreespace.size then
             data.insert(freespace + 1, Free(curFreespace.size - curFile.size))
-          
-      else
-        curId = -1
+      else curId = -1
 
-    
-  
     data.toVector
-  
 
   override def part1(input: String): Long =
     val disk = unpackData(input)

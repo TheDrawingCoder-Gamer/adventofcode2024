@@ -9,41 +9,33 @@ object Day02 extends Problem[List[Day02.RawThrow], Int]:
       this match
         case Loss => 0
         case Draw => 3
-        case Win => 6
-
+        case Win  => 6
 
   enum RPS:
     case Rock, Paper, Scissors
 
     def beatsOther(that: RPS): Boolean =
       this match
-        case Rock => that == Scissors
-        case Paper => that == Rock
+        case Rock     => that == Scissors
+        case Paper    => that == Rock
         case Scissors => that == Paper
-
 
     def beats: RPS =
       this match
-        case Rock => Scissors
-        case Paper => Rock
+        case Rock     => Scissors
+        case Paper    => Rock
         case Scissors => Paper
-
 
     def beatenBy: RPS =
       this match
-        case Rock => Paper
-        case Paper => Scissors
+        case Rock     => Paper
+        case Paper    => Scissors
         case Scissors => Rock
 
-
     def result(that: RPS): RPSResult =
-      if this.beatsOther(that) then
-        RPSResult.Win
-      else if that.beatsOther(this) then
-        RPSResult.Loss
-      else
-        RPSResult.Draw
-
+      if this.beatsOther(that) then RPSResult.Win
+      else if that.beatsOther(this) then RPSResult.Loss
+      else RPSResult.Draw
 
     def score: Int = ordinal + 1
 
@@ -58,17 +50,15 @@ object Day02 extends Problem[List[Day02.RawThrow], Int]:
       val result = player.result(opponent).score
       result + shapeScore
 
-
   case class Strategy(opponent: RPS, player: RPSResult):
     def toThrow: Throw =
-      val newPlayer = 
+      val newPlayer =
         player match
-          case RPSResult.Win => opponent.beatenBy
+          case RPSResult.Win  => opponent.beatenBy
           case RPSResult.Draw => opponent
           case RPSResult.Loss => opponent.beats
-      
+
       Throw(opponent, newPlayer)
-    
 
   def parse(input: String): List[RawThrow] =
     input.linesIterator.map: line =>
@@ -80,11 +70,9 @@ object Day02 extends Problem[List[Day02.RawThrow], Int]:
       RawThrow(opponent, player)
     .toList
 
-  def part1(input: List[RawThrow]) : Int =
-    input.map(_.toThrow.score).sum
+  def part1(input: List[RawThrow]): Int = input.map(_.toThrow.score).sum
 
   def part2(input: List[RawThrow]): Int =
     input.map(_.toStrategy.toThrow.score).sum
-
 
   lazy val input = FileIO.getInput(2022, 2)

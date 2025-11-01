@@ -20,7 +20,8 @@ object Day13 extends Problem[List[((String, String), Int)], Int]:
     var i = 0
 
     def getID(s: String): Int =
-      seen.getOrElseUpdate(s,
+      seen.getOrElseUpdate(
+        s,
         locally:
           val hold = i
           i += 1
@@ -32,21 +33,23 @@ object Day13 extends Problem[List[((String, String), Int)], Int]:
         case ((s, o), n) => ((getID(s), getID(o)), n)
     (x.toMap, i)
 
-
   def calc(input: Map[(Int, Int), Int], nPeople: Int): Int =
     // yes WE are bruteforcing ts...
     (0 until nPeople).toList.permutations.map: ls =>
-      val badSum = ls.sliding2.map((x, y) => input.getOrElse((x, y), 0) + input.getOrElse((y, x), 0)).sum
+      val badSum =
+        ls.sliding2.map((x, y) =>
+          input.getOrElse((x, y), 0) + input.getOrElse((y, x), 0)
+        ).sum
       val last = ls.last
-      val edge = input.getOrElse((ls.head, last), 0) + input.getOrElse((last, ls.head), 0)
+      val edge =
+        input.getOrElse((ls.head, last), 0) +
+          input.getOrElse((last, ls.head), 0)
       badSum + edge
     .max
 
   def part1(input: List[((String, String), Int)]): Int =
     val (optInput, nPeople) = optimize(input)
     calc(optInput, nPeople)
-
-
 
   def part2(input: List[((String, String), Int)]): Int =
     val (optInput, nPeople) = optimize(input)

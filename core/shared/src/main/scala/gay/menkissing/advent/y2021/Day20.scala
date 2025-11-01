@@ -8,31 +8,26 @@ import scala.io.Source
 object Day20 extends Problem[(Vector[Boolean], Day20.Image), Int]:
   lazy val input = FileIO.getInput(2021, 20)
 
-  
-
-
   case class Image(grid: Grid[Boolean], oobPixel: Boolean):
-    def apply(x: Int, y: Int): Boolean =
-      grid.get(x, y).getOrElse(oobPixel)
-    def expand(n: Int): Image =
-      Image(grid.expand(oobPixel)(n), oobPixel)
+    def apply(x: Int, y: Int): Boolean = grid.get(x, y).getOrElse(oobPixel)
+    def expand(n: Int): Image = Image(grid.expand(oobPixel)(n), oobPixel)
     def height = grid.height
     def width = grid.width
-    def valuesAround(x: Int, y: Int): Grid[Boolean] = grid.valuesAround(oobPixel)(x, y)
+    def valuesAround(x: Int, y: Int): Grid[Boolean] =
+      grid.valuesAround(oobPixel)(x, y)
     def flatten: Vector[Boolean] = grid.flatten
     def countLitPixels: Int = grid.values.view.flatten.count(identity)
   @annotation.tailrec
   final def boolsToInt(bs: List[Boolean], accum: Int = 0): Int =
     bs match
-      case Nil => accum
-      case true :: next => boolsToInt(next, (accum << 1) | 1)
+      case Nil           => accum
+      case true :: next  => boolsToInt(next, (accum << 1) | 1)
       case false :: next => boolsToInt(next, (accum << 1) | 0)
   def convolute(algo: Vector[Boolean], img: Image): Image =
-    val newValues =
-      (-1 to img.height).flatMap: y =>
-        (-1 to img.width).map: x =>
-          val values = img.valuesAround(x, y)
-          algo(boolsToInt(values.flatten.toList))
+    val newValues = (-1 to img.height).flatMap: y =>
+      (-1 to img.width).map: x =>
+        val values = img.valuesAround(x, y)
+        algo(boolsToInt(values.flatten.toList))
     val newImg = Grid(newValues, img.width + 2)
     val daIndex = if img.oobPixel then 511 else 0
     Image(newImg, algo(daIndex))
@@ -46,7 +41,6 @@ object Day20 extends Problem[(Vector[Boolean], Day20.Image), Int]:
     val image = Image(Grid.fromString(b)(_ == '#'), false)
 
     (algo, image)
-    
 
   override def part1(input: (Vector[Boolean], Image)): Int =
     val (algo, img) = input

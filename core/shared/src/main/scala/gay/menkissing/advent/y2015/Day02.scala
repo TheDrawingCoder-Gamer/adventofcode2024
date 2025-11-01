@@ -4,8 +4,7 @@ package y2015
 object Day02 extends Problem[List[(Int, Int, Int)], Int]:
   def parse(str: String): List[(Int, Int, Int)] =
     str.linesIterator.map:
-      case s"${x}x${y}x${z}" =>
-        (x.toInt, y.toInt, z.toInt)
+      case s"${x}x${y}x${z}" => (x.toInt, y.toInt, z.toInt)
     .toList
 
   def part1(input: List[(Int, Int, Int)]): Int =

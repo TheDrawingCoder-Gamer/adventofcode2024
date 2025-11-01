@@ -7,8 +7,11 @@ object Day05 extends Problem[(Day05.Palettes, List[Day05.CraneMove]), String]:
   lazy val input = FileIO.getInput(2022, 5)
 
   def parsePalletes(input: String): Palettes =
-    Palettes(input.linesIterator.map(parseRow).toVector.reverse.transpose[Option[Crate]]
-                  .map(it => mut.ListBuffer.from(it.filter(_.isDefined).map(_.get))))
+    Palettes(
+      input.linesIterator.map(parseRow).toVector.reverse
+        .transpose[Option[Crate]]
+        .map(it => mut.ListBuffer.from(it.filter(_.isDefined).map(_.get)))
+    )
 
   def parseRow(input: String): List[Option[Crate]] =
     var good = input
@@ -16,10 +19,8 @@ object Day05 extends Problem[(Day05.Palettes, List[Day05.CraneMove]), String]:
     Iterator.continually:
       val crate = good.take(3)
       good = good.drop(4)
-      if (crate.startsWith("["))
-        Some(crate(1))
-      else
-        None
+      if crate.startsWith("[") then Some(crate(1))
+      else None
     .takeWhile: _ =>
       val cur = temp
       temp = good.nonEmpty
@@ -29,7 +30,6 @@ object Day05 extends Problem[(Day05.Palettes, List[Day05.CraneMove]), String]:
   def parse(input: String): (Palettes, List[CraneMove]) =
     val l :: (r :: _) = input.split("\n\n").toList: @unchecked
     (parsePalletes(l), parseMoves(r))
-
 
   def parseMoves(input: String): List[CraneMove] =
     input.linesIterator.map:
@@ -41,18 +41,21 @@ object Day05 extends Problem[(Day05.Palettes, List[Day05.CraneMove]), String]:
   // Ordered from bottom to top
   type Pallete = mut.ListBuffer[Crate]
 
-
   class Palettes(val palletes: Vector[Pallete]):
-    private def moveWith(n: Int, from: Int, to: Int)(extractor: Pallete => mut.ListBuffer[Crate]): Unit =
+    private def moveWith
+      (n: Int, from: Int, to: Int)
+      (
+        extractor: Pallete => mut.ListBuffer[Crate]
+      ): Unit =
       val crates = extractor(palletes(from))
       palletes(from).dropRightInPlace(n)
       palletes(to) ++= crates
 
-
     def moves(n: Int, from: Int, to: Int): Unit =
       moveWith(n, from, to)(_.takeRight(n).reverse)
 
-    def movesMany(n: Int, from: Int, to: Int): Unit = moveWith(n, from, to)(_.takeRight(n))
+    def movesMany(n: Int, from: Int, to: Int): Unit =
+      moveWith(n, from, to)(_.takeRight(n))
 
     def perform(craneMove: CraneMove): Unit =
       moves(craneMove.n, craneMove.from, craneMove.to)
@@ -60,8 +63,7 @@ object Day05 extends Problem[(Day05.Palettes, List[Day05.CraneMove]), String]:
     def performMany(craneMove: CraneMove): Unit =
       movesMany(craneMove.n, craneMove.from, craneMove.to)
 
-    def performs(craneMoves: Seq[CraneMove]): Unit =
-      craneMoves.foreach(perform)
+    def performs(craneMoves: Seq[CraneMove]): Unit = craneMoves.foreach(perform)
 
     def performsMany(craneMoves: Seq[CraneMove]): Unit =
       craneMoves.foreach(performMany)

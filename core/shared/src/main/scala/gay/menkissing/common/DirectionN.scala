@@ -13,8 +13,7 @@ trait IsDirectionN[A]:
 
   def fromDirectionN(d: DirectionN): A
   extension (self: A)
-    def toDirectionN: DirectionN =
-      DirectionN(self.axisId, self.axisDirection)
+    def toDirectionN: DirectionN = DirectionN(self.axisId, self.axisDirection)
 
     def reverse: A =
       val d = self.toDirectionN
@@ -23,11 +22,8 @@ trait IsDirectionN[A]:
     final def digitalDir[F](using ring: Ring[F]): Vec[F] =
       if self.axisDirection == AxisDirection.Positive then
         vecNVec.axis(self.axisId)
-      else
-        -vecNVec.axis(self.axisId)
-      
+      else -vecNVec.axis(self.axisId)
 
     def axisId: Int
-    def axis: Axis =
-      axisNAxis.fromIndex(self.axisId)
+    def axis: Axis = axisNAxis.fromIndex(self.axisId)
     def axisDirection: AxisDirection

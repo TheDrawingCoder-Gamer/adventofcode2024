@@ -7,9 +7,9 @@ object Day03 extends Problem[Vector[Vector[Boolean]], Long]:
 
   extension (self: Vector[Vector[Boolean]])
     def testSlope(slopeX: Int, slopeY: Int): Int =
-      Iterator.iterate((0, 0))((x, y) => ((x + slopeX) % self.head.length, y + slopeY))
-              .takeWhile((_, y) => y < self.length)
-              .count((x, y) => self(y)(x))
+      Iterator.iterate((0, 0))((x, y) =>
+        ((x + slopeX) % self.head.length, y + slopeY)
+      ).takeWhile((_, y) => y < self.length).count((x, y) => self(y)(x))
 
   override def part1(input: Vector[Vector[Boolean]]): Long =
     input.testSlope(3, 1)
@@ -19,4 +19,3 @@ object Day03 extends Problem[Vector[Vector[Boolean]], Long]:
       case (acc, (x, y)) => acc * input.testSlope(x, y)
 
   override lazy val input: String = FileIO.getInput(2020, 3)
-

@@ -13,16 +13,15 @@ object Day04 extends Problem[(List[Int], List[Day04.BingoCard]), Int]:
   def parse(str: String): (List[Int], List[BingoCard]) =
     val blocks = str.split("\n\n")
     val callouts = blocks.head.trim.split(',').map(_.toInt)
-    val cards = blocks.tail.map: block =>
-      Grid:
-        block.linesIterator.map: it =>
-          it.trim.split(raw"\s+").map(_.toInt)
+    val cards =
+      blocks.tail.map: block =>
+        Grid:
+          block.linesIterator.map: it =>
+            it.trim.split(raw"\s+").map(_.toInt)
 
     (callouts.toList, cards.toList)
 
-
-  def makeCard(base: BingoCard): RealBingoCard =
-    base.map(it => (it, false))
+  def makeCard(base: BingoCard): RealBingoCard = base.map(it => (it, false))
 
   extension (card: RealBingoCard)
     def acceptCallout(callout: Int): RealBingoCard =
@@ -53,5 +52,8 @@ object Day04 extends Problem[(List[Int], List[Day04.BingoCard]), Int]:
       case ((f, cards), callout) =>
         val newCards = cards.map(_.acceptCallout(callout))
         val winningCards = newCards.filter(_.won)
-        (newCards.find(_.won).map(_.score(callout)).orElse(f), newCards -- winningCards)
+        (
+          newCards.find(_.won).map(_.score(callout)).orElse(f),
+          newCards -- winningCards
+        )
     ._1.get

@@ -25,19 +25,15 @@ object Day07 extends Problem[Seq[Day07.Command], Int]:
       val line = lines(i)
       i += 1
       line match
-        case s"$$ cd $dir" =>
-          daSeq += Command.Chdir(dir)
-        case s"$$ ls" =>
+        case s"$$ cd $dir" => daSeq += Command.Chdir(dir)
+        case s"$$ ls"      =>
           val files = lines.drop(i).takeWhile(it => !it.startsWith("$"))
           i += files.length
-          daSeq += 
-            Command.List:
-              files.map:
-                case s"dir $dir" =>
-                  AFile.Dir(dir)
-                case s"$size $name" =>
-                  AFile.File(name, size.toInt)
-                case _ => whatTheScallop.!
+          daSeq += Command.List:
+            files.map:
+              case s"dir $dir"    => AFile.Dir(dir)
+              case s"$size $name" => AFile.File(name, size.toInt)
+              case _              => whatTheScallop.!
         case _ => whatTheScallop.!
     // drop cd /
     daSeq.toSeq.drop(1)
@@ -65,14 +61,11 @@ object Day07 extends Problem[Seq[Day07.Command], Int]:
           parents.prepend(workingOn)
           workingOn = newOne
       case Command.List(files) =>
-        workingOn.children ++= 
-          files.iterator.map:
-            case AFile.Dir(name) => FSDir(0, name, mut.ListBuffer())
-            case AFile.File(name, size) => FSFFile(size, name)
-    
+        workingOn.children ++= files.iterator.map:
+          case AFile.Dir(name)        => FSDir(0, name, mut.ListBuffer())
+          case AFile.File(name, size) => FSFFile(size, name)
+
     root
-
-
 
   sealed trait FSFile:
     def size: Int
@@ -80,21 +73,23 @@ object Day07 extends Problem[Seq[Day07.Command], Int]:
     def show: String
 
   case class FSFFile(size: Int, name: String) extends FSFile:
-    override def show: String =
-      s"- $name (file, size=$size)"
-  class FSDir(var size: Int, val name: String, val children: mut.ListBuffer[FSFile]) extends FSFile:
+    override def show: String = s"- $name (file, size=$size)"
+  class FSDir
+    (
+      var size: Int,
+      val name: String,
+      val children: mut.ListBuffer[FSFile]
+    ) extends FSFile:
     override def toString: String = s"dir $name"
     override def show: String =
-      children.map(_.show.prependedAll("> ")).fold(s"- $name (dir)")(_ + "\n" + _)
-
-
+      children.map(_.show.prependedAll("> "))
+        .fold(s"- $name (dir)")(_ + "\n" + _)
 
   final def calcSizes(fsdir: FSDir): Unit =
     fsdir.children.foreach:
       case FSFFile(size, name) => ()
-      case d: FSDir => calcSizes(d)
+      case d: FSDir            => calcSizes(d)
     fsdir.size = fsdir.children.map(_.size).sum
-
 
   def part1(input: Seq[Command]): Int =
     val root = buildDirs(input)
@@ -104,43 +99,34 @@ object Day07 extends Problem[Seq[Day07.Command], Int]:
   final def sizesLessThanN(fsdir: FSDir, n: Int): Seq[FSDir] =
     lazy val children =
       fsdir.children.flatMap:
-        case it: FSDir =>
-          sizesLessThanN(it, n)
+        case it: FSDir => sizesLessThanN(it, n)
         case _: FSFile => Seq()
       .toSeq
-    if fsdir.size < n then
-      children.appended(fsdir)
+    if fsdir.size < n then children.appended(fsdir)
     else children
 
   final def findSmallestGreaterThanN(fsdir: FSDir, n: Int): Option[FSDir] =
     val smallestChild =
       fsdir.children.collect:
-        case it: FSDir =>
-          findSmallestGreaterThanN(it, n)
+        case it: FSDir => findSmallestGreaterThanN(it, n)
       .minByOption(_.map(_.size).getOrElse(Int.MaxValue)).flatten
     val goodfsdir =
-      if (fsdir.size < n)
-        None
-      else
-        Some(fsdir)
+      if fsdir.size < n then None
+      else Some(fsdir)
     (goodfsdir, smallestChild) match
       case (Some(parent), Some(child)) =>
-        if parent.size > child.size then
-          Some(child)
-        else
-          Some(parent)
-      case _ =>
-        goodfsdir.orElse(smallestChild)
+        if parent.size > child.size then Some(child)
+        else Some(parent)
+      case _ => goodfsdir.orElse(smallestChild)
 
   def part2(input: Seq[Command]): Int =
     val root = buildDirs(input)
     calcSizes(root)
-    // 
+    //
     val total = 70000000
     val required = 30000000
     val used = root.size
     val available = total - used
     val toFree = required - available
-    
-  
+
     findSmallestGreaterThanN(root, toFree).map(_.size).get

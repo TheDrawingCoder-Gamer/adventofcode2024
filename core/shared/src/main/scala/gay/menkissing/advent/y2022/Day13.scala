@@ -22,44 +22,40 @@ object Day13 extends Problem[Vector[Day13.Packet], Int]:
           NestedPacket(List(l)) `compare` r
         case (left @ NestedPacket(_), r @ LeafPacket(_)) =>
           left `compare` NestedPacket(List(r))
-          
+
     override def equals(x: Any): Boolean =
       x match
-       case p: Packet =>
-         this.compare(p) == 0
-       case _ => false
-
+        case p: Packet => this.compare(p) == 0
+        case _         => false
 
   // order contains eq, which so happens to exactly match our universal equals impl
   given orderPacket: Order[Packet] = Order.fromOrdering(using Ordering.ordered)
   case class NestedPacket(packets: List[Packet]) extends Packet
   case class LeafPacket(n: Int) extends Packet
 
-
-  val leafParser: Parser[LeafPacket] = Numbers.bigInt.map(it => LeafPacket(it.toInt))
-  val packetParser: Parser[Packet] = 
+  val leafParser: Parser[LeafPacket] =
+    Numbers.bigInt.map(it => LeafPacket(it.toInt))
+  val packetParser: Parser[Packet] =
     Parser.recursive[Packet]: recur =>
-      leafParser
-      | Parser.string("[]").as(NestedPacket(List()))
-      | recur.repSep(Parser.char(',')).between(Parser.char('['), Parser.char(']')).map(it => NestedPacket(it.toList))
+      leafParser | Parser.string("[]").as(NestedPacket(List())) |
+        recur.repSep(Parser.char(','))
+          .between(Parser.char('['), Parser.char(']'))
+          .map(it => NestedPacket(it.toList))
 
   lazy val input = FileIO.getInput(2022, 13)
 
   def parse(str: String): Vector[Packet] =
     str.linesIterator.filterNot(_.isEmpty).map: it =>
       packetParser.parseAll(it) match
-        case Left(_) => assert(false)
+        case Left(_)  => assert(false)
         case Right(v) => v
     .toVector
-
 
   def part1(input: Vector[Packet]): Int =
     input.groupedN[2].zipWithIndex.map:
       case ((l, r), idx) =>
-        if l <= r then
-          idx + 1
-        else
-          0
+        if l <= r then idx + 1
+        else 0
     .sum
 
   def part2(input: Vector[Packet]): Int =
@@ -69,5 +65,3 @@ object Day13 extends Problem[Vector[Day13.Packet], Int]:
     val dataP2 = input.prependedAll(Seq(divider1, divider2)).sorted
 
     (dataP2.indexOf(divider1) + 1) * (dataP2.indexOf(divider2) + 1)
-
-

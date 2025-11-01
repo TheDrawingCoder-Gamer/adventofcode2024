@@ -16,9 +16,8 @@ final class MinBinaryHeap[A, S](using ord: Order[S]):
       val v = backing(parent)
       backing(parent) = backing(p)
       backing(p) = v
-      if parent != 0 then
-        bubbleUp(parent)
-  
+      if parent != 0 then bubbleUp(parent)
+
   @tailrec
   private def siftDown(p: Int): Unit =
     val left = 2 * p + 1
@@ -36,7 +35,7 @@ final class MinBinaryHeap[A, S](using ord: Order[S]):
       backing(smallest) = backing(p)
       backing(p) = v
       siftDown(smallest)
-      
+
   def insert(n: A, priority: S): this.type =
     // first, append that thang :joy:
     backing.append((n, priority))
@@ -58,19 +57,14 @@ final class MinBinaryHeap[A, S](using ord: Order[S]):
       // then sift down to preserve the heap property
       siftDown(0)
       head
-  def extract(): A =
-    extractWithPriority()._1
-  def head: A =
-    backing(0)._1
-  def headOption: Option[A] =
-    Option.when(backing.nonEmpty)(backing(0)._1)
+  def extract(): A = extractWithPriority()._1
+  def head: A = backing(0)._1
+  def headOption: Option[A] = Option.when(backing.nonEmpty)(backing(0)._1)
   def updatePriority(n: A, value: S)(using Eq[A]): this.type =
     val p = backing.indexWhere(_._1 === n)
-    if p < 0 then
-      return insert(n, value)
+    if p < 0 then return insert(n, value)
     val (q, realScore) = backing(p)
-    if value === realScore then
-      ()
+    if value === realScore then ()
     else if value < realScore then
       // in a min heap, when decreasing a key, we bubble up
       backing(p) = (q, value)

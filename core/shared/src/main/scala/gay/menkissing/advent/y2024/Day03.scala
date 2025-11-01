@@ -1,17 +1,15 @@
 package gay.menkissing.advent
 package y2024
 
-
 object Day03 extends Problem[String, Int]:
-  
+
   lazy val input: String = FileIO.getInput(2024, 3)
 
   override def parse(str: String): String = str
-  
+
   def getMultMap(str: String): List[(Int, Int)] =
     val regex = raw"mul\(([0-9]{1,3}),([0-9]{1,3})\)".r
 
-    
     regex.findAllMatchIn(str).map: it =>
       (it.start, it.group(1).toInt * it.group(2).toInt)
     .toList
@@ -27,11 +25,12 @@ object Day03 extends Problem[String, Int]:
     val doIdxs = doRegex.findAllMatchIn(input).map(_.start)
     val dontIdxs = dontRegex.findAllMatchIn(input).map(_.start)
 
-    val idxes = (doIdxs.map(it => (it, true)) ++ dontIdxs.map(it => (it, false))).toList.prepended((0, true)).sortBy(_._1)
+    val idxes =
+      (doIdxs.map(it => (it, true)) ++ dontIdxs.map(it => (it, false))).toList
+        .prepended((0, true)).sortBy(_._1)
 
-    multMap.map: 
+    multMap.map:
       case (start, res) =>
         if idxes.findLast(_._1 < start).get._2 then res
         else 0
     .sum
-

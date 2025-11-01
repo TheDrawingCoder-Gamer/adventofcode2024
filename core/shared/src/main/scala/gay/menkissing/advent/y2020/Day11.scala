@@ -14,77 +14,72 @@ object Day11 extends Problem[Grid[Day11.Seat], Int]:
 
     def isSeat: Boolean = this != Floor
   given Show[Seat] =
-    case Seat.Floor => "."
+    case Seat.Floor    => "."
     case Seat.Occupied => "#"
-    case Seat.Empty => "L"
+    case Seat.Empty    => "L"
 
   override def parse(str: String): Grid[Seat] =
     Grid.fromString(str):
       case '.' => Seat.Floor
       case 'L' => Seat.Empty
       case '#' => Seat.Occupied
-      case _ => whatTheScallop.!
-
-
-
-
+      case _   => whatTheScallop.!
 
   extension (grid: Grid[Seat])
     def lineIsOccupied(start: Vec2[Int])(dir: PrincibleWind2D): Boolean =
       var s = start + dir.digitalDir
       while grid.isDefinedAt(s.x, s.y) do
         val r = grid(s.x, s.y)
-        if r.isSeat then
-          return r == Seat.Occupied
+        if r.isSeat then return r == Seat.Occupied
         s += dir.digitalDir
       false
     def next(): Option[Grid[Seat]] =
       var updated = false
-      val res = grid.mapWithIndex: (index, x) =>
-        val nOccupied = grid.valuesAround(Seat.Empty)(index.x, index.y).updated(1,1)(Seat.Floor).foldLeft(0)((a, s) => a + (if s == Seat.Occupied then 1 else 0))
-        x match
-          case Seat.Empty if nOccupied == 0 =>
-            updated = true
-            Seat.Occupied
-          case Seat.Occupied if nOccupied >= 4 =>
-            updated = true
-            Seat.Empty
-          case y => y
+      val res =
+        grid.mapWithIndex: (index, x) =>
+          val nOccupied =
+            grid.valuesAround(Seat.Empty)(index.x, index.y)
+              .updated(1, 1)(Seat.Floor)
+              .foldLeft(0)((a, s) => a + (if s == Seat.Occupied then 1 else 0))
+          x match
+            case Seat.Empty if nOccupied == 0 =>
+              updated = true
+              Seat.Occupied
+            case Seat.Occupied if nOccupied >= 4 =>
+              updated = true
+              Seat.Empty
+            case y => y
       Option.when(updated)(res)
     def nextP2(): Option[Grid[Seat]] =
       var updated = false
-      val res = grid.mapWithIndex: (index, x) =>
-        val nOccupied = PrincibleWind2D.values.count(grid.lineIsOccupied(index))
-        x match
-          case Seat.Empty if nOccupied == 0 =>
-            updated = true
-            Seat.Occupied
-          case Seat.Occupied if nOccupied >= 5 =>
-            updated = true
-            Seat.Empty
-          case y => y
+      val res =
+        grid.mapWithIndex: (index, x) =>
+          val nOccupied =
+            PrincibleWind2D.values.count(grid.lineIsOccupied(index))
+          x match
+            case Seat.Empty if nOccupied == 0 =>
+              updated = true
+              Seat.Occupied
+            case Seat.Occupied if nOccupied >= 5 =>
+              updated = true
+              Seat.Empty
+            case y => y
       Option.when(updated)(res)
-
-
 
   override def part1(input: Grid[Seat]): Int =
     Iterator.unfold(input): x =>
-      x.next().map(y => (y,y))
+      x.next().map(y => (y, y))
     .toList.last.flatten.map:
       case Seat.Occupied => 1
-      case _ => 0
+      case _             => 0
     .sum
-
 
   def part2(input: Grid[Seat]): Int =
     Iterator.unfold(input): x =>
-      x.nextP2().map(y => (y,y))
+      x.nextP2().map(y => (y, y))
     .toList.last.flatten.map:
       case Seat.Occupied => 1
-      case _ => 0
+      case _             => 0
     .sum
 
-
-
   override lazy val input: String = FileIO.getInput(2020, 11)
-

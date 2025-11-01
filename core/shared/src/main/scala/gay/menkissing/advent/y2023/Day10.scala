@@ -11,13 +11,11 @@ import spire.implicits.IntAlgebra
 object Day10 extends Problem[(Grid[Option[Day10.Pipe]], Vec2[Int]), Int]:
   lazy val input: String = FileIO.getInput(2023, 10)
 
-
   case class Pipe(conn1: Direction2D, conn2: Direction2D):
-    
+
     def exit(entrance: Direction2D): Direction2D =
       if conn1 == entrance then conn2 else conn1
-    def contains(dir: Direction2D): Boolean = 
-      dir == conn1 || dir == conn2
+    def contains(dir: Direction2D): Boolean = dir == conn1 || dir == conn2
 
   object Pipe:
     def apply(conn1: Direction2D, conn2: Direction2D): Pipe =
@@ -25,17 +23,18 @@ object Day10 extends Problem[(Grid[Option[Day10.Pipe]], Vec2[Int]), Int]:
       val max = if conn1.ordinal < conn2.ordinal then conn2 else conn1
       new Pipe(min, max)
 
-    given Show[Pipe] = pipe =>
-      (pipe.conn1, pipe.conn2) match
-        case (Direction2D.Up, Direction2D.Down) => "|"
-        case (Direction2D.Left, Direction2D.Right) => "-"
-        case (Direction2D.Up, Direction2D.Right) => "L"
-        case (Direction2D.Up, Direction2D.Left) => "J"
-        case (Direction2D.Down, Direction2D.Left) => "7"
-        case (Direction2D.Down, Direction2D.Right) => "F"
-        case _ => whatTheScallop.!
+    given Show[Pipe] =
+      pipe =>
+        (pipe.conn1, pipe.conn2) match
+          case (Direction2D.Up, Direction2D.Down)    => "|"
+          case (Direction2D.Left, Direction2D.Right) => "-"
+          case (Direction2D.Up, Direction2D.Right)   => "L"
+          case (Direction2D.Up, Direction2D.Left)    => "J"
+          case (Direction2D.Down, Direction2D.Left)  => "7"
+          case (Direction2D.Down, Direction2D.Right) => "F"
+          case _                                     => whatTheScallop.!
   def parse(str: String): (Grid[Option[Day10.Pipe]], Vec2[Int]) =
-    val grid = 
+    val grid =
       Grid.fromString(str):
         case '.' => None
         case '|' => Some(Pipe(Direction2D.Up, Direction2D.Down))
@@ -46,31 +45,47 @@ object Day10 extends Problem[(Grid[Option[Day10.Pipe]], Vec2[Int]), Int]:
         case 'F' => Some(Pipe(Direction2D.Down, Direction2D.Right))
         // HACK : ( this makes me sad
         case 'S' => null
-        case _ => whatTheScallop.!
+        case _   => whatTheScallop.!
     (grid, grid.indexWhere(_ == null).getOrElse(whatTheScallop.!))
 
   // LOOP TUAH THAT THANG!!!!!!
-  def searchLoop(grid: Grid[Option[Pipe]], start: Vec2[Int]): Map[Vec2[Int], Int] =
+  def searchLoop
+    (
+      grid: Grid[Option[Pipe]],
+      start: Vec2[Int]
+    ): Map[Vec2[Int], Int] =
     val visited = mutable.Map[Vec2[Int], Int]()
     val dirs = grid(start).getOrElse(whatTheScallop.!)
-    def advance(cur: Vec2[Int], enteredFrom: Direction2D, i: Int): Option[(Vec2[Int], Direction2D, Int)] =
+    def advance
+      (
+        cur: Vec2[Int],
+        enteredFrom: Direction2D,
+        i: Int
+      ): Option[(Vec2[Int], Direction2D, Int)] =
       visited.updateWith(cur):
         case Some(v) => Some(math.min(v, i))
-        case None => Some(i)
+        case None    => Some(i)
       val dir = grid(cur).getOrElse(whatTheScallop.!).exit(enteredFrom)
       val newCur = cur.offset(dir)
-      Option.when(newCur != start && visited(cur) == i)((newCur, dir.reverse, i + 1))
+      Option.when(newCur != start && visited(cur) == i)(
+        (newCur, dir.reverse, i + 1)
+      )
     // ???
-    val _ = Monad[Option].iterateForeverM((start, dirs.conn1, 0))(advance.tupled)
-    val _ = Monad[Option].iterateForeverM((start, dirs.conn2, 0))(advance.tupled)
+    val _ =
+      Monad[Option].iterateForeverM((start, dirs.conn1, 0))(advance.tupled)
+    val _ =
+      Monad[Option].iterateForeverM((start, dirs.conn2, 0))(advance.tupled)
     visited.toMap
 
-  def getStartGrid(grid: Grid[Option[Pipe]], start: Vec2[Int]): Grid[Option[Pipe]] =
-    val dirs = 
-      Direction2D.values.toList
-        .map: it => 
-          (it, start.offset(it), grid.getOrElse(start.offset(it), None))
-        .filter((dir, _, xs) => xs.exists(_.contains(dir.reverse)))
+  def getStartGrid
+    (
+      grid: Grid[Option[Pipe]],
+      start: Vec2[Int]
+    ): Grid[Option[Pipe]] =
+    val dirs =
+      Direction2D.values.toList.map: it =>
+        (it, start.offset(it), grid.getOrElse(start.offset(it), None))
+      .filter((dir, _, xs) => xs.exists(_.contains(dir.reverse)))
     assert(dirs.size == 2)
     grid.updated(start)(Some(Pipe(dirs(0)._1, dirs(1)._1)))
 
@@ -81,30 +96,29 @@ object Day10 extends Problem[(Grid[Option[Day10.Pipe]], Vec2[Int]), Int]:
     searchLoop(goodGrid, start).maxBy(_._2)._2
 
   extension (self: Grid[Boolean])
-    def floodFill(x: Int, y: Int): Set[Vec2[Int]] = {
+    def floodFill(x: Int, y: Int): Set[Vec2[Int]] =
       val q = mutable.Queue[Vec2[Int]]()
       val start = self(x, y)
       val res = mutable.Set[Vec2[Int]]()
       q.addOne(Vec2(x, y))
-      while (q.nonEmpty) {
+      while q.nonEmpty do
         val n = q.removeHead()
-        if (self.get(n).contains(start) && !res.contains(n)) {
+        if self.get(n).contains(start) && !res.contains(n) then
           res += n
           q.addAll(n.cardinalNeighbors)
-        }
-      }
       res.toSet
-    }
 
   def part2(input: (Grid[Option[Pipe]], Vec2[Int])): Int =
     val (grid, start) = input
     val goodGrid = getStartGrid(grid, start)
     val map = searchLoop(goodGrid, start).as(true)
-    val loopGrid = goodGrid.mapWithIndex((k, v) => if map.contains(k) then v else None).expand(None)(1)
-    val newGrid = 
+    val loopGrid =
+      goodGrid.mapWithIndex((k, v) => if map.contains(k) then v else None)
+        .expand(None)(1)
+    val newGrid =
       loopGrid.scaleWith:
-        case None => Grid.fill(3, 3)(false)
-        case Some(v) => 
+        case None    => Grid.fill(3, 3)(false)
+        case Some(v) =>
           val isUp = v.contains(Direction2D.Up)
           val isLeft = v.contains(Direction2D.Left)
           val isDown = v.contains(Direction2D.Down)
@@ -115,15 +129,19 @@ object Day10 extends Problem[(Grid[Option[Day10.Pipe]], Vec2[Int]), Int]:
               Vector(isLeft, true, isRight),
               Vector(false, isDown, false)
             )
-    //println(newGrid.width)
-    //println(newGrid.height)
+    // println(newGrid.width)
+    // println(newGrid.height)
     // println(newGrid.map(c => if c then 'X' else '.').show)
-    val filledBigGrid = Grid.fromSparse(newGrid.width, newGrid.height, newGrid.floodFill(0, 0).map(i => (i, true)).toMap)(false)
+    val filledBigGrid =
+      Grid.fromSparse(
+        newGrid.width,
+        newGrid.height,
+        newGrid.floodFill(0, 0).map(i => (i, true)).toMap
+      )(false)
     // println(filledBigGrid.map(if _ then 'X' else '.').show)
-    val filledGrid = 
-      filledBigGrid
-        .scaleDownWith(3, 3): c =>
-          c.flatten.forall(identity)
+    val filledGrid =
+      filledBigGrid.scaleDownWith(3, 3): c =>
+        c.flatten.forall(identity)
     assert(filledGrid.width == loopGrid.width)
     // println(loopGrid.map(_.map(_.show).getOrElse(".")).show)
     // println(filledGrid.map(c => if c then 'X' else '.').show)

@@ -20,18 +20,17 @@ object Day09 extends Problem[Vector[Long], Long]:
       case _ => whatTheScallop.!
     .get
 
-
   def part1(input: Vector[Long]): Long = weakNum(input)
 
   def part2(input: Vector[Long]): Long =
     val num = weakNum(input)
 
-
-    val (min, max) = unfoldedMap((0, 1, input(0))): (min, max, sum) =>
-      sum.compareTo(num) match
-        case -1 => Right((min, max + 1, sum + input(max)))
-        case  1 => Right((min + 1, max, sum - input(min)))
-        case  0 => Left((min, max))
+    val (min, max) =
+      unfoldedMap((0, 1, input(0))): (min, max, sum) =>
+        sum.compareTo(num) match
+          case -1 => Right((min, max + 1, sum + input(max)))
+          case 1  => Right((min + 1, max, sum - input(min)))
+          case 0  => Left((min, max))
 
     val nums = (min until max).map(input)
     nums.min + nums.max

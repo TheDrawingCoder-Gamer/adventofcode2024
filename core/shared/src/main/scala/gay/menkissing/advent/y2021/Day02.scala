@@ -17,8 +17,8 @@ object Day02 extends Problem[List[(Day02.Dir, Int)], Int]:
     def parse(str: String): Dir =
       str match
         case "forward" => Dir.Forward
-        case "down" => Dir.Down
-        case "up" => Dir.Up
+        case "down"    => Dir.Down
+        case "up"      => Dir.Up
 
   def parse(input: String): List[(Dir, Int)] =
     input.linesIterator.map:
@@ -27,14 +27,14 @@ object Day02 extends Problem[List[(Day02.Dir, Int)], Int]:
         (d, n.toInt)
     .toList
 
-
   def part1(input: List[(Dir, Int)]): Int =
-    val (horz, depth) = input.foldLeft((0, 0)):
-      case ((horz, depth), (dir, n)) =>
-        dir match
-          case Dir.Forward => (horz + n, depth)
-          case Dir.Down => (horz, depth + n)
-          case Dir.Up => (horz, depth - n)
+    val (horz, depth) =
+      input.foldLeft((0, 0)):
+        case ((horz, depth), (dir, n)) =>
+          dir match
+            case Dir.Forward => (horz + n, depth)
+            case Dir.Down    => (horz, depth + n)
+            case Dir.Up      => (horz, depth - n)
 
     depth * horz
 
@@ -42,11 +42,11 @@ object Day02 extends Problem[List[(Day02.Dir, Int)], Int]:
     @tailrec
     def go(rest: List[(Dir, Int)], aim: Int, depth: Int, x: Int): (Int, Int) =
       rest match
-        case Nil => (x, depth)
+        case Nil          => (x, depth)
         case head :: next =>
           head match
             case (Dir.Forward, i) => go(next, aim, depth + aim * i, x + i)
-            case (Dir.Down,    i) => go(next, aim + i, depth, x)
-            case (Dir.Up,      i) => go(next, aim - i, depth, x)
+            case (Dir.Down, i)    => go(next, aim + i, depth, x)
+            case (Dir.Up, i)      => go(next, aim - i, depth, x)
     val (x, depth) = go(input, 0, 0, 0)
     x * depth

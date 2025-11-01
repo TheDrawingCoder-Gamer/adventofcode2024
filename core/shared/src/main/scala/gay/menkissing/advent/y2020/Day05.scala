@@ -22,4 +22,3 @@ object Day05 extends Problem[List[Int], Int]:
     .get
 
   override lazy val input: String = FileIO.getInput(2020, 5)
-

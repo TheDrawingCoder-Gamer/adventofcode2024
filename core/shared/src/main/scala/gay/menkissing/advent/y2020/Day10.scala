@@ -13,13 +13,14 @@ object Day10 extends Problem[List[Int], Long]:
   override def part1(input: List[Int]): Long =
     // Only "correct" way to use all adapters in ascending order is by sorting them
     val goodInput = input.sorted
-    val (d1s, d3s) = goodInput.prepended(0).slidingN[2].foldLeft((0L, 0L)):
-      case ((d1s, d3s), (l, r)) =>
-        val diff = r - l
-        diff match
-          case 1 => (d1s + 1L, d3s)
-          case 3 => (d1s, d3s + 1L)
-          case _ => (d1s, d3s)
+    val (d1s, d3s) =
+      goodInput.prepended(0).slidingN[2].foldLeft((0L, 0L)):
+        case ((d1s, d3s), (l, r)) =>
+          val diff = r - l
+          diff match
+            case 1 => (d1s + 1L, d3s)
+            case 3 => (d1s, d3s + 1L)
+            case _ => (d1s, d3s)
     d1s * (d3s + 1L)
 
   def part2(input: List[Int]): Long =
@@ -30,12 +31,10 @@ object Day10 extends Problem[List[Int], Long]:
     val dict = mutable.HashMap[Int, Long](0 -> 1L).withDefault(_ => 0L)
 
     goodInput.foreach: x =>
-      dict(x+1) += dict(x)
-      dict(x+2) += dict(x)
-      dict(x+3) += dict(x)
+      dict(x + 1) += dict(x)
+      dict(x + 2) += dict(x)
+      dict(x + 3) += dict(x)
 
     dict(maxPlug)
 
-
   override lazy val input: String = FileIO.getInput(2020, 10)
-

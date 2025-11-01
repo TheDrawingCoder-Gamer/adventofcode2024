@@ -6,18 +6,22 @@ import gay.menkissing.common.*
 import scala.annotation.tailrec
 
 object Day17 extends ProblemAdv[Day17.ComputerState, String, Long]:
-  case class ComputerState(ip: Int, program: Vector[Byte], regA: Long, regB: Long, regC: Long, outputs: List[Byte]):
+  case class ComputerState
+    (
+      ip: Int,
+      program: Vector[Byte],
+      regA: Long,
+      regB: Long,
+      regC: Long,
+      outputs: List[Byte]
+    ):
     def advancePtr: ComputerState = copy(ip = ip + 2)
 
     @tailrec
     final def completeState: ComputerState =
-      if (ip < program.size)
-        step.completeState
-      else
-        copy(outputs = outputs.reverse)
-    final def complete: List[Byte] =
-      completeState.outputs
-
+      if ip < program.size then step.completeState
+      else copy(outputs = outputs.reverse)
+    final def complete: List[Byte] = completeState.outputs
 
     final def completeP2: Boolean =
       @tailrec
@@ -25,26 +29,19 @@ object Day17 extends ProblemAdv[Day17.ComputerState, String, Long]:
         if i.ip < i.program.size then
           i.stepP2 match
             case Some(x) => go(x)
-            case None => false
-        else
-          i.outputs.reverse.toVector == i.program
+            case None    => false
+        else i.outputs.reverse.toVector == i.program
 
-
-      if (regA.binaryDigits ceilDiv 3) != program.size then
-        false
-      else
-        go(this)
+      if (regA.binaryDigits ceilDiv 3) != program.size then false
+      else go(this)
 
     def stepP2: Option[ComputerState] =
       val goodStep = step
       if program(ip) == 5 then
         val size = goodStep.outputs.size
-        if program(size - 1) != goodStep.outputs.head then
-          None
-        else
-          Some(goodStep)
-      else
-        Some(goodStep)
+        if program(size - 1) != goodStep.outputs.head then None
+        else Some(goodStep)
+      else Some(goodStep)
 
     def step: ComputerState =
       val Vector(opcode, operand) = program.slice(ip, ip + 2)
@@ -68,11 +65,13 @@ object Day17 extends ProblemAdv[Day17.ComputerState, String, Long]:
         // bst modulo 8
         case 2 => advancePtr.copy(regB = comboOperand & 0b111)
         // jnz
-        case 3 => if (regA == 0) advancePtr else copy(ip = operand)
+        case 3 => if regA == 0 then advancePtr else copy(ip = operand)
         // bxc
         case 4 => advancePtr.copy(regB = regB ^ regC)
         // out
-        case 5 => advancePtr.copy(outputs = outputs.prepended((comboOperand & 0b111).toByte))
+        case 5 =>
+          advancePtr
+            .copy(outputs = outputs.prepended((comboOperand & 0b111).toByte))
         // bdv
         case 6 => advancePtr.copy(regB = regA >> comboOperand)
         // cdv
@@ -80,20 +79,29 @@ object Day17 extends ProblemAdv[Day17.ComputerState, String, Long]:
 
   override def parse(str: String): ComputerState =
     val Array(regs, program) = str.split("\n\n")
-    val List(regA, regB, regC) = 
+    val List(regA, regB, regC) =
       regs.linesIterator.map:
         case s"Register $_: $a" => a.toLong
       .toList
-    val s"Program: $programStr" = program.trim : @unchecked
+    val s"Program: $programStr" = program.trim: @unchecked
 
-    ComputerState(0, programStr.split(',').map(_.toByte).toVector, regA, regB, regC, List())
+    ComputerState(
+      0,
+      programStr.split(',').map(_.toByte).toVector,
+      regA,
+      regB,
+      regC,
+      List()
+    )
 
   override def part1(input: ComputerState): String =
     input.complete.mkString("", ",", "")
 
   override def part2(input: ComputerState): Long =
     Iterator.iterate(1L): a =>
-      if input.program.endsWith(input.copy(regA = a).complete) then a << 3 else if a % 8 < 7 then a + 1 else (a >> 3) + 1
+      if input.program.endsWith(input.copy(regA = a).complete) then a << 3
+      else if a % 8 < 7 then a + 1
+      else (a >> 3) + 1
     .find(it => input.copy(regA = it).completeP2).get
 
   override lazy val input: String = FileIO.getInput(2024, 17)

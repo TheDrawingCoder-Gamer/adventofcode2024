@@ -28,11 +28,13 @@ object Day08 extends Problem[List[(List[Int], List[Int])], Int]:
           case 'f' => acc | fBit
           case 'g' => acc | gBit
 
-
-
   def parse(input: String): List[(List[Int], List[Int])] =
     input.linesIterator.map:
-      case s"$l | $r" => (l.split(' ').map(parseSegment).toList, r.split(' ').map(parseSegment).toList)
+      case s"$l | $r" =>
+        (
+          l.split(' ').map(parseSegment).toList,
+          r.split(' ').map(parseSegment).toList
+        )
     .toList
 
   def digitCouldBe(n: Int): List[Int] =
@@ -45,12 +47,13 @@ object Day08 extends Problem[List[(List[Int], List[Int])], Int]:
       case 7 => List(8)
       case _ => assert(false)
 
-  def bitCount(n: Int): Int = List(aBit, bBit, cBit, dBit, eBit, fBit, gBit).count(it => (it & n) != 0)
+  def bitCount(n: Int): Int =
+    List(aBit, bBit, cBit, dBit, eBit, fBit, gBit).count(it => (it & n) != 0)
 
   def unary[A](ls: List[A]): Boolean =
     ls match
       case _ :: Nil => true
-      case _ => false
+      case _        => false
 
   inline def memberOf(member: Int, group: Int): Boolean =
     (group & member) == member
@@ -64,7 +67,11 @@ object Day08 extends Problem[List[(List[Int], List[Int])], Int]:
     val n7 = uniqueDigits.find(bitCount.andThen(_ == 3)).get
     val n8 = uniqueDigits.find(bitCount.andThen(_ == 7)).get
     val n3 = uniqueDigits.find(x => memberOf(n1, x) && bitCount(x) == 5).get
-    val n0 = uniqueDigits.find(x => bitCount(x) == 6 && memberOf(n1, x) && memberOf(n7, x) && !memberOf(n3, x)).get
+    val n0 =
+      uniqueDigits.find: x =>
+        bitCount(x) == 6 && memberOf(n1, x) && memberOf(n7, x) &&
+          !memberOf(n3, x)
+      .get
     val l5 = uniqueDigits.filter(x => bitCount(x) == 5 && x != n3)
     val l6 = uniqueDigits.filter(x => bitCount(x) == 6 && x != n0)
     val s5n6 = (l5, l6).tupled
@@ -83,4 +90,3 @@ object Day08 extends Problem[List[(List[Int], List[Int])], Int]:
 
   def part2(input: List[(List[Int], List[Int])]): Int =
     input.map(calcDigits).sum
-

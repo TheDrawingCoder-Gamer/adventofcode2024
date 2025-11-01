@@ -1,6 +1,5 @@
 package gay.menkissing.bench
 
-
 import cats.syntax.all.*
 
 import java.util.concurrent.TimeUnit
@@ -22,10 +21,12 @@ case class IterationResult(name: String, stats: ListStatistics, unit: TimeUnit):
   def fullResult: String =
     val goodMean = Duration(mean, TimeUnit.NANOSECONDS).toUnit(unit)
     val goodError = Duration(error, TimeUnit.NANOSECONDS).toUnit(unit)
-    val (ciMin, ciMax) = stats.confidenceIntervalAt(0.999).getOrElse((Double.NaN, Double.NaN))
+    val (ciMin, ciMax) =
+      stats.confidenceIntervalAt(0.999).getOrElse((Double.NaN, Double.NaN))
     val goodMin = Duration(stats.min, TimeUnit.NANOSECONDS).toUnit(unit)
     val goodMax = Duration(stats.max, TimeUnit.NANOSECONDS).toUnit(unit)
-    val goodStdDev = Duration(stats.sampleStandardDeviation, TimeUnit.NANOSECONDS).toUnit(unit)
+    val goodStdDev =
+      Duration(stats.sampleStandardDeviation, TimeUnit.NANOSECONDS).toUnit(unit)
     val goodCiMin = Duration(ciMin, TimeUnit.NANOSECONDS).toUnit(unit)
     val goodCiMax = Duration(ciMax, TimeUnit.NANOSECONDS).toUnit(unit)
     f"""
@@ -71,4 +72,4 @@ object IterationResult:
       case _ =>
         println(str)
         throw new RuntimeException("Not a valid IterationResult")
-*/
+ */

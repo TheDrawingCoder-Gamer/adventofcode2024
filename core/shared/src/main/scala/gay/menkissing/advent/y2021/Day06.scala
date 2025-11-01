@@ -39,15 +39,10 @@ object Day06 extends Problem[Vector[Int], Long]:
   override def part1(input: Vector[Int]): Long =
     naiveAdvance.repeated(80)(input).size
 
-
   override def part2(input: Vector[Int]): Long =
-    val fishMap = input.groupBy(identity).map(it => it._1 -> it._2.length.toLong)
+    val fishMap =
+      input.groupBy(identity).map(it => it._1 -> it._2.length.toLong)
     advance.repeated(256)(fishMap).foldLeft(0L):
       case (acc, (_, v)) => acc + v
 
   override lazy val input: String = FileIO.getInput(2021, 6)
-
-
-
-
-

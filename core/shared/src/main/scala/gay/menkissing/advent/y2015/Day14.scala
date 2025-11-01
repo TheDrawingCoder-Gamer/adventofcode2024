@@ -7,21 +7,37 @@ import scala.collection.mutable
 object Day14 extends Problem[List[Day14.Reindeer], Int]:
 
   case class Reindeer(speed: Int, active: Int, rest: Int)
-  case class ReindeerState(pos: Int, activeTime: Int, point: Int, reindeer: Reindeer):
+  case class ReindeerState
+    (
+      pos: Int,
+      activeTime: Int,
+      point: Int,
+      reindeer: Reindeer
+    ):
     def advance: ReindeerState =
       if activeTime > 0 then
         val newPos = pos + reindeer.speed
         val newTime = activeTime - 1
-        ReindeerState(newPos, if newTime == 0 then -reindeer.rest else newTime, point, reindeer)
+        ReindeerState(
+          newPos,
+          if newTime == 0 then -reindeer.rest else newTime,
+          point,
+          reindeer
+        )
       else
         assert(activeTime != 0)
         val newTime = activeTime + 1
-        ReindeerState(pos, if newTime == 0 then reindeer.active else newTime, point, reindeer)
+        ReindeerState(
+          pos,
+          if newTime == 0 then reindeer.active else newTime,
+          point,
+          reindeer
+        )
 
   object ReindeerState:
     def apply(reindeer: Reindeer): ReindeerState =
       ReindeerState(0, reindeer.active, 0, reindeer)
-    
+
     def advanced(self: ReindeerState): ReindeerState = self.advance
 
   def parse(str: String): List[Day14.Reindeer] =
@@ -29,7 +45,6 @@ object Day14 extends Problem[List[Day14.Reindeer], Int]:
       case s"$_ can fly $speed km/s for $active seconds, but then must rest for $rest seconds." =>
         Reindeer(speed.toInt, active.toInt, rest.toInt)
     .toList
-
 
   def updateMaxes(l: List[ReindeerState]): List[ReindeerState] =
     val max = l.maxBy(_.pos).pos
@@ -43,6 +58,5 @@ object Day14 extends Problem[List[Day14.Reindeer], Int]:
     val states = input.map(ReindeerState.apply)
     val fun = (it: List[ReindeerState]) => updateMaxes(it.map(_.advance))
     fun.repeated(2503)(states).maxBy(_.point).point
-
 
   lazy val input: String = FileIO.getInput(2015, 14)

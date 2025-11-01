@@ -9,13 +9,16 @@ object Day12 extends Problem[List[(List[Option[Boolean]], List[Int])], Long]:
 
   def parse(str: String): List[(List[Option[Boolean]], List[Int])] =
     str.linesIterator.map:
-      case s"$pat $is" => 
-        (pat.map {
-          case '.' => Some(false)
-          case '#' => Some(true)
-          case '?' => None
-          case _ => whatTheScallop.!
-        }.toList, is.split(",").map(_.toInt).toList)
+      case s"$pat $is" =>
+        (
+          pat.map {
+            case '.' => Some(false)
+            case '#' => Some(true)
+            case '?' => None
+            case _   => whatTheScallop.!
+          }.toList,
+          is.split(",").map(_.toInt).toList
+        )
       case _ => whatTheScallop.!
     .toList
 
@@ -35,10 +38,9 @@ object Day12 extends Problem[List[(List[Option[Boolean]], List[Int])], Long]:
           else if d == ds.head then 0L
           else count(input.tail, ds, d + 1)
         input.head match
-          case Some(true) => bad()
+          case Some(true)  => bad()
           case Some(false) => good()
-          case None => bad() + good()
-
+          case None        => bad() + good()
 
   def part1(input: List[(List[Option[Boolean]], List[Int])]): Long =
     input.map: (pat, groups) =>
@@ -52,4 +54,3 @@ object Day12 extends Problem[List[(List[Option[Boolean]], List[Int])], Long]:
     input.map: (pat, groups) =>
       count(unfoldRow(pat), List.fill(5)(groups).flatten, 0)
     .sum
-    

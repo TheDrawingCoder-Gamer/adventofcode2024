@@ -9,10 +9,8 @@ import scala.collection.mutable
 
 object Day15 extends Problem[List[Int], Int]:
 
-
   override def parse(str: String): List[Int] =
     str.split(",").map(_.toInt).toList
-
 
   def calc(input: List[Int], n: Int): Int =
     // ; )
@@ -33,13 +31,8 @@ object Day15 extends Problem[List[Int], Int]:
         setArr(0, idx)
     lastNum
 
-  override def part1(input: List[Int]): Int =
-    calc(input, 2020)
+  override def part1(input: List[Int]): Int = calc(input, 2020)
 
-  def part2(input: List[Int]): Int =
-    calc(input, 30000000)
-
-
+  def part2(input: List[Int]): Int = calc(input, 30000000)
 
   override lazy val input: String = FileIO.getInput(2020, 15)
-

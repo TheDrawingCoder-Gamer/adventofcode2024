@@ -13,8 +13,6 @@ object Day20 extends Problem[Int, Int]:
 
   def parse(str: String): Int = str.trim.toInt
 
-
-
   val max = 1_000_000
   def precalc(): Array[Int] =
     // sieve for chowla (sigma without self)
@@ -32,12 +30,11 @@ object Day20 extends Problem[Int, Int]:
     (1 to 50).foreach(x => sums(x) = 1)
     (2 to ((max + 1) / 2)).foreach: i =>
       // this only breaks down when I take 54 (it reverts to previous answer)
-      // the gaps in the sequence are large enough that I can be very incorrect here 
+      // the gaps in the sequence are large enough that I can be very incorrect here
       // and still get the correct answer
       ((i * 2) until (max + 1) by i).take(49).foreach: idx =>
         sums(idx) += i
     sums
-
 
   // according to OEIS, the sequence is the "sigma(x)" sequences
   // where sigma is the sum of divisors
@@ -56,4 +53,3 @@ object Day20 extends Problem[Int, Int]:
     Iterator.iterate(1)(_ + 1).collectFirst:
       case it if modSigma(it) > v => it
     .get
-

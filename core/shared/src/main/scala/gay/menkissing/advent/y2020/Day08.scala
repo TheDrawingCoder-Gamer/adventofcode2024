@@ -1,7 +1,6 @@
 package gay.menkissing.advent
 package y2020
 
-
 import collection.mutable as mut
 import gay.menkissing.common.*
 
@@ -20,7 +19,6 @@ object Day08 extends Problem[Vector[Day08.Instruction], Int]:
       case s"nop $n" => Instruction.Nop(n.toInt)
     .toVector
 
-
   case class CPU(acc: Int, ip: Int)
 
   import Instruction.*
@@ -36,17 +34,12 @@ object Day08 extends Problem[Vector[Day08.Instruction], Int]:
         case Acc(by) =>
           acc += by
           ip += 1
-        case Jmp(by) =>
-          ip += by
-        case Nop(by) =>
-          ip += 1
-    if ip >= input.length then
-      Right(acc)
-    else
-      Left(acc)
+        case Jmp(by) => ip += by
+        case Nop(by) => ip += 1
+    if ip >= input.length then Right(acc)
+    else Left(acc)
 
-  def part1(input: Vector[Instruction]): Int =
-    execute(input).leftOrDie
+  def part1(input: Vector[Instruction]): Int = execute(input).leftOrDie
 
   def part2(input: Vector[Instruction]): Int =
     input.zipWithIndex.findMap:
@@ -54,4 +47,3 @@ object Day08 extends Problem[Vector[Day08.Instruction], Int]:
       case (Jmp(by), idx) => execute(input.updated(idx, Nop(by))).toOption
       case (Nop(by), idx) => execute(input.updated(idx, Jmp(by))).toOption
     .get
-

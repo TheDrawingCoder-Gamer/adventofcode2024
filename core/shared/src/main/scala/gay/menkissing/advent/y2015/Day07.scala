@@ -17,12 +17,12 @@ object Day07 extends Problem[Map[String, Day07.Op], Int]:
       case s"$op -> $r" =>
         val o =
           op match
-            case s"$x AND $y" => Op.And(x, y)
-            case s"$x OR $y" => Op.Or(x, y)
+            case s"$x AND $y"    => Op.And(x, y)
+            case s"$x OR $y"     => Op.Or(x, y)
             case s"$x LSHIFT $y" => Op.LShift(x, y.toInt)
             case s"$x RSHIFT $y" => Op.RShift(x, y.toInt)
-            case s"NOT $x" => Op.Not(x)
-            case v => Op.Value(v)
+            case s"NOT $x"       => Op.Not(x)
+            case v               => Op.Value(v)
         (r, o)
     .toMap
 
@@ -33,24 +33,24 @@ object Day07 extends Problem[Map[String, Day07.Op], Int]:
       def valueOrGet(v: String): Int =
         v.toIntOption match
           case Some(v) => v.toShort
-          case None => go(v)
+          case None    => go(v)
 
-      memo.getOrElseUpdate(s,
+      memo.getOrElseUpdate(
+        s,
         (input(s) match
-          case Op.Value(v) => valueOrGet(v)
-          case Op.And(a, b) =>
-            valueOrGet(a) & valueOrGet(b)
-          case Op.Or(a, b) => valueOrGet(a) | valueOrGet(b)
-          case Op.Not(a) => ~valueOrGet(a)
+          case Op.Value(v)     => valueOrGet(v)
+          case Op.And(a, b)    => valueOrGet(a) & valueOrGet(b)
+          case Op.Or(a, b)     => valueOrGet(a) | valueOrGet(b)
+          case Op.Not(a)       => ~valueOrGet(a)
           case Op.LShift(a, b) => valueOrGet(a) << b
-          case Op.RShift(a, b) => valueOrGet(a) >>> b) & 0xffff
+          case Op.RShift(a, b) => valueOrGet(a) >>> b
+        ) & 0xffff
       )
 
     go
 
   def part1(input: Map[String, Op]): Int =
     val go = calc(input)
-
 
     go("a")
 

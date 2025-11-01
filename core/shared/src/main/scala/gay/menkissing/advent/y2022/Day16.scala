@@ -12,7 +12,7 @@ object Day16 extends Problem[Day16.ValveMap, Int]:
   val fullTimeP2 = 26
   // valve?
   case class ValveRoom(room: String, flowRate: Int, connectsTo: Vector[String]):
-    def value(time: Int, fullTime: Int) = flowRate * (fullTime - time )
+    def value(time: Int, fullTime: Int) = flowRate * (fullTime - time)
 
   type ValveMap = Map[String, ValveRoom]
 
@@ -43,22 +43,43 @@ object Day16 extends Problem[Day16.ValveMap, Int]:
   case class State(on: List[String], time: Int, pressure: Int)
   case class Position(dest: ValveRoom, progress: Int)
 
-  def importantRooms(rooms: ValveMap, on: List[String]) = rooms.filter((k, v) => v.flowRate != 0 && !on.contains(k)).values.toVector
-
+  def importantRooms(rooms: ValveMap, on: List[String]) =
+    rooms.filter((k, v) => v.flowRate != 0 && !on.contains(k)).values.toVector
 
   def graphAStar(start: String, goal: String, graph: ValveMap): Option[Int] =
-    dijstraByReturning(start, _ === goal, (_, _) => 1d, it => graph(it).connectsTo, SearchReturns.lengthFromPath)
+    dijstraByReturning(
+      start,
+      _ === goal,
+      (_, _) => 1d,
+      it => graph(it).connectsTo,
+      SearchReturns.lengthFromPath
+    )
 
-  def runP1(data: Map[String, ValveRoom], rooms: Set[ValveRoom], curPos: ValveRoom, fullTime: Int, time: Int, pressure: Int): Int =
-    val res = rooms.flatMap: room =>
-      // includes current, and nodes to get there. no minus 1 because of valve turning
-      val timeTaken = data.distance(curPos.room, room.room)
-      val goodTime = time + timeTaken
-      Option.when(goodTime <= fullTime):
-        runP1(data, rooms - room, room, fullTime, goodTime, pressure + room.value(goodTime, fullTime))
-    .maxOption
+  def runP1
+    (
+      data: Map[String, ValveRoom],
+      rooms: Set[ValveRoom],
+      curPos: ValveRoom,
+      fullTime: Int,
+      time: Int,
+      pressure: Int
+    ): Int =
+    val res =
+      rooms.flatMap: room =>
+        // includes current, and nodes to get there. no minus 1 because of valve turning
+        val timeTaken = data.distance(curPos.room, room.room)
+        val goodTime = time + timeTaken
+        Option.when(goodTime <= fullTime):
+          runP1(
+            data,
+            rooms - room,
+            room,
+            fullTime,
+            goodTime,
+            pressure + room.value(goodTime, fullTime)
+          )
+      .maxOption
     res.getOrElse(pressure)
-
 
   def part1(input: ValveMap): Int =
     val important = importantRooms(input, List()).toSet
@@ -68,9 +89,7 @@ object Day16 extends Problem[Day16.ValveMap, Int]:
     // An optimal solution likely has an even split
     val important = importantRooms(input, List())
     val importantSet = important.toSet
-    val valvesA = important
-      .combinations(importantSet.size / 2)
-      .map(_.toSet)
+    val valvesA = important.combinations(importantSet.size / 2).map(_.toSet)
 
     val allPaths =
       valvesA.map: va =>
@@ -79,6 +98,3 @@ object Day16 extends Problem[Day16.ValveMap, Int]:
         val scoreB = runP1(input, vb, input.startRoom, 26, 0, 0)
         scoreA + scoreB
     allPaths.max
-
-
-

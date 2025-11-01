@@ -13,34 +13,35 @@ object Day19 extends Problem[(List[String], List[String]), Long]:
 
   def parseDesign(towels: List[String], design: String): Boolean =
     def go(curTowels: List[String], restDesign: String): Boolean =
-      if restDesign.isEmpty then
-        true
+      if restDesign.isEmpty then true
       else
         curTowels match
           case head :: next =>
             if restDesign.startsWith(head) then
               val nextDesign = restDesign.drop(head.length)
               go(towels, nextDesign) || go(next, restDesign)
-            else
-              go(next, restDesign)
+            else go(next, restDesign)
           case Nil => false
     go(towels, design)
   def countDesigns(towels: List[String], design: String): Long =
-    def go(pattern: String, total: Long, cache: Map[String, Long]): (Long, Map[String, Long]) =
+    def go
+      (
+        pattern: String,
+        total: Long,
+        cache: Map[String, Long]
+      ): (Long, Map[String, Long]) =
       cache.get(pattern) match
         case Some(count) => (total + count, cache)
-        case _ =>
-          val (count, cache2) = towels.foldLeft(0L -> cache):
-            case ((count, cache), towel) =>
-              if pattern.startsWith(towel) then
-                go(pattern.drop(towel.length), count, cache)
-              else
-                (count, cache)
+        case _           =>
+          val (count, cache2) =
+            towels.foldLeft(0L -> cache):
+              case ((count, cache), towel) =>
+                if pattern.startsWith(towel) then
+                  go(pattern.drop(towel.length), count, cache)
+                else (count, cache)
           (total + count, cache2 + (pattern -> count))
 
-
     go(design, 0L, Map("" -> 1L))._1
-
 
   override def part1(input: (List[String], List[String])): Long =
     val (towels, designs) = input

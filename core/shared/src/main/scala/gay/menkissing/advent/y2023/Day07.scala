@@ -10,8 +10,8 @@ object Day07 extends Problem[List[(Day07.Hand, Int)], Int]:
   override def parse(str: String): List[(Hand, Int)] =
     str.linesIterator.toList.map:
       case s"$hand $n" => (Hand(hand), n.toInt)
-      case _ => ???
-  
+      case _           => ???
+
   enum HandKind:
     case HighCard
     case OnePair
@@ -25,7 +25,7 @@ object Day07 extends Problem[List[(Day07.Hand, Int)], Int]:
 
   case class Hand(value: String) extends AnyVal
   object Hand:
-    def apply(n: String): Hand = 
+    def apply(n: String): Hand =
       assert(n.length == 5)
       new Hand(n)
 
@@ -35,16 +35,13 @@ object Day07 extends Problem[List[(Day07.Hand, Int)], Int]:
     // and they will cleanly fit in ONE group, otherwise it will be a four of a kind
     // VALID: QJJKK, QQJKK, QQQJK
     def validFullHouseP2(n: Map[Char, Int], jonklers: Int): Boolean =
-      if n.size != 2 then
-        false
+      if n.size != 2 then false
       else
         val mn = n.values.min
         val mx = n.values.max
         jonklers match
-          case 0 =>
-            mn == 2 && mx == 3
-          case 1 =>
-            (mn == 1 && mx == 3) || (mn == 2 && mx == 2)
+          case 0 => mn == 2 && mx == 3
+          case 1 => (mn == 1 && mx == 3) || (mn == 2 && mx == 2)
           case 2 =>
             // swapped roles, mn is the large group
             mn == 1 && mx == 2
@@ -64,39 +61,26 @@ object Day07 extends Problem[List[(Day07.Hand, Int)], Int]:
         val m = hand.value.groupMapReduce(identity)(_ => 1)(_ + _)
         val jonklers = m.getOrElse('J', 0)
         val n = m.removed('J')
-        
+
         // If the size is <= 1. If size == 1 and there are jonklers, the effect is the same
-        if n.size <= 1 then
-          HandKind.FiveOfAKind
-        else if n.exists(_._2 >= 4 - jonklers) then
-          HandKind.FourOfAKind
-        else if validFullHouseP2(n, jonklers) then
-          HandKind.FullHouse
-        else if n.exists(_._2 >= 3 - jonklers) then
-          HandKind.ThreeOfAKind
-        else if validTwoPairP2(n, jonklers) then
-          HandKind.TwoPair
-        else if n.exists(_._2 >= 2 - jonklers) then
-          HandKind.OnePair
-        else
-          HandKind.HighCard
+        if n.size <= 1 then HandKind.FiveOfAKind
+        else if n.exists(_._2 >= 4 - jonklers) then HandKind.FourOfAKind
+        else if validFullHouseP2(n, jonklers) then HandKind.FullHouse
+        else if n.exists(_._2 >= 3 - jonklers) then HandKind.ThreeOfAKind
+        else if validTwoPairP2(n, jonklers) then HandKind.TwoPair
+        else if n.exists(_._2 >= 2 - jonklers) then HandKind.OnePair
+        else HandKind.HighCard
 
       def kind: HandKind =
         val n = hand.value.groupMapReduce(identity)(_ => 1)(_ + _)
-        if n.size == 1 then
-          HandKind.FiveOfAKind
-        else if n.exists(_._2 == 4) then
-          HandKind.FourOfAKind
+        if n.size == 1 then HandKind.FiveOfAKind
+        else if n.exists(_._2 == 4) then HandKind.FourOfAKind
         else if n.exists(_._2 == 3) && n.exists(_._2 == 2) then
           HandKind.FullHouse
-        else if n.exists(_._2 == 3) then
-          HandKind.ThreeOfAKind
-        else if n.count(_._2 == 2) == 2 then
-          HandKind.TwoPair
-        else if n.exists(_._2 == 2) then
-          HandKind.OnePair
-        else
-          HandKind.HighCard
+        else if n.exists(_._2 == 3) then HandKind.ThreeOfAKind
+        else if n.count(_._2 == 2) == 2 then HandKind.TwoPair
+        else if n.exists(_._2 == 2) then HandKind.OnePair
+        else HandKind.HighCard
     private def charStrengthP2(c: Char): Byte =
       c match
         case 'J' => -1
@@ -133,8 +117,7 @@ object Day07 extends Problem[List[(Day07.Hand, Int)], Int]:
       new Order[Hand]:
         override def compare(x: Hand, y: Hand): Int =
           val r = x.kindP2.compare(y.kindP2)
-          if r != 0 then
-            r
+          if r != 0 then r
           else
             val left = x.value.toList.map(charStrengthP2)
             val right = y.value.toList.map(charStrengthP2)
@@ -143,8 +126,7 @@ object Day07 extends Problem[List[(Day07.Hand, Int)], Int]:
     given orderHand: Order[Hand] with
       override def compare(x: Hand, y: Hand): Int =
         val r = x.kind.compare(y.kind)
-        if r != 0 then
-          r
+        if r != 0 then r
         else
           val left = x.value.toList.map(charStrength)
           val right = y.value.toList.map(charStrength)

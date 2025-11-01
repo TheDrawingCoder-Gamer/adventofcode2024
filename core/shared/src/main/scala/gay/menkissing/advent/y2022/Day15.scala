@@ -26,7 +26,7 @@ object Day15 extends Problem[Set[Day15.SensorRanged], Long]:
         case (acc, ls) =>
           ls.rangeForRow(row) match
             case Some(v) => acc + v
-            case _ => acc
+            case _       => acc
 
     private def trivialEmptySpotsDiet(row: Int): Diet[Int] =
       var diet = Diet.fromRange(Range(0, max))
@@ -35,32 +35,26 @@ object Day15 extends Problem[Set[Day15.SensorRanged], Long]:
           diet -= rng
       diet
 
-
     def beaconsOnLine(row: Int): Set[Int] =
       values.withFilter(_.beacon.y == row).map(_.beacon.x)
 
-    def findValidPos(max: Int): Option[Vec2[Int]] =
-      (0 to max).findMap: y =>
-        // by never calling `getRow`, i save like 16s
-        // because that is VERY expensive
-        var diet = trivialEmptySpotsDiet(y)
-        if !diet.isEmpty then
-          beaconsOnLine(y).foreach: beacon =>
-            diet -= beacon
-          diet.toList.headOption.map: x =>
-            Vec2(x, y)
-
-        else
-          None
-
+    def findValidPos(max: Int): Option[Vec2[Int]] = (0 to max).findMap: y =>
+      // by never calling `getRow`, i save like 16s
+      // because that is VERY expensive
+      var diet = trivialEmptySpotsDiet(y)
+      if !diet.isEmpty then
+        beaconsOnLine(y).foreach: beacon =>
+          diet -= beacon
+        diet.toList.headOption.map: x =>
+          Vec2(x, y)
+      else None
 
   lazy val input = FileIO.getInput(2022, 15)
 
-
   def parse(input: String): Set[SensorRanged] =
     input.linesIterator.map:
-      case s"Sensor at x=$sx, y=$sy: closest beacon is at x=$bx, y=$by" => SensorRanged(Vec2(sx.toInt, sy
-        .toInt), Vec2(bx.toInt, by.toInt))
+      case s"Sensor at x=$sx, y=$sy: closest beacon is at x=$bx, y=$by" =>
+        SensorRanged(Vec2(sx.toInt, sy.toInt), Vec2(bx.toInt, by.toInt))
       case _ => whatTheScallop.!
     .toSet
 
@@ -77,5 +71,3 @@ object Day15 extends Problem[Set[Day15.SensorRanged], Long]:
     val spots = grid.findValidPos(max)
     val Vec2(x, y) = spots.get
     (x.toLong * 4000000) + y.toLong
-
-

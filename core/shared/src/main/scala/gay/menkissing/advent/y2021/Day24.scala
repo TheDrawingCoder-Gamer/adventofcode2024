@@ -17,7 +17,7 @@ object Day24 extends Problem[Vector[Day24.Instruction], BigInt]:
         case "x" => X
         case "y" => Y
         case "z" => Z
-        case _ => whatTheScallop.!
+        case _   => whatTheScallop.!
 
   type Operand = Either[Int, Variable]
 
@@ -34,11 +34,11 @@ object Day24 extends Problem[Vector[Day24.Instruction], BigInt]:
     case Div(base: Variable, value: Operand)
     case Mod(base: Variable, value: Operand)
     case Eql(base: Variable, value: Operand)
-  
+
   object Instruction:
     def parse(line: String): Instruction =
       line match
-        case s"inp $v" => Inp(Variable.parse(v))
+        case s"inp $v"    => Inp(Variable.parse(v))
         case s"add $x $y" => Add(Variable.parse(x), Operand.parse(y))
         case s"mul $x $y" => Mul(Variable.parse(x), Operand.parse(y))
         case s"div $x $y" => Div(Variable.parse(x), Operand.parse(y))
@@ -46,33 +46,31 @@ object Day24 extends Problem[Vector[Day24.Instruction], BigInt]:
         case s"eql $x $y" => Eql(Variable.parse(x), Operand.parse(y))
 
   case class State(x: Int, y: Int, z: Int, w: Int, remainingInput: String):
-    def setVar(variable: Variable, v: Int): State =
-      updateVar(variable, _ => v)
+    def setVar(variable: Variable, v: Int): State = updateVar(variable, _ => v)
     def updateVar(variable: Variable, f: Int => Int): State =
       variable match
         case Variable.W => copy(w = f(w))
         case Variable.X => copy(x = f(x))
         case Variable.Y => copy(y = f(y))
         case Variable.Z => copy(z = f(z))
-    
+
     def getVar(variable: Variable): Int =
       variable match
         case Variable.X => x
         case Variable.Y => y
         case Variable.Z => z
         case Variable.W => w
-      
-    
+
     def evaluateOperand(operand: Operand): Int =
       operand match
-        case Left(value) => value
+        case Left(value)  => value
         case Right(value) => getVar(value)
-      
-    
+
     def advance(step: Instruction): State =
       step match
         case Instruction.Inp(variable) =>
-          setVar(variable, remainingInput.head.asDigit).copy(remainingInput = remainingInput.tail)
+          setVar(variable, remainingInput.head.asDigit)
+            .copy(remainingInput = remainingInput.tail)
         case Instruction.Add(base, value) =>
           updateVar(base, _ + evaluateOperand(value))
         case Instruction.Mul(base, value) =>
@@ -82,14 +80,11 @@ object Day24 extends Problem[Vector[Day24.Instruction], BigInt]:
         case Instruction.Mod(base, value) =>
           updateVar(base, _ % evaluateOperand(value))
         case Instruction.Eql(base, value) =>
-          if getVar(base) == evaluateOperand(value) then
-            setVar(base, 1)
-          else
-            setVar(base, 0)
-  
+          if getVar(base) == evaluateOperand(value) then setVar(base, 1)
+          else setVar(base, 0)
+
   case class FuncSegment(n: Int, m: Int):
-    override def toString(): String =
-      s"segment N=$n,M=$m"
+    override def toString(): String = s"segment N=$n,M=$m"
     // each iteration:
     // if n >= 0 then either we stay in the same "ballpark" or we times by 26
     // if n < 0 then either we stay in the same "ballpark" or we divide by 26
@@ -105,15 +100,16 @@ object Day24 extends Problem[Vector[Day24.Instruction], BigInt]:
       val iz = if n < 0 then z / 26 else z
       x += n
       // if x == w then we don't edit z at all, asides from diving it if n < 0
-      if x != w then
-        (26 * iz + w + m, x)
-      else
-        (iz, x)
+      if x != w then (26 * iz + w + m, x)
+      else (iz, x)
 
   def parse(str: String): Vector[Instruction] =
     str.linesIterator.map(Instruction.parse).toVector
 
-  def splitInstructions(input: Vector[Instruction]): Vector[Vector[Instruction]] =
+  def splitInstructions
+    (
+      input: Vector[Instruction]
+    ): Vector[Vector[Instruction]] =
     val builder = Vector.newBuilder[Vector[Instruction]]
     var cur = input
     while cur.nonEmpty do
@@ -127,20 +123,21 @@ object Day24 extends Problem[Vector[Day24.Instruction], BigInt]:
     val m = segment(15).asInstanceOf[Instruction.Add].value.leftOrDie
     FuncSegment(n, m)
 
-  def evaluateAll(segments: Vector[FuncSegment], input: IndexedSeq[Int]): (Int, Int) =
+  def evaluateAll
+    (
+      segments: Vector[FuncSegment],
+      input: IndexedSeq[Int]
+    ): (Int, Int) =
     input.zip(segments).foldLeft((0, 0)):
       case ((z0, _), (w, segment)) => segment.eval(w, z0)
 
-
-
   def find(segments: Vector[FuncSegment], range: Range): BigInt =
-    val (_, indices) = 
-      segments.zipWithIndex.foldLeft((Seq.empty[Int], IndexedSeq.empty[Option[Int]])):
-        case ((stack, indices), (segment, i)) =>
-          if segment.n >= 0 then
-            (i +: stack, indices :+ None)
-          else
-            (stack.tail, indices :+ stack.headOption)
+    val (_, indices) =
+      segments.zipWithIndex
+        .foldLeft((Seq.empty[Int], IndexedSeq.empty[Option[Int]])):
+          case ((stack, indices), (segment, i)) =>
+            if segment.n >= 0 then (i +: stack, indices :+ None)
+            else (stack.tail, indices :+ stack.headOption)
     BigInt:
       segments.indices.foldLeft(IndexedSeq.empty[Int]): (filled, k) =>
         val newFilled = filled :+ range.head
@@ -167,10 +164,10 @@ object Day24 extends Problem[Vector[Day24.Instruction], BigInt]:
 
     /*
     def evaluateAll(str: String): Long =
-      frkySegments.zip(str).foldLeft(0L): 
+      frkySegments.zip(str).foldLeft(0L):
         case (z, (segment, c)) =>
         segment.eval(c.asDigit, z)
-    */
+     */
     // in our input, x is ALWAYS reset to z modulo 26 at the start of each segment
     // shape of segment:
     // inp w
@@ -192,7 +189,7 @@ object Day24 extends Problem[Vector[Day24.Instruction], BigInt]:
     // mul y x
     // add z y
     // The value at the end in the `x` register is if ((z % 26) + N) != w
-    // then, the `y` register will contain 
+    // then, the `y` register will contain
     // Our only two inputs that aren't reset before usage are w and z.
     // when N < 0, we are basically "losing" a level, so it could possibly be represented as a stack
     find(frkySegments, (1 to 9).reverse)

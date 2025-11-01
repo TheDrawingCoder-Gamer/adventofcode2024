@@ -3,21 +3,24 @@ package y2024
 
 import gay.menkissing.common.*
 
-
 object Day04 extends Problem[Grid[Char], Int]:
   lazy val input = FileIO.getInput(2024, 4)
 
   override def parse(str: String): Grid[Char] =
     Grid[Char](str.linesIterator.map(_.toCharArray))
-    
-  
 
-  def searchDir(grid: Grid[Char], x: Int, y: Int, dir: PrincibleWind2D): Boolean =
+  def searchDir
+    (
+      grid: Grid[Char],
+      x: Int,
+      y: Int,
+      dir: PrincibleWind2D
+    ): Boolean =
     val digitalDir = dir.digitalDir
     val fullX = x + digitalDir.x * 3
     val fullY = y + digitalDir.y * 3
-    if fullX < 0 || fullX >= grid.width || fullY < 0 || fullY >= grid.height then
-      false
+    if fullX < 0 || fullX >= grid.width || fullY < 0 || fullY >= grid.height
+    then false
     else
       val c1 = grid(x, y)
       val c2 = grid(x + digitalDir.x, y + digitalDir.y)
@@ -35,10 +38,8 @@ object Day04 extends Problem[Grid[Char], Int]:
       // Don't test edges
       false
     else
-      grid(x, y) == 'A' 
-      && matchesMS(grid(x - 1, y - 1), grid(x + 1, y + 1))
-      && matchesMS(grid(x + 1, y - 1), grid(x - 1, y + 1))
-    
+      grid(x, y) == 'A' && matchesMS(grid(x - 1, y - 1), grid(x + 1, y + 1)) &&
+      matchesMS(grid(x + 1, y - 1), grid(x - 1, y + 1))
 
   override def part1(grid: Grid[Char]): Int =
     grid.indices.map: (x, y) =>

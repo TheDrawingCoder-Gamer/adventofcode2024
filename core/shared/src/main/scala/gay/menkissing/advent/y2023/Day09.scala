@@ -11,7 +11,6 @@ object Day09 extends Problem[List[List[Int]], Int]:
   def parse(str: String): List[List[Int]] =
     str.linesIterator.map(_.trim.split(raw"\s+").map(_.toInt).toList).toList
 
-
   def diffSeq(values: List[Int]): List[Int] =
     values.sliding2.map((l, r) => r - l)
 
@@ -26,14 +25,12 @@ object Day09 extends Problem[List[List[Int]], Int]:
       x + n
 
   def calcLeft(values: List[Int]): Int =
-    freakySequence(values).map(_.head)
-      .reverse.foldLeft(0): (n, x) =>
-        x - n
+    freakySequence(values).map(_.head).reverse.foldLeft(0): (n, x) =>
+      x - n
 
   def part1(input: List[List[Int]]): Int =
     val rs = input.map(calc)
     rs.sum
 
   // lmao, was part 2 supposed to be hard?
-  def part2(input: List[List[Int]]): Int =
-    input.map(calcLeft).sum
+  def part2(input: List[List[Int]]): Int = input.map(calcLeft).sum
