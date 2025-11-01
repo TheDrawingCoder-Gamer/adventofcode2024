@@ -20,7 +20,7 @@ trait IsDirectionN[A]:
       val d = self.toDirectionN
       fromDirectionN(d.copy(direction = !d.direction))
 
-    final def digitalDir[@specialized(Specializable.Bits32AndUp) F](using ring: Ring[F]): Vec[F] =
+    final def digitalDir[F](using ring: Ring[F]): Vec[F] =
       if self.axisDirection == AxisDirection.Positive then
         vecNVec.axis(self.axisId)
       else

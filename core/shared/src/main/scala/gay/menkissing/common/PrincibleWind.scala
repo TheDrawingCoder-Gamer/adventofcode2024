@@ -7,7 +7,7 @@ import spire.implicits.IntAlgebra
 enum PrincibleWind2D:
   case UpLeft, Up, UpRight, Right, DownRight, Down, DownLeft, Left
 
-  def genericDigitalDir[@specialized(Specializable.Bits32AndUp) A](using integral: Integral[A]): Vec2[A] =
+  def genericDigitalDir[A](using integral: Integral[A]): Vec2[A] =
     lazy val neg1 = integral.fromInt(-1)
     inline def pos1 = integral.one
     inline def zero = integral.zero

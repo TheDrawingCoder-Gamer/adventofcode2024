@@ -7,7 +7,7 @@ import cats.collections.{Discrete, Range}
 import spire.math.ConvertableTo
 import spire.syntax.additiveGroup.*
 
-final case class Dimension[@specialized(Int, Long) A] private (min: A, max: A):
+final case class Dimension[A] private (min: A, max: A):
   infix def intersect(t: Dimension[A])(using ord: Order[A]): Option[Dimension[A]] =
     Option.when(max >= t.min && min <= t.max):
       (min max t.min) dimBy (max min t.max)

@@ -6,7 +6,7 @@ import cats.collections.Discrete
 import cats.collections.Range
 import cats.collections.syntax.range.*
 
-final case class Vec2[@specialized(Specializable.Bits32AndUp) A](x: A, y: A):
+final case class Vec2[A](x: A, y: A):
   def cardinalNeighbors(using ring: Ring[A]): List[Vec2[A]] =
       List(
         Vec2[A](x - ring.one, y),
@@ -58,7 +58,7 @@ final case class Vec2[@specialized(Specializable.Bits32AndUp) A](x: A, y: A):
     
 
 object Vec2:
-  given eqVec2[@specialized(Specializable.Bits32AndUp) A](using Eq[A]): Eq[Vec2[A]] with
+  given eqVec2[A](using Eq[A]): Eq[Vec2[A]] with
     def eqv(x: Vec2[A], y: Vec2[A]): Boolean =
       x.x === y.x && x.y === y.y
 

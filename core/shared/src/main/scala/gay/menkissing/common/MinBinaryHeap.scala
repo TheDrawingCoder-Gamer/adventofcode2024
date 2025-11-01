@@ -6,7 +6,7 @@ import cats.syntax.all.*
 
 import annotation.tailrec
 
-final class MinBinaryHeap[A, @specialized(Specializable.AllNumeric) S](using ord: Order[S]):
+final class MinBinaryHeap[A, S](using ord: Order[S]):
   val backing: mutable.ArrayBuffer[(A, S)] = mutable.ArrayBuffer()
 
   @tailrec

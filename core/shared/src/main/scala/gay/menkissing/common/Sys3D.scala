@@ -28,7 +28,7 @@ object Sys3D:
           case 2 => Vec3(ring.zero, ring.zero, ring.one)
           case _ => whatTheScallop.!
 
-      extension [@specialized(Int, Long) A](self: Vec3[A]) 
+      extension [A](self: Vec3[A]) 
         def axes: List[A] =  List(self.x, self.y, self.z)
         def zip(that: Vec3[A])(f: (A, A) => A): Vec3[A] =
           Vec3(f(self.x, that.x), f(self.y, that.y), f(self.z, that.z))
@@ -47,7 +47,7 @@ object Sys3D:
             case 0 => self.copy(x = v)
             case 1 => self.copy(y = v)
             case 2 => self.copy(z = v)
-  case class Vec3[@specialized(Int, Long) A](x: A, y: A, z: A):
+  case class Vec3[A](x: A, y: A, z: A):
 
 
     def offset(dir: Direction3D, n: A)(using add: AdditiveGroup[A]): Vec3[A] =
@@ -194,7 +194,7 @@ object Sys3D:
       yield Orientation3D(f, r)
     
 
-  case class AABB3D[@specialized(Int, Long) A](xs: Dimension[A], ys: Dimension[A], zs: Dimension[A]):
+  case class AABB3D[A](xs: Dimension[A], ys: Dimension[A], zs: Dimension[A]):
     infix def intersect(that: AABB3D[A])(using ord: Order[A]): Option[AABB3D[A]] =
       for
         xs <- this.xs intersect that.xs
