@@ -115,8 +115,8 @@ object Day10 extends Problem[(Grid[Option[Day10.Pipe]], Vec2[Int]), Int]:
               Vector(isLeft, true, isRight),
               Vector(false, isDown, false)
             )
-    println(newGrid.width)
-    println(newGrid.height)
+    //println(newGrid.width)
+    //println(newGrid.height)
     // println(newGrid.map(c => if c then 'X' else '.').show)
     val filledBigGrid = Grid.fromSparse(newGrid.width, newGrid.height, newGrid.floodFill(0, 0).map(i => (i, true)).toMap)(false)
     // println(filledBigGrid.map(if _ then 'X' else '.').show)

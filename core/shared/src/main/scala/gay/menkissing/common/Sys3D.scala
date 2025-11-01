@@ -107,23 +107,7 @@ object Sys3D:
   // it's like minecraft all over again :frown:
   enum Direction3D:
     case North, East, South, West, Up, Down
-    lazy val axis: Axis3D =
-      this match
-        case North => Axis3D.Z
-        case South => Axis3D.Z
-        case East => Axis3D.X
-        case West => Axis3D.X
-        case Up => Axis3D.Y
-        case Down => Axis3D.Y
-    lazy val axisDirection: AxisDirection =
-      this match
-        case North => AxisDirection.Positive
-        case East => AxisDirection.Positive
-        case Up => AxisDirection.Positive
-        case South => AxisDirection.Negative
-        case West => AxisDirection.Negative
-        case Down => AxisDirection.Negative
-      
+
 
     def next(axis: Axis3D): Direction3D =
       if this.axis == axis then
@@ -151,16 +135,6 @@ object Sys3D:
               case Down => West
               case West => Up
               case _ => this
-            
-
-    def reverse: Direction3D =
-      this match
-        case North => South
-        case East => West
-        case South => North
-        case West => East
-        case Up => Down
-        case Down => Up
       
 
     @tailrec
@@ -169,19 +143,43 @@ object Sys3D:
       // magic
       val gTimes = if (times2 < 0) 4 + times2 else times2
       val ggTimes = (if (clockwise) gTimes else 4 - gTimes) % 4
-      if (ggTimes == 0) this
+      if ggTimes == 0 then this
       else this.next(axis).rotate(axis, true, ggTimes - 1)
-
 
   object Direction3D:
     val horizontal: Seq[Direction3D] = Seq(North, East, South, West)
     val zplane: Seq[Direction3D] = Seq(Up, East, Down, West)
 
-  enum Axis3D:
+    given isDirectionN3D: IsDirectionN[Direction3D] with
+      type Axis = Axis3D
+      given axisNAxis: AxisN[Axis3D] = summon
+
+      type Vec = Vec3
+
+      given vecNVec: VecN[Vec3] = summon
+      def fromDirectionN(d: DirectionN): Direction3D =
+        (d.axis, d.direction) match
+          case (0, AxisDirection.Negative) => Direction3D.West
+          case (0, AxisDirection.Positive) => Direction3D.East
+          case (1, AxisDirection.Negative) => Direction3D.Down
+          case (1, AxisDirection.Positive) => Direction3D.Up
+          case (2, AxisDirection.Negative) => Direction3D.South
+          case (2, AxisDirection.Positive) => Direction3D.North
+          case _ => whatTheScallop.!
+      extension (self: Direction3D)
+        def axisId: Int =
+          self match
+            case Direction3D.West | Direction3D.East => 0
+            case Direction3D.Down | Direction3D.Up   => 1
+            case Direction3D.South | Direction3D.North => 2
+        def axisDirection: AxisDirection =
+          self match
+            case Direction3D.West | Direction3D.Down | Direction3D.South => AxisDirection.Negative
+            case _ => AxisDirection.Positive
+
+  enum Axis3D derives AxisN:
     case X, Y, Z
 
-  enum AxisDirection:
-    case Positive, Negative
 
   enum Rotation:
     case Rot0, Rot90, Rot180, Rot270

@@ -372,13 +372,13 @@ object Day22 extends Problem[(Day22.ForbiddenGrid, List[Day22.Instruction]), Int
     final def move(pos: Vec2[Int], dir: Direction2D, n: Int): Vec2[Int] =
       def getGood(rowOrCol: Seq[GridPos]): Option[GridPos] =
         dir.axisDirection match
-          case Axis2D.Direction.Positive => rowOrCol.find(_ != GNil)
-          case Axis2D.Direction.Negative => rowOrCol.findLast(_ != GNil)
+          case AxisDirection.Positive => rowOrCol.find(_ != GNil)
+          case AxisDirection.Negative => rowOrCol.findLast(_ != GNil)
         
       def getPos(rowOrCol: Seq[GridPos]): Int =
         dir.axisDirection match
-          case Axis2D.Direction.Positive => rowOrCol.indexWhere(_ != GNil)
-          case Axis2D.Direction.Negative => rowOrCol.lastIndexWhere(_ != GNil)
+          case AxisDirection.Positive => rowOrCol.indexWhere(_ != GNil)
+          case AxisDirection.Negative => rowOrCol.lastIndexWhere(_ != GNil)
         
       moveHelper(pos, dir, n): (line, lastPos) =>
         val countUntilEdge = line.indexWhere(it => grid.getOrElse(it, GNil) == GNil)

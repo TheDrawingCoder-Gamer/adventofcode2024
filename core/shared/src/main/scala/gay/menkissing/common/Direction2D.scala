@@ -6,34 +6,9 @@ import spire.implicits.IntAlgebra
 
 enum Direction2D:
   case Up, Down, Left, Right
-
-  def genericDigitalDir[@specialized(Specializable.Integral) A](using integral: Integral[A]): Vec2[A] =
-    lazy val neg1 = integral.fromInt(-1)
-    inline def zero = integral.zero
-    inline def one = integral.one
-    this match
-      case Up => Vec2(zero, neg1)
-      case Down => Vec2(zero, one)
-      case Left => Vec2(neg1, zero)
-      case Right => Vec2(one, zero)
-    
-
-  def digitalDir: Vec2[Int] = genericDigitalDir[Int]
   
-  def axis = 
-    this match
-      case Direction2D.Up => Axis2D.Y 
-      case Direction2D.Down => Axis2D.Y 
-      case Direction2D.Left => Axis2D.X 
-      case Direction2D.Right => Axis2D.X
   // Grid based axis direction
   // Like scratch for you NERDS
-  def axisDirection = 
-    this match
-      case Direction2D.Up => Axis2D.Direction.Negative
-      case Direction2D.Down => Axis2D.Direction.Positive
-      case Direction2D.Left => Axis2D.Direction.Negative
-      case Direction2D.Right => Axis2D.Direction.Positive
   def clockwise = 
     this match
       case Direction2D.Up => Direction2D.Right 
@@ -72,3 +47,29 @@ object Direction2D:
       case Left => "Left"
       case Right => "Right"
       case Up => "Up"
+
+  given isDirectionN2D: IsDirectionN[Direction2D] with
+    type Axis = Axis2D
+    given axisNAxis: AxisN[Axis2D] = summon[AxisN[Axis2D]]
+
+    type Vec[A] = Vec2[A]
+    given vecNVec: VecN[Vec] = summon
+    def fromDirectionN(d: DirectionN): Direction2D =
+      (d.axis, d.direction) match
+        case (0, AxisDirection.Negative) => Direction2D.Left
+        case (0, AxisDirection.Positive) => Direction2D.Right
+        case (1, AxisDirection.Negative) => Direction2D.Up
+        case (1, AxisDirection.Positive) => Direction2D.Down
+        case _ => whatTheScallop.!
+    
+    extension (self: Direction2D)
+      def axisId: Int =
+        self match
+          case Direction2D.Left | Direction2D.Right => 0
+          case _ => 1
+      def axisDirection: AxisDirection =
+        self match
+          case Direction2D.Left | Direction2D.Up => AxisDirection.Negative
+          case _ => AxisDirection.Positive
+
+    

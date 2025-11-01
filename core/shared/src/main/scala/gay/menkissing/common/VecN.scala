@@ -6,7 +6,7 @@ import spire.implicits.*
 trait VecN[V[_]]:
   def dimensions: Int
 
-  def axis[A](i: Int)(using ring: Ring[A]): V[A]
+  def axis[@specialized(Specializable.Bits32AndUp) A](i: Int)(using ring: Ring[A]): V[A]
 
   extension[@specialized(Specializable.Bits32AndUp) A](self: V[A])
     // equivilant to constructing from axes.map(f)

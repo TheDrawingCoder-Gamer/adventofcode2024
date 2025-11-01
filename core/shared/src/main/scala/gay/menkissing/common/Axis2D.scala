@@ -1,9 +1,6 @@
 package gay.menkissing.common
 
 
-enum Axis2D:
+enum Axis2D derives AxisN:
   case X, Y
 
-object Axis2D:
-  enum Direction:
-    case Positive, Negative

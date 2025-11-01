@@ -84,6 +84,7 @@ object Day23 extends Problem[Grid[Boolean], Int]:
   extension (order: Vector[Direction2D])
     def access(offset: Int)(idx: Int): Direction2D = order((idx + offset) % 4)
 
+  // todo: takes 25s???
   def part2(grid:ElfGrid): Int =
     Iterator.iterate((grid, 0, false)): (grid, offset, _) =>
       val (newGrid, didntMove) = round(grid, offset)
