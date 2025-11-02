@@ -31,7 +31,7 @@ object Day20 extends Problem:
       q.insert(start, 0)
 
       while q.nonEmpty && q.head =!= goal do
-        val (current, score) = q.extractWithPriority()
+        val (current, score) = q.extract()
 
         current.cardinalNeighbors.filter(grid.get(_).contains(false)).foreach:
           neighbor =>

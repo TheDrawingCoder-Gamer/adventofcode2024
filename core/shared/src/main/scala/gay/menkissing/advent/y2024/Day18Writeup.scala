@@ -44,11 +44,9 @@ object Day18Writeup extends ProblemAdv:
       while q.nonEmpty && q.head._1 != goal do
         val (current, score) = q.dequeue()
 
-        for neighbor <-
-            current.cardinalNeighbors.filter(it =>
-              it.isContainedIn(gridSize, gridSize) && !walls.contains(it)
-            )
-        do
+        current.cardinalNeighbors.filter(it =>
+          it.isContainedIn(gridSize, gridSize) && !walls.contains(it)
+        ).foreach: neighbor =>
           val alt = score + 1d
           if alt < dist.getOrElse(neighbor, Double.PositiveInfinity) then
             cameFrom(neighbor) = current

@@ -93,7 +93,7 @@ object Day23 extends NewProblem:
     val openSet = MinBinaryHeap[State, Int]()
     openSet.insert(start, 0)
     while openSet.nonEmpty do
-      val (current, curEnergy) = openSet.extractWithPriority()
+      val (current, curEnergy) = openSet.extract()
       if current.isGoal then return Some(gscore(current))
       // if no shorter path was found yet
       if curEnergy == gscore(current) then

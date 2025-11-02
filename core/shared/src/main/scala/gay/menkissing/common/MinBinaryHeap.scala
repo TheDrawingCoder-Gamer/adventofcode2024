@@ -6,28 +6,27 @@ import cats.syntax.all.*
 
 import annotation.tailrec
 
-final class MinBinaryHeap[A, S](using ord: Order[S]):
-  val backing: mutable.ArrayBuffer[(A, S)] = mutable.ArrayBuffer()
+sealed class BinaryHeap[A](using ord: Order[A]):
+  protected val backing: mutable.ArrayBuffer[A] = mutable.ArrayBuffer()
 
   @tailrec
-  private def bubbleUp(p: Int): Unit =
+  protected final def bubbleUp(p: Int): Unit =
     val parent = (p - 1) / 2
-    if backing(parent)._2 > backing(p)._2 then
+    if backing(parent) > backing(p) then
       val v = backing(parent)
       backing(parent) = backing(p)
       backing(p) = v
       if parent != 0 then bubbleUp(parent)
-
   @tailrec
-  private def siftDown(p: Int): Unit =
+  protected final def siftDown(p: Int): Unit =
     val left = 2 * p + 1
     val right = 2 * p + 2
 
     var smallest = p
 
-    if left < backing.length && backing(left)._2 < backing(smallest)._2 then
+    if left < backing.length && backing(left) < backing(smallest) then
       smallest = left
-    if right < backing.length && backing(right)._2 < backing(smallest)._2 then
+    if right < backing.length && backing(right) < backing(smallest) then
       smallest = right
 
     if smallest != p then
@@ -35,15 +34,11 @@ final class MinBinaryHeap[A, S](using ord: Order[S]):
       backing(smallest) = backing(p)
       backing(p) = v
       siftDown(smallest)
-
-  def insert(n: A, priority: S): this.type =
-    // first, append that thang :joy:
-    backing.append((n, priority))
-    // then bubble up that thang :joy:
+  def insert(n: A): this.type =
+    backing.append(n)
     bubbleUp(backing.length - 1)
     this
-
-  def extractWithPriority(): (A, S) =
+  def extract(): A =
     // for degenerate case of backing.length == 1
     if backing.length == 1 then
       val r = backing.remove(0)
@@ -57,9 +52,22 @@ final class MinBinaryHeap[A, S](using ord: Order[S]):
       // then sift down to preserve the heap property
       siftDown(0)
       head
-  def extract(): A = extractWithPriority()._1
-  def head: A = backing(0)._1
-  def headOption: Option[A] = Option.when(backing.nonEmpty)(backing(0)._1)
+  def peek: A = backing(0)
+  def peekOption: Option[A] = Option.when(backing.nonEmpty)(peek)
+
+  def isEmpty: Boolean = backing.isEmpty
+  def nonEmpty: Boolean = backing.nonEmpty
+
+final class MinBinaryHeap[A, S]
+  (using ord: Order[S])
+    extends BinaryHeap[(A, S)](using ord.contramap(_._2)):
+
+  inline def insert(n: A, priority: S): this.type = insert((n, priority))
+
+  def extractWithoutPriority(): A = extract()._1
+  def head: A = peek._1
+  def headOption: Option[A] = peekOption.map(_._1)
+  // very slow, if possible to use a different one do it
   def updatePriority(n: A, value: S)(using Eq[A]): this.type =
     val p = backing.indexWhere(_._1 === n)
     if p < 0 then return insert(n, value)
@@ -74,6 +82,3 @@ final class MinBinaryHeap[A, S](using ord: Order[S]):
       siftDown(p)
 
     this
-
-  def isEmpty: Boolean = backing.isEmpty
-  def nonEmpty: Boolean = backing.nonEmpty

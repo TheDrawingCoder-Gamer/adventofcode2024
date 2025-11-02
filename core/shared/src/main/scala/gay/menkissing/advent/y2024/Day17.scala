@@ -2,13 +2,16 @@ package gay.menkissing.advent
 package y2024
 
 import gay.menkissing.common.*
+import cats.*
 
 import scala.annotation.tailrec
 
 object Day17 extends ProblemAdv:
   type Input = ComputerState
-  type OutputP1 = String
+  type OutputP1 = List[Byte]
   type OutputP2 = Long
+
+  override given showOutputP1: Show[OutputP1] = _.mkString("", ",", "")
 
   case class ComputerState
     (
@@ -98,8 +101,7 @@ object Day17 extends ProblemAdv:
       List()
     )
 
-  override def part1(input: ComputerState): String =
-    input.complete.mkString("", ",", "")
+  override def part1(input: ComputerState): List[Byte] = input.complete
 
   override def part2(input: ComputerState): Long =
     Iterator.iterate(1L): a =>

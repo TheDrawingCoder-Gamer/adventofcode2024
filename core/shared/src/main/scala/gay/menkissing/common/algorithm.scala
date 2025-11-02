@@ -96,7 +96,7 @@ def astarByReturning[A, R]
   val openSet = MinBinaryHeap[A, Double]()
   openSet.insert(start, h(start))
   while openSet.nonEmpty do
-    val (current, priority) = openSet.extractWithPriority()
+    val (current, priority) = openSet.extract()
 
     // if this is the shortest path found
     if priority <= fscore(current) then
@@ -110,7 +110,7 @@ def astarByReturning[A, R]
           val daFScore = stinkyGScore + h(neighbor)
           fscore(neighbor) = daFScore
           // let the filter above handle the case where its already in the queue
-          openSet.updatePriority(neighbor, daFScore)
+          openSet.insert(neighbor, daFScore)
 
   None
 
@@ -131,7 +131,7 @@ def dijstraByReturning[A, R]
   openSet.insert(start, 0d)
 
   while openSet.nonEmpty do
-    val (current, priority) = openSet.extractWithPriority()
+    val (current, priority) = openSet.extract()
     val curScore = gscore(current)
 
     if curScore == priority then
@@ -142,7 +142,8 @@ def dijstraByReturning[A, R]
         if gscore.get(neighbor).forall(stinkyGScore < _) then
           cameFrom(neighbor) = current
           gscore(neighbor) = stinkyGScore
-          openSet.updatePriority(neighbor, stinkyGScore)
+          // insert is safe, we checked to see if this is the smallest
+          openSet.insert(neighbor, stinkyGScore)
 
   None
 
