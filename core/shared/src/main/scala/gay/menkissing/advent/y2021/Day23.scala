@@ -12,7 +12,6 @@ import scala.collection.mutable
 object Day23 extends NewProblem:
   type Input = State
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   enum Amphipod(val cost: Int, val room: Int) derives Eq:
     case A extends Amphipod(1, 3)

@@ -8,7 +8,6 @@ import cats.Show
 object Day25 extends HalfDay:
   type Input = List[Long]
   type Output = String
-  def showOutput: Show[String] = summon
 
   def snafuToDec(input: String): Long =
     @tailrec

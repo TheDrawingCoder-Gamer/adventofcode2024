@@ -7,7 +7,6 @@ import cats.Show
 object Day07 extends Problem:
   type Input = Map[String, Op]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   enum Op:
     case Value(s: String)

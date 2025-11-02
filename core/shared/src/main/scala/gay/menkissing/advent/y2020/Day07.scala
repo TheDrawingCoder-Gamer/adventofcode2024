@@ -6,7 +6,6 @@ import cats.Show
 object Day07 extends Problem:
   type Input = Rules
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   case class BagDesc(color: String, amount: Int)
   type Rules = Map[String, Set[BagDesc]]

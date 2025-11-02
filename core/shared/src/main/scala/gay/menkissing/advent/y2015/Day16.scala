@@ -7,7 +7,6 @@ import cats.Show
 object Day16 extends Problem:
   type Input = List[Aunt]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   val greaterValues = Set("cats", "trees")
   val lessValues = Set("pomeranians", "goldfish")

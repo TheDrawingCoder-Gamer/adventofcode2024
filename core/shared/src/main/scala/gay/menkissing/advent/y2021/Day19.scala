@@ -16,7 +16,6 @@ import cats.Show
 object Day19 extends Problem:
   type Input = List[Set[Vec3[Int]]]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   def findTransformIfIntersects
     (

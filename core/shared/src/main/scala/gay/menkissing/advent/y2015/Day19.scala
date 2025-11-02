@@ -14,7 +14,6 @@ import scala.annotation.tailrec
 object Day19 extends Problem:
   type Input = (Map[String, List[String]], String)
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   lazy val input = FileIO.getInput(2015, 19)
 

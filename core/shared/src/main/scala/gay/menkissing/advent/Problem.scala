@@ -2,6 +2,7 @@ package gay.menkissing.advent
 
 import gay.menkissing.common.debugTiming
 import cats.*
+import compiletime.deferred
 
 trait Problem extends ProblemSuperAdv, WithParser, HasSharedOutput
 trait NewProblem extends ProblemSuperAdv, HasSharedInput, HasSharedOutput
@@ -19,17 +20,14 @@ trait HasSharedInput extends HasInputP1, HasInputP2:
   type InputP2 = Input
 trait HasOutputP1:
   type OutputP1
-  def showOutputP1: Show[OutputP1]
+  given showOutputP1: Show[OutputP1] = deferred
 trait HasOutputP2:
   type OutputP2
-  def showOutputP2: Show[OutputP2]
+  given showOutputP2: Show[OutputP2] = deferred
 trait HasSharedOutput extends HasOutputP1, HasOutputP2:
   type Output
-  def showOutput: Show[Output]
   type OutputP1 = Output
-  def showOutputP1: Show[OutputP1] = showOutput
   type OutputP2 = Output
-  def showOutputP2: Show[OutputP2] = showOutput
 
 trait ParseP1 extends HasInputP1:
   def parseP1(str: String): InputP1

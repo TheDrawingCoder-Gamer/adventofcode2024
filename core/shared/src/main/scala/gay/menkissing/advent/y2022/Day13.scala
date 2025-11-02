@@ -9,7 +9,6 @@ import cats.implicits.*
 object Day13 extends Problem:
   type Input = Vector[Packet]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   sealed trait Packet extends Ordered[Packet]:
     def compare(that: Packet): Int =

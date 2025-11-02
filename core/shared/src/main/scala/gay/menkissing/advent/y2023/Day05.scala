@@ -10,7 +10,6 @@ object Day05 extends Problem:
   // was already here and declared as input so it ALL WORKS OUT : )
   type Input = (List[Long], NonEmptyList[NonEmptyList[MapRange]])
   type Output = Long
-  def showOutput: Show[Long] = summon
 
   type RangeResult =
     Ior[NonEmptyChain[(Long, Long)], NonEmptyChain[(Long, Long)]]

@@ -11,9 +11,6 @@ object Day10 extends ProblemAdv:
   type OutputP1 = Int
   type OutputP2 = String
 
-  def showOutputP1: Show[OutputP1] = summon
-  def showOutputP2: Show[OutputP2] = summon
-
   // I just KNOW it will tell me there is more than one register for part two
   case class CPU(tick: Int, register: Int)
 

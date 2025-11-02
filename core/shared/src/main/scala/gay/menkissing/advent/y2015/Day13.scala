@@ -9,7 +9,6 @@ import cats.syntax.all.*
 object Day13 extends Problem:
   type Input = List[((String, String), Int)]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   def parse(str: String): List[((String, String), Int)] =
     str.trim.linesIterator.map:

@@ -11,7 +11,6 @@ import cats.Show
 object Day10 extends Problem:
   type Input = String
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   def parse(str: String): String = str.trim
 

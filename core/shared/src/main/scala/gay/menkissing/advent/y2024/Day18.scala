@@ -11,9 +11,6 @@ object Day18 extends ProblemAdv:
   type OutputP1 = Int
   type OutputP2 = Vec2[Int]
 
-  def showOutputP1 = summon
-  def showOutputP2 = summon
-
   case class GridSize(x: Int, y: Int)
 
   override def parse(str: String): List[Vec2[Int]] =

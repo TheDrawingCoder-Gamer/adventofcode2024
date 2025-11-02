@@ -13,7 +13,6 @@ import cats.Show
 object Day14 extends Problem:
   type Input = SparseCaveGrid
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   extension (a: Int)
     infix def ascendsTo(b: Int): Range =

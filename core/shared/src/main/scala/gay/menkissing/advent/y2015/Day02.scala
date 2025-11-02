@@ -8,8 +8,6 @@ object Day02 extends Problem:
 
   type Output = Int
 
-  def showOutput: Show[Int] = summon
-
   def parse(str: String): List[(Int, Int, Int)] =
     str.linesIterator.map:
       case s"${x}x${y}x${z}" => (x.toInt, y.toInt, z.toInt)

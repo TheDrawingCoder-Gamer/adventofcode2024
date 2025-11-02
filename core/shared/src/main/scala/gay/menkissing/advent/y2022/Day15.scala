@@ -15,7 +15,6 @@ import cats.Show
 object Day15 extends Problem:
   type Input = Set[SensorRanged]
   type Output = Long
-  def showOutput: Show[Long] = summon
 
   case class SensorRanged(pos: Vec2[Int], beacon: Vec2[Int]):
     val range = pos `taxiDistance` beacon

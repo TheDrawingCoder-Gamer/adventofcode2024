@@ -11,7 +11,6 @@ import cats.derived.*
 object Day16 extends Problem:
   type Input = ProblemState
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   type Maze = Grid[Boolean]
 

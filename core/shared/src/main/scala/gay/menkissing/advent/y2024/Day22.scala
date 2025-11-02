@@ -9,8 +9,6 @@ object Day22 extends Problem:
   type Input = List[Int]
   type Output = Long
 
-  def showOutput = summon
-
   override def parse(str: String): List[Int] =
     str.linesIterator.map(_.toInt).toList
 

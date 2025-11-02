@@ -10,9 +10,6 @@ object Day17 extends ProblemAdv:
   type OutputP1 = String
   type OutputP2 = Long
 
-  def showOutputP1 = summon
-  def showOutputP2 = summon
-
   case class ComputerState
     (
       ip: Int,

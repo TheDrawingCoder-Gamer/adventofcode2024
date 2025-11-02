@@ -8,7 +8,6 @@ import cats.syntax.all.*
 object Day09 extends Problem:
   type Input = List[List[Int]]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   lazy val input = FileIO.getInput(2023, 9)
 

@@ -8,7 +8,6 @@ import cats.Show
 object Day14 extends Problem:
   type Input = List[Reindeer]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   case class Reindeer(speed: Int, active: Int, rest: Int)
   case class ReindeerState

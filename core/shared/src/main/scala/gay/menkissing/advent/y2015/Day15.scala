@@ -8,7 +8,6 @@ import alleycats.std.set.*
 object Day15 extends Problem:
   type Input = Vector[Ingredient]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   case class Ingredient
     (

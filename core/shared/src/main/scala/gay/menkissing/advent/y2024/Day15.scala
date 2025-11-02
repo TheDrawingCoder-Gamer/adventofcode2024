@@ -12,7 +12,6 @@ import scala.collection.mutable as mut
 object Day15 extends Problem:
   type Input = ProblemState
   type Output = Long
-  def showOutput: Show[Long] = summon
 
   enum GridItem:
     case Empty, Wall, Box

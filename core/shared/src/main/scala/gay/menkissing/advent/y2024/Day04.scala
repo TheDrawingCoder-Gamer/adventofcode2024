@@ -7,7 +7,6 @@ import cats.Show
 object Day04 extends Problem:
   type Input = Grid[Char]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   lazy val input = FileIO.getInput(2024, 4)
 

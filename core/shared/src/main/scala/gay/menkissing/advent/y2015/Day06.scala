@@ -6,7 +6,6 @@ import cats.Show
 object Day06 extends Problem:
   type Input = List[Instruction]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   enum Op:
     case On, Toggle, Off

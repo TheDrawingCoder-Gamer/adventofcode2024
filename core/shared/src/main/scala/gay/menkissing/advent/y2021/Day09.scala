@@ -11,7 +11,6 @@ import cats.Show
 object Day09 extends Problem:
   type Input = Grid[Int]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   lazy val input = FileIO.getInput(2021, 9)
   def parse(input: String): Grid[Int] =

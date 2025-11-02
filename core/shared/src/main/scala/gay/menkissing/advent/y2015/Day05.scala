@@ -7,7 +7,6 @@ import cats.implicits.*
 object Day05 extends Problem:
   type Input = String
   type Output = Int
-  def showOutput: Show[Int] = summon
   def parse(str: String): String = str
 
   def part1(input: String): Int =

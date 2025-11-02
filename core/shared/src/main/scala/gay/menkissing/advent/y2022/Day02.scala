@@ -6,7 +6,6 @@ import cats.Show
 object Day02 extends Problem:
   type Input = List[RawThrow]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   enum RPSResult:
     case Loss, Draw, Win

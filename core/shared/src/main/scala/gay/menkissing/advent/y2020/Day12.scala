@@ -12,7 +12,6 @@ import scala.collection.mutable
 object Day12 extends Problem:
   type Input = List[(Char, Int)]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   case class DaState
     (

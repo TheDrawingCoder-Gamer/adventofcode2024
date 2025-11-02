@@ -9,7 +9,6 @@ import cats.Show
 object Day04 extends Problem:
   type Input = String
   type Output = Int
-  def showOutput: Show[Int] = summon
   def parse(str: String): String = str.trim
 
   // NEVER roll your own crypto

@@ -11,7 +11,6 @@ import cats.syntax.all.*
 object Day16 extends Problem:
   type Input = ValveMap
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   val fullTimeP2 = 26
   // valve?

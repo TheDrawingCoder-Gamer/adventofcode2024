@@ -7,7 +7,6 @@ import cats.Show
 object Day06 extends Problem:
   type Input = Vector[Int]
   type Output = Long
-  def showOutput: Show[Long] = summon
 
   type FishMap = Map[Int, Long]
 

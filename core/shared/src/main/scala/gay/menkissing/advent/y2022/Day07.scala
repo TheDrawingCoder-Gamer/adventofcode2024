@@ -10,7 +10,6 @@ import cats.Show
 object Day07 extends Problem:
   type Input = Seq[Command]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   lazy val input = FileIO.getInput(2022, 7)
   enum Command:

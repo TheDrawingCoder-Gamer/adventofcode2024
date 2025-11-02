@@ -10,7 +10,6 @@ import cats.Show
 object Day11 extends Problem:
   type Input = List[Long]
   type Output = Long
-  def showOutput: Show[Long] = summon
 
   lazy val input = FileIO.getInput(2024, 11)
 

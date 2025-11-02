@@ -7,7 +7,6 @@ import cats.Show
 object Day07 extends Problem:
   type Input = List[Equation]
   type Output = Long
-  def showOutput: Show[Long] = summon
 
   lazy val input = FileIO.getInput(2024, 7)
 

@@ -6,7 +6,6 @@ import cats.Show
 object Day08 extends Problem:
   type Input = List[String]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   def parse(str: String): List[String] = str.linesIterator.toList
 

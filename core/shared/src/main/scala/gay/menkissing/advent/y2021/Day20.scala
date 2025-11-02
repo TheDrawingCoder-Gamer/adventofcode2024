@@ -9,7 +9,6 @@ import cats.Show
 object Day20 extends Problem:
   type Input = (Vector[Boolean], Image)
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   lazy val input = FileIO.getInput(2021, 20)
 

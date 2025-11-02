@@ -10,7 +10,6 @@ import gay.menkissing.common.*
 object Day01 extends Problem:
   type Input = Vector[String]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   lazy val input = FileIO.getInput(2023, 1)
 

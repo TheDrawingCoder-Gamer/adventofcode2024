@@ -10,7 +10,6 @@ import cats.Show
 object Day08 extends Problem:
   type Input = (String, Map[String, (String, String)])
   type Output = Long
-  def showOutput: Show[Long] = summon
   lazy val input: String = FileIO.getInput(2023, 8)
 
   def parse(str: String): (String, Map[String, (String, String)]) =

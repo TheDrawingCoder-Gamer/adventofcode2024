@@ -8,7 +8,6 @@ import cats.Show
 object Day08 extends Problem:
   type Input = Vector[Instruction]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   enum Instruction:
     case Acc(n: Int)

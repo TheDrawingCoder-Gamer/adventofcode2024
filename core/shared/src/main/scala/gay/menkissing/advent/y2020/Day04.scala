@@ -6,7 +6,6 @@ import cats.Show
 object Day04 extends Problem:
   type Input = List[Passport]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   case class Passport
     (

@@ -7,7 +7,6 @@ import cats.Show
 object Day03 extends Problem:
   type Input = List[Rucksack]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   case class ItemType(underlying: Char):
     def priority: Int =

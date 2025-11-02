@@ -10,7 +10,6 @@ import scala.collection.mutable
 object Day15 extends Problem:
   type Input = List[Int]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   override def parse(str: String): List[Int] =
     str.split(",").map(_.toInt).toList

@@ -6,9 +6,6 @@ object Day24 extends ProblemAdv:
   type OutputP1 = Long
   type OutputP2 = String
 
-  def showOutputP1 = summon
-  def showOutputP2 = summon
-
   case class Machine
     (
       starts: Map[String, Long],

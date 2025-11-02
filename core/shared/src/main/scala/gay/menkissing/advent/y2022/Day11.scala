@@ -13,7 +13,6 @@ import cats.Show
 object Day11 extends Problem:
   type Input = Vector[Monkey]
   type Output = Long
-  def showOutput: Show[Long] = summon
 
   class Monkey
     (

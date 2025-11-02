@@ -7,7 +7,6 @@ import cats.Show
 object Day18 extends Problem:
   type Input = SnailfishNum
   type Output = Long
-  def showOutput: Show[Long] = summon
 
   sealed trait SnailfishNum:
     def +(that: SnailfishNum): SnailfishNum = SnailfishGroup(this, that)

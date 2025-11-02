@@ -14,7 +14,6 @@ import scala.collection.mutable
 object Day18 extends Problem:
   type Input = String
   type Output = BigInt
-  def showOutput: Show[BigInt] = summon
 
   override def parse(str: String): String = str
 

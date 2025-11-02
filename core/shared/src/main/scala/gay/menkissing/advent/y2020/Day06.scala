@@ -6,7 +6,6 @@ import cats.Show
 object Day06 extends Problem:
   type Input = List[List[Set[Char]]]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   override def parse(str: String): List[List[Set[Char]]] =
     str.split("\n\n").map: block =>

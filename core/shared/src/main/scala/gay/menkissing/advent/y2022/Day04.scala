@@ -6,7 +6,6 @@ import cats.Show
 object Day04 extends Problem:
   type Input = List[Jobs]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   // j*bs...
   case class Jobs(left: Range, right: Range):

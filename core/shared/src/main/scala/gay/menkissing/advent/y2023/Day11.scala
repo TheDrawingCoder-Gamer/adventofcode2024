@@ -9,7 +9,6 @@ import spire.implicits.{IntAlgebra, LongAlgebra}
 object Day11 extends Problem:
   type Input = Grid[Boolean]
   type Output = Long
-  def showOutput: Show[Long] = summon
   lazy val input = FileIO.getInput(2023, 11)
 
   def parse(str: String): Grid[Boolean] =

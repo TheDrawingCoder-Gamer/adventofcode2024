@@ -6,7 +6,6 @@ import cats.Show
 object Day02 extends Problem:
   type Input = List[PolicyEntry]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   case class PolicyEntry(left: Int, right: Int, of: Char, password: String)
 

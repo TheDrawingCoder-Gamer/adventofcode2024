@@ -7,7 +7,6 @@ import cats.Show
 object Day12 extends Problem:
   type Input = PlantMap
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   type Region = Vector[(Int, Int)]
   def cardinalPositions(x: Int, y: Int): List[(Int, Int)] =

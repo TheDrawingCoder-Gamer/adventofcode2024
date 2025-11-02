@@ -10,7 +10,6 @@ import cats.Show
 object Day12 extends Problem:
   type Input = (Vec2[Int], Vec2[Int], MountainMap)
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   case class MountainMap(grid: Grid[Byte]) extends AnyVal:
     def verticies: Vector[Vec2[Int]] = (0 until grid.width)

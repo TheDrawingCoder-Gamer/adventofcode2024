@@ -6,7 +6,6 @@ import cats.Show
 object Day03 extends Problem:
   type Input = Vector[Vector[Boolean]]
   type Output = Long
-  def showOutput: Show[Long] = summon
 
   override def parse(str: String): Vector[Vector[Boolean]] =
     str.linesIterator.map(_.map(_ == '#').toVector).toVector

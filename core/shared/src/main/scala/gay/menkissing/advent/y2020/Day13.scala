@@ -11,7 +11,6 @@ import scala.collection.mutable
 object Day13 extends Problem:
   type Input = (Int, List[Option[Int]])
   type Output = BigInt
-  def showOutput: Show[BigInt] = summon
 
   override def parse(str: String): (Int, List[Option[Int]]) =
     str.linesIterator.toList match

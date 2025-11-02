@@ -7,7 +7,6 @@ import cats.Show
 object Day07 extends Problem:
   type Input = List[Int]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   lazy val input = FileIO.getInput(2021, 7)
 

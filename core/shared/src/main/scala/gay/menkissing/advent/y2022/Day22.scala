@@ -11,7 +11,6 @@ object Day22 extends Problem:
 
   type Input = (ForbiddenGrid, List[Instruction])
   type Output = Int
-  def showOutput: Show[Int] = summon
   enum GridPos:
     case Solid, Open, GNil
   import GridPos.*

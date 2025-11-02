@@ -12,7 +12,6 @@ import cats.Show
 object Day13 extends Problem:
   type Input = List[CraneMachine]
   type Output = Long
-  def showOutput: Show[Long] = summon
 
   extension (a: Long)
     infix def safeDiv(b: Long): Option[Long] =

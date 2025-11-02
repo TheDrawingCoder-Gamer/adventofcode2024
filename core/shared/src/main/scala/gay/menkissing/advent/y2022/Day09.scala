@@ -10,7 +10,6 @@ import cats.Show
 object Day09 extends Problem:
   type Input = List[Movement]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   type Day9State[A] = State[List[Vec2[Int]], A]
   def minDistance(a: Vec2[Int], b: Vec2[Int]) =

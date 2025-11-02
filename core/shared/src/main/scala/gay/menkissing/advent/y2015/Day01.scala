@@ -9,7 +9,6 @@ object Day01 extends Problem:
 
   type Output = Int
 
-  def showOutput: Show[Int] = summon
   def parse(str: String): String = str
 
   def part1(input: String): Int = input.count(_ == '(') - input.count(_ == ')')

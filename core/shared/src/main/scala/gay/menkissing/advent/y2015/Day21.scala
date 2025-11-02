@@ -8,7 +8,6 @@ import cats.Show
 object Day21 extends Problem:
   type Input = Actor
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   case class Actor(hp: Int, damage: Int, armor: Int):
     def diesIn(dmg: Int): Int =

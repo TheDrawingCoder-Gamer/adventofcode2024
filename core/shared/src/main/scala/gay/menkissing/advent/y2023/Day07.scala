@@ -7,7 +7,6 @@ import cats.syntax.all.*
 object Day07 extends Problem:
   type Input = List[(Hand, Int)]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   lazy val input: String = FileIO.getInput(2023, 7)
 

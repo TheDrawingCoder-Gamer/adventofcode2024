@@ -11,7 +11,6 @@ import cats.syntax.all.*
 object Day06 extends Problem:
   type Input = (Grid[Boolean], Int)
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   lazy val input = FileIO.getInput(2024, 6)
 

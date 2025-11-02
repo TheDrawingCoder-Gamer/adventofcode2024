@@ -6,7 +6,6 @@ import cats.Show
 object Day21 extends Problem:
   type Input = Context
   type Output = Long
-  def showOutput: Show[Long] = summon
 
   val testInput =
     """|root: pppw + sjmn

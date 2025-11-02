@@ -8,7 +8,6 @@ import cats.Show
 object Day23 extends Problem:
   type Input = ElfGrid
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   type ElfGrid = Grid[Boolean]
 

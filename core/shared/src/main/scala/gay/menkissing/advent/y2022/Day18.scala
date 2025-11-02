@@ -9,7 +9,6 @@ import cats.Show
 object Day18 extends NewProblem:
   type Input = Map[Vec3[Int], Cube]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   def parse(input: String, default: Boolean): Map[Vec3[Int], Cube] =
     input.linesIterator.map:

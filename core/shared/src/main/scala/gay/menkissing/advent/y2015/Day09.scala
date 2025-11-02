@@ -8,7 +8,6 @@ import gay.menkissing.common.bfsFoldl
 object Day09 extends Problem:
   type Input = Map[(String, String), Int]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   def parse(str: String): Map[(String, String), Int] =
     str.linesIterator.map:

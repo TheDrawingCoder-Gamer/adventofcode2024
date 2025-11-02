@@ -10,8 +10,6 @@ import scala.collection.mutable
 object Day16 extends Problem:
   type Input = DaInput
   type Output = Long
-  def showOutput: Show[Long] = summon
-
   case class DaInput
     (
       validRanges: Map[String, (Range, Range)],

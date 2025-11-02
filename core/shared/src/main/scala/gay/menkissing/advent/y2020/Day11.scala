@@ -11,7 +11,6 @@ import scala.collection.mutable
 object Day11 extends Problem:
   type Input = Grid[Seat]
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   enum Seat:
     case Floor, Occupied, Empty

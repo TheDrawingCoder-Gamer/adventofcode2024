@@ -15,7 +15,6 @@ import cats.syntax.all.*
 object Day24 extends Problem:
   type Input = BlizzardMap
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   lazy val input = FileIO.getInput(2022, 24)
 

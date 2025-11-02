@@ -9,7 +9,6 @@ import cats.Show
 object Day24 extends Problem:
   type Input = Vector[Instruction]
   type Output = BigInt
-  def showOutput: Show[BigInt] = summon
 
   lazy val input = FileIO.getInput(2021, 24)
 

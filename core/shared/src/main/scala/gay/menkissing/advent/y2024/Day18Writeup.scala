@@ -11,9 +11,9 @@ object Day18Writeup extends ProblemAdv:
   type OutputP1 = Int
   type OutputP2 = Vec2i
 
-  def showOutputP1 = summon
-  def showOutputP2 = summon
-  case class Vec2i(x: Int, y: Int) derives Show:
+  override given showOutputP2: Show[Vec2i] = Show.derived
+
+  case class Vec2i(x: Int, y: Int):
     def cardinalNeighbors: List[Vec2i] =
       List(Vec2i(x - 1, y), Vec2i(x + 1, y), Vec2i(x, y - 1), Vec2i(x, y + 1))
 

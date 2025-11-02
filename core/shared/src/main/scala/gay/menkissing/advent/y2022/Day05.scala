@@ -7,7 +7,6 @@ import cats.Show
 object Day05 extends Problem:
   type Input = (Palettes, List[CraneMove])
   type Output = String
-  def showOutput: Show[String] = summon
 
   lazy val input = FileIO.getInput(2022, 5)
 

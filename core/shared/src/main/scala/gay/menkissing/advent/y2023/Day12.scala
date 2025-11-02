@@ -8,8 +8,6 @@ import cats.Show
 object Day12 extends Problem:
   type Input = List[(List[Option[Boolean]], List[Int])]
   type Output = Long
-  def showOutput: Show[Long] = summon
-
   lazy val input = FileIO.getInput(2023, 12)
 
   def parse(str: String): List[(List[Option[Boolean]], List[Int])] =

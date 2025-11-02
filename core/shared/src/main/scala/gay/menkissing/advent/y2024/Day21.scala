@@ -15,8 +15,6 @@ object Day21 extends Problem:
   type Input = List[String]
   type Output = Long
 
-  def showOutput = summon
-
   override def parse(str: String): List[String] = str.linesIterator.toList
 
   trait Pad:

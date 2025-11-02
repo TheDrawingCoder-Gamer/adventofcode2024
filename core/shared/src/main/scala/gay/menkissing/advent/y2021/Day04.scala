@@ -8,7 +8,6 @@ import cats.Show
 object Day04 extends Problem:
   type Input = (List[Int], List[BingoCard])
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   type BingoCard = Grid[Int]
   type RealBingoCard = Grid[(Int, Boolean)]

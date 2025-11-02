@@ -8,7 +8,6 @@ import gay.menkissing.common.*
 object Day05 extends Problem:
   type Input = (List[(Int, Int)], List[List[Int]])
   type Output = Int
-  def showOutput: Show[Int] = summon
 
   lazy val input = FileIO.getInput(2024, 5)
 
