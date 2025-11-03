@@ -34,23 +34,26 @@ object Main extends Bench:
   def benchmarkFull
     (
       day: Int,
-      p: ProblemSuperAdv,
+      // delay loading the object
+      p: => ProblemSuperAdv,
       opts: FullOpts = FullOpts.Both(BenchmarkOptions())
     )
     (using year: Year): Unit =
+    lazy val pee = p
     benchmark(s"day${day}y${year.n}p1", opts.part1):
-      p.fullPart1
+      pee.fullPart1
     benchmark(s"day${day}y${year.n}p2", opts.part2):
-      p.fullPart2
+      pee.fullPart2
   def benchmarkHalf
     (
       day: Int,
-      p: IncompleteProblem,
+      p: => IncompleteProblem,
       opts: BenchmarkOptions = BenchmarkOptions()
     )
     (using year: Year): Unit =
+    lazy val pee = p
     benchmark(s"day${day}y${year.n}p1", opts):
-      p.fullPart1
+      pee.fullPart1
 
   locally:
     given Year = Year(2015)
@@ -118,6 +121,7 @@ object Main extends Bench:
     benchmarkFull(
       21,
       Day21,
+      // do not test me child, only woe comes from reenabling this
       FullOpts.part2Only(
         BenchmarkOptions(excludePlatforms = List(PlatformKind.Native))
       )

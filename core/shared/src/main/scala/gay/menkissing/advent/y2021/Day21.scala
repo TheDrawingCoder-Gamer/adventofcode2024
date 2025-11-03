@@ -9,7 +9,7 @@ import gay.menkissing.common.*
 
 object Day21 extends Problem:
   type Input = ProblemState
-  type Output = BigInt
+  type Output = Long
 
   case class Player(score: Int, space: Int):
     def move(n: Int): Player =
@@ -66,17 +66,31 @@ object Day21 extends Problem:
       .toList
     ProblemState(0, 0, player1, player2)
 
-  override def part1(input: ProblemState): BigInt =
+  override def part1(input: ProblemState): Long =
     val (state, winner) = fullTurn.untilDefinedM.run(input).value
-    BigInt:
-      winner match
-        case 1 => state.p2.score * state.nrolls
-        case 2 => state.p1.score * state.nrolls
-        case _ => 0
 
-  case class P2State(pState: ProblemState, universeCount: BigInt)
+    winner match
+      case 1 => state.p2.score * state.nrolls
+      case 2 => state.p1.score * state.nrolls
+      case _ => 0
 
-  val dieCombos: List[(Int, BigInt)] =
+  case class Players(p1: Player, p2: Player)
+  case class P2State(p1: Player, p2: Player, universeCount: Long):
+    inline def updatePlayer[N <: Int](w: Player, uc: Long): P2State =
+      inline compiletime.constValue[N] match
+        case 1 => copy(p1 = w, universeCount = uc)
+        case 2 => copy(p2 = w, universeCount = uc)
+        case _ => compiletime.error("what the scallop!")
+    // awesome sauce!!!
+    inline def getPlayer[N <: Int]: Player =
+      inline compiletime.constValue[N] match
+        case 1 => p1
+        case 2 => p2
+        case _ => compiletime.error("what the scallop!")
+  object P2State:
+    def fromProblemState(p: ProblemState): P2State = P2State(p.p1, p.p2, 1L)
+
+  val dieCombos: List[(Int, Long)] =
 
     val possibleRolls =
       for
@@ -84,54 +98,47 @@ object Day21 extends Problem:
         y <- 1 to 3
         z <- 1 to 3
       yield x + y + z
-    possibleRolls.groupMapReduce(identity)(_ => BigInt(1))(_ + _).toList
+    possibleRolls.groupMapReduce(identity)(_ => 1L)(_ + _).toList
 
-  type P2Func[B] = Kleisli[List, P2State, B]
-  def playerTurnP2
-    (
-      accessor: ProblemState => Player,
-      setter: (ProblemState, Player) => ProblemState
-    ): P2Func[(P2State, Option[BigInt])] =
-    Kleisli: state =>
+  inline def playerTurnP2[I <: Int]: P2State => List[(P2State, Option[Long])] =
+    state =>
       dieCombos.map: (it, v) =>
-        val newPlayer = accessor(state.pState).move(it)
+        val newPlayer = state.getPlayer[I].move(it)
         (
-          state.copy(
-            pState = setter(state.pState, newPlayer),
-            universeCount = state.universeCount * v
-          ),
+          state.updatePlayer[I](newPlayer, state.universeCount * v),
           Option.when(newPlayer.score >= 21)(state.universeCount * v)
         )
 
-  val player1TurnP2 = playerTurnP2(_.p1, (s, p) => s.copy(p1 = p))
-  val player2TurnP2 = playerTurnP2(_.p2, (s, p) => s.copy(p2 = p))
+  val player1TurnP2 = playerTurnP2[1]
+  val player2TurnP2 = playerTurnP2[2]
 
-  val fullTurnP2: Reader[P2State, ((BigInt, BigInt), Chain[P2State])] =
-    Reader: state =>
-      // get all possible results of a player 1 turn...
-      val p1 = player1TurnP2(state)
-      val (p1Win, p1Cont) = p1.partition(_._2.isDefined)
-      // For all turns where player one didn't win, then do a player 2 turn...
-      val (p2Win, p2Cont) =
-        p1Cont.map((s, _) => s).flatMap(player2TurnP2.apply)
-          .partition(_._2.isDefined)
-      // return a list of problem states that have no winner
-      // and count the ones where a player won.
-      val p1WinCount = p1Win.map((_, p) => p.get).sum
-      val p2WinCount = p2Win.map((_, p) => p.get).sum
-      ((p1WinCount, p2WinCount), Chain.fromSeq(p2Cont.map((s, _) => s)))
+  def fullTurnP2(state: P2State): (Long, Long, Chain[P2State]) =
+    // get all possible results of a player 1 turn...
+    val p1 = player1TurnP2(state)
+    val (p1Win, p1Cont) =
+      p1.partitionEither:
+        case (_, Some(v)) => Left(v)
+        case (s, _)       => Right(s)
+    // For all turns where player one didn't win, then do a player 2 turn...
+    val (p2Win, p2Cont) =
+      p1Cont.flatMap(player2TurnP2.apply).partitionEither:
+        case (_, Some(v)) => Left(v)
+        case (s, _)       => Right(s)
+    // return a list of problem states that have no winner
+    // and count the ones where a player won.
+    val p1WinCount = p1Win.sum
+    val p2WinCount = p2Win.sum
+    (p1WinCount, p2WinCount, Chain.fromSeq(p2Cont))
 
-  override def part2(input: ProblemState): BigInt =
-    val p2State = P2State(input, BigInt(1))
+  override def part2(input: ProblemState): Long =
+    val p2State = P2State.fromProblemState(input)
+    given Semigroup[Long] = _ + _
     val (l, r) =
-      unfolded((BigInt(0), BigInt(0), Chain(p2State))):
+      unfolded((0L, 0L, Chain(p2State))):
         case (p1Sum, p2Sum, states) =>
           Option.when(states.nonEmpty):
             val r =
               states.foldLeft((p1Sum, p2Sum, Chain[P2State]())):
-                case ((p1, p2, allStates), state) =>
-                  val (counts, list) = fullTurnP2(state)
-
-                  (p1 + counts._1, p2 + counts._2, allStates ++ list)
+                case (fs, state) => fs |+| fullTurnP2(state)
             ((r._1, r._2), r)
     l.max(r)
