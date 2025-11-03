@@ -65,8 +65,7 @@ def astarGeneric[A]
     h: A => Double,
     d: (A, A) => Double,
     neighbors: A => IterableOnce[A]
-  )
-  (using Eq[A]): Option[List[A]] =
+  ): Option[List[A]] =
   astarByReturning[A, List[A]](
     start,
     isGoal,
@@ -84,8 +83,7 @@ def astarByReturning[A, R]
     d: (A, A) => Double,
     neighbors: A => IterableOnce[A],
     returning: (mutable.Map[A, A], A, Double) => R
-  )
-  (using Eq[A]): Option[R] =
+  ): Option[R] =
   val cameFrom = mutable.HashMap[A, A]()
 
   val gscore = mutable.HashMap(start -> 0d)
@@ -121,8 +119,7 @@ def dijstraByReturning[A, R]
     d: (A, A) => Double,
     neighbors: A => IterableOnce[A],
     returning: (mutable.Map[A, A], A, Double) => R
-  )
-  (using Eq[A]): Option[R] =
+  ): Option[R] =
   val cameFrom = mutable.HashMap[A, A]()
 
   val gscore = mutable.HashMap(start -> 0d)
@@ -169,8 +166,7 @@ def dijstraBy[A]
     isGoal: A => Boolean,
     d: (A, A) => Double,
     neighbors: A => IterableOnce[A]
-  )
-  (using Eq[A]): Option[List[A]] =
+  ): Option[List[A]] =
   dijstraByReturning[A, List[A]](
     start,
     isGoal,
@@ -195,8 +191,7 @@ def dijstraByScore[A]
     isGoal: A => Boolean,
     d: (A, A) => Double,
     neighbors: A => IterableOnce[A]
-  )
-  (using Eq[A]): Option[Double] =
+  ): Option[Double] =
   dijstraByReturning[A, Double](start, isGoal, d, neighbors, (_, _, v) => v)
 
 def dijstraScore[A]

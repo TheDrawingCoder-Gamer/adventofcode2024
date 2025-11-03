@@ -9,7 +9,11 @@ case class Grid[A] private (values: Vector[Vector[A]])
 
   val height: Int = values.length
 
-  assert(values.forall(_.lengthCompare(width) == 0))
+  private[common] def checkInvariants(): this.type =
+    require(values.forall(_.lengthCompare(width) == 0))
+    this
+
+  // assert(values.forall(_.lengthCompare(width) == 0))
 
   def isDefinedAt(x: Int, y: Int): Boolean =
     (x >= 0 && x < width) && (y >= 0 && y < height)
@@ -148,11 +152,12 @@ case class Grid[A] private (values: Vector[Vector[A]])
 
 object Grid:
   def apply[A](values: Iterable[A], width: Int): Grid[A] =
-    assert(values.nonEmpty && values.size % width == 0)
+    require(values.nonEmpty && values.size % width == 0)
     Grid[A](values.grouped(width).toVector.map(_.toVector))
 
   def apply[A](values: IterableOnce[IterableOnce[A]]): Grid[A] =
     Grid[A](values.iterator.to(Vector).map(_.iterator.to(Vector)))
+      .checkInvariants()
   def fill[A](x: Int, y: Int)(v: => A) = Grid[A](Vector.fill(y, x)(v))
 
   def fromSparse[A](x: Int, y: Int, map: Map[Vec2[Int], A])(default: => A) =
@@ -162,10 +167,10 @@ object Grid:
     Grid(
       str.linesIterator.zipWithIndex
         .map((s, y) => s.zipWithIndex.map((c, x) => fn(Vec2(x, y), c)))
-    )
+    ).checkInvariants()
 
   def fromString[A](str: String)(fn: Char => A): Grid[A] =
-    Grid(str.linesIterator.map(_.map(fn)))
+    Grid(str.linesIterator.map(_.map(fn))).checkInvariants()
 
   given gridShow[A](using s: Show[A]): Show[Grid[A]] with
     def show(t: Grid[A]): String =

@@ -22,8 +22,6 @@ object Day20 extends Problem:
 
     r
 
-  // Using this reduces performance LOL
-  // when the programming is functional....
   extension [A: ClassTag](vec: IArray[A])
     def move(from: Int, to: Int): IArray[A] =
       if from == to then vec

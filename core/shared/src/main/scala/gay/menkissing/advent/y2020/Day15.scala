@@ -35,6 +35,6 @@ object Day15 extends Problem:
 
   override def part1(input: List[Int]): Int = calc(input, 2020)
 
-  def part2(input: List[Int]): Int = calc(input, 30000000)
+  def part2(input: List[Int]): Int = calc(input, 30_000_000)
 
   override lazy val input: String = FileIO.getInput(2020, 15)

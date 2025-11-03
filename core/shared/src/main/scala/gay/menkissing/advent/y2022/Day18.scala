@@ -90,9 +90,8 @@ object Day18 extends NewProblem:
     items.toSet
 
   def part2(input: Map[Vec3[Int], Cube]): Int =
-    // TODO: why do i need to grow this so much to get the correct answer? what is wrong with my flood fill implementation???
-    // fix this later, it got ME the correct answer :troll:
-    val daBounds = AABB3D.containingAll(input.keySet).grow(10)
+    // fixed, was some shenanagins in AABB3D.grow
+    val daBounds = AABB3D.containingAll(input.keySet).grow(1)
     val freeAir = floodFill(daBounds.start, input, daBounds)
 
     val resMap =

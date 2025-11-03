@@ -6,7 +6,6 @@ import algebra.instances.*
 import cats.*
 import cats.syntax.all.*
 
-
 object Sys3D:
   object Vec3i:
     def of(str: String): Vec3[Int] =
@@ -196,7 +195,7 @@ object Sys3D:
     def volume
       (using
         rng: Ring[A],
-        cv: AsNumber[A],
+        cv: AsNumber[A]
       ): BigInt =
       cv.toBigInt(xs.length) * cv.toBigInt(ys.length) * cv.toBigInt(zs.length)
 
@@ -208,7 +207,7 @@ object Sys3D:
       AABB3D(
         xs.min - n dimBy xs.max + n,
         ys.min - n dimBy ys.max + n,
-        zs.min - n dimBy ys.max + n
+        zs.min - n dimBy zs.max + n
       )
 
     def fitsIn(that: AABB3D[A])(using order: Order[A]): Boolean =

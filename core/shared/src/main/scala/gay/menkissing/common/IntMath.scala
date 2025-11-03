@@ -32,10 +32,6 @@ def chooseL(n: Long, k: Long): BigInt =
 extension (self: Int)
   def digits: Int = math.log10(self.toDouble).toInt + 1
 
-  def fallingFactorial(n: Int): Int =
-    if n == 0 then 1
-    else (0 until n).map(f => self - f).product
-
   def binaryDigits: Int = logBaseN(self.toDouble, 2.0).toInt
 
   infix def rem(that: Int): Int =
