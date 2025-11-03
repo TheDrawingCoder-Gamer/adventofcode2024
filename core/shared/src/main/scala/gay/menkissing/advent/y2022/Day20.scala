@@ -3,6 +3,8 @@ package y2022
 
 import gay.menkissing.common.*
 import cats.Show
+import scala.reflect.ClassTag
+import java.util.Arrays
 
 object Day20 extends Problem:
   type Input = Vector[Long]
@@ -22,22 +24,27 @@ object Day20 extends Problem:
 
   // Using this reduces performance LOL
   // when the programming is functional....
-  extension [A](vec: Vector[A])
-    def move(from: Int, to: Int): Vector[A] =
+  extension [A: ClassTag](vec: IArray[A])
+    def move(from: Int, to: Int): IArray[A] =
       if from == to then vec
       else if from < to then
-        val (before, at) = vec.splitAt(from)
-        val after = at.drop(1)
-        val (beforeMove, afterMove) = after.splitAt(to - from)
-        before ++ beforeMove ++ Vector(vec(from)) ++ afterMove
+        val arr = vec.toArray
+        val arr2 = Array.ofDim[A](arr.length)
+        Array.copy(arr, 0, arr2, 0, from)
+        Array.copy(arr, from + 1, arr2, from, to - from)
+        arr2(to) = arr(from)
+        Array.copy(arr, to + 1, arr2, to + 1, arr2.length - (to + 1))
+        IArray.unsafeFromArray(arr2)
       else
-        val (before, at) = vec.splitAt(from)
-        val after = at.drop(1)
-        val (beforeMove, afterMove) = before.splitAt(to)
-        beforeMove ++ Vector(vec(from)) ++ afterMove ++ after
-
-  extension (vec: Vector[(Long, Int)])
-    def mixNumbersReal: Vector[(Long, Int)] =
+        val arr = vec.toArray
+        val arr2 = Array.ofDim[A](arr.length)
+        Array.copy(arr, 0, arr2, 0, to)
+        arr2(to) = arr(from)
+        Array.copy(arr, to, arr2, to + 1, from - to)
+        Array.copy(arr, from + 1, arr2, from + 1, arr2.length - (from + 1))
+        IArray.unsafeFromArray(arr2)
+  extension (vec: IArray[(Long, Int)])
+    def mixNumbersReal: IArray[(Long, Int)] =
       val dataSize = vec.size
       vec.sortBy(_._2).foldLeft(vec):
         case (result, (item, idx)) =>
@@ -47,15 +54,15 @@ object Day20 extends Problem:
           if dataSize < 20 then println(r.map(_._1))
           r
 
-  extension (vec: Vector[Long])
-    def mixNumbersImm: Vector[Long] = vec.zipWithIndex.mixNumbersReal.map(_._1)
+  extension (vec: IArray[Long])
+    def mixNumbersImm: IArray[Long] = vec.zipWithIndex.mixNumbersReal.map(_._1)
 
   lazy val input = FileIO.getInput(2022, 20)
   def parse(input: String): Vector[Long] =
     input.linesIterator.map(_.toLong).toVector
   def part1(input: Vector[Long]): Long =
     val dataSize = input.size
-    val goodData = input.mixNumbersImm
+    val goodData = IArray.from(input).mixNumbersImm
     val zeroIndex = goodData.indexOf(0L)
     if dataSize < 20 then println(goodData)
     val xIdx = (zeroIndex + 1000) % dataSize
@@ -63,10 +70,14 @@ object Day20 extends Problem:
     val zIdx = (zeroIndex + 3000) % dataSize
 
     goodData(xIdx) + goodData(yIdx) + goodData(zIdx)
+
+  // swapping vector for iarray - ~2500ms to ~350ms!!!
+  // this is so awesome sauce
   def part2(input: Vector[Long]): Long =
     val data = input.map(_ * 811589153L)
     val dataSize = data.size
-    val goodData = mixNumbersReal.repeated(10)(data.zipWithIndex).map(_._1)
+    val goodData =
+      mixNumbersReal.repeated(10)(IArray.from(data.zipWithIndex)).map(_._1)
 
     val zeroIndex = goodData.indexOf(0L)
     if dataSize < 20 then println(goodData)
