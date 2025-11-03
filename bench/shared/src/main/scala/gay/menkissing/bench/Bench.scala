@@ -126,7 +126,7 @@ trait Bench:
       ).toVector
 
     val benches =
-      daBenches.map { it =>
+      daBenches.map: it =>
         if it.opts.excludePlatforms.contains(Platform.current) then
           Left:
             println(s"skipping ${it.name} for current platform")
@@ -135,18 +135,15 @@ trait Bench:
           val samples =
             spawn.Spawn
               .run(it.name, BenchmarkRunOpts(args.timeout, args.verbosity))
-          samples.map { samples =>
+          samples.map: samples =>
             val result =
               IterationResult(it.name, ListStatistics(samples), it.opts.unit)
             if args.verbosity.ordinal >= Verbosity.Normal.ordinal then
               println(result.fullResult)
             result
-          }.toRight {
+          .toRight:
             println("timed out")
             IterationFailure(it.name, "Timed Out")
-          }
-
-      }
 
     println("results: ")
     // benches.foreach(it => println(s"${it.name}: ${it.hocon}"))

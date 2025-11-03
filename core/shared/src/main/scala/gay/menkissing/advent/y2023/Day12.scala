@@ -14,12 +14,12 @@ object Day12 extends Problem:
     str.linesIterator.map:
       case s"$pat $is" =>
         (
-          pat.map {
+          pat.map:
             case '.' => Some(false)
             case '#' => Some(true)
             case '?' => None
             case _   => whatTheScallop.!
-          }.toList,
+          .toList,
           is.split(",").map(_.toInt).toList
         )
       case _ => whatTheScallop.!

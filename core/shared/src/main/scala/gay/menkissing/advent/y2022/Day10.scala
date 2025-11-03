@@ -51,14 +51,13 @@ object Day10 extends ProblemAdv:
     input.traverse(executeOp).runA(CPU(0, 1)).value.toVector
 
   def executeOp(op: Operation): State[CPU, CPU] =
-    State { it =>
+    State: it =>
       val newRegister =
         op match
           case Noop    => it.register
           case Addx(n) => it.register + n
       val newCpu = CPU(it.tick + opTakesCycles(op), newRegister)
       (newCpu, newCpu)
-    }
 
   def getCycle(cpus: Vector[CPU])(c: Int): CPU =
 

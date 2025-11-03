@@ -13,11 +13,10 @@ object Day12 extends Problem:
     List((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1))
 
   def neighborPositions(ix: Int, iy: Int): List[(Int, Int)] = (ix - 1 to ix + 1)
-    .flatMap { x =>
-      (iy - 1 to iy + 1).flatMap { y =>
+    .flatMap: x =>
+      (iy - 1 to iy + 1).flatMap: y =>
         Option.when(x != ix || y != iy)((x, y))
-      }
-    }.toList
+    .toList
 
   extension (region: Region)
     def pretty: String =

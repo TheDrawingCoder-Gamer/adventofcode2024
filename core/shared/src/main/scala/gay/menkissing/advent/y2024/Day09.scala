@@ -20,9 +20,9 @@ object Day09 extends Problem:
       else Iterator.fill(s.asDigit)(-1L))
 
   def unpackP2(str: String): Vector[Chunk] =
-    str.zipWithIndex.map { (s, i) =>
+    str.zipWithIndex.map: (s, i) =>
       if i % 2 == 0 then File(s.asDigit, i / 2) else Free(s.asDigit)
-    }.toVector
+    .toVector
 
   sealed trait Chunk
 

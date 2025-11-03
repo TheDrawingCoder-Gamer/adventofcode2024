@@ -17,11 +17,10 @@ object Day02 extends Problem:
     val inc = Integer.signum(report.tail.head - report.head)
     if inc == 0 then false
     else
-      report.slidingN[2].forall { case (x, y) =>
+      report.slidingN[2].forall: (x, y) =>
         val diff = y - x
         Math.abs(diff) >= 1 && Math.abs(diff) <= 3 &&
         Integer.signum(diff) == inc
-      }
 
   // a valid "final" configuration must:
   // be all increasing or all decreasing

@@ -52,7 +52,7 @@ object Main extends Bench:
     benchmark(s"day${day}y${year.n}p1", opts):
       p.fullPart1
 
-  {
+  locally:
     given Year = Year(2015)
 
     import y2015.*
@@ -67,9 +67,8 @@ object Main extends Bench:
     benchmarkFull(8, Day08)
     benchmarkFull(9, Day09)
     benchmarkFull(10, Day10)
-  }
 
-  {
+  locally:
     given Year = Year(2020)
 
     import y2020.*
@@ -92,9 +91,8 @@ object Main extends Bench:
     benchmarkFull(16, Day16)
     benchmarkFull(18, Day18)
     benchmarkFull(19, Day19)
-  }
 
-  {
+  locally:
     given Year = Year(2021)
 
     import y2021.*
@@ -125,9 +123,7 @@ object Main extends Bench:
       )
     )
 
-  }
-
-  {
+  locally:
     given Year = Year(2022)
 
     import y2022.*
@@ -169,9 +165,8 @@ object Main extends Bench:
     )
     benchmarkFull(24, Day24)
     benchmarkHalf(25, Day25)
-  }
 
-  {
+  locally:
     given Year = Year(2023)
 
     import y2023.*
@@ -183,9 +178,8 @@ object Main extends Bench:
     benchmarkFull(5, Day05)
     benchmarkFull(6, Day06)
     benchmarkFull(7, Day07)
-  }
 
-  {
+  locally:
     given Year = Year(2024)
 
     import y2024.*
@@ -219,4 +213,3 @@ object Main extends Bench:
     benchmarkFull(23, Day23)
     benchmarkFull(24, Day24)
     benchmarkHalf(25, Day25)
-  }

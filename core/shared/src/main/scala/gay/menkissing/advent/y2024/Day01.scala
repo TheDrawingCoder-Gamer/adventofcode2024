@@ -10,7 +10,9 @@ object Day01 extends Problem:
   override lazy val input = FileIO.getInput(2024, 1)
 
   override def parse(str: String): (List[Int], List[Int]) =
-    str.linesIterator.map { case s"$a   $b" => (a.toInt, b.toInt) }.toList.unzip
+    str.linesIterator.map:
+      case s"$a   $b" => (a.toInt, b.toInt)
+    .toList.unzip
 
   override def part1(input: (List[Int], List[Int])): Int =
     val (fst, snd) = input
@@ -23,11 +25,10 @@ object Day01 extends Problem:
   override def part2(input: (List[Int], List[Int])): Int =
     val (fst, snd) = input
     val sndCount =
-      snd.foldLeft(Map[Int, Int]()) { case (map, a) =>
-        map.updatedWith(a) {
-          case Some(value) => Some(value + 1)
-          case _           => Some(1)
-        }
-      }
+      snd.foldLeft(Map[Int, Int]()):
+        case (map, a) =>
+          map.updatedWith(a):
+            case Some(value) => Some(value + 1)
+            case _           => Some(1)
 
     fst.map(it => sndCount.getOrElse(it, 0) * it).sum
