@@ -173,17 +173,15 @@ object Day15 extends Problem:
     val sides = str.split("\n\n")
     var robotPos = Vec2(-1, -1)
     val grid =
-      Grid(sides(0).linesIterator.zipWithIndex.map: (str, y) =>
-        str.toVector.zipWithIndex.map: (it, x) =>
-          it match
-            case '#' => GridItem.Wall
-            case 'O' => GridItem.Box
-            case '.' => GridItem.Empty
-            case '@' =>
-              assert(robotPos === Vec2(-1, -1))
-              robotPos = Vec2(x, y)
-              GridItem.Empty
-            case _ => ???)
+      Grid.fromStringWithIndex(sides(0)):
+        case (_, '#') => GridItem.Wall
+        case (_, 'O') => GridItem.Box
+        case (_, '.') => GridItem.Empty
+        case (v, '@') =>
+          assert(robotPos == Vec2(-1, -1))
+          robotPos = v
+          GridItem.Empty
+        case _ => whatTheScallop.!
     val dirs =
       sides(1).linesIterator.flatten.map:
         case '<' => Direction2D.Left

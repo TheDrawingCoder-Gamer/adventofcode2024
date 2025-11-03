@@ -63,7 +63,8 @@ extension [Output]
   )
   def fullPart1: Output = x.part1(x.parseP1(x.input))
   def debugAndTimeP1(): Unit =
-    val res = debugTiming(fullPart1)
+    val input = x.input
+    val res = debugTiming(x.part1(x.parseP1(input)))
     println(x.showOutputP1.show(res))
 
 extension [Output]
@@ -72,7 +73,8 @@ extension [Output]
   )
   def fullPart2: Output = x.part2(x.parseP2(x.input))
   def debugAndTimeP2(): Unit =
-    val res = debugTiming(fullPart2)
+    val input = x.input
+    val res = debugTiming(x.part2(x.parseP2(input)))
     println(x.showOutputP2.show(res))
 
 trait IncompleteProblem extends ParseP1, WithPart1, WithInput:

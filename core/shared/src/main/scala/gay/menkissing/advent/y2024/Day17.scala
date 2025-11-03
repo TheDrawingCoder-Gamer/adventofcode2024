@@ -51,7 +51,8 @@ object Day17 extends ProblemAdv:
       else Some(goodStep)
 
     def step: ComputerState =
-      val Vector(opcode, operand) = program.slice(ip, ip + 2)
+      val opcode = program(ip)
+      val operand = program(ip + 1)
       def comboOperand =
         operand match
           case 0 => 0L

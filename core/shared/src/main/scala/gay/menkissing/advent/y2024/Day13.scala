@@ -19,7 +19,7 @@ object Day13 extends Problem:
 
   object CraneMachine:
     def parse(str: String): CraneMachine =
-      val lines = str.trim.linesIterator.toVector
+      val lines = str.trim.linesIterator.toArray
       val s"Button A: X+$xa, Y+$ya" = lines(0): @unchecked
       val s"Button B: X+$xb, Y+$yb" = lines(1): @unchecked
       val s"Prize: X=$xp, Y=$yp" = lines(2): @unchecked
