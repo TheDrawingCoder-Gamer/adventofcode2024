@@ -1,11 +1,11 @@
 package gay.menkissing.advent
 package y2023
 
-import gay.menkissing.common.ForeverIterator
-import spire.implicits.*
+import gay.menkissing.common.*, algebras.given
 import collection.mutable
 import cats.data.Chain
 import cats.Show
+import algebra.ring.EuclideanRing
 
 object Day08 extends Problem:
   type Input = (String, Map[String, (String, String)])
@@ -45,4 +45,4 @@ object Day08 extends Problem:
 
     connMap.keys.filter(_.endsWith("A")).map: key =>
       calcTuahThatThang(path, connMap, key, _.endsWith("Z"))
-    .reduce(LongAlgebra.lcm)
+    .reduce(EuclideanRing[Long].lcm).toLong

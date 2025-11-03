@@ -3,7 +3,7 @@ package y2021
 
 import gay.menkissing.common.{Grid, Vec2, given}
 import cats.syntax.all.*
-import spire.implicits.IntAlgebra
+import algebra.instances.all.*
 
 import scala.annotation.tailrec
 import cats.Show

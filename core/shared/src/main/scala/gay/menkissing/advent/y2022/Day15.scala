@@ -1,14 +1,13 @@
 package gay.menkissing.advent
 package y2022
 
-import gay.menkissing.common.*
+import gay.menkissing.common.*, algebras.given
 
 import scala.collection.mutable as mut
 import cats.collections.{Diet, Range}
 import cats.collections.syntax.range.*
 import cats.syntax.all.*
 import cats.data.Chain
-import spire.implicits.IntAlgebra
 import cats.Show
 
 // TODO: Unacceptably slow on JS

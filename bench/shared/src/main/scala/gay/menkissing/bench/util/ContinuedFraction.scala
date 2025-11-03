@@ -12,12 +12,7 @@ object ContinuedFraction:
   /** Maximum allowed numerical error. */
   val DEFAULT_EPSILON = 10e-9
 
-abstract class ContinuedFraction protected
-
-/**
- * Default constructor.
- */
-:
+abstract class ContinuedFraction protected:
   /**
    * Access the n-th a coefficient of the continued fraction. Since a can be a
    * function of the evaluation point, x, that is passed in as well.

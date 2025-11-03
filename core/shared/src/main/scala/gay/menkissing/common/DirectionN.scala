@@ -1,7 +1,8 @@
 package gay.menkissing.common
 
-import spire.algebra.*
-import spire.implicits.*
+import cats.implicits.*
+import algebra.ring.*
+import algebras.given
 
 case class DirectionN(axis: Int, direction: AxisDirection)
 

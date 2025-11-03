@@ -1,8 +1,7 @@
 package gay.menkissing.common
 
 import cats.*
-import spire.math.*
-import spire.implicits.IntAlgebra
+import algebras.given
 
 enum Direction2D:
   case Up, Down, Left, Right

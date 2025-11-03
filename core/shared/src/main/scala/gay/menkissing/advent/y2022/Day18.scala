@@ -3,7 +3,7 @@ package y2022
 
 import gay.menkissing.common.*, Sys3D.*
 import collection.mutable
-import spire.implicits.IntAlgebra
+import algebra.instances.all.*
 import cats.Show
 
 object Day18 extends NewProblem:

@@ -3,7 +3,7 @@ package y2015
 
 import gay.menkissing.common.*
 import cats.syntax.all.*
-import spire.std.any.IntAlgebra
+import algebra.instances.all.*
 import cats.Show
 
 object Day18 extends Problem:

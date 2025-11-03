@@ -4,7 +4,7 @@ package y2024
 import gay.menkissing.common.*
 
 import scala.collection.mutable as mut
-import spire.implicits.IntAlgebra
+import algebra.instances.all.*
 import cats.*
 import cats.syntax.all.*
 

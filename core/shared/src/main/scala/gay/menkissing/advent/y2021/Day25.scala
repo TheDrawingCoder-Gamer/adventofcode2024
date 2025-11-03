@@ -4,7 +4,7 @@ package y2021
 import gay.menkissing.common.*, ArityN.*
 import cats.syntax.all.*
 import cats.*
-import spire.implicits.IntAlgebra
+import algebra.instances.all.*
 
 object Day25 extends HalfDay:
   type Input = Grid[Option[Direction2D]]

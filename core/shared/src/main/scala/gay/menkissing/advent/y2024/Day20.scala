@@ -2,9 +2,9 @@ package gay.menkissing.advent
 package y2024
 
 import gay.menkissing.common.*
+import algebras.given
 
 import scala.collection.mutable as mut
-import spire.implicits.IntAlgebra
 import cats.syntax.all.*
 
 object Day20 extends Problem:

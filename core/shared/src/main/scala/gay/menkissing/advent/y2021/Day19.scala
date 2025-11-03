@@ -1,7 +1,7 @@
 package gay.menkissing.advent
 package y2021
 
-import gay.menkissing.common.*, ArityN.*, Sys3D.*
+import gay.menkissing.common.*, ArityN.*, Sys3D.*, algebras.given
 
 import scala.annotation.tailrec
 import scala.collection.mutable as mut
@@ -9,7 +9,6 @@ import scala.io.Source
 
 import cats.syntax.all.*
 import alleycats.std.set.*
-import spire.implicits.IntAlgebra
 import cats.Show
 
 // This code was mostly written in 2022, and ported to fit this new repo's model

@@ -4,7 +4,7 @@ package y2022
 import gay.menkissing.common.*
 import scala.collection.mutable as mut
 import cats.syntax.all.*
-import spire.implicits.IntAlgebra
+import algebra.instances.all.*
 import cats.Show
 
 object Day22 extends Problem:

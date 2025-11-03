@@ -1,9 +1,7 @@
 package gay.menkissing.advent
 package y2022
 
-import gay.menkissing.common.*
-import spire.implicits.IntAlgebra
-import cats.Show
+import gay.menkissing.common.*, algebras.given
 
 // import cats.collections.*
 // import cats.collections.syntax.all.*

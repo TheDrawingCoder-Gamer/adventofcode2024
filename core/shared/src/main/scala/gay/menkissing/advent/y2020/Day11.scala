@@ -4,7 +4,7 @@ package y2020
 import gay.menkissing.common.{*, given}
 import cats.*
 import cats.syntax.all.*
-import spire.std.any.IntAlgebra
+import algebra.instances.all.*
 
 import scala.collection.mutable
 

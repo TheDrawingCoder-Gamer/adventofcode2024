@@ -1,10 +1,9 @@
 package gay.menkissing.advent
 package y2024
 
-import gay.menkissing.common.*
+import gay.menkissing.common.*, algebras.given
 
 import scala.annotation.tailrec
-import spire.implicits.IntAlgebra
 
 object Day18 extends ProblemAdv:
   type Input = List[Vec2[Int]]

@@ -3,7 +3,7 @@ package y2022
 
 import gay.menkissing.common.*
 import ArityN.*
-import spire.implicits.IntAlgebra
+import algebra.instances.all.*
 
 import scala.annotation.tailrec
 import scala.collection.mutable as mut

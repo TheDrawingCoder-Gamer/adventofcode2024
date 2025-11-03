@@ -1,16 +1,17 @@
 package gay.menkissing.common
 
-import spire.algebra.*
-import spire.math.*
-import spire.implicits.IntAlgebra
+import cats.implicits.*
+import cats.*
+import algebra.ring.*
+import algebra.instances.all.*
 
 enum PrincibleWind2D:
   case UpLeft, Up, UpRight, Right, DownRight, Down, DownLeft, Left
 
-  def genericDigitalDir[A](using integral: Integral[A]): Vec2[A] =
-    lazy val neg1 = integral.fromInt(-1)
-    inline def pos1 = integral.one
-    inline def zero = integral.zero
+  def genericDigitalDir[A](using ring: Ring[A]): Vec2[A] =
+    lazy val neg1 = ring.fromInt(-1)
+    inline def pos1 = ring.one
+    inline def zero = ring.zero
     this match
       case UpLeft    => Vec2(neg1, neg1)
       case Up        => Vec2(zero, neg1)

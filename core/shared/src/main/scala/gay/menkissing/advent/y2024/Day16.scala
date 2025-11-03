@@ -3,7 +3,7 @@ package y2024
 
 import gay.menkissing.common.*
 import ArityN.*
-import spire.implicits.IntAlgebra
+import algebras.given
 import cats.*
 
 import cats.derived.*

@@ -4,7 +4,7 @@ package y2022
 import gay.menkissing.common.*
 import cats.implicits.{catsKernelStdOrderForInt as _, *}
 import cats.data.*
-import spire.implicits.IntAlgebra
+import algebra.instances.*
 import cats.Show
 
 object Day09 extends Problem:

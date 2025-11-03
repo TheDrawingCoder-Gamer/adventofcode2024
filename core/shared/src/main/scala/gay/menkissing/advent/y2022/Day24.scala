@@ -1,10 +1,9 @@
 package gay.menkissing.advent
 package y2022
 
-import gay.menkissing.common.*
+import gay.menkissing.common.*, algebras.given
 
 import scala.collection.mutable as mut
-import spire.implicits.IntAlgebra
 import cats.*
 import cats.derived.*
 import cats.syntax.all.*
@@ -85,7 +84,7 @@ object Day24 extends Problem:
         val cur = newGrid(k)
         val newSpot =
           cur match
-            case BlizzardSpot(blizzards) => BlizzardSpot(blizzards ++ v)
+            case BlizzardSpot(blizzies) => BlizzardSpot(blizzies ++ v)
             case Wall                    => ???
             case Empty                   => BlizzardSpot(v)
 

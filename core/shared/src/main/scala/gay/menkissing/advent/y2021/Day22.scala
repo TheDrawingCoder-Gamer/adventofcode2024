@@ -3,7 +3,7 @@ package y2021
 
 import gay.menkissing.common.*
 import Sys3D.*
-import spire.implicits.IntAlgebra
+import algebra.instances.all.*
 import cats.syntax.show.*
 
 import collection.mutable

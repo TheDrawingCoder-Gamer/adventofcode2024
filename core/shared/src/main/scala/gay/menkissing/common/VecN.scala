@@ -1,7 +1,9 @@
 package gay.menkissing.common
 
-import spire.algebra.*
-import spire.implicits.*
+import algebra.ring.*
+import algebra.instances.all.*
+import cats.*
+import cats.syntax.all.*
 
 trait VecN[V[_]]:
   def dimensions: Int
@@ -22,7 +24,7 @@ trait VecN[V[_]]:
     def withCoord(i: Int, v: A): V[A]
 
     final infix def dot(that: V[A])(using ring: Ring[A]): A =
-      self.axes.zip(that.axes).map(_ * _).reduce(ring.plus)
+      self.axes.zip(that.axes).map((l, r) => ring.times(l, r)).reduce(ring.plus)
 
     final def +(that: V[A])(using addsg: AdditiveSemigroup[A]): V[A] =
       self.zip(that)(addsg.plus)

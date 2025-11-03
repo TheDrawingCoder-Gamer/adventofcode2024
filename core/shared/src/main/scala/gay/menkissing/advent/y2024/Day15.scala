@@ -3,7 +3,7 @@ package y2024
 
 import cats.*
 import cats.syntax.all.*
-import spire.implicits.IntAlgebra
+import algebra.instances.all.*
 import gay.menkissing.common.*
 
 import scala.annotation.{tailrec, targetName}

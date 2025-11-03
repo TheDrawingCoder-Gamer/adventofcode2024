@@ -3,9 +3,8 @@ package gay.menkissing.common
 import cats.*
 import cats.syntax.all.*
 import algebra.ring.*
+import algebra.instances.*
 import cats.collections.{Discrete, Range}
-import spire.math.ConvertableTo
-import spire.syntax.additiveGroup.*
 
 final case class Dimension[A] private (min: A, max: A):
   infix def intersect
@@ -50,8 +49,7 @@ final case class Dimension[A] private (min: A, max: A):
 
   def contains(n: A)(using ord: Order[A]): Boolean = n >= min && n <= max
 
-  def length(using rng: Rng[A], ct: ConvertableTo[A]): A =
-    rng.minus(max, min) + ct.fromInt(1)
+  def length(using ring: Ring[A]): A = ring.minus(max, min) + ring.fromInt(1)
 
   def combine(t: Dimension[A])(using Order[A], Discrete[A]): Set[Dimension[A]] =
     this intersect t match

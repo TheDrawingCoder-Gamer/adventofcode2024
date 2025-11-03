@@ -65,69 +65,6 @@ object Beta:
       -.234065664793997056856992426667e-21, .171348014966398575409015466667e-22)
 
   /**
-   * Returns the <a
-   * href="http://mathworld.wolfram.com/RegularizedBetaFunction.html">
-   * regularized beta function</a> I(x, a, b).
-   *
-   * @param x
-   *   Value.
-   * @param a
-   *   Parameter {@code a}.
-   * @param b
-   *   Parameter {@code b}.
-   * @return
-   *   the regularized beta function I(x, a, b).
-   * @throws org.apache.commons.math3.exception.MaxCountExceededException
-   *   if the algorithm fails to converge.
-   */
-  def regularizedBeta(x: Double, a: Double, b: Double): Double =
-    regularizedBeta(x, a, b, DEFAULT_EPSILON, Integer.MAX_VALUE)
-
-  /**
-   * Returns the <a
-   * href="http://mathworld.wolfram.com/RegularizedBetaFunction.html">
-   * regularized beta function</a> I(x, a, b).
-   *
-   * @param x
-   *   Value.
-   * @param a
-   *   Parameter {@code a}.
-   * @param b
-   *   Parameter {@code b}.
-   * @param epsilon
-   *   When the absolute value of the nth item in the series is less than
-   *   epsilon the approximation ceases to calculate further elements in the
-   *   series.
-   * @return
-   *   the regularized beta function I(x, a, b)
-   * @throws org.apache.commons.math3.exception.MaxCountExceededException
-   *   if the algorithm fails to converge.
-   */
-  def regularizedBeta
-    (x: Double, a: Double, b: Double, epsilon: Double): Double =
-    regularizedBeta(x, a, b, epsilon, Integer.MAX_VALUE)
-
-  /**
-   * Returns the regularized beta function I(x, a, b).
-   *
-   * @param x
-   *   the value.
-   * @param a
-   *   Parameter {@code a}.
-   * @param b
-   *   Parameter {@code b}.
-   * @param maxIterations
-   *   Maximum number of "iterations" to complete.
-   * @return
-   *   the regularized beta function I(x, a, b)
-   * @throws org.apache.commons.math3.exception.MaxCountExceededException
-   *   if the algorithm fails to converge.
-   */
-  def regularizedBeta
-    (x: Double, a: Double, b: Double, maxIterations: Int): Double =
-    regularizedBeta(x, a, b, DEFAULT_EPSILON, maxIterations)
-
-  /**
    * Returns the regularized beta function I(x, a, b).
    *
    * The implementation of this method is based on: <ul> <li> <a
@@ -158,8 +95,8 @@ object Beta:
       x: Double,
       a: Double,
       b: Double,
-      epsilon: Double,
-      maxIterations: Int
+      epsilon: Double = DEFAULT_EPSILON,
+      maxIterations: Int = Int.MaxValue
     ): Double =
     var ret = .0
     if x.isNaN || a.isNaN || b.isNaN || x < 0 || x > 1 || a <= 0 || b <= 0 then
@@ -195,33 +132,6 @@ object Beta:
           (a * math.log(x)) + (b * math.log1p(-x)) - math.log(a) - logBeta(a, b)
         ) * 1.0 / fraction.evaluate(x, epsilon, maxIterations)
     ret
-
-  /**
-   * Returns the natural logarithm of the beta function B(a, b).
-   *
-   * The implementation of this method is based on: <ul> <li><a
-   * href="http://mathworld.wolfram.com/BetaFunction.html"> Beta Function</a>,
-   * equation (1).</li> </ul>
-   *
-   * @param a
-   *   Parameter {@code a}.
-   * @param b
-   *   Parameter {@code b}.
-   * @param epsilon
-   *   This parameter is ignored.
-   * @param maxIterations
-   *   This parameter is ignored.
-   * @return
-   *   log(B(a, b)).
-   * @deprecated
-   *   as of version 3.1, this method is deprecated as the computation of the
-   *   beta function is no longer iterative; it will be removed in version 4.0.
-   *   Current implementation of this method internally calls
-   *   {@link # logBeta ( double, double)}.
-   */
-  @deprecated def logBeta
-    (a: Double, b: Double, epsilon: Double, maxIterations: Int): Double =
-    logBeta(a, b)
 
   /**
    * Returns the value of log Γ(a + b) for 1 ≤ a, b ≤ 2. Based on the <em>NSWC
@@ -282,8 +192,7 @@ object Beta:
     val u = d * math.log1p(a / b)
     val v = a * (math.log(b) - 1.0)
     if u <= v then (w - u) - v
-    else
-      (w - v) - u
+    else (w - v) - u
 
   /**
    * Returns the value of Δ(b) - Δ(a + b), with 0 ≤ a ≤ b and b ≥ 10. Based on
@@ -374,8 +283,7 @@ object Beta:
       val u = -(a - 0.5) * math.log(c)
       val v = b * math.log1p(h)
       if u <= v then (((-0.5 * math.log(b) + HALF_LOG_TWO_PI) + w) - u) - v
-      else
-        (((-0.5 * math.log(b) + HALF_LOG_TWO_PI) + w) - v) - u
+      else (((-0.5 * math.log(b) + HALF_LOG_TWO_PI) + w) - v) - u
     else if a > 2.0 then
       if b > 1000.0 then
         val n = math.floor(a - 1.0).toInt
@@ -424,10 +332,3 @@ object Beta:
       // (Gamma.logGamma(b) - Gamma.logGamma(a + b));
       // The following command turns out to be more accurate.
       math.log(Gamma.gamma(a) * Gamma.gamma(b) / Gamma.gamma(a + b))
-
-class Beta private
-
-/**
- * Default constructor. Prohibit instantiation.
- */
-{}

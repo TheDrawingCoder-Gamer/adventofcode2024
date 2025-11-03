@@ -1,12 +1,12 @@
 package gay.menkissing.common
 
-import spire.algebra.*
-import spire.implicits.*
 import cats.collections.Discrete
 import cats.collections.Range
 import cats.collections.syntax.range.*
 import cats.*
-import cats.syntax.show.*
+import cats.syntax.all.*
+import algebra.ring.*
+import algebra.instances.*
 
 final case class Vec2[A](x: A, y: A):
   def cardinalNeighbors(using ring: Ring[A]): List[Vec2[A]] =

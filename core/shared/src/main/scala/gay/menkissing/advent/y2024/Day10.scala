@@ -1,9 +1,8 @@
 package gay.menkissing.advent
 package y2024
 
-import gay.menkissing.common.*
+import gay.menkissing.common.*, algebras.given
 
-import spire.implicits.IntAlgebra
 import cats.Show
 
 object Day10 extends Problem:

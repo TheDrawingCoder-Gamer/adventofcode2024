@@ -6,7 +6,7 @@ import gay.menkissing.common.*
 import scala.annotation.tailrec
 import scala.collection.mutable as mut
 
-import spire.implicits.LongAlgebra
+import algebra.instances.all.*
 import cats.Show
 
 object Day13 extends Problem:

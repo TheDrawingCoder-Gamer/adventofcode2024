@@ -1,13 +1,11 @@
 package gay.menkissing.common
 
 import scala.annotation.tailrec
-import spire.implicits.IntAlgebra
-import spire.algebra.*
+import algebra.ring.*
+import algebra.instances.*
 import cats.*
 import cats.syntax.all.*
-import spire.implicits.{partialOrderOps as _, *}
-import spire.math.ConvertableFrom
-import spire.math.ConvertableTo
+
 
 object Sys3D:
   object Vec3i:
@@ -197,9 +195,8 @@ object Sys3D:
 
     def volume
       (using
-        rng: Rng[A],
-        cv: ConvertableFrom[A],
-        ct: ConvertableTo[A]
+        rng: Ring[A],
+        cv: AsNumber[A],
       ): BigInt =
       cv.toBigInt(xs.length) * cv.toBigInt(ys.length) * cv.toBigInt(zs.length)
 

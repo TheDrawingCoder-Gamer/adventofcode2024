@@ -2,9 +2,8 @@ package gay.menkissing.advent
 package y2015
 
 import gay.menkissing.common.*
-import spire.math.*
-import spire.compat.*
 import cats.implicits.*
+import algebra.instances.all.*
 
 import scala.collection.mutable
 import cats.Show

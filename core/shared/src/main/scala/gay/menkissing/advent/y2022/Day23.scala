@@ -2,7 +2,7 @@ package gay.menkissing.advent
 package y2022
 
 import gay.menkissing.common.*
-import spire.implicits.IntAlgebra
+import algebra.instances.all.*
 import cats.Show
 
 object Day23 extends Problem:

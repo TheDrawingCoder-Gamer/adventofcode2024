@@ -1,10 +1,9 @@
 package gay.menkissing.advent
 package y2023
 
-import gay.menkissing.common.*
+import gay.menkissing.common.*, algebras.given
 import cats.*
 import cats.syntax.all.*
-import spire.implicits.{IntAlgebra, LongAlgebra}
 
 object Day11 extends Problem:
   type Input = Grid[Boolean]

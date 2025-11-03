@@ -6,7 +6,7 @@ import scala.collection.mutable
 import cats.*
 import cats.syntax.all.*
 import cats.data.*
-import spire.implicits.IntAlgebra
+import algebra.instances.all.*
 
 object Day10 extends Problem:
   type Input = (Grid[Option[Pipe]], Vec2[Int])

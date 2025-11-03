@@ -3,13 +3,13 @@ package y2024
 
 import cats.*
 import cats.syntax.all.*
+import algebra.instances.all.*
 import gay.menkissing.common
 import gay.menkissing.common.*
 import ArityN.*
 
 import scala.annotation.experimental
 import scala.collection.mutable as mut
-import spire.implicits.IntAlgebra
 
 object Day21 extends Problem:
   type Input = List[String]

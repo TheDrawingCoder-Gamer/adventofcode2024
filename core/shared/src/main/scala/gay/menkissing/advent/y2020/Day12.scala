@@ -5,7 +5,8 @@ import cats.*
 import cats.data.State
 import cats.implicits.*
 import gay.menkissing.common.{*, given}
-import spire.implicits.IntAlgebra
+import gay.menkissing.common.algebras.given
+import Direction2D.isDirectionN2D.*
 
 import scala.collection.mutable
 
@@ -33,7 +34,7 @@ object Day12 extends Problem:
           copy(facing = facing.rotate(by))
         case 'F' =>
 
-          val next = Vec2(x, y) + (facing.digitalDir * value)
+          val next = Vec2(x, y) + (facing.digitalDir[Int] * value)
           copy(x = next.x, y = next.y)
         case _ => this
   case class DaStateP2
