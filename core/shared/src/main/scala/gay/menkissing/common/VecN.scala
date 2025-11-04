@@ -35,7 +35,7 @@ trait VecN[V[_]]:
     final def *(that: A)(using mulsg: MultiplicativeSemigroup[A]): V[A] =
       self.map(mulsg.times(_, that))
 
-    final def taxiDistance
+    final infix def taxiDistance
       (that: V[A])
       (using addg: AdditiveGroup[A], signed: Signed[A]): A =
       self.axes.zip(that.axes).map((l, r) => signed.abs(addg.minus(l, r)))
@@ -49,3 +49,7 @@ trait VecN[V[_]]:
 
     final infix def max(that: V[A])(using ord: Order[A]): V[A] =
       self.zip(that)(ord.max)
+
+object VecN:
+  def axis[V[_]](using vn: VecN[V])[A](n: Int)(using ring: Ring[A]): V[A] =
+    vn.axis(n)

@@ -102,14 +102,18 @@ case class Grid[A] private (values: Vector[Vector[A]])
     Grid((mnY to mxY).map(y => (mnX to mxX).map(x => apply(x, y))))
   def flatten: Vector[A] = values.flatten
 
-  private def combineHorizontal(that: Grid[A]): Grid[A] =
-    assert(this.height == that.height)
+  def combineHorizontal(that: Grid[A]): Grid[A] =
+    require(this.height == that.height)
     // YAY I LOVE CATS
     Grid(values.alignCombine(that.values))
 
-  private def combineVertical(that: Grid[A]): Grid[A] =
-    assert(this.width == that.width)
+  def combineVertical(that: Grid[A]): Grid[A] =
+    require(this.width == that.width)
     Grid(values ++ that.values)
+
+  def tileN(x: Int, y: Int): Grid[A] =
+    List.fill(y, x)(this).map(_.reduce(_.combineHorizontal(_)))
+      .reduce(_.combineVertical(_))
 
   // Requires that all returned grids are the same size
   def scaleWith[B](f: A => Grid[B]): Grid[B] =
