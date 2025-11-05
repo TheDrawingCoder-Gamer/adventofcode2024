@@ -118,6 +118,10 @@ lazy val core =
         "io.circe" %%% "circe-generic",
         "io.circe" %%% "circe-parser"
       ).map(_ % "0.14.14"),
+      libraryDependencies ++= Seq(
+        "dev.optics" %%% "monocle-core",
+        "dev.optics" %%% "monocle-macro"
+      ).map(_ % "3.1.0"),
       // no spire until they fix it for native 0.5
       // libraryDependencies += "org.typelevel" %%% "spire" % "0.18.0",
       Compile / run / fork := true,
