@@ -1,7 +1,7 @@
 package gay.menkissing.advent
 package y2015
 
-import gay.menkissing.common.repeated
+import gay.menkissing.common.*
 
 import scala.annotation.tailrec
 
@@ -213,20 +213,10 @@ object Day10 extends Problem:
       "U" -> List("Pa")
     )
   // ???
-  def grouped(s: String): List[String] =
-    @tailrec
-    def go(v: String, acc: List[String]): List[String] =
-      if v.isEmpty then acc
-      else
-        val x = v.head
-        val xs = v.tail
-        val (ys, zs) = xs.span(_ == x)
-        go(zs, (ys :+ x) :: acc)
-
-    go(s, List.empty).reverse
+  def segmentedStr(s: String): List[String] = s.toList.segmented.map(_.mkString)
 
   def rle(str: String): String =
-    val chunks = grouped(str)
+    val chunks = segmentedStr(str)
 
     val r = chunks.map(it => it.length.toString + it.head.toString).mkString("")
     // println(r)
