@@ -122,6 +122,9 @@ lazy val core =
         "dev.optics" %%% "monocle-core",
         "dev.optics" %%% "monocle-macro"
       ).map(_ % "3.1.0"),
+      // for testing only, won't be enabled when i finalize the commit
+      // libraryDependencies +=
+      //  "org.scala-lang.modules" %%% "scala-parallel-collections" % "1.2.0",
       // no spire until they fix it for native 0.5
       // libraryDependencies += "org.typelevel" %%% "spire" % "0.18.0",
       Compile / run / fork := true,

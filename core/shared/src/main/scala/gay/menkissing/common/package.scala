@@ -75,7 +75,7 @@ def prettyCharForNum(num: Int): Char =
 
 def logBaseN(n: Double, base: Double): Double = math.log(n) / math.log(base)
 
-extension [A, B](map: mut.HashMap[A, B])
+extension [A, B](map: mut.Map[A, B])
   def memo(in: A)(func: => B): B = map.getOrElseUpdate(in, func)
 
 private def bfsImpl[A, B, C]
