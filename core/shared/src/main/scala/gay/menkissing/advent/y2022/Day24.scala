@@ -85,8 +85,8 @@ object Day24 extends Problem:
         val newSpot =
           cur match
             case BlizzardSpot(blizzies) => BlizzardSpot(blizzies ++ v)
-            case Wall                    => ???
-            case Empty                   => BlizzardSpot(v)
+            case Wall                   => ???
+            case Empty                  => BlizzardSpot(v)
 
         newGrid = newGrid.updated(k)(newSpot)
 
@@ -98,7 +98,7 @@ object Day24 extends Problem:
       val daDirs =
         pos.loc.cardinalNeighbors.prepended(pos.loc).flatMap: p =>
           newMap.get(p).flatMap:
-            case Empty => Some(pos.copy(loc = p, time = pos.time + 1))
+            case Empty => Some(TimeLocation(time = pos.time + 1, p))
             case _     => None
       daDirs
 

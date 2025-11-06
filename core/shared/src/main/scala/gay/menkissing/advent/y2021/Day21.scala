@@ -7,6 +7,10 @@ import cats.*
 
 import gay.menkissing.common.*
 
+import monocle.*
+import monocle.syntax.all.*
+import monocle.macros.*
+
 object Day21 extends Problem:
   type Input = ProblemState
   type Output = Long
@@ -33,21 +37,15 @@ object Day21 extends Problem:
     yield x + y + z
 
   def playerTurn
-    (
-      accessor: ProblemState => Player,
-      setter: (ProblemState, Player) => ProblemState
-    ): State[ProblemState, Boolean] =
+    (lens: Lens[ProblemState, Player]): State[ProblemState, Boolean] =
     for
       score <- takeTurn
-      _ <-
-        State.modify[ProblemState](state =>
-          setter(state, accessor(state).move(score))
-        )
-      res <- State.inspect[ProblemState, Int](accessor.andThen(_.score))
+      _ <- State.modify[ProblemState](lens.modify(_.move(score)))
+      res <- State.inspect[ProblemState, Int](lens.get.andThen(_.score))
     yield res >= 1000
 
-  val player1Turn = playerTurn(_.p1, (s, p) => s.copy(p1 = p))
-  val player2Turn = playerTurn(_.p2, (s, p) => s.copy(p2 = p))
+  val player1Turn = playerTurn(GenLens[ProblemState](_.p1))
+  val player2Turn = playerTurn(GenLens[ProblemState](_.p2))
 
   val fullTurn =
     for
