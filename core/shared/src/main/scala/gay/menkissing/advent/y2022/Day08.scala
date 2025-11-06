@@ -43,7 +43,7 @@ object Day08 extends Problem:
     if isEdge then 0
     else
       def edgeView(part: Seq[Int]): Int =
-        val r = part.countWhile(_ < v)
+        val r = part.countWhile(_ < v).toInt
         if part.lengthIs == r then r
         else r + 1
       val row = grid.rows(y)

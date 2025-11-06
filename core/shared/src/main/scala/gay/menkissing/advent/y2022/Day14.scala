@@ -123,9 +123,9 @@ object Day14 extends Problem:
   lazy val input = FileIO.getInput(2022, 14)
 
   def part1(input: SparseCaveGrid): Int =
-    Iterator.iterate(Option(input))(_.flatMap(_.withSandP1))
-      .countWhile(_.isDefined) - 1
+    LazyList.iterate(Option(input))(_.flatMap(_.withSandP1))
+      .countWhile(_.isDefined).toInt - 1
 
   def part2(input: SparseCaveGrid): Int =
-    Iterator.iterate(Option(input))(_.flatMap(_.withSand))
-      .countWhile(_.isDefined) - 1
+    LazyList.iterate(Option(input))(_.flatMap(_.withSand))
+      .countWhile(_.isDefined).toInt - 1

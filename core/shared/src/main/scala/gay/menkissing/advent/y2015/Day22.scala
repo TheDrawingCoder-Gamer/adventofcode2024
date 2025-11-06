@@ -176,7 +176,7 @@ object Day22 extends Problem:
       _.boss.hp <= 0,
       (a, b) => b.manaSpent - a.manaSpent,
       state =>
-        state.validSpells.map(spell => fullTurn(spell).run(state).value._1)
+        state.validSpells.map(spell => fullTurn(spell).runS(state).value)
           .filter(_.player.hp > 0)
     ).get.last.manaSpent
 
@@ -187,6 +187,6 @@ object Day22 extends Problem:
       _.boss.hp <= 0,
       (a, b) => b.manaSpent - a.manaSpent,
       state =>
-        state.validSpells.map(spell => fullTurnP2(spell).run(state).value._1)
+        state.validSpells.map(spell => fullTurnP2(spell).runS(state).value)
           .filter(_.player.hp > 0)
     ).get.last.manaSpent

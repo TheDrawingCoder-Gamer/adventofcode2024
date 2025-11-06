@@ -7,25 +7,7 @@ import math.Numeric
 import cats.*
 import cats.implicits.*
 import cats.data.Kleisli
-
-class ForeverIterator[A](val underlying: Iterator[A]) extends Iterator[A]:
-  private var memoizedAll: Boolean = false
-  private val memoizedValues = mut.ArrayBuffer[A]()
-  private var currentIterator = underlying
-
-  override def hasNext: Boolean = memoizedAll || currentIterator.hasNext
-
-  override def next(): A =
-    if currentIterator.hasNext then
-      val v = currentIterator.next()
-      if !memoizedAll then
-        memoizedValues.append(v)
-        if !currentIterator.hasNext then memoizedAll = true
-      v
-    else if memoizedAll then
-      currentIterator = memoizedValues.iterator
-      currentIterator.next()
-    else throw new NoSuchElementException("Input iterator was empty")
+import cats.data.NonEmptyList
 
 def topologicalSort[A]
   (a: List[A])
@@ -131,22 +113,46 @@ def unfolded[A, S](init: S)(f: S => Option[(A, S)]): A =
       case Some((a, v)) => go(v, Some(a))
   go(init, None).get
 
-object ListExt:
-  def segmentBy[A](ls: List[A])(f: (A, A) => Boolean): List[List[A]] =
-    @tailrec def go(cur: List[A], acc: List[List[A]]): List[List[A]] =
+object segmentFuncs:
+  def segmentBy[F[_], A]
+    (fa: F[A])
+    (f: (A, A) => Boolean)
+    (using fold: Foldable[F]): List[NonEmptyList[A]] =
+    val ls = fold.toList(fa)
+    @tailrec def go
+      (cur: List[A], acc: List[NonEmptyList[A]]): List[NonEmptyList[A]] =
       cur match
         case Nil     => acc.reverse
         case x :: xs =>
           val (ys, zs) = xs.span(it => f(x, it))
-          go(zs, (x :: ys) :: acc)
+          go(zs, NonEmptyList.of(x, ys*) :: acc)
     go(ls, Nil)
 
-extension [A](self: List[A])
+extension [F[_], A](self: F[A])(using fold: Foldable[F])
   // haskell's `groupBy`
-  inline def segmentBy(f: (A, A) => Boolean): List[List[A]] =
-    ListExt.segmentBy(self)(f)
+  inline def segmentBy(f: (A, A) => Boolean): List[NonEmptyList[A]] =
+    segmentFuncs.segmentBy(self)(f)
   // haskell's `group`
-  def segmented(using eq: Eq[A]): List[List[A]] = segmentBy(eq.eqv)
+  def segmented(using eq: Eq[A]): List[NonEmptyList[A]] = segmentBy(eq.eqv)
+
+  def foldString
+    (start: String, sep: String, end: String)
+    (using show: Show[A]): String =
+    val first =
+      self.foldLeft(start): (acc, a) =>
+        acc + show.show(a) + sep
+    first.dropRight(sep.length) + end
+
+  def foldString(sep: String)(using show: Show[A]): String =
+    foldString("", sep, "")
+  def foldString(using show: Show[A]): String = foldString("", "", "")
+
+  def countWhile(f: A => Boolean): Long =
+    fold.foldM[[a] =>> Either[Long, a], A, Long](self, 0L): (i, a) =>
+      if !f(a) then Left(i) else Right(i + 1L)
+    .match
+      case Left(i)  => i
+      case Right(i) => i
 
 extension [A](self: Array[A])
   def collectFirstSome[B](f: A => Option[B]): Option[B] =

@@ -213,7 +213,8 @@ object Day10 extends Problem:
       "U" -> List("Pa")
     )
   // ???
-  def segmentedStr(s: String): List[String] = s.toList.segmented.map(_.mkString)
+  def segmentedStr(s: String): List[String] =
+    s.toList.segmented.map(_.foldString(""))
 
   def rle(str: String): String =
     val chunks = segmentedStr(str)
