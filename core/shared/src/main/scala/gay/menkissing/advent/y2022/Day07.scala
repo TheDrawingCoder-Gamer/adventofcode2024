@@ -88,7 +88,7 @@ object Day07 extends Problem:
       children.map(_.show.prependedAll("> "))
         .fold(s"- $name (dir)")(_ + "\n" + _)
 
-  final def calcSizes(fsdir: FSDir): Unit =
+  def calcSizes(fsdir: FSDir): Unit =
     fsdir.children.foreach:
       case FSFFile(size, name) => ()
       case d: FSDir            => calcSizes(d)
@@ -99,7 +99,7 @@ object Day07 extends Problem:
     calcSizes(root)
     sizesLessThanN(root, 100000).map(_.size).sum
 
-  final def sizesLessThanN(fsdir: FSDir, n: Int): Seq[FSDir] =
+  def sizesLessThanN(fsdir: FSDir, n: Int): Seq[FSDir] =
     lazy val children =
       fsdir.children.flatMap:
         case it: FSDir => sizesLessThanN(it, n)
@@ -108,7 +108,7 @@ object Day07 extends Problem:
     if fsdir.size < n then children.appended(fsdir)
     else children
 
-  final def findSmallestGreaterThanN(fsdir: FSDir, n: Int): Option[FSDir] =
+  def findSmallestGreaterThanN(fsdir: FSDir, n: Int): Option[FSDir] =
     val smallestChild =
       fsdir.children.collect:
         case it: FSDir => findSmallestGreaterThanN(it, n)

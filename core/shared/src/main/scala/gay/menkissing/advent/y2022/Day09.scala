@@ -20,7 +20,7 @@ object Day09 extends Problem:
     List((Math.abs(a.x - b.x), Axis2D.X), (Math.abs(a.y - b.y), Axis2D.Y))
       .maxBy(_._1)._2
   // @annotation.tailrec
-  final def correctTail(poses: List[Vec2[Int]]): List[Vec2[Int]] =
+  def correctTail(poses: List[Vec2[Int]]): List[Vec2[Int]] =
     poses match
       case head :: (tail :: next) if maxDistance(head, tail) <= 1 =>
         head :: correctTail(poses.tail)

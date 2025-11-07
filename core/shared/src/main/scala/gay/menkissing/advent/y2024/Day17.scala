@@ -6,12 +6,14 @@ import cats.*
 
 import scala.annotation.tailrec
 
-object Day17 extends ProblemAdv:
+object Day17 extends ProblemAdv, FormatP1:
   type Input = ComputerState
   type OutputP1 = List[Byte]
   type OutputP2 = Long
 
-  case class ComputerState
+  def formatP1(out: List[Byte]): String = out.mkString(",")
+
+  final case class ComputerState
     (
       ip: Int,
       program: Vector[Byte],
@@ -23,12 +25,12 @@ object Day17 extends ProblemAdv:
     def advancePtr: ComputerState = copy(ip = ip + 2)
 
     @tailrec
-    final def completeState: ComputerState =
+    def completeState: ComputerState =
       if ip < program.size then step.completeState
       else copy(outputs = outputs.reverse)
-    final def complete: List[Byte] = completeState.outputs
+    def complete: List[Byte] = completeState.outputs
 
-    final def completeP2: Boolean =
+    def completeP2: Boolean =
       @tailrec
       def go(i: ComputerState): Boolean =
         if i.ip < i.program.size then

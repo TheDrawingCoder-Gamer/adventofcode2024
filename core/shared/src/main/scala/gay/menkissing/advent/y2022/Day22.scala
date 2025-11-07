@@ -495,7 +495,7 @@ object Day22 extends Problem:
         assert(grid.get(openPos).isDefined && grid(openPos) == Open)
         (openPos, dir)
 
-  case class ForbiddenGrid(grid: Grid[GridPos]) extends AnyVal:
+  final case class ForbiddenGrid(grid: Grid[GridPos]) extends AnyVal:
     def regions: List[Vec2[Int]] =
       val faceWidth =
         math.min(
@@ -520,7 +520,7 @@ object Day22 extends Problem:
 
     // helper means no recursion is accessable
     // @annotation.tailrec
-    final def move(pos: Vec2[Int], dir: Direction2D, n: Int): Vec2[Int] =
+    def move(pos: Vec2[Int], dir: Direction2D, n: Int): Vec2[Int] =
       def getGood(rowOrCol: Seq[GridPos]): Option[GridPos] =
         dir.axisDirection match
           case AxisDirection.Positive => rowOrCol.find(_ != GNil)
@@ -564,7 +564,7 @@ object Day22 extends Problem:
                 assert(y != -1)
                 move(pos.copy(y = y), dir, restCount)
               case _ => assert(false)
-    final def moveHelper
+    def moveHelper
       (pos: Vec2[Int], dir: Direction2D, n: Int)
       (
         handleOff: (Seq[Vec2[Int]], Vec2[Int]) => Vec2[Int]

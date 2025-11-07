@@ -20,8 +20,12 @@ trait HasSharedInput extends HasInputP1, HasInputP2:
   type InputP2 = Input
 trait HasOutputP1:
   type OutputP1
+object HasOutputP1:
+  type Aux[O] = HasOutputP1 { type OutputP1 = O }
 trait HasOutputP2:
   type OutputP2
+object HasOutputP2:
+  type Aux[O] = HasOutputP2 { type OutputP2 = O }
 trait HasSharedOutput extends HasOutputP1, HasOutputP2:
   type Output
   type OutputP1 = Output
@@ -32,6 +36,12 @@ trait ParseP1 extends HasInputP1:
 
 trait ParseP2 extends HasInputP2:
   def parseP2(str: String): InputP2
+
+trait FormatP1 extends HasOutputP1:
+  def formatP1(out: OutputP1): String
+
+trait FormatP2 extends HasOutputP2:
+  def formatP2(out: OutputP2): String
 
 trait WithParser extends ParseP1, ParseP2, HasSharedInput:
 
@@ -55,6 +65,18 @@ object WithPart2:
 trait WithInput:
   lazy val input: String
 
+extension [Output](x: HasOutputP1.Aux[Output])
+  def tryFormatP1(out: Output): String =
+    x match
+      case i: FormatP1 => i.formatP1(out)
+      case _           => out.toString
+
+extension [Output](x: HasOutputP2.Aux[Output])
+  def tryFormatP2(out: Output): String =
+    x match
+      case i: FormatP2 => i.formatP2(out)
+      case _           => out.toString
+
 extension [Output]
   (
     x: WithPart1.WithOutput[Output] & WithInput & ParseP1
@@ -63,7 +85,7 @@ extension [Output]
   def debugAndTimeP1(): Unit =
     val input = x.input
     val res = debugTiming(x.part1(x.parseP1(input)))
-    println(res)
+    println(x.tryFormatP1(res))
 
 extension [Output]
   (
@@ -73,7 +95,7 @@ extension [Output]
   def debugAndTimeP2(): Unit =
     val input = x.input
     val res = debugTiming(x.part2(x.parseP2(input)))
-    println(res)
+    println(x.tryFormatP2(res))
 
 trait IncompleteProblem extends ParseP1, WithPart1, WithInput:
   def main(args: Array[String]): Unit = this.debugAndTimeP1()

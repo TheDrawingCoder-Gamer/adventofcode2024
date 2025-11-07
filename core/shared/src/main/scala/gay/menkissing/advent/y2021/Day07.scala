@@ -29,7 +29,7 @@ object Day07 extends Problem:
 
   def part1(input: List[Int]): Int = sumDistance(input, median(input))
 
-  final def sumtorial(p: Int): Int = IntSequences.triangleNumber(p).toInt
+  def sumtorial(p: Int): Int = IntSequences.triangleNumber(p).toInt
 
   def distanceP2(crabs: List[Int], pt: Int): Int =
     crabs.map(it => sumtorial(math.abs(it - pt))).sum

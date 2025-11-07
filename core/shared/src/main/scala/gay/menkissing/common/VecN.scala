@@ -26,13 +26,13 @@ trait VecN[V[_]]:
     final infix def dot(that: V[A])(using ring: Ring[A]): A =
       self.axes.zip(that.axes).map((l, r) => ring.times(l, r)).reduce(ring.plus)
 
-    final def +(that: V[A])(using addsg: AdditiveSemigroup[A]): V[A] =
+    final infix def +(that: V[A])(using addsg: AdditiveSemigroup[A]): V[A] =
       self.zip(that)(addsg.plus)
 
-    final def -(that: V[A])(using addg: AdditiveGroup[A]): V[A] =
+    final infix def -(that: V[A])(using addg: AdditiveGroup[A]): V[A] =
       self.zip(that)(addg.minus)
 
-    final def *(that: A)(using mulsg: MultiplicativeSemigroup[A]): V[A] =
+    final infix def *(that: A)(using mulsg: MultiplicativeSemigroup[A]): V[A] =
       self.map(mulsg.times(_, that))
 
     final infix def taxiDistance

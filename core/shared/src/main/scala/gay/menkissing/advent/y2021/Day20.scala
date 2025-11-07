@@ -22,7 +22,7 @@ object Day20 extends Problem:
     def flatten: Vector[Boolean] = grid.flatten
     def countLitPixels: Int = grid.values.view.flatten.count(identity)
   @annotation.tailrec
-  final def boolsToInt(bs: List[Boolean], accum: Int = 0): Int =
+  def boolsToInt(bs: List[Boolean], accum: Int = 0): Int =
     bs match
       case Nil           => accum
       case true :: next  => boolsToInt(next, (accum << 1) | 1)

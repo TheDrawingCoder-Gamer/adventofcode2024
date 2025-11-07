@@ -16,7 +16,7 @@ object Day25 extends HalfDay:
         Vec2(x.toInt, y.toInt)
       case _ => whatTheScallop.!
 
-  final def sumtorial(p: Int): Int = IntSequences.triangleNumber(p).toInt
+  def sumtorial(p: Int): Int = IntSequences.triangleNumber(p).toInt
 
   // A cursory search (that i didnt do before) for triangle numbers on the OEIS
   // linked to "Floyd's triangle"

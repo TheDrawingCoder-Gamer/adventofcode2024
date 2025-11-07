@@ -36,7 +36,7 @@ object Day14 extends Problem:
   enum CavePoint:
     case Rock, Sand, Air
 
-  case class SparseCaveGrid
+  final case class SparseCaveGrid
     (
       points: Map[Vec2[Int], CavePoint],
       source: Vec2[Int]
@@ -52,7 +52,7 @@ object Day14 extends Problem:
     def getP1(p: Vec2[Int]) = points.getOrElse(p, CavePoint.Air)
 
     @tailrec
-    final def genericMove
+    def genericMove
       (
         p: Vec2[Int],
         get: Vec2[Int] => CavePoint,

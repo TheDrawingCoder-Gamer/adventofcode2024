@@ -42,7 +42,7 @@ object Sys3D:
             case 0 => self.copy(x = v)
             case 1 => self.copy(y = v)
             case 2 => self.copy(z = v)
-  case class Vec3[A](x: A, y: A, z: A):
+  final case class Vec3[A](x: A, y: A, z: A):
 
     def offset(dir: Direction3D, n: A)(using add: AdditiveGroup[A]): Vec3[A] =
       val v =
@@ -75,9 +75,7 @@ object Sys3D:
         case Rotation.Rot270 => rotate(Axis3D.Z, 3)
 
     @tailrec
-    final def rotate
-      (axis: Axis3D, times: Int)
-      (using add: AdditiveGroup[A]): Vec3[A] =
+    def rotate(axis: Axis3D, times: Int)(using add: AdditiveGroup[A]): Vec3[A] =
       val gTimes =
         val temp = times % 4
         if temp < 0 then (4 + temp) % 4
@@ -126,6 +124,8 @@ object Sys3D:
               case _    => this
 
     @tailrec
+    // ???? no way to define enum as final (even though it should implicitly be final)
+    // so this must be marked final???
     final def rotate
       (axis: Axis3D, clockwise: Boolean, times: Int): Direction3D =
       val times2 = times % 4
