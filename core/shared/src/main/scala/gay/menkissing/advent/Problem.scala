@@ -20,10 +20,8 @@ trait HasSharedInput extends HasInputP1, HasInputP2:
   type InputP2 = Input
 trait HasOutputP1:
   type OutputP1
-  given showOutputP1: Show[OutputP1] = deferred
 trait HasOutputP2:
   type OutputP2
-  given showOutputP2: Show[OutputP2] = deferred
 trait HasSharedOutput extends HasOutputP1, HasOutputP2:
   type Output
   type OutputP1 = Output
@@ -65,7 +63,7 @@ extension [Output]
   def debugAndTimeP1(): Unit =
     val input = x.input
     val res = debugTiming(x.part1(x.parseP1(input)))
-    println(x.showOutputP1.show(res))
+    println(res)
 
 extension [Output]
   (
@@ -75,7 +73,7 @@ extension [Output]
   def debugAndTimeP2(): Unit =
     val input = x.input
     val res = debugTiming(x.part2(x.parseP2(input)))
-    println(x.showOutputP2.show(res))
+    println(res)
 
 trait IncompleteProblem extends ParseP1, WithPart1, WithInput:
   def main(args: Array[String]): Unit = this.debugAndTimeP1()

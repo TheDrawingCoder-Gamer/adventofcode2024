@@ -154,6 +154,16 @@ extension [F[_], A](self: F[A])(using fold: Foldable[F])
       case Left(i)  => i
       case Right(i) => i
 
+extension [F[_]](self: Monad[F])
+  def whenM[A](cond: F[Boolean])(ifTrue: => F[A]): F[Unit] =
+    self.ifM(cond)(self.as(ifTrue, ()), self.pure(()))
+
+extension [F[_], A](self: F[A])(using monad: Monad[F])
+  def whenM(cond: F[Boolean]): F[Unit] = monad.whenM(cond)(self)
+
+extension [F[_]](self: F[Boolean])(using monad: Monad[F])
+  def ifMHalf[A](fa: F[A]): F[Unit] = monad.whenM(self)(fa)
+
 extension [A](self: Array[A])
   def collectFirstSome[B](f: A => Option[B]): Option[B] =
     self.collectFirst(Function.unlift(f))

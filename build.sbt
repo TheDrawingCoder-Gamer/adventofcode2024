@@ -122,6 +122,8 @@ lazy val core =
         "dev.optics" %%% "monocle-core",
         "dev.optics" %%% "monocle-macro"
       ).map(_ % "3.1.0"),
+      // use the syntax that I thought was already in scala 3 by now
+      scalacOptions += "-Xkind-projector:underscores",
       // for testing only, won't be enabled when i finalize the commit
       // libraryDependencies +=
       //  "org.scala-lang.modules" %%% "scala-parallel-collections" % "1.2.0",

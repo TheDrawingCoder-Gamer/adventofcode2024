@@ -11,8 +11,6 @@ object Day17 extends ProblemAdv:
   type OutputP1 = List[Byte]
   type OutputP2 = Long
 
-  override given showOutputP1: Show[OutputP1] = _.mkString("", ",", "")
-
   case class ComputerState
     (
       ip: Int,
