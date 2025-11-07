@@ -43,6 +43,13 @@ object Sys3D:
             case 1 => self.copy(y = v)
             case 2 => self.copy(z = v)
   final case class Vec3[A](x: A, y: A, z: A):
+    def allNeighbors(using eq: Eq[A], ring: Ring[A]): List[Vec3[A]] =
+      for
+        x <- List(this.x - ring.one, this.x, this.x + ring.one)
+        y <- List(this.y - ring.one, this.y, this.y + ring.one)
+        z <- List(this.z - ring.one, this.z, this.z + ring.one)
+        if x =!= this.x || y =!= this.y || z =!= this.z
+      yield Vec3(x, y, z)
 
     def offset(dir: Direction3D, n: A)(using add: AdditiveGroup[A]): Vec3[A] =
       val v =
