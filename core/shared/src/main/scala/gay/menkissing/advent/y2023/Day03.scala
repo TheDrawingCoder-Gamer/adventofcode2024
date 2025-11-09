@@ -57,7 +57,7 @@ object Day03 extends Problem:
 
   def part2(input: Grid[Char]): Int =
     input.gears.flatMap: p =>
-      p.allNeighbors.flatMap(input.numberAt).distinct.toList match
+      p.allNeighbors.flatMap(input.numberAt).distinct match
         case List(x, y) => Some(x.n * y.n)
         case _          => None
     .sum

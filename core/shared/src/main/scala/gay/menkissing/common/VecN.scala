@@ -4,24 +4,53 @@ import algebra.ring.*
 import algebra.instances.all.*
 import cats.*
 import cats.syntax.all.*
+import scala.deriving.*
 
-trait VecN[V[_]]:
+trait BareVecN[V[_]]:
   def dimensions: Int
 
-  def axis[A](i: Int)(using ring: Ring[A]): V[A]
+trait VecN[V[_]] extends BareVecN[V]:
+  def axis[A](i: Int)(using ring: Ring[A]): V[A] =
+    if i >= dimensions then whatTheScallop.!
+    else
+      construct(
+        Vector.tabulate[A](dimensions)(it =>
+          if it == i then ring.one else ring.zero
+        )
+      )
+  // If ls.length != dimensions then error : (
+  def construct[A](ls: Vector[A]): V[A]
 
   extension [A](self: V[A])
     // equivilant to constructing from axes.map(f)
-    def map(f: A => A): V[A]
-    def zip(that: V[A])(f: (A, A) => A): V[A]
+    // but if want to go fast override this
+    def map(f: A => A): V[A] = construct(axes.map(f))
+    def zip(that: V[A])(f: (A, A) => A): V[A] =
+      construct(self.axes.zip(that.axes).map(f.tupled))
 
     // Forall V[_], axes.length will be the same
     // (no Vecs that can be any length)
-    def axes: List[A]
+    def axes: Vector[A]
 
-    def coord(i: Int): A
+    def coord(i: Int): A = self.axes(i)
 
-    def withCoord(i: Int, v: A): V[A]
+    def withCoord(i: Int, v: A): V[A] = construct(self.axes.updated(i, v))
+
+    def offset[D]
+      (d: D, n: A)
+      (using dirN: IsDirectionN[D] { type Vec = V }, ring: Ring[A]): V[A] =
+      self + d.digitalDir * n
+
+    def allNeighbors(using ring: Ring[A], eq: Eq[A]): List[V[A]] =
+      (0 until dimensions).map: dim =>
+        List(
+          ring.minus(self.coord(dim), ring.one),
+          self.coord(dim),
+          ring.plus(self.coord(dim), ring.one)
+        )
+      .toVector.sequence
+        .filter(_.zipWithIndex.exists((v, i) => self.coord(i) =!= v))
+        .map(construct)
 
     final infix def dot(that: V[A])(using ring: Ring[A]): A =
       self.axes.zip(that.axes).map((l, r) => ring.times(l, r)).reduce(ring.plus)

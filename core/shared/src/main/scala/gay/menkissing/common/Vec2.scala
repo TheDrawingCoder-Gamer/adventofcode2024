@@ -16,12 +16,6 @@ final case class Vec2[A](x: A, y: A):
       Vec2[A](x, y - ring.one),
       Vec2[A](x, y + ring.one)
     )
-  def allNeighbors(using eq: Eq[A], ring: Ring[A]): List[Vec2[A]] =
-    for
-      x <- List(this.x - ring.one, this.x, this.x + ring.one)
-      y <- List(this.y - ring.one, this.y, this.y + ring.one)
-      if x =!= this.x || y =!= this.y
-    yield Vec2(x, y)
 
   def offset(dir: Direction2D, n: A)(using AdditiveGroup[A]): Vec2[A] =
     dir match
@@ -72,27 +66,32 @@ object Vec2:
   given vecNVec2: VecN[Vec2] with
     def dimensions: Int = 2
 
-    def axis[A](i: Int)(using ring: Ring[A]): Vec2[A] =
+    override def axis[A](i: Int)(using ring: Ring[A]): Vec2[A] =
       i match
         case 0 => Vec2(ring.one, ring.zero)
         case 1 => Vec2(ring.zero, ring.one)
         case _ => whatTheScallop.!
 
+    def construct[A](ls: Vector[A]): Vec2[A] =
+      ls match
+        case Vector(x, y) => Vec2(x, y)
+        case _            => whatTheScallop.!
+
     extension [A](self: Vec2[A])
 
-      def coord(i: Int): A =
+      override def coord(i: Int): A =
         i match
           case 0 => self.x
           case 1 => self.y
           case _ => whatTheScallop.!
 
-      def withCoord(i: Int, v: A): Vec2[A] =
+      override def withCoord(i: Int, v: A): Vec2[A] =
         i match
           case 0 => self.copy(x = v)
           case 1 => self.copy(y = v)
           case _ => whatTheScallop.!
 
-      def axes: List[A] = List(self.x, self.y)
-      def map(f: A => A): Vec2[A] = Vec2(f(self.x), f(self.y))
-      def zip(that: Vec2[A])(f: (A, A) => A): Vec2[A] =
+      def axes: Vector[A] = Vector(self.x, self.y)
+      override def map(f: A => A): Vec2[A] = Vec2(f(self.x), f(self.y))
+      override def zip(that: Vec2[A])(f: (A, A) => A): Vec2[A] =
         Vec2(f(self.x, that.x), f(self.y, that.y))

@@ -6,20 +6,23 @@ import algebras.given
 import Sys3D.*
 
 import cats.implicits.*
+import algebra.ring.Ring
+import cats.*
 
 object Day17 extends Problem:
   type Input = Set[Vec3[Int]]
   type Output = Int
 
-  case class Vec4i(x: Int, y: Int, z: Int, w: Int):
-    def allNeighbors: List[Vec4i] =
-      for
-        x <- List(this.x - 1, this.x, this.x + 1)
-        y <- List(this.y - 1, this.y, this.y + 1)
-        z <- List(this.z - 1, this.z, this.z + 1)
-        w <- List(this.w - 1, this.w, this.w + 1)
-        if x != this.x || y != this.y || z != this.z || w != this.w
-      yield Vec4i(x, y, z, w)
+  case class Vec4[A](x: A, y: A, z: A, w: A)
+  given VecN[Vec4] with
+    def dimensions: Int = 4
+
+    def construct[A](ls: Vector[A]): Vec4[A] =
+      ls match
+        case Vector(x, y, z, w) => Vec4(x, y, z, w)
+        case _                  => whatTheScallop.!
+    extension [A](self: Vec4[A])
+      def axes: Vector[A] = Vector(self.x, self.y, self.z, self.w)
 
   lazy val input = FileIO.getInput(2020, 17)
   def parse(str: String): Input =
@@ -28,19 +31,9 @@ object Day17 extends Problem:
       case _                  => None
     .toSet
 
-  def step(state: Set[Vec3[Int]]): Set[Vec3[Int]] =
-    val extendedSet = state.flatMap(it => it.allNeighbors.toSet + it)
-    val withKilled =
-      state.filter: p =>
-        val r = p.allNeighbors.count(state.apply)
-        r == 2 || r == 3
-    val deadSet = extendedSet -- state
-    val withBorn =
-      deadSet.filter:
-        _.allNeighbors.count(state.apply) == 3
-    withKilled ++ withBorn
-
-  def stepP2(state: Set[Vec4i]): Set[Vec4i] =
+  // thought process:
+  // wouldn't it be hilarous if I had to do zero changes between part 1 and 2?
+  def step[V[_]](state: Set[V[Int]])(using vn: VecN[V]): Set[V[Int]] =
     val extendedSet = state.flatMap(it => it.allNeighbors.toSet + it)
     val withKilled =
       state.filter: p =>
@@ -72,8 +65,8 @@ object Day17 extends Problem:
         show"slice y=$y;\n$grid"
     .mkString("\n\n")
 
-  def part1(input: Set[Vec3[Int]]): Int = step.repeated(6)(input).size
+  def part1(input: Set[Vec3[Int]]): Int = step[Vec3].repeated(6)(input).size
 
   def part2(input: Set[Vec3[Int]]): Int =
-    val newInput = input.map(it => Vec4i(it.x, it.y, it.z, 0))
-    stepP2.repeated(6)(newInput).size
+    val newInput = input.map(it => Vec4(it.x, it.y, it.z, 0))
+    step[Vec4].repeated(6)(newInput).size

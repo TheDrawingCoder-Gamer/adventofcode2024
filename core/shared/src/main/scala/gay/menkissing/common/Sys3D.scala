@@ -17,39 +17,38 @@ object Sys3D:
     given vecNVec3: VecN[Vec3] with
       def dimensions: Int = 3
 
-      def axis[A](i: Int)(using ring: Ring[A]): Vec3[A] =
+      override def axis[A](i: Int)(using ring: Ring[A]): Vec3[A] =
         i match
           case 0 => Vec3(ring.one, ring.zero, ring.zero)
           case 1 => Vec3(ring.zero, ring.one, ring.zero)
           case 2 => Vec3(ring.zero, ring.zero, ring.one)
           case _ => whatTheScallop.!
 
-      extension [A](self: Vec3[A])
-        def axes: List[A] = List(self.x, self.y, self.z)
-        def zip(that: Vec3[A])(f: (A, A) => A): Vec3[A] =
-          Vec3(f(self.x, that.x), f(self.y, that.y), f(self.z, that.z))
-        def map(f: A => A): Vec3[A] = Vec3(f(self.x), f(self.y), f(self.z))
+      def construct[A](ls: Vector[A]): Vec3[A] =
+        ls match
+          case Vector(x, y, z) => Vec3(x, y, z)
+          case _               => whatTheScallop.!
 
-        def coord(i: Int): A =
+      extension [A](self: Vec3[A])
+        def axes: Vector[A] = Vector(self.x, self.y, self.z)
+        override def zip(that: Vec3[A])(f: (A, A) => A): Vec3[A] =
+          Vec3(f(self.x, that.x), f(self.y, that.y), f(self.z, that.z))
+        override def map(f: A => A): Vec3[A] =
+          Vec3(f(self.x), f(self.y), f(self.z))
+
+        override def coord(i: Int): A =
           i match
             case 0 => self.x
             case 1 => self.y
             case 2 => self.z
             case _ => whatTheScallop.!
 
-        def withCoord(i: Int, v: A): Vec3[A] =
+        override def withCoord(i: Int, v: A): Vec3[A] =
           i match
             case 0 => self.copy(x = v)
             case 1 => self.copy(y = v)
             case 2 => self.copy(z = v)
   final case class Vec3[A](x: A, y: A, z: A):
-    def allNeighbors(using eq: Eq[A], ring: Ring[A]): List[Vec3[A]] =
-      for
-        x <- List(this.x - ring.one, this.x, this.x + ring.one)
-        y <- List(this.y - ring.one, this.y, this.y + ring.one)
-        z <- List(this.z - ring.one, this.z, this.z + ring.one)
-        if x =!= this.x || y =!= this.y || z =!= this.z
-      yield Vec3(x, y, z)
 
     def offset(dir: Direction3D, n: A)(using add: AdditiveGroup[A]): Vec3[A] =
       val v =

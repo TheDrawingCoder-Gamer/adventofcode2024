@@ -37,8 +37,7 @@ case class Grid[A] private (values: Vector[Vector[A]])
       values.indexWhere: it =>
         x = it.indexWhere(f)
         x != -1
-    if x == -1 || y == -1 then None
-    else Some(Vec2(x, y))
+    Option.unless(x == -1 || y == -1)(Vec2(x, y))
   def get(p: Vec2[Int]): Option[A] = get(p.x, p.y)
 
   def getOrElse(p: Vec2[Int], orElse: => A): A = applyOrElse(p, _ => orElse)
