@@ -1,7 +1,7 @@
 package gay.menkissing.advent
 package y2024
 
-import scala.collection.mutable as mut
+import scala.collection.mutable
 import gay.menkissing.common.*
 import cats.Show
 
@@ -58,7 +58,7 @@ object Day14 extends Problem:
     .getOrElse(-1)
 
     def robotMap: Vector[Vector[Int]] =
-      val goodGrid = mut.ArrayBuffer.fill(size.y + 1, size.x + 1)(0)
+      val goodGrid = mutable.ArrayBuffer.fill(size.y + 1, size.x + 1)(0)
 
       robots.foreach: robot =>
         goodGrid(robot.pos.y)(robot.pos.x) =

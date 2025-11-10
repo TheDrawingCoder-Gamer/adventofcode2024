@@ -4,7 +4,7 @@ package y2021
 import gay.menkissing.common.*, ArityN.*, Sys3D.*, algebras.given
 
 import scala.annotation.tailrec
-import scala.collection.mutable as mut
+import scala.collection.mutable
 import scala.io.Source
 
 import cats.syntax.all.*
@@ -36,9 +36,9 @@ object Day19 extends Problem:
       scanner.linesIterator.drop(1).map(Vec3i.of).toSet
     .toList
   def solve(data: List[Set[Vec3[Int]]]): Solution =
-    val baseSector = mut.Set.from(data.head)
-    val foundScanners = mut.Set(Vec3(0, 0, 0))
-    val unmappedSector = mut.ListBuffer.from(data.tail)
+    val baseSector = mutable.Set.from(data.head)
+    val foundScanners = mutable.Set(Vec3(0, 0, 0))
+    val unmappedSector = mutable.ListBuffer.from(data.tail)
     while unmappedSector.nonEmpty do
       val thisSector = unmappedSector.head
       unmappedSector.remove(0)

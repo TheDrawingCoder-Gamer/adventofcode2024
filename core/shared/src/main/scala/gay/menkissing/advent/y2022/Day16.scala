@@ -4,7 +4,7 @@ package y2022
 import gay.menkissing.advent.FileIO
 import gay.menkissing.common.*
 
-import scala.collection.mutable as mut
+import scala.collection.mutable
 import cats.*
 import cats.syntax.all.*
 
@@ -30,7 +30,7 @@ object Day16 extends Problem:
         ValveRoom(room, n.toInt, goodRest)
     .map(it => (it.room, it)).toMap
 
-  private val distanceMemo = mut.HashMap[String, Int]()
+  private val distanceMemo = mutable.HashMap[String, Int]()
 
   extension (self: Map[String, ValveRoom])
     def startRoom: ValveRoom = self(start)

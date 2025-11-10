@@ -3,7 +3,7 @@ package y2022
 
 import gay.menkissing.common.*, algebras.given
 
-import scala.collection.mutable as mut
+import scala.collection.mutable
 import cats.*
 import cats.derived.*
 import cats.syntax.all.*
@@ -30,7 +30,7 @@ object Day24 extends Problem:
   type BlizzardMap = Grid[BlizzardMapPoint]
 
   class State:
-    val memo = mut.HashMap[Int, BlizzardMap]()
+    val memo = mutable.HashMap[Int, BlizzardMap]()
 
     def freakstar(start: TimeLocation, goal: Vec2[Int]): Option[TimeLocation] =
       astarByReturning(

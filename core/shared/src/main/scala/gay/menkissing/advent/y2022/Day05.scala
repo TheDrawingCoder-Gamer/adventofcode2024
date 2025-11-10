@@ -1,7 +1,7 @@
 package gay.menkissing.advent
 package y2022
 
-import scala.collection.mutable as mut
+import scala.collection.mutable
 import cats.Show
 
 object Day05 extends Problem:
@@ -14,7 +14,7 @@ object Day05 extends Problem:
     Palettes(
       input.linesIterator.map(parseRow).toVector.reverse
         .transpose[Option[Crate]]
-        .map(it => mut.ListBuffer.from(it.filter(_.isDefined).map(_.get)))
+        .map(it => mutable.ListBuffer.from(it.filter(_.isDefined).map(_.get)))
     )
 
   def parseRow(input: String): List[Option[Crate]] =
@@ -43,13 +43,13 @@ object Day05 extends Problem:
 
   type Crate = Char
   // Ordered from bottom to top
-  type Pallete = mut.ListBuffer[Crate]
+  type Pallete = mutable.ListBuffer[Crate]
 
   class Palettes(val palletes: Vector[Pallete]):
     private def moveWith
       (n: Int, from: Int, to: Int)
       (
-        extractor: Pallete => mut.ListBuffer[Crate]
+        extractor: Pallete => mutable.ListBuffer[Crate]
       ): Unit =
       val crates = extractor(palletes(from))
       palletes(from).dropRightInPlace(n)

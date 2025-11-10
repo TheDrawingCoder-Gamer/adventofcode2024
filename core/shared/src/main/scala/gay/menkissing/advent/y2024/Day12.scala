@@ -1,7 +1,7 @@
 package gay.menkissing.advent
 package y2024
 
-import scala.collection.mutable as mut
+import scala.collection.mutable
 import cats.Show
 
 object Day12 extends Problem:
@@ -24,7 +24,7 @@ object Day12 extends Problem:
       val minY = region.minBy(_._2)._2
       val maxX = region.maxBy(_._1)._1
       val maxY = region.maxBy(_._2)._2
-      val res = mut.ArrayBuffer.fill(maxY - minY + 1, maxX - minX + 1)('.')
+      val res = mutable.ArrayBuffer.fill(maxY - minY + 1, maxX - minX + 1)('.')
       region.foreach: (x, y) =>
         res(y - minY)(x - minX) = '#'
       res.map(_.mkString("", "", "")).mkString("", "\n", "")
@@ -32,7 +32,7 @@ object Day12 extends Problem:
     def asPlantMap: PlantMap =
       val maxX = region.maxBy(_._1)._1
       val maxY = region.maxBy(_._2)._2
-      val res = mut.ArrayBuffer.fill(maxY + 1, maxX + 1)('.')
+      val res = mutable.ArrayBuffer.fill(maxY + 1, maxX + 1)('.')
       region.foreach: (x, y) =>
         res(y)(x) = '#'
       PlantMap(res.map(_.mkString("", "", "")).toVector)
@@ -88,9 +88,9 @@ object Day12 extends Problem:
       neighborPositions(x, y).map(get)
 
     def floodFill(x: Int, y: Int): Region =
-      val q = mut.Queue[(Int, Int)]()
+      val q = mutable.Queue[(Int, Int)]()
       val char = apply(x, y)
-      val res = mut.Set[(Int, Int)]()
+      val res = mutable.Set[(Int, Int)]()
       q.addOne((x, y))
       while q.nonEmpty do
         val n = q.removeHead()

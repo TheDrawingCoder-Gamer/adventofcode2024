@@ -1,7 +1,7 @@
 package gay.menkissing.common
 
 import scala.annotation.tailrec
-import scala.collection.mutable as mut
+import scala.collection.mutable
 import math.Numeric
 import cats.*
 import cats.implicits.*
@@ -9,7 +9,7 @@ import cats.data.Kleisli
 
 class ForeverIterator[A](val underlying: Iterator[A]) extends Iterator[A]:
   private var memoizedAll: Boolean = false
-  private val memoizedValues = mut.ArrayBuffer[A]()
+  private val memoizedValues = mutable.ArrayBuffer[A]()
   private var currentIterator = underlying
 
   override def hasNext: Boolean = memoizedAll || currentIterator.hasNext

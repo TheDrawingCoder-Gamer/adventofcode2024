@@ -4,12 +4,11 @@ package y2024
 import cats.*
 import cats.syntax.all.*
 import algebra.instances.all.*
-import gay.menkissing.common
 import gay.menkissing.common.*
 import ArityN.*
 
 import scala.annotation.experimental
-import scala.collection.mutable as mut
+import scala.collection.mutable
 
 object Day21 extends Problem:
   type Input = List[String]
@@ -178,7 +177,7 @@ object Day21 extends Problem:
   def codeNum(code: String): Long = code.dropRight(1).toLong
 
   def processCode(code: String, n: Int = 2): Long =
-    val solveCache = mut.HashMap[(Vec2[Int], Vec2[Int], Int), Long]()
+    val solveCache = mutable.HashMap[(Vec2[Int], Vec2[Int], Int), Long]()
     def shortestMove(start: Vec2[Int], end: Vec2[Int], level: Int): Long =
       solveCache.memo((start, end, level)):
         given Monoid[Long] =

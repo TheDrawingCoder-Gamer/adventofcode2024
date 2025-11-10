@@ -2,7 +2,7 @@ package gay.menkissing.advent
 package y2024
 
 import scala.annotation.tailrec
-import scala.collection.mutable as mut
+import scala.collection.mutable
 import cats.derived.*
 import cats.*
 import cats.syntax.all.*
@@ -22,7 +22,7 @@ object Day18Writeup extends ProblemAdv:
   extension (walls: Set[Vec2i])
     def search(gridSize: Int): Option[List[Vec2i]] =
       def reconstructPath(cameFrom: Map[Vec2i, Vec2i], p: Vec2i): List[Vec2i] =
-        val totalPath = mut.ListBuffer[Vec2i](p)
+        val totalPath = mutable.ListBuffer[Vec2i](p)
         var current = p
         while cameFrom.contains(current) do
           current = cameFrom(current)
@@ -31,12 +31,12 @@ object Day18Writeup extends ProblemAdv:
 
       val start = Vec2i(0, 0)
       val goal = Vec2i(gridSize - 1, gridSize - 1)
-      val cameFrom = mut.HashMap[Vec2i, Vec2i]()
+      val cameFrom = mutable.HashMap[Vec2i, Vec2i]()
 
-      val dist = mut.HashMap(start -> 0d)
+      val dist = mutable.HashMap(start -> 0d)
 
       val q =
-        mut.PriorityQueue(start -> 0d)(using
+        mutable.PriorityQueue(start -> 0d)(using
           Ordering.by[(Vec2i, Double), Double](_._2).reverse
         )
 

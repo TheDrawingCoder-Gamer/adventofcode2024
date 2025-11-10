@@ -3,7 +3,7 @@ package y2022
 
 import gay.menkissing.common.repeat
 
-import scala.collection.mutable as mut
+import scala.collection.mutable
 import scala.io.Source
 import scala.math.BigInt
 import cats.Show
@@ -16,7 +16,7 @@ object Day11 extends Problem:
   class Monkey
     (
       val n: Int,
-      val items: mut.ListBuffer[Long],
+      val items: mutable.ListBuffer[Long],
       val op: MonkeyOp,
       val divisor: Int,
       val throwTrue: Int,
@@ -60,7 +60,7 @@ object Day11 extends Problem:
 
           Monkey(
             name.toInt,
-            startingItems.split(',').map(_.trim.toLong).to(mut.ListBuffer),
+            startingItems.split(',').map(_.trim.toLong).to(mutable.ListBuffer),
             goodOp,
             div.toInt,
             trueMonkey.toInt,

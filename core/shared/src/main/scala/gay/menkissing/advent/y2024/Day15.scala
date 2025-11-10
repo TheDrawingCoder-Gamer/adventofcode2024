@@ -7,7 +7,7 @@ import algebra.instances.all.*
 import gay.menkissing.common.*
 
 import scala.annotation.{tailrec, targetName}
-import scala.collection.mutable as mut
+import scala.collection.mutable
 
 object Day15 extends Problem:
   type Input = ProblemState
@@ -94,7 +94,7 @@ object Day15 extends Problem:
                   case None     => Eval.now(None)
 
       go(istart, List()).value.map:
-        val alreadyInspected = mut.Set[Vec2[Int]]()
+        val alreadyInspected = mutable.Set[Vec2[Int]]()
         _.foldLeft(grid.updated(istart)(GridItemP2.Empty)):
           case (g, (p, item)) =>
             if !alreadyInspected.contains(p) then

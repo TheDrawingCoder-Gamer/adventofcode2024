@@ -4,7 +4,7 @@ package y2021
 import gay.menkissing.common.*
 import cats.syntax.all.*
 
-import scala.collection.mutable as mut
+import scala.collection.mutable
 import cats.Show
 
 object Day05 extends Problem:
@@ -52,7 +52,7 @@ object Day05 extends Problem:
     def unionWith(that: Map[A, B])(f: (B, B) => B): Map[A, B] =
       map.alignMergeWith(that)(f)
 
-  extension (map: mut.HashMap[Vec2[Int], Int])
+  extension (map: mutable.HashMap[Vec2[Int], Int])
     def updateInPlaceField(line: Line): Unit =
       val daSet = line.covers
       daSet.foreach: p =>
@@ -63,14 +63,14 @@ object Day05 extends Problem:
     def countDanger: Int = map.count((_, i) => i >= 2)
 
   def part1(input: List[Line]): Int =
-    val daMap = mut.HashMap.empty[Vec2[Int], Int]
+    val daMap = mutable.HashMap.empty[Vec2[Int], Int]
     input.filter(_.orientation != LineOrientation.Diagonal)
       .foreach(daMap.updateInPlaceField)
 
     daMap.countDanger
 
   def part2(input: List[Line]): Int =
-    val daMap = mut.HashMap.empty[Vec2[Int], Int]
+    val daMap = mutable.HashMap.empty[Vec2[Int], Int]
     input.foreach(daMap.updateInPlaceField)
 
     daMap.countDanger

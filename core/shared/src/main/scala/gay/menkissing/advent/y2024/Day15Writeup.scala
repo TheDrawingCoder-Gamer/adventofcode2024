@@ -5,7 +5,7 @@ import cats.*
 import cats.implicits.*
 
 import scala.annotation.{tailrec, targetName}
-import scala.collection.mutable as mut
+import scala.collection.mutable
 
 object Day15Writeup extends Writeup[Day15Writeup.ProblemState, Long]:
   enum Direction:
@@ -103,7 +103,7 @@ object Day15Writeup extends Writeup[Day15Writeup.ProblemState, Long]:
                   case None     => Eval.now(None)
 
       go(istart, List()).value.map:
-        val alreadyInspected = mut.Set[Vec2i]()
+        val alreadyInspected = mutable.Set[Vec2i]()
         _.foldLeft(grid.updated(istart)(GridItemP2.Empty)):
           case (g, (p, item)) =>
             if !alreadyInspected.contains(p) then

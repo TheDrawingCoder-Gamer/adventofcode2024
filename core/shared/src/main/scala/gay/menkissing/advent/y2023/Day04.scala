@@ -1,7 +1,7 @@
 package gay.menkissing.advent
 package y2023
 
-import scala.collection.mutable as mut
+import scala.collection.mutable
 import cats.Show
 
 object Day04 extends Problem:
@@ -30,7 +30,7 @@ object Day04 extends Problem:
 
   def part2(input: List[Scratchcard]): Int =
     val size = input.length
-    val map = (0 until size).map((_, 1)).to(mut.HashMap)
+    val map = (0 until size).map((_, 1)).to(mutable.HashMap)
 
     input.zipWithIndex.foldLeft(0):
       case (acc, (card, idx)) =>

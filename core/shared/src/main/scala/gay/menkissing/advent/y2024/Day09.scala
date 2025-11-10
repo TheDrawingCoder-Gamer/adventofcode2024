@@ -3,7 +3,7 @@ package y2024
 
 import gay.menkissing.common.*
 
-import scala.collection.mutable as mut
+import scala.collection.mutable
 import cats.Show
 
 object Day09 extends Problem:
@@ -60,7 +60,7 @@ object Day09 extends Problem:
     .toList)
 
   def calculateP2(chunks: Vector[Chunk]): Vector[Chunk] =
-    val data = chunks.iterator.to(mut.ArrayBuffer.iterableFactory[Chunk])
+    val data = chunks.iterator.to(mutable.ArrayBuffer.iterableFactory[Chunk])
     var curId =
       chunks.findLast(_.isInstanceOf[File]).get.asInstanceOf[File].id + 1
 

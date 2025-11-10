@@ -1,7 +1,7 @@
 package gay.menkissing.advent
 package y2020
 
-import collection.mutable as mut
+import collection.mutable
 import gay.menkissing.common.*
 import cats.Show
 
@@ -29,7 +29,7 @@ object Day08 extends Problem:
 
   // Solves the halting problem!
   def execute(input: Vector[Instruction]): Either[Int, Int] =
-    val visited = mut.Set.empty[Int]
+    val visited = mutable.Set.empty[Int]
     var acc = 0
     var ip = 0
     while !visited(ip) && ip < input.length do

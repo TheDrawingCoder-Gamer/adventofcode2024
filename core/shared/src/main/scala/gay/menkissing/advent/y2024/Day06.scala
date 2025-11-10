@@ -3,7 +3,7 @@ package y2024
 
 import gay.menkissing.common.*
 
-import scala.collection.mutable as mut
+import scala.collection.mutable
 import algebra.instances.all.*
 import cats.*
 import cats.syntax.all.*
@@ -30,7 +30,7 @@ object Day06 extends Problem:
 
     var guardDirection = Direction2D.Up
 
-    val daPoints = mut.Set(guardPos)
+    val daPoints = mutable.Set(guardPos)
 
     while grid.isDefinedAt(guardPos.x, guardPos.y) do
       val nextPos = guardPos.offset(guardDirection)
@@ -51,7 +51,7 @@ object Day06 extends Problem:
       var (guardPos, guardDirection) = getStarts(grid, guardIdx)
 
       val freakyPoints =
-        mut.Set[(Vec2[Int], Direction2D)]((guardPos, guardDirection))
+        mutable.Set[(Vec2[Int], Direction2D)]((guardPos, guardDirection))
 
       while grid2.isDefinedAt(guardPos.x, guardPos.y) do
         val nextPos = guardPos.offset(guardDirection)
@@ -68,10 +68,10 @@ object Day06 extends Problem:
 
     var guardDirection = Direction2D.Up
 
-    val daPoints = mut.Set(guardPos)
+    val daPoints = mutable.Set(guardPos)
 
     // missing start point
-    val goodPoints: mut.Set[(Vec2[Int], Direction2D)] = mut.Set()
+    val goodPoints: mutable.Set[(Vec2[Int], Direction2D)] = mutable.Set()
 
     while grid.isDefinedAt(guardPos.x, guardPos.y) do
       val nextPos = guardPos.offset(guardDirection)

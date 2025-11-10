@@ -1,7 +1,7 @@
 package gay.menkissing.advent
 package y2022
 
-import scala.collection.mutable as mut
+import scala.collection.mutable
 import scala.io.Source
 import scala.util.chaining.*
 import gay.menkissing.common.*
@@ -21,7 +21,7 @@ object Day07 extends Problem:
     case Dir(name: String) extends AFile(name)
 
   def parse(input: String): Seq[Command] =
-    val daSeq = mut.ListBuffer[Command]()
+    val daSeq = mutable.ListBuffer[Command]()
     val lines = input.linesIterator.toList
     var i = 0
     while i < lines.length do
@@ -40,11 +40,11 @@ object Day07 extends Problem:
     daSeq.toSeq.drop(1)
 
   def buildDirs(commands: Seq[Command]): FSDir =
-    val root: FSDir = FSDir(0, "/", mut.ListBuffer())
+    val root: FSDir = FSDir(0, "/", mutable.ListBuffer())
 
     var workingOn: FSDir = root
     // sanity loss
-    val parents = mut.ListBuffer[FSDir]()
+    val parents = mutable.ListBuffer[FSDir]()
     commands.foreach:
       case Command.Chdir("..") =>
         workingOn = parents.head
@@ -57,13 +57,13 @@ object Day07 extends Problem:
             workingOn = it
           case _ => !!!
         node.getOrElse:
-          val newOne = FSDir(0, to, mut.ListBuffer())
+          val newOne = FSDir(0, to, mutable.ListBuffer())
           workingOn.children += newOne
           parents.prepend(workingOn)
           workingOn = newOne
       case Command.List(files) =>
         workingOn.children ++= files.iterator.map:
-          case AFile.Dir(name)        => FSDir(0, name, mut.ListBuffer())
+          case AFile.Dir(name)        => FSDir(0, name, mutable.ListBuffer())
           case AFile.File(name, size) => FSFFile(size, name)
 
     root
@@ -79,7 +79,7 @@ object Day07 extends Problem:
     (
       var size: Int,
       val name: String,
-      val children: mut.ListBuffer[FSFile]
+      val children: mutable.ListBuffer[FSFile]
     ) extends FSFile:
     override def toString: String = s"dir $name"
     override def show: String =

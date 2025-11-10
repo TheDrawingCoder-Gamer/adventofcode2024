@@ -4,7 +4,7 @@ package y2024
 import gay.menkissing.common.*
 import algebras.given
 
-import scala.collection.mutable as mut
+import scala.collection.mutable
 import cats.syntax.all.*
 
 object Day20 extends Problem:
@@ -18,14 +18,14 @@ object Day20 extends Problem:
           cameFrom: Map[Vec2[Int], Vec2[Int]],
           p: Vec2[Int]
         ): List[Vec2[Int]] =
-        val totalPath = mut.ListBuffer[Vec2[Int]](p)
+        val totalPath = mutable.ListBuffer[Vec2[Int]](p)
         var current = p
         while cameFrom.contains(current) do
           current = cameFrom(current)
           totalPath.prepend(current)
         totalPath.toList
-      val cameFrom = mut.HashMap[Vec2[Int], Vec2[Int]]()
-      val dist = mut.HashMap[Vec2[Int], Int](start -> 0)
+      val cameFrom = mutable.HashMap[Vec2[Int], Vec2[Int]]()
+      val dist = mutable.HashMap[Vec2[Int], Int](start -> 0)
 
       val q = MinBinaryHeap[Vec2[Int], Int]()
       q.insert(start, 0)
@@ -59,7 +59,7 @@ object Day20 extends Problem:
 
   override def parse(str: String): RaceTrack =
     val goodGrid =
-      mut.ArrayBuffer
+      mutable.ArrayBuffer
         .fill(str.linesIterator.length, str.linesIterator.next().length)(false)
     var start = Vec2(0, 0)
     var end = Vec2(0, 0)
