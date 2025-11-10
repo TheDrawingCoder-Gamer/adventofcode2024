@@ -3,7 +3,6 @@ package y2021
 
 import gay.menkissing.common.{*, given}
 import cats.syntax.all.*
-import cats.Show
 
 object Day04 extends Problem:
   type Input = (List[Int], List[BingoCard])

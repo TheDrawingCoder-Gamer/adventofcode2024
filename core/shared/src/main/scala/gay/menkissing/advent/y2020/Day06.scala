@@ -1,8 +1,6 @@
 package gay.menkissing.advent
 package y2020
 
-import cats.Show
-
 object Day06 extends Problem:
   type Input = List[List[Set[Char]]]
   type Output = Int

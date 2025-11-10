@@ -4,7 +4,6 @@ package y2015
 import scala.util.matching.Regex
 import gay.menkissing.common.*
 import io.circe.*
-import cats.Show
 
 object Day12 extends Problem:
   type Input = String

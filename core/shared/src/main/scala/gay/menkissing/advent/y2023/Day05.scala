@@ -4,7 +4,6 @@ package y2023
 import cats.data.{NonEmptyList, NonEmptyChain, Ior}
 import cats.syntax.all.*
 import gay.menkissing.common.ArityN.*
-import cats.Show
 
 object Day05 extends Problem:
   // was already here and declared as input so it ALL WORKS OUT : )

@@ -3,7 +3,6 @@ package y2021
 
 import cats.implicits.*
 import gay.menkissing.common.ArityN.*
-import cats.Show
 
 object Day01 extends Problem:
   type Input = List[Int]

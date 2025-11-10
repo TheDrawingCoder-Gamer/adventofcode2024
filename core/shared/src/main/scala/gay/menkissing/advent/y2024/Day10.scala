@@ -3,8 +3,6 @@ package y2024
 
 import gay.menkissing.common.*, algebras.given
 
-import cats.Show
-
 object Day10 extends Problem:
   type Input = Grid[Int]
   type Output = Int

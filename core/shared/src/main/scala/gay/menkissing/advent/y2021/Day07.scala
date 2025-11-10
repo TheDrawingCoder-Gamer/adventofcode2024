@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2021
 
 import gay.menkissing.common.IntSequences
-import cats.Show
 
 object Day07 extends Problem:
   type Input = List[Int]

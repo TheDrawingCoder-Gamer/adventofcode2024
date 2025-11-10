@@ -3,7 +3,6 @@ package y2022
 
 import gay.menkissing.common.*
 import algebra.instances.all.*
-import cats.Show
 
 object Day23 extends Problem:
   type Input = ElfGrid

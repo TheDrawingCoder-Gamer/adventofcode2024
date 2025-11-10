@@ -4,7 +4,6 @@ package y2021
 import gay.menkissing.common.*
 
 import scala.io.Source
-import cats.Show
 
 object Day20 extends Problem:
   type Input = (Vector[Boolean], Image)

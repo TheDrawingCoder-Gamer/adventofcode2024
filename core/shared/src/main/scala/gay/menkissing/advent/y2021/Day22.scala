@@ -7,7 +7,6 @@ import algebra.instances.all.*
 import cats.syntax.show.*
 
 import collection.mutable
-import cats.Show
 
 object Day22 extends Problem:
   type Input = List[Step]

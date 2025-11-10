@@ -3,7 +3,6 @@ package y2022
 
 import cats.implicits.*
 import gay.menkissing.common.*, ArityN.*
-import cats.Show
 
 object Day06 extends Problem:
   type Input = String

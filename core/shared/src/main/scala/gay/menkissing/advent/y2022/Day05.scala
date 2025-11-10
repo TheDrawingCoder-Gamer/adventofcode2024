@@ -2,8 +2,6 @@ package gay.menkissing.advent
 package y2022
 
 import scala.collection.mutable
-import cats.Show
-
 object Day05 extends Problem:
   type Input = (Palettes, List[CraneMove])
   type Output = String

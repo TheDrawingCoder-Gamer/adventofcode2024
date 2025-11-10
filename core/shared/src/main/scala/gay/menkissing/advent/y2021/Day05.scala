@@ -5,7 +5,6 @@ import gay.menkissing.common.*
 import cats.syntax.all.*
 
 import scala.collection.mutable
-import cats.Show
 
 object Day05 extends Problem:
   type Input = List[Line]

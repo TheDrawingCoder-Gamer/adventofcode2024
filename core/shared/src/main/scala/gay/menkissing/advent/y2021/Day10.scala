@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2021
 
 import scala.annotation.tailrec
-import cats.Show
 
 object Day10 extends Problem:
   type Input = List[String]

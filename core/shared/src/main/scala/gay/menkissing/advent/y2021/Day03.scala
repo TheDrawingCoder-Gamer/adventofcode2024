@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2021
 
 import gay.menkissing.common.*
-import cats.Show
 
 object Day03 extends Problem:
   type Input = (List[Int], Int)

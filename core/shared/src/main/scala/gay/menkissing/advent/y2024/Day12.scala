@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2024
 
 import scala.collection.mutable
-import cats.Show
 
 object Day12 extends Problem:
   type Input = PlantMap

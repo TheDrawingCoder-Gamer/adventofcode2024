@@ -4,8 +4,6 @@ package y2024
 import gay.menkissing.common.*
 
 import scala.annotation.tailrec
-import scala.collection.mutable as mut
-import cats.Show
 
 object Day11 extends Problem:
   type Input = List[Long]

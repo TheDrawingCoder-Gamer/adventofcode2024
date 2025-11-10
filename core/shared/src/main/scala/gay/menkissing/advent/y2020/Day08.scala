@@ -3,7 +3,6 @@ package y2020
 
 import collection.mutable
 import gay.menkissing.common.*
-import cats.Show
 
 object Day08 extends Problem:
   type Input = Vector[Instruction]

@@ -5,7 +5,6 @@ import gay.menkissing.common.*
 import scala.collection.mutable as mut
 import cats.syntax.all.*
 import algebra.instances.all.*
-import cats.Show
 
 object Day22 extends Problem:
 

@@ -4,7 +4,6 @@ package y2024
 import gay.menkissing.common.*
 
 import scala.collection.mutable
-import cats.Show
 
 object Day09 extends Problem:
   type Input = String

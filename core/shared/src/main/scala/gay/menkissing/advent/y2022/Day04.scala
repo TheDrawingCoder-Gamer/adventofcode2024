@@ -1,8 +1,6 @@
 package gay.menkissing.advent
 package y2022
 
-import cats.Show
-
 object Day04 extends Problem:
   type Input = List[Jobs]
   type Output = Int

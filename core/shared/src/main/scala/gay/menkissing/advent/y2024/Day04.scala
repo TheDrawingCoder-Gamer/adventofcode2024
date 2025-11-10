@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2024
 
 import gay.menkissing.common.*
-import cats.Show
 
 object Day04 extends Problem:
   type Input = Grid[Char]

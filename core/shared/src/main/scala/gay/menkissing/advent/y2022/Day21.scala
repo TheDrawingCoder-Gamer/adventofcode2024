@@ -1,8 +1,6 @@
 package gay.menkissing.advent
 package y2022
 
-import cats.Show
-
 object Day21 extends Problem:
   type Input = Context
   type Output = Long

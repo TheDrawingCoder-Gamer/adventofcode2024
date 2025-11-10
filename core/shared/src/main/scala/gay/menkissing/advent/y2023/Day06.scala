@@ -1,8 +1,6 @@
 package gay.menkissing.advent
 package y2023
 
-import cats.Show
-
 object Day06 extends ProblemUniqueInputs:
   type InputP1 = List[(Long, Long)]
   type InputP2 = (Long, Long)

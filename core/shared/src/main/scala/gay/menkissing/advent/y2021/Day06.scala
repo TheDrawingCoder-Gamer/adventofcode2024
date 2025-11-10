@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2021
 
 import gay.menkissing.common.*
-import cats.Show
 
 object Day06 extends Problem:
   type Input = Vector[Int]

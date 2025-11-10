@@ -4,7 +4,6 @@ package y2022
 import gay.menkissing.common.*, Sys3D.*
 import collection.mutable
 import algebra.instances.all.*
-import cats.Show
 
 object Day18 extends NewProblem:
   type Input = Map[Vec3[Int], Cube]

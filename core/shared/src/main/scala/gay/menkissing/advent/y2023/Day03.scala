@@ -4,7 +4,6 @@ package y2023
 import gay.menkissing.common.*
 import cats.syntax.functorFilter.*
 import algebra.instances.all.*
-import cats.Show
 
 object Day03 extends Problem:
   type Input = Grid[Char]

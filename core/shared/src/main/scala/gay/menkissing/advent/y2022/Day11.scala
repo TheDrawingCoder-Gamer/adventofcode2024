@@ -6,7 +6,6 @@ import gay.menkissing.common.repeat
 import scala.collection.mutable
 import scala.io.Source
 import scala.math.BigInt
-import cats.Show
 
 // I totally forgot why this works - figure it out later!
 object Day11 extends Problem:

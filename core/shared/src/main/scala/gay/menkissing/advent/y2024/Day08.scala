@@ -5,7 +5,6 @@ import gay.menkissing.common.*, ArityN.*
 
 import scala.collection.mutable.ListBuffer
 import algebra.instances.all.*
-import cats.Show
 
 object Day08 extends Problem:
   type Input = Grid[Char]

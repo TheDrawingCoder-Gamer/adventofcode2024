@@ -5,8 +5,6 @@ import gay.menkissing.common.*
 
 import scala.io.Source
 import scala.math.Ordering
-import cats.Show
-
 object Day08 extends Problem:
   type Input = Grid[Int]
   type Output = Int

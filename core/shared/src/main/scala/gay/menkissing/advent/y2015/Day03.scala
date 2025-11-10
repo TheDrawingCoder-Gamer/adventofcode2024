@@ -6,7 +6,6 @@ import gay.menkissing.common.Direction2D
 import scala.collection.mutable
 import gay.menkissing.common.Vec2
 import algebra.instances.all.*
-import cats.Show
 
 object Day03 extends Problem:
   type Input = String

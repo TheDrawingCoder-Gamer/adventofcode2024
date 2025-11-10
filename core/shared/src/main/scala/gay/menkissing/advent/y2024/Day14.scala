@@ -3,7 +3,6 @@ package y2024
 
 import scala.collection.mutable
 import gay.menkissing.common.*
-import cats.Show
 
 object Day14 extends Problem:
   type Input = List[Robot]

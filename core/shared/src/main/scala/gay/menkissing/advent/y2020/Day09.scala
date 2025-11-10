@@ -5,7 +5,6 @@ import cats.implicits.*
 import cats.syntax.all.*
 
 import gay.menkissing.common.*, ArityN.*
-import cats.Show
 
 object Day09 extends Problem:
   type Input = Vector[Long]

@@ -3,7 +3,6 @@ package y2015
 
 import gay.menkissing.common.*, ArityN.*
 import cats.implicits.*
-import cats.Show
 
 object Day21 extends Problem:
   type Input = Actor

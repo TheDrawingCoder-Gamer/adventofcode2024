@@ -7,7 +7,6 @@ import scala.annotation.tailrec
 import scala.collection.mutable as mut
 
 import algebra.instances.all.*
-import cats.Show
 
 object Day13 extends Problem:
   type Input = List[CraneMachine]

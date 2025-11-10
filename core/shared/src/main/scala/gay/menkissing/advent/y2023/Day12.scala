@@ -3,7 +3,6 @@ package y2023
 
 import gay.menkissing.common.*
 import cats.implicits.*
-import cats.Show
 
 object Day12 extends Problem:
   type Input = List[(List[Option[Boolean]], List[Int])]

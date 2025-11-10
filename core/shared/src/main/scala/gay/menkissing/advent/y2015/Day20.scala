@@ -6,7 +6,6 @@ import cats.implicits.*
 import algebra.instances.all.*
 
 import scala.collection.mutable
-import cats.Show
 
 object Day20 extends Problem:
   type Input = Int

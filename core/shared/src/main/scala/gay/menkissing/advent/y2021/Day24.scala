@@ -4,7 +4,6 @@ package y2021
 import gay.menkissing.common.*
 import cats.implicits.*
 import cats.data.Chain
-import cats.Show
 
 object Day24 extends Problem:
   type Input = Vector[Instruction]

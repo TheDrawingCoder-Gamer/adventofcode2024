@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2015
 
 import gay.menkissing.common.*
-import cats.Show
 
 object Day25 extends HalfDay:
   type Input = Vec2[Int]

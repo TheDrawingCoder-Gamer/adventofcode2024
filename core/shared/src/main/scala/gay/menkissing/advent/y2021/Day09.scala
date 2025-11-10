@@ -6,7 +6,6 @@ import cats.syntax.all.*
 import algebra.instances.all.*
 
 import scala.annotation.tailrec
-import cats.Show
 
 object Day09 extends Problem:
   type Input = Grid[Int]

@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2022
 
 import gay.menkissing.common.*
-import cats.Show
 import scala.reflect.ClassTag
 import java.util.Arrays
 

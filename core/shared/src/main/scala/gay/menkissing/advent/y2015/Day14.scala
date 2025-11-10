@@ -3,7 +3,6 @@ package y2015
 
 import gay.menkissing.common.*
 import scala.collection.mutable
-import cats.Show
 
 object Day14 extends Problem:
   type Input = List[Reindeer]

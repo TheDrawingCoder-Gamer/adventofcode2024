@@ -9,7 +9,6 @@ import scala.io.Source
 
 import cats.syntax.all.*
 import alleycats.std.set.*
-import cats.Show
 
 // This code was mostly written in 2022, and ported to fit this new repo's model
 object Day19 extends Problem:

@@ -5,7 +5,6 @@ import scala.collection.mutable
 import scala.io.Source
 import scala.util.chaining.*
 import gay.menkissing.common.*
-import cats.Show
 
 object Day07 extends Problem:
   type Input = Seq[Command]

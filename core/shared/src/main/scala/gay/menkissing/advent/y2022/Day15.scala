@@ -3,12 +3,10 @@ package y2022
 
 import gay.menkissing.common.*, algebras.given
 
-import scala.collection.mutable as mut
 import cats.collections.{Diet, Range}
 import cats.collections.syntax.range.*
 import cats.syntax.all.*
 import cats.data.Chain
-import cats.Show
 
 // TODO: Unacceptably slow on JS
 object Day15 extends Problem:

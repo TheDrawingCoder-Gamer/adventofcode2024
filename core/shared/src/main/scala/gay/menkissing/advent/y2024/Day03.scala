@@ -1,8 +1,6 @@
 package gay.menkissing.advent
 package y2024
 
-import cats.Show
-
 object Day03 extends Problem:
   type Input = String
   type Output = Int

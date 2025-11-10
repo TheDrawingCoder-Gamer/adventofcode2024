@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2022
 
 import gay.menkissing.common.ArityN.*
-import cats.Show
 
 object Day03 extends Problem:
   type Input = List[Rucksack]

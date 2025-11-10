@@ -4,7 +4,6 @@ package y2021
 import cats.syntax.all.*
 
 import scala.annotation.tailrec
-import cats.Show
 
 object Day02 extends Problem:
   type Input = List[(Dir, Int)]

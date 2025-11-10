@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2024
 
 import gay.menkissing.common.ArityN.*
-import cats.Show
 
 object Day02 extends Problem:
 

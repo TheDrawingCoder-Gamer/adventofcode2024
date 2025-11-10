@@ -6,7 +6,6 @@ import gay.menkissing.common.*
 import scala.annotation.tailrec
 
 import collection.mutable
-import cats.Show
 
 object Day10 extends Problem:
   type Input = String

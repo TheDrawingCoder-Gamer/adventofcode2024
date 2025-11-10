@@ -3,7 +3,6 @@ package y2021
 
 import cats.implicits.*
 import cats.syntax.all.*
-import cats.Show
 
 object Day08 extends Problem:
   type Input = List[(List[Int], List[Int])]

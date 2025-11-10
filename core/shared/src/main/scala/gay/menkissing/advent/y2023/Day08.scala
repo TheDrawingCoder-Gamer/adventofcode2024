@@ -4,7 +4,6 @@ package y2023
 import gay.menkissing.common.*, algebras.given
 import collection.mutable
 import cats.data.Chain
-import cats.Show
 import algebra.ring.EuclideanRing
 
 object Day08 extends Problem:

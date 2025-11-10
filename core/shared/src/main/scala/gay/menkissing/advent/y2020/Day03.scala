@@ -1,8 +1,6 @@
 package gay.menkissing.advent
 package y2020
 
-import cats.Show
-
 object Day03 extends Problem:
   type Input = Vector[Vector[Boolean]]
   type Output = Long

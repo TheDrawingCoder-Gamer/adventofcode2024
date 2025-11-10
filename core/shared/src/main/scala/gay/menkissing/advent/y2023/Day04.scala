@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2023
 
 import scala.collection.mutable
-import cats.Show
 
 object Day04 extends Problem:
   type Input = List[Scratchcard]
