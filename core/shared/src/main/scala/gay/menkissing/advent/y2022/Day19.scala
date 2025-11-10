@@ -59,7 +59,6 @@ object Day19 extends Problem:
           case "ore"      => ore = c
           case "clay"     => clay = c
           case "obsidian" => obsidian = c
-          case _          => whatTheScallop.!
       Minerals(ore, clay, obsidian, 0)
 
   // Because we can only build 1 robot each step,
@@ -103,7 +102,6 @@ object Day19 extends Problem:
             Cost(obsidianOre.toInt, obsidianClay.toInt, 0),
             Cost(geodeOre.toInt, 0, geodeObsidian.toInt)
           )
-        case _ => whatTheScallop.!
 
   sealed trait Robot:
     val stateRobotLens: Lens[PState, Int]

@@ -33,13 +33,13 @@ object Day14 extends Problem:
       val middleY = (size.y / 2)
 
       robots.groupBy: robot =>
-        (robot.pos.x.compareTo(middleX), robot.pos.y.compareTo(middleY)) match
+        (robot.pos.x.compareTo(middleX), robot.pos.y.compareTo(middleY))
+          .runtimeChecked match
           case (0, _) | (_, 0) => -1
           case (1, -1)         => 0
           case (-1, -1)        => 1
           case (-1, 1)         => 2
           case (1, 1)          => 3
-          case _               => whatTheScallop.!
       .removed(-1).values.map(_.length).product
     def pretty: String =
       val grid = robots.robotMap
@@ -68,8 +68,7 @@ object Day14 extends Problem:
 
   override def parse(str: String): List[Robot] =
     str.linesIterator.map:
-      case s"p=$px,$py v=$vx,$vy" =>
-        Robot(Vec2(px.toInt, py.toInt), Vec2(vx.toInt, vy.toInt))
+      case s"p=${Vec2[Int](p)} v=${Vec2[Int](v)}" => Robot(p, v)
     .toList
 
   // given size: GridSize = GridSize(11, 7)

@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2015
 
 import gay.menkissing.common.Vec2
-import cats.Show
 object Day06 extends Problem:
   type Input = List[Instruction]
   type Output = Int

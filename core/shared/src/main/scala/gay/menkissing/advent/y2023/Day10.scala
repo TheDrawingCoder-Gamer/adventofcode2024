@@ -28,28 +28,30 @@ object Day10 extends Problem:
 
     given Show[Pipe] =
       pipe =>
-        (pipe.conn1, pipe.conn2) match
+        (pipe.conn1, pipe.conn2).runtimeChecked match
           case (Direction2D.Up, Direction2D.Down)    => "|"
           case (Direction2D.Left, Direction2D.Right) => "-"
           case (Direction2D.Up, Direction2D.Right)   => "L"
           case (Direction2D.Up, Direction2D.Left)    => "J"
           case (Direction2D.Down, Direction2D.Left)  => "7"
           case (Direction2D.Down, Direction2D.Right) => "F"
-          case _                                     => whatTheScallop.!
   def parse(str: String): (Grid[Option[Day10.Pipe]], Vec2[Int]) =
+    var start = Vec2(-1, -1)
     val grid =
-      Grid.fromString(str):
-        case '.' => None
-        case '|' => Some(Pipe(Direction2D.Up, Direction2D.Down))
-        case '-' => Some(Pipe(Direction2D.Left, Direction2D.Right))
-        case 'L' => Some(Pipe(Direction2D.Up, Direction2D.Right))
-        case 'J' => Some(Pipe(Direction2D.Up, Direction2D.Left))
-        case '7' => Some(Pipe(Direction2D.Down, Direction2D.Left))
-        case 'F' => Some(Pipe(Direction2D.Down, Direction2D.Right))
+      Grid.fromStringWithIndex[Option[Pipe]](str):
+        case (_, '.') => None
+        case (_, '|') => Some(Pipe(Direction2D.Up, Direction2D.Down))
+        case (_, '-') => Some(Pipe(Direction2D.Left, Direction2D.Right))
+        case (_, 'L') => Some(Pipe(Direction2D.Up, Direction2D.Right))
+        case (_, 'J') => Some(Pipe(Direction2D.Up, Direction2D.Left))
+        case (_, '7') => Some(Pipe(Direction2D.Down, Direction2D.Left))
+        case (_, 'F') => Some(Pipe(Direction2D.Down, Direction2D.Right))
         // HACK : ( this makes me sad
-        case 'S' => null
-        case _   => whatTheScallop.!
-    (grid, grid.indexWhere(_ == null).getOrElse(whatTheScallop.!))
+        case (v, 'S') =>
+          start = v
+          None
+        case _ => !!!
+    (grid, start)
 
   // LOOP TUAH THAT THANG!!!!!!
   def searchLoop
@@ -58,7 +60,7 @@ object Day10 extends Problem:
       start: Vec2[Int]
     ): Map[Vec2[Int], Int] =
     val visited = mutable.Map[Vec2[Int], Int]()
-    val dirs = grid(start).getOrElse(whatTheScallop.!)
+    val dirs = grid(start).get
     def advance
       (
         cur: Vec2[Int],
@@ -68,7 +70,7 @@ object Day10 extends Problem:
       visited.updateWith(cur):
         case Some(v) => Some(math.min(v, i))
         case None    => Some(i)
-      val dir = grid(cur).getOrElse(whatTheScallop.!).exit(enteredFrom)
+      val dir = grid(cur).get.exit(enteredFrom)
       val newCur = cur.offset(dir)
       Option.when(newCur != start && visited(cur) == i)(
         (newCur, dir.reverse, i + 1)

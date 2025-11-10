@@ -33,7 +33,6 @@ object Day16 extends Problem:
             case 5 => if vs(0) > vs(1) then 1L else 0L
             case 6 => if vs(0) < vs(1) then 1L else 0L
             case 7 => if vs(0) == vs(1) then 1L else 0L
-            case _ => whatTheScallop.!
 
   lazy val input = FileIO.getInput(2021, 16)
 
@@ -121,7 +120,6 @@ object Day16 extends Problem:
                 curBit = res._1
                 packets.addOne(res._2)
               packets.result()
-            case _ => whatTheScallop.!
         debugger.assert(packets.nonEmpty)
         if op >= 5 then debugger.assert(packets.length == 2)
         (curBit, Packet(version, PacketKind.Operator(op, packets)))

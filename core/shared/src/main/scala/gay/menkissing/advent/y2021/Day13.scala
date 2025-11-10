@@ -13,11 +13,10 @@ object Day13 extends ProblemAdv:
   lazy val input = FileIO.getInput(2021, 13)
 
   def parse(str: String): (Set[Vec2[Int]], List[Fold]) =
-    val Array(dots, folds) = str.trim.split("\n\n").toArray: @unchecked
+    val Array(dots, folds) = str.trim.split("\n\n").toArray.runtimeChecked
     val goodDots =
       dots.linesIterator.map:
-        case s"$x,$y" => Vec2(x.toInt, y.toInt)
-        case _        => whatTheScallop.!
+        case Read[Vec2[Int]](vec2) => vec2
       .toSet
     val goodFolds =
       folds.linesIterator.map:

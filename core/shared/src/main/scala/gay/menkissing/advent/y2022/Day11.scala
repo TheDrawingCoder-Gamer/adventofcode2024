@@ -6,7 +6,6 @@ import gay.menkissing.common.repeat
 import scala.collection.mutable as mut
 import scala.io.Source
 import scala.math.BigInt
-import gay.menkissing.common.whatTheScallop
 import cats.Show
 
 // I totally forgot why this works - figure it out later!
@@ -41,7 +40,7 @@ object Day11 extends Problem:
   def parse(str: String): Vector[Monkey] =
     str.split("\n\n").map: it =>
       val xs = it.trim.linesIterator.toVector
-      xs.map(_.trim) match
+      xs.map(_.trim).runtimeChecked match
         case Vector(
               s"Monkey $name:",
               s"Starting items:$startingItems",
@@ -57,9 +56,7 @@ object Day11 extends Problem:
                   op match
                     case "*" => MonkeyOp.Multiply.apply
                     case "+" => MonkeyOp.Addition.apply
-                    case _   => whatTheScallop.!
                 cons(l.toLongOption, r.toLongOption)
-              case _ => whatTheScallop.!
 
           Monkey(
             name.toInt,
@@ -69,7 +66,6 @@ object Day11 extends Problem:
             trueMonkey.toInt,
             falseMonkey.toInt
           )
-        case _ => whatTheScallop.!
     .toVector
 
   def calculate(monkeys: Vector[Monkey], sanityLoss: Int, rounds: Int): Long =

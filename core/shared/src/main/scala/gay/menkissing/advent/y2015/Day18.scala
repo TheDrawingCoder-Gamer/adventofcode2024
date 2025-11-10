@@ -15,7 +15,6 @@ object Day18 extends Problem:
     Grid.fromString(str):
       case '.' => false
       case '#' => true
-      case _   => whatTheScallop.!
 
   def setCorners(grid: Grid[Boolean]): Grid[Boolean] =
     grid.updated(0, 0)(true).updated(grid.width - 1, 0)(true)

@@ -28,3 +28,6 @@ trait IsDirectionN[A]:
     def axisId: Int
     def axis: Axis = axisNAxis.fromIndex(self.axisId)
     def axisDirection: AxisDirection
+
+object IsDirectionN:
+  type VecAux[A, V[_]] = IsDirectionN[A] { type Vec = V }

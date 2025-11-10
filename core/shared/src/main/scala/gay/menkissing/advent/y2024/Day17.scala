@@ -62,8 +62,7 @@ object Day17 extends ProblemAdv, FormatP1:
           case 4 => regA
           case 5 => regB
           case 6 => regC
-          case 7 => whatTheScallop.!
-          case _ => whatTheScallop.!
+          case 7 => !!!
       opcode match
         // adv
         // this is the only place that regA gets set :thinking:

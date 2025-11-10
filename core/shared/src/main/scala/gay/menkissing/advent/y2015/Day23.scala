@@ -12,12 +12,10 @@ object Day23 extends Problem:
       c match
         case 'a' => a
         case 'b' => b
-        case _   => whatTheScallop.!
     def updateRegister(c: Char, f: Int => Int): State =
       c match
         case 'a' => copy(a = f(a))
         case 'b' => copy(b = f(b))
-        case _   => whatTheScallop.!
     def incrPC: State = copy(pc = pc + 1)
     def jump(offset: Int): State = copy(pc = pc + offset)
 

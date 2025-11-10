@@ -17,7 +17,6 @@ object Day17 extends Problem:
     str.trim match
       case s"target area: x=$mnx..$mxx, y=$mny..$mxy" =>
         AABB2D(mnx.toInt dimBy mxx.toInt, mny.toInt dimBy mxy.toInt)
-      case _ => whatTheScallop.!
 
   def willBeInRange(input: AABB2D[Int], initVelocity: Vec2[Int]): Boolean =
     val validRange =

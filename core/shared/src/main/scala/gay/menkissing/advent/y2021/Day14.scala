@@ -17,7 +17,6 @@ object Day14 extends Problem:
     val goodPats =
       patterns.linesIterator.map:
         case s"$a -> $b" => (a(0), a(1)) -> b.head
-        case _           => whatTheScallop.!
       .toMap
     (template.trim, goodPats)
 

@@ -49,6 +49,13 @@ trait VecN[V[_]] extends BareVecN[V]:
       (using dirN: IsDirectionN[D] { type Vec = V }, ring: Ring[A]): V[A] =
       self + d.digitalDir * n
 
+    def offset[D]
+      (d: D)
+      (using dirN: IsDirectionN.VecAux[D, V], ring: Ring[A]): V[A] =
+      self + d.digitalDir
+
+    def cardinalNeighbors(using ring: Ring[A]): List[V[A]]
+
     def allNeighbors(using ring: Ring[A], eq: Eq[A]): List[V[A]]
     final infix def dot(that: V[A])(using ring: Ring[A]): A =
       self.axes.zip(that.axes).map((l, r) => ring.times(l, r)).reduce(ring.plus)
@@ -85,6 +92,62 @@ object VecN:
     Type.of[Elems] match
       case '[elem *: elems] => 1 + countTuple[elems]
       case '[EmptyTuple]    => 0
+
+  type CardinalNeighborsFunc[
+    V[_]
+  ] = [A] => V[A] => (Ring[A]) ?=> List[V[A]]
+
+  private def implCardinalNeighbors[T[_]]
+    (body: (T[Any], Ring[Any]) => List[T[Any]]): CardinalNeighborsFunc[T] =
+    [A] =>
+      (self: T[A]) =>
+        (ring: Ring[A]) ?=>
+          body(
+            self.asInstanceOf[T[Any]],
+            ring.asInstanceOf[Ring[Any]]
+          ).asInstanceOf[List[T[A]]]
+
+  def defaultCardinalNeighborsMacro[T[_]: Type]
+    (using Quotes): Expr[
+    CardinalNeighborsFunc[T]
+  ] =
+    val ev: Expr[Mirror.ProductOf[T[Any]]] =
+      Expr.summon[Mirror.ProductOf[T[Any]]].get
+
+    ev match
+      case '{
+            $m: Mirror.ProductOf[T[Any]] {
+              type MirroredElemTypes = elementTypes
+            }
+          } =>
+        val size = countTuple[elementTypes]
+        def body
+          (x: Expr[Product], ring: Expr[Ring[Any]])
+          (using Quotes): Expr[List[T[Any]]] =
+          val accessors = (0 until size).map: i =>
+            val indexExpr = Expr(i)
+            '{ $x.productElement($indexExpr) }
+          .toList
+          Expr.ofList:
+            accessors.map: e =>
+              List(
+                '{ $ring.minus($e, $ring.one) },
+                '{ $ring.plus($e, $ring.one) }
+              )
+            .zipWithIndex.flatMap: (es, idx) =>
+              es.map: e1 =>
+                val tp =
+                  Expr.ofTupleFromSeq(
+                    accessors.zipWithIndex
+                      .map((e2, j) => if idx == j then e1 else e2)
+                  )
+                '{ $m.fromProduct($tp) }
+
+        '{
+          implCardinalNeighbors[T]((expr: T[Any], ring: Ring[Any]) =>
+            ${ body('expr.asExprOf[Product], 'ring) }
+          )
+        }
 
   private def implAllNeighbors[T[_]]
     (body: (T[Any], Ring[Any]) => List[T[Any]]): AllNeighborsSignature[T] =
@@ -143,12 +206,6 @@ object VecN:
           )
         }
 
-  inline def defaultAllNeighbors[T[_]]
-    (using
-      m: Mirror.ProductOf[T[Any]],
-      homo: Macros.TupleIsHomo[m.MirroredElemTypes]
-    ): AllNeighborsSignature[T] = ${ defaultAllNeighborsMacro[T] }
-
   type MapSignature[V[_]] = [A] => V[A] => (A => A) => V[A]
 
   private def implMap[T[_]]
@@ -184,11 +241,6 @@ object VecN:
             ${ body('t.asExprOf[Product], 'f) }
           )
         }
-  inline def defaultMap[T[_]]
-    (using
-      m: Mirror.ProductOf[T[Any]],
-      homo: Macros.TupleIsHomo[m.MirroredElemTypes]
-    ): MapSignature[T] = ${ defaultMapMacro[T] }
 
   type ZipSignature[V[_]] = [A] => V[A] => V[A] => ((A, A) => A) => V[A]
 
@@ -242,12 +294,6 @@ object VecN:
             ${ body('self.asExprOf[Product], 'that.asExprOf[Product], 'f) }
           )
         }
-
-  inline def defaultZip[T[_]]
-    (using
-      m: Mirror.ProductOf[T[Any]],
-      homo: Macros.TupleIsHomo[m.MirroredElemTypes]
-    ): ZipSignature[T] = ${ defaultZipMacro[T] }
 
   type AxesSignature[T[_]] = [A] => T[A] => Vector[A]
 
@@ -325,11 +371,6 @@ object VecN:
             ${ body('self.asExprOf[Product], 'i, 'v) }
           )
         }
-  inline def defaultWithCoord[T[_]]
-    (using
-      m: Mirror.ProductOf[T[Any]],
-      homo: Macros.TupleIsHomo[m.MirroredElemTypes]
-    ): WithCoordFunc[T] = ${ withCoordMacro[T] }
   type CoordFunc[V[_]] = [A] => V[A] => Int => A
   private def implCoord[T[_]](body: (T[Any], Int) => Any): CoordFunc[T] =
     [A] =>
@@ -357,13 +398,6 @@ object VecN:
             ${ body('self.asExprOf[Product], 'i) }
           )
         }
-  def defaultCoord[T[_] <: Product]
-    (using
-      m: Mirror.ProductOf[T[Any]],
-      homo: Macros.TupleIsHomo[m.MirroredElemTypes]
-    ): CoordFunc[
-    T
-  ] = [A] => (self: T[A]) => (i: Int) => self.productElement(i).asInstanceOf[A]
 
   type AxisFunc[V[_]] = [A] => Int => Ring[A] ?=> V[A]
   private def implAxis[T[_]](body: (Int, Ring[Any]) => T[Any]): AxisFunc[T] =
@@ -400,6 +434,7 @@ object VecN:
 
   def derivedMacro[T[_]: Type](using Quotes): Expr[VecN[T]] =
     val allNeighborsM = defaultAllNeighborsMacro[T]
+    val cardinalNeighborsM = defaultCardinalNeighborsMacro[T]
     val mapM = defaultMapMacro[T]
     val zipM = defaultZipMacro[T]
     val axisM = defaultAxisMacro[T]
@@ -426,6 +461,8 @@ object VecN:
             extension [A](self: T[A])
               def allNeighbors(using ring: Ring[A], eq: Eq[A]): List[T[A]] =
                 $allNeighborsM[A](self)
+              def cardinalNeighbors(using ring: Ring[A]): List[T[A]] =
+                $cardinalNeighborsM[A](self)
               def map(f: A => A): T[A] = $mapM[A](self)(f)
               def zip(that: T[A])(f: (A, A) => A): T[A] =
                 $zipM[A](self)(that)(f)

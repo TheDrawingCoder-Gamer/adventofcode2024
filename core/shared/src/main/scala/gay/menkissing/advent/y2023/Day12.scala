@@ -18,11 +18,9 @@ object Day12 extends Problem:
             case '.' => Some(false)
             case '#' => Some(true)
             case '?' => None
-            case _   => whatTheScallop.!
           .toList,
           is.split(",").map(_.toInt).toList
         )
-      case _ => whatTheScallop.!
     .toList
 
   val count: (List[Option[Boolean]], List[Int], Int) => Long =

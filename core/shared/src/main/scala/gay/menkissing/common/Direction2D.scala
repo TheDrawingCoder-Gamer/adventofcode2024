@@ -52,12 +52,11 @@ object Direction2D:
     type Vec[A] = Vec2[A]
     given vecNVec: VecN[Vec] = summon
     def fromDirectionN(d: DirectionN): Direction2D =
-      (d.axis, d.direction) match
+      (d.axis, d.direction).runtimeChecked match
         case (0, AxisDirection.Negative) => Direction2D.Left
         case (0, AxisDirection.Positive) => Direction2D.Right
         case (1, AxisDirection.Negative) => Direction2D.Up
         case (1, AxisDirection.Positive) => Direction2D.Down
-        case _                           => whatTheScallop.!
 
     extension (self: Direction2D)
       def axisId: Int =

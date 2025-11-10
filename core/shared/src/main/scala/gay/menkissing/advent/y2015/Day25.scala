@@ -14,7 +14,6 @@ object Day25 extends HalfDay:
     str.trim match
       case s"To continue, please consult the code grid in the manual.  Enter the code at row $y, column $x." =>
         Vec2(x.toInt, y.toInt)
-      case _ => whatTheScallop.!
 
   def sumtorial(p: Int): Int = IntSequences.triangleNumber(p).toInt
 

@@ -34,13 +34,18 @@ object Day05 extends Problem:
             (start.x to end.x by math.signum(end.x - start.x)).toList,
             (start.y to end.y by math.signum(end.y - start.y)).toList
           ).parMapN(Vec2.apply).toSet
+  object Line:
+    def unapply(str: String): Option[Line] =
+      str match
+        case s"${Vec2[Int](start)} -> ${Vec2[Int](stop)}" =>
+          Some(Line(start, stop))
+        case _ => None
   enum LineOrientation:
     case Horizontal, Vertical, Diagonal, Point
 
   def parse(input: String): List[Line] =
     input.linesIterator.map:
-      case s"$x1,$y1 -> $x2,$y2" =>
-        Line(Vec2(x1.toInt, y1.toInt), Vec2(x2.toInt, y2.toInt))
+      case Line(line) => line
     .toList
 
   extension [A, B](map: Map[A, B])

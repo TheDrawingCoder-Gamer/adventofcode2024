@@ -33,7 +33,6 @@ object Day07 extends Problem:
     str.linesIterator.map:
       case s"$a: $nums" =>
         Equation(a.toLong, nums.trim.split(' ').map(_.toLong).toList)
-      case _ => whatTheScallop.!
     .toList
 
   def combinationsOfGeneric(n: Int, availableChars: Seq[Char]): Seq[String] =

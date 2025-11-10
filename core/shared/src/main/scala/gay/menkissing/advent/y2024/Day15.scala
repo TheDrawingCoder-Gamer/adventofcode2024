@@ -173,7 +173,7 @@ object Day15 extends Problem:
     val sides = str.split("\n\n")
     var robotPos = Vec2(-1, -1)
     val grid =
-      Grid.fromStringWithIndex(sides(0)):
+      Grid.fromStringWithIndex[GridItem](sides(0)):
         case (_, '#') => GridItem.Wall
         case (_, 'O') => GridItem.Box
         case (_, '.') => GridItem.Empty
@@ -181,14 +181,13 @@ object Day15 extends Problem:
           assert(robotPos == Vec2(-1, -1))
           robotPos = v
           GridItem.Empty
-        case _ => whatTheScallop.!
+        case _ => !!!
     val dirs =
       sides(1).linesIterator.flatten.map:
         case '<' => Direction2D.Left
         case '^' => Direction2D.Up
         case '>' => Direction2D.Right
         case 'v' => Direction2D.Down
-        case _   => ???
 
     ProblemState(grid, robotPos, dirs.toList)
 

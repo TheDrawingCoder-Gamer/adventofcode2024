@@ -58,7 +58,6 @@ object Day15 extends Problem:
     input.linesIterator.map:
       case s"Sensor at x=$sx, y=$sy: closest beacon is at x=$bx, y=$by" =>
         SensorRanged(Vec2(sx.toInt, sy.toInt), Vec2(bx.toInt, by.toInt))
-      case _ => whatTheScallop.!
     .toSet
 
   val max = 4000000

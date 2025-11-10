@@ -114,7 +114,7 @@ object Day14 extends Problem:
       input.linesIterator.map: it =>
         Pathway:
           it.split("->").map(_.trim).map:
-            case s"$l,$r" => Vec2(l.toInt, r.toInt)
+            case Vec2[Int](v) => v
           .toList
       .toVector
     val goodData = data.flatMap(_.bake).toSet

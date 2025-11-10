@@ -12,55 +12,7 @@ object Sys3D:
       val parts = str.split(',')
       Vec3(parts(0).toInt, parts(1).toInt, parts(2).toInt)
 
-  object Vec3:
-
-    given vecNVec3: VecN[Vec3] with
-      def dimensions: Int = 3
-
-      override def axis[A](i: Int)(using ring: Ring[A]): Vec3[A] =
-        i match
-          case 0 => Vec3(ring.one, ring.zero, ring.zero)
-          case 1 => Vec3(ring.zero, ring.one, ring.zero)
-          case 2 => Vec3(ring.zero, ring.zero, ring.one)
-          case _ => whatTheScallop.!
-
-      extension [A](self: Vec3[A])
-        def axes: Vector[A] = Vector(self.x, self.y, self.z)
-        override def zip(that: Vec3[A])(f: (A, A) => A): Vec3[A] =
-          Vec3(f(self.x, that.x), f(self.y, that.y), f(self.z, that.z))
-        override def map(f: A => A): Vec3[A] =
-          Vec3(f(self.x), f(self.y), f(self.z))
-
-        override def allNeighbors
-          (using ring: Ring[A], eq: Eq[A]): List[Vec3[A]] =
-          VecN.defaultAllNeighbors[Vec3](self)
-        override def coord(i: Int): A =
-          i match
-            case 0 => self.x
-            case 1 => self.y
-            case 2 => self.z
-            case _ => whatTheScallop.!
-
-        override def withCoord(i: Int, v: A): Vec3[A] =
-          i match
-            case 0 => self.copy(x = v)
-            case 1 => self.copy(y = v)
-            case 2 => self.copy(z = v)
-  final case class Vec3[A](x: A, y: A, z: A):
-
-    def offset(dir: Direction3D, n: A)(using add: AdditiveGroup[A]): Vec3[A] =
-      val v =
-        dir.axisDirection match
-          case AxisDirection.Positive => n
-          case AxisDirection.Negative => add.negate(n)
-      dir.axis match
-        case Axis3D.X => Vec3(x + v, y, z)
-        case Axis3D.Y => Vec3(x, y + v, z)
-        case Axis3D.Z => Vec3(x, y, z + v)
-
-    def offset(dir: Direction3D)(using add: Ring[A]): Vec3[A] =
-      offset(dir, add.one)
-
+  final case class Vec3[A](x: A, y: A, z: A) derives VecN:
     // facing default North
     def face(dir: Direction3D)(using add: AdditiveGroup[A]): Vec3[A] =
       dir match
@@ -151,14 +103,13 @@ object Sys3D:
 
       given vecNVec: VecN[Vec3] = summon
       def fromDirectionN(d: DirectionN): Direction3D =
-        (d.axis, d.direction) match
+        (d.axis, d.direction).runtimeChecked match
           case (0, AxisDirection.Negative) => Direction3D.West
           case (0, AxisDirection.Positive) => Direction3D.East
           case (1, AxisDirection.Negative) => Direction3D.Down
           case (1, AxisDirection.Positive) => Direction3D.Up
           case (2, AxisDirection.Negative) => Direction3D.South
           case (2, AxisDirection.Positive) => Direction3D.North
-          case _                           => whatTheScallop.!
       extension (self: Direction3D)
         def axisId: Int =
           self match

@@ -1,25 +1,26 @@
 package gay.menkissing.common
 
 import scala.annotation.tailrec
-import scala.collection.mutable as mut
+import scala.collection.mutable
 import math.Numeric
 
 import cats.*
 import cats.implicits.*
 import cats.data.Kleisli
 import cats.data.NonEmptyList
+import scala.annotation.targetName
 
 def topologicalSort[A]
   (a: List[A])
   (using pord: PartialOrder[A]): Option[List[A]] =
   var unsorted = a.toBuffer
-  val sorted = mut.Buffer[A]()
+  val sorted = mutable.Buffer[A]()
 
   def hasIncomingNode(n: A): Boolean = unsorted.exists(it => pord.lt(it, n))
   def nodeEnters(inc: A, n: A): Boolean = pord.lt(inc, n)
 
-  val startNodes: mut.Set[A] =
-    a.filterNot(hasIncomingNode).iterator.to(mut.Set.iterableFactory)
+  val startNodes: mutable.Set[A] =
+    a.filterNot(hasIncomingNode).iterator.to(mutable.Set.iterableFactory)
 
   while startNodes.nonEmpty do
     val n = startNodes.head
@@ -57,14 +58,14 @@ def prettyCharForNum(num: Int): Char =
 
 def logBaseN(n: Double, base: Double): Double = math.log(n) / math.log(base)
 
-extension [A, B](map: mut.Map[A, B])
+extension [A, B](map: mutable.Map[A, B])
   def memo(in: A)(func: => B): B = map.getOrElseUpdate(in, func)
 
 private def bfsImpl[A, B, C]
   (a: A, z: C, append: (C, B) => C)
   (f: A => Either[Iterable[A], B]): C =
   var result = z
-  val queue = mut.Queue(a)
+  val queue = mutable.Queue(a)
   while queue.nonEmpty do
     f(queue.dequeue()) match
       case Right(r)     => result = append(result, r)
@@ -168,5 +169,6 @@ extension [A](self: Array[A])
   def collectFirstSome[B](f: A => Option[B]): Option[B] =
     self.collectFirst(Function.unlift(f))
 
-object whatTheScallop:
-  def ! : Nothing = throw AssertionError("WHAT THE SCALLOP?!?")
+class ThisShouldntHappenError(val why: String) extends RuntimeException
+
+def !!! : Nothing = throw ThisShouldntHappenError("This shouldn't happen")

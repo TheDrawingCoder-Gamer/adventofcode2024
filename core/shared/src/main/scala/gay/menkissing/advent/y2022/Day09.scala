@@ -45,7 +45,7 @@ object Day09 extends Problem:
 
         val r = correctTail(newHead :: next)
         (r, r)
-      case _ => whatTheScallop.!
+      case _ => !!!
 
   def moveN(dir: Direction2D, n: Int): Day9State[List[List[Vec2[Int]]]] =
     move(dir).replicateA(n)
@@ -62,7 +62,6 @@ object Day09 extends Problem:
             case 'U' => Direction2D.Up
             case 'D' => Direction2D.Down
             case 'L' => Direction2D.Left
-            case _   => whatTheScallop.!
         Movement(dir, n.toInt)
     .toList
 

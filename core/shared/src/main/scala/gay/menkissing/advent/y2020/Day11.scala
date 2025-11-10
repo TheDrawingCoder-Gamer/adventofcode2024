@@ -26,8 +26,6 @@ object Day11 extends Problem:
       case '.' => Seat.Floor
       case 'L' => Seat.Empty
       case '#' => Seat.Occupied
-      case _   => whatTheScallop.!
-
   extension (grid: Grid[Seat])
     def lineIsOccupied(start: Vec2[Int])(dir: PrincibleWind2D): Boolean =
       var s = start + dir.digitalDir

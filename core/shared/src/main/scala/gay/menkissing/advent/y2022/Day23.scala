@@ -70,11 +70,7 @@ object Day23 extends Problem:
               .updated(to + Vec2(1, 1))(true)
 
       (daGrid, false)
-  def parse(input: String): ElfGrid =
-    Grid.fromString(input):
-      case '#' => true
-      case '.' => false
-      case _   => whatTheScallop.!
+  def parse(input: String): ElfGrid = Grid.fromString(input)(_ == '#')
   extension (elfGrid: ElfGrid)
     def sliced: Grid[Boolean] =
       val rows = elfGrid.rows

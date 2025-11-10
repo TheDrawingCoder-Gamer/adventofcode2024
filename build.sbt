@@ -123,7 +123,10 @@ lazy val core =
         "dev.optics" %%% "monocle-macro"
       ).map(_ % "3.1.0"),
       // use the syntax that I thought was already in scala 3 by now
-      scalacOptions += "-Xkind-projector:underscores",
+      scalacOptions ++= Seq(
+        "-Xkind-projector:underscores",
+        "-experimental"
+      ),
       // for testing only, won't be enabled when i finalize the commit
       // libraryDependencies +=
       //  "org.scala-lang.modules" %%% "scala-parallel-collections" % "1.2.0",
@@ -147,7 +150,8 @@ lazy val bench =
     .configurePlatform(JVMPlatform)(_.enablePlugins(JmhPlugin)).settings(
       publish / skip := true,
       run / baseDirectory := goodDir,
-      Compile / run / mainClass := Some("gay.menkissing.bench.Main")
+      Compile / run / mainClass := Some("gay.menkissing.bench.Main"),
+      scalacOptions += "-experimental"
     ).jvmSettings(
       Compile / run / fork := true
     ).nativeSettings(

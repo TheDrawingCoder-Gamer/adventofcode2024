@@ -17,7 +17,6 @@ object Day25 extends HalfDay:
       case '>' => Some(Direction2D.Right)
       case 'v' => Some(Direction2D.Down)
       case '.' => None
-      case _   => whatTheScallop.!
 
   extension (self: Grid[?])
     def wrapVec2i(p: Vec2[Int]): Vec2[Int] =

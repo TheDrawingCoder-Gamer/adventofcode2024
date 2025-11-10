@@ -23,7 +23,6 @@ object Day22 extends Problem:
       v match
         case "on"  => On
         case "off" => Off
-        case _     => whatTheScallop.!
 
   lazy val input = FileIO.getInput(2021, 22)
 

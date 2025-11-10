@@ -110,7 +110,6 @@ object Day24 extends Problem:
       case 'v' => BlizzardSpot.one(Direction2D.Down)
       case '<' => BlizzardSpot.one(Direction2D.Left)
       case '>' => BlizzardSpot.one(Direction2D.Right)
-      case _   => whatTheScallop.!
 
   def part1(data: BlizzardMap): Int =
     val state = new State

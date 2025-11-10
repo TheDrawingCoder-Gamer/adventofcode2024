@@ -20,7 +20,7 @@ object Day09 extends Problem:
     input.sliding(26).findMap:
       case Unsnoc(init, last) =>
         Option.when(init.combinationsN[2].forall(_ + _ != last))(last)
-      case _ => whatTheScallop.!
+      case _ => !!!
     .get
 
   def part1(input: Vector[Long]): Long = weakNum(input)

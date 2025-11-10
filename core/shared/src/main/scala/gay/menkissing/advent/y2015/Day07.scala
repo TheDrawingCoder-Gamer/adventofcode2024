@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2015
 
 import scala.collection.mutable
-import cats.Show
 
 object Day07 extends Problem:
   type Input = Map[String, Op]

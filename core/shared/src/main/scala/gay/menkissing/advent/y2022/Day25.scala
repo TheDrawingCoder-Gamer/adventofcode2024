@@ -2,8 +2,7 @@ package gay.menkissing.advent
 package y2022
 
 import scala.annotation.tailrec
-import gay.menkissing.common.whatTheScallop
-import cats.Show
+import gay.menkissing.common.*
 
 object Day25 extends HalfDay:
   type Input = List[Long]
@@ -36,7 +35,6 @@ object Day25 extends HalfDay:
       case 0  => '0'
       case 1  => '1'
       case 2  => '2'
-      case _  => whatTheScallop.!
 
   def decToSnafu(n: Long): String =
     val sunits =

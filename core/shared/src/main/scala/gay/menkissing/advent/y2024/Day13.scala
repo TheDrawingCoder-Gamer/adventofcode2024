@@ -20,9 +20,9 @@ object Day13 extends Problem:
   object CraneMachine:
     def parse(str: String): CraneMachine =
       val lines = str.trim.linesIterator.toArray
-      val s"Button A: X+$xa, Y+$ya" = lines(0): @unchecked
-      val s"Button B: X+$xb, Y+$yb" = lines(1): @unchecked
-      val s"Prize: X=$xp, Y=$yp" = lines(2): @unchecked
+      val s"Button A: X+$xa, Y+$ya" = lines(0).runtimeChecked
+      val s"Button B: X+$xb, Y+$yb" = lines(1).runtimeChecked
+      val s"Prize: X=$xp, Y=$yp" = lines(2).runtimeChecked
       CraneMachine(
         Vec2(xa.toLong, ya.toLong),
         Vec2(xb.toLong, yb.toLong),

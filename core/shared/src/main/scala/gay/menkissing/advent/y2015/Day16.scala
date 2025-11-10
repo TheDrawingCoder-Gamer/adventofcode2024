@@ -40,12 +40,10 @@ object Day16 extends Problem:
       case s"Sue $n: $values" =>
         Aunt(
           n.toInt,
-          values.split(", ").map:
+          values.split(", ").map[(String, Int)]:
             case s"$k: $v" => k -> v.toInt
-            case _         => whatTheScallop.!
           .toMap
         )
-      case _ => whatTheScallop.!
     .toList
 
   def part1(input: List[Aunt]): Int = input.find(_.validP1).get.n

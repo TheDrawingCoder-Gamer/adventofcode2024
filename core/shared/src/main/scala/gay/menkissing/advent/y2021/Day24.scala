@@ -21,7 +21,6 @@ object Day24 extends Problem:
         case "x" => X
         case "y" => Y
         case "z" => Z
-        case _   => whatTheScallop.!
 
   type Operand = Either[Int, Variable]
 

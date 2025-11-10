@@ -4,7 +4,7 @@ package y2022
 import scala.collection.mutable as mut
 import scala.io.Source
 import scala.util.chaining.*
-import gay.menkissing.common.whatTheScallop
+import gay.menkissing.common.*
 import cats.Show
 
 object Day07 extends Problem:
@@ -36,8 +36,6 @@ object Day07 extends Problem:
             files.map:
               case s"dir $dir"    => AFile.Dir(dir)
               case s"$size $name" => AFile.File(name, size.toInt)
-              case _              => whatTheScallop.!
-        case _ => whatTheScallop.!
     // drop cd /
     daSeq.toSeq.drop(1)
 
@@ -57,7 +55,7 @@ object Day07 extends Problem:
           case it: FSDir =>
             parents.prepend(workingOn)
             workingOn = it
-          case _ => whatTheScallop.!
+          case _ => !!!
         node.getOrElse:
           val newOne = FSDir(0, to, mut.ListBuffer())
           workingOn.children += newOne

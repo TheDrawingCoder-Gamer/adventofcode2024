@@ -28,8 +28,6 @@ object Day16 extends Problem:
       case s"Valve $room has flow rate=$n; tunnel$_ lead$_ to valve$_ $rest" =>
         val goodRest = rest.split(",").map(_.trim).toVector
         ValveRoom(room, n.toInt, goodRest)
-
-      case _ => whatTheScallop.!
     .map(it => (it.room, it)).toMap
 
   private val distanceMemo = mut.HashMap[String, Int]()
