@@ -72,11 +72,6 @@ object Vec2:
         case 1 => Vec2(ring.zero, ring.one)
         case _ => whatTheScallop.!
 
-    def construct[A](ls: Vector[A]): Vec2[A] =
-      ls match
-        case Vector(x, y) => Vec2(x, y)
-        case _            => whatTheScallop.!
-
     extension [A](self: Vec2[A])
 
       override def coord(i: Int): A =
@@ -90,6 +85,9 @@ object Vec2:
           case 0 => self.copy(x = v)
           case 1 => self.copy(y = v)
           case _ => whatTheScallop.!
+
+      override def allNeighbors(using ring: Ring[A], eq: Eq[A]): List[Vec2[A]] =
+        VecN.defaultAllNeighbors[Vec2](self)
 
       def axes: Vector[A] = Vector(self.x, self.y)
       override def map(f: A => A): Vec2[A] = Vec2(f(self.x), f(self.y))

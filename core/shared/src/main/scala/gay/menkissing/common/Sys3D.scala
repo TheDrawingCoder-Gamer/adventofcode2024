@@ -24,11 +24,6 @@ object Sys3D:
           case 2 => Vec3(ring.zero, ring.zero, ring.one)
           case _ => whatTheScallop.!
 
-      def construct[A](ls: Vector[A]): Vec3[A] =
-        ls match
-          case Vector(x, y, z) => Vec3(x, y, z)
-          case _               => whatTheScallop.!
-
       extension [A](self: Vec3[A])
         def axes: Vector[A] = Vector(self.x, self.y, self.z)
         override def zip(that: Vec3[A])(f: (A, A) => A): Vec3[A] =
@@ -36,6 +31,9 @@ object Sys3D:
         override def map(f: A => A): Vec3[A] =
           Vec3(f(self.x), f(self.y), f(self.z))
 
+        override def allNeighbors
+          (using ring: Ring[A], eq: Eq[A]): List[Vec3[A]] =
+          VecN.defaultAllNeighbors[Vec3](self)
         override def coord(i: Int): A =
           i match
             case 0 => self.x

@@ -1,7 +1,9 @@
 package gay.menkissing.common
 
 import compiletime.*
+import compiletime.ops.int.*
 import scala.deriving.*
+import quoted.*
 
 object Macros:
   private inline def summonSingletonsImpl[T <: Tuple, A]
@@ -23,3 +25,22 @@ object Macros:
 
   inline def summonSingletons[T](using s: Mirror.SumOf[T]): List[T] =
     summonSingletonsImpl[s.MirroredElemTypes, T](constValue[s.MirroredLabel])
+
+  type TupleN[T, N <: Int] =
+    N match
+      case 0    => EmptyTuple
+      case S[n] => T *: TupleN[T, n]
+
+  type TupleIsHomo[T <: Tuple] = T =:= TupleN[Tuple.Head[T], Tuple.Size[T]]
+
+  def countTuple[Elems: Type](using Quotes): Int =
+    Type.of[Elems] match
+      case '[elem *: elems] => 1 + countTuple[elems]
+      case '[EmptyTuple]    => 0
+
+  def countTupleExpr[Elems: Type](using Quotes): Expr[Int] =
+    val size = countTuple[Elems]
+    Expr(size)
+
+  // Tuple size in term, but determined from type instead of term
+  inline def tupleSize[T <: Tuple]: Int = ${ countTupleExpr[T] }

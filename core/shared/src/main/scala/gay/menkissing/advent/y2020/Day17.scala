@@ -13,16 +13,7 @@ object Day17 extends Problem:
   type Input = Set[Vec3[Int]]
   type Output = Int
 
-  case class Vec4[A](x: A, y: A, z: A, w: A)
-  given VecN[Vec4] with
-    def dimensions: Int = 4
-
-    def construct[A](ls: Vector[A]): Vec4[A] =
-      ls match
-        case Vector(x, y, z, w) => Vec4(x, y, z, w)
-        case _                  => whatTheScallop.!
-    extension [A](self: Vec4[A])
-      def axes: Vector[A] = Vector(self.x, self.y, self.z, self.w)
+  case class Vec4[A](x: A, y: A, z: A, w: A) derives VecN
 
   lazy val input = FileIO.getInput(2020, 17)
   def parse(str: String): Input =
