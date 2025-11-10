@@ -3,7 +3,6 @@ package y2023
 
 import cats.*
 import cats.syntax.all.*
-import scala.io.Source
 import scala.util.matching.Regex
 import gay.menkissing.common.*
 

@@ -5,7 +5,6 @@ import gay.menkissing.common.*
 
 import scala.annotation.tailrec
 import scala.collection.immutable.BitSet
-import scala.collection.{AbstractIterator, mutable as mut}
 
 object Day23 extends ProblemAdv:
   type Input = LANConnections

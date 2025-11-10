@@ -5,7 +5,6 @@ import gay.menkissing.common.*, ArityN.*, Sys3D.*, algebras.given
 
 import scala.annotation.tailrec
 import scala.collection.mutable
-import scala.io.Source
 
 import cats.syntax.all.*
 import alleycats.std.set.*

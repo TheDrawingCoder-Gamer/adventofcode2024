@@ -4,7 +4,6 @@ package y2024
 import gay.menkissing.common.*
 
 import scala.annotation.tailrec
-import scala.collection.mutable as mut
 
 import algebra.instances.all.*
 

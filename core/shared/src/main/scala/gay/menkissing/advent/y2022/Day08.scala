@@ -3,7 +3,6 @@ package y2022
 
 import gay.menkissing.common.*
 
-import scala.io.Source
 import scala.math.Ordering
 object Day08 extends Problem:
   type Input = Grid[Int]

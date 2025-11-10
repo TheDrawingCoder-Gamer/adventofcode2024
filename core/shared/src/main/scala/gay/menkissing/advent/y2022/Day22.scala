@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2022
 
 import gay.menkissing.common.*
-import scala.collection.mutable as mut
 import cats.syntax.all.*
 import algebra.instances.all.*
 

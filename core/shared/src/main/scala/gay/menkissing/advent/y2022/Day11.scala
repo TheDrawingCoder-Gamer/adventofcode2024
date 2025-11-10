@@ -4,7 +4,6 @@ package y2022
 import gay.menkissing.common.repeat
 
 import scala.collection.mutable
-import scala.io.Source
 import scala.math.BigInt
 
 // I totally forgot why this works - figure it out later!

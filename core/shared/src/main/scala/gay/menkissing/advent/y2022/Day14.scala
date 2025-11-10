@@ -6,8 +6,6 @@ import ArityN.*
 import algebra.instances.all.*
 
 import scala.annotation.tailrec
-import scala.collection.mutable as mut
-import scala.io.Source
 
 object Day14 extends Problem:
   type Input = SparseCaveGrid

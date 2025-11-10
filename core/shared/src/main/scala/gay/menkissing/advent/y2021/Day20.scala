@@ -3,8 +3,6 @@ package y2021
 
 import gay.menkissing.common.*
 
-import scala.io.Source
-
 object Day20 extends Problem:
   type Input = (Vector[Boolean], Image)
   type Output = Int
