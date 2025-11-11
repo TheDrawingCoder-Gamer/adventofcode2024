@@ -3,7 +3,6 @@ package gay.menkissing.common
 import cats.*
 import cats.syntax.all.*
 import algebra.ring.*
-import algebra.instances.*
 import cats.collections.{Discrete, Range}
 
 final case class Dimension[A] private (min: A, max: A):

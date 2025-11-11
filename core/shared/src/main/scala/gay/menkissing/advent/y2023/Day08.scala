@@ -2,8 +2,6 @@ package gay.menkissing.advent
 package y2023
 
 import gay.menkissing.common.*, algebras.given
-import collection.mutable
-import cats.data.Chain
 import algebra.ring.EuclideanRing
 
 object Day08 extends Problem:

@@ -1,12 +1,7 @@
 package gay.menkissing.hash
 
 import gay.menkissing.common.toUInt
-import scala.scalajs.js
-import js.annotation.*
-import js.typedarray.Uint8Array
-import js.JSConverters.*
 
-import java.nio.{ByteBuffer, ByteOrder}
 
 object MD5:
   val s: IArray[Int] =

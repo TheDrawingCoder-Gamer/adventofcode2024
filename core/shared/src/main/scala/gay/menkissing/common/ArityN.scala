@@ -1,7 +1,6 @@
 package gay.menkissing.common
 
 import cats.*
-import cats.syntax.all.*
 import scala.reflect.ClassTag
 
 object ArityN:

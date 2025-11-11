@@ -2,11 +2,9 @@ package gay.menkissing.advent
 package y2020
 
 import cats.*
-import cats.data.State
 import cats.implicits.*
-import gay.menkissing.common.{*, given}
+import gay.menkissing.common.*
 
-import scala.collection.mutable
 
 object Day13 extends Problem:
   type Input = (Int, List[Option[Int]])

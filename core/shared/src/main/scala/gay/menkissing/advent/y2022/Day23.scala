@@ -58,7 +58,7 @@ object Day23 extends Problem:
 
     val daProposals = elfs.filter(_ != _).groupBy(_._2)
     val goodPositions =
-      daProposals.filter(_._2.lengthCompare(1) == 0).map((x, y) => y.head)
+      daProposals.filter(_._2.lengthCompare(1) == 0).map((_, y) => y.head)
     if goodPositions.isEmpty then (grid, true)
     else
       var daGrid = grid.expand(false)(1)

@@ -3,7 +3,6 @@ package y2024
 
 import gay.menkissing.common.*
 
-import scala.annotation.tailrec
 
 import algebra.instances.all.*
 

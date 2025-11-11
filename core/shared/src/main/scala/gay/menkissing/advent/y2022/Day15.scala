@@ -4,9 +4,6 @@ package y2022
 import gay.menkissing.common.*, algebras.given
 
 import cats.collections.{Diet, Range}
-import cats.collections.syntax.range.*
-import cats.syntax.all.*
-import cats.data.Chain
 
 // TODO: Unacceptably slow on JS
 object Day15 extends Problem:

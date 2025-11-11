@@ -1,9 +1,7 @@
 package gay.menkissing.advent
 package y2024
 
-import gay.menkissing.common.*
 
-import scala.annotation.tailrec
 import scala.collection.immutable.BitSet
 
 object Day23 extends ProblemAdv:

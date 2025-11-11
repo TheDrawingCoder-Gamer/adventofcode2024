@@ -1,7 +1,6 @@
 package gay.menkissing.advent
 package y2021
 
-import cats.syntax.all.*
 
 import scala.annotation.tailrec
 

@@ -1,7 +1,6 @@
 package gay.menkissing.advent
 package y2021
 
-import gay.menkissing.common.*
 
 object Day18 extends Problem:
   type Input = SnailfishNum

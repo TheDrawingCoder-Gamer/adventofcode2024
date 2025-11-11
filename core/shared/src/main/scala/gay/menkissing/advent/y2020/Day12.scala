@@ -1,14 +1,9 @@
 package gay.menkissing.advent
 package y2020
 
-import cats.*
-import cats.data.State
-import cats.implicits.*
-import gay.menkissing.common.{*, given}
+import gay.menkissing.common.*
 import gay.menkissing.common.algebras.given
 import Direction2D.isDirectionN2D.*
-
-import scala.collection.mutable
 
 object Day12 extends Problem:
   type Input = List[(Char, Int)]

@@ -1,8 +1,6 @@
 package gay.menkissing.advent
 package y2015
 
-import gay.menkissing.common.*
-
 object Day23 extends Problem:
   type Input = Vector[Instruction]
   type Output = Int

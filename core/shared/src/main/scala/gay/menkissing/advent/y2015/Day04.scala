@@ -1,8 +1,6 @@
 package gay.menkissing.advent
 package y2015
 
-import java.nio.{ByteBuffer, ByteOrder}
-import scala.collection.mutable
 import gay.menkissing.common.*
 
 // this should not have been this hard???

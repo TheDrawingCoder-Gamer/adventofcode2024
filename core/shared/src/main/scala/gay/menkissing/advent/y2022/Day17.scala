@@ -4,7 +4,6 @@ package y2022
 import gay.menkissing.common.*
 
 import collection.mutable
-import annotation.tailrec
 
 object Day17 extends Problem:
   type Input = List[Boolean]
@@ -152,7 +151,7 @@ object Day17 extends Problem:
     val beforeRepeatRockCount = repeatBase.rockCount
     val repeatSizeRocks = extRockCount - beforeRepeatRockCount
 
-    val repeatSizeWind = wind.count - repeatBase.windCount
+    wind.count - repeatBase.windCount
 
     val beforeRepeatChamberHeight = repeatBase.height
     val afterRepeatChamberHeight = chamber.height

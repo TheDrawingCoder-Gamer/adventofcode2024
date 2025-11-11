@@ -1,9 +1,6 @@
 package gay.menkissing.common
 
 // import spire.implicits.*
-import cats.*
-import algebra.ring.*
-import cats.implicits.*
 import annotation.tailrec
 
 extension (self: Byte)

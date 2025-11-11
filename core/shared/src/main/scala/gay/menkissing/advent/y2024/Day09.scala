@@ -13,7 +13,7 @@ object Day09 extends Problem:
   override def parse(str: String): String = str
 
   def unpackData(str: String): Disk =
-    var freakyNum: Long = 0
+    
     Disk(str.zipWithIndex.flatMap: (s, i) =>
       if i % 2 == 0 then Iterator.fill(s.asDigit)((i / 2).toLong)
       else Iterator.fill(s.asDigit)(-1L))

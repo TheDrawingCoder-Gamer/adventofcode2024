@@ -1,7 +1,5 @@
 package gay.menkissing.common
 
-import cats.implicits.*
-import cats.*
 import algebra.ring.*
 import algebra.instances.all.*
 

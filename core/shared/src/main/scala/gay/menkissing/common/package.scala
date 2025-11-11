@@ -2,13 +2,11 @@ package gay.menkissing.common
 
 import scala.annotation.tailrec
 import scala.collection.mutable
-import math.Numeric
 
 import cats.*
 import cats.implicits.*
 import cats.data.Kleisli
 import cats.data.NonEmptyList
-import scala.annotation.targetName
 
 def topologicalSort[A]
   (a: List[A])

@@ -1,7 +1,6 @@
 package gay.menkissing.advent
 package y2023
 
-import gay.menkissing.common.ArityN.*
 import cats.*
 import cats.syntax.all.*
 

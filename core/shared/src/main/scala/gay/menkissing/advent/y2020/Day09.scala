@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2020
 
 import cats.implicits.*
-import cats.syntax.all.*
 
 import gay.menkissing.common.*, ArityN.*
 

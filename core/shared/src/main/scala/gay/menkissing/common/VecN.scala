@@ -1,12 +1,10 @@
 package gay.menkissing.common
 
 import algebra.ring.*
-import algebra.instances.all.*
 import cats.*
 import cats.syntax.all.*
 import scala.deriving.*
 import scala.quoted.*
-import compiletime.*
 
 trait BareVecN[V[_]]:
   def dimensions: Int
@@ -386,7 +384,7 @@ object VecN:
               type MirroredElemTypes = elementTypes
             }
           } =>
-        val size = countTuple[elementTypes]
+        countTuple[elementTypes]
         def body
           (
             self: Expr[Product],

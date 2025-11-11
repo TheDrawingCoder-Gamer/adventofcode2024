@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2024
 
 import cats.*
-import cats.implicits.*
 import gay.menkissing.common.*
 
 object Day05 extends Problem:

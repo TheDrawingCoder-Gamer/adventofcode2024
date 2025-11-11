@@ -1,7 +1,6 @@
 package gay.menkissing.advent
 package y2020
 
-import cats.syntax.all.*
 import gay.menkissing.common.ArityN.*
 
 object Day05 extends Problem:

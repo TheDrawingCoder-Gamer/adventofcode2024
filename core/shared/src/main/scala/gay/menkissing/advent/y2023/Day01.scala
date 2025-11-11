@@ -1,8 +1,6 @@
 package gay.menkissing.advent
 package y2023
 
-import cats.*
-import cats.syntax.all.*
 import scala.util.matching.Regex
 import gay.menkissing.common.*
 

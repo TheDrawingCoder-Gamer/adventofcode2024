@@ -1,15 +1,11 @@
 package gay.menkissing.advent
 package y2020
 
-import cats.*
-import cats.implicits.*
-import gay.menkissing.common.{*, given}
 import parsley.*
 import parsley.combinator.*
 import parsley.token.descriptions.LexicalDesc
 import token.Lexer
 
-import scala.collection.mutable
 
 object Day18 extends Problem:
   type Input = String

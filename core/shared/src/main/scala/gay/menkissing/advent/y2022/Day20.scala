@@ -3,7 +3,6 @@ package y2022
 
 import gay.menkissing.common.*
 import scala.reflect.ClassTag
-import java.util.Arrays
 
 object Day20 extends Problem:
   type Input = Vector[Long]

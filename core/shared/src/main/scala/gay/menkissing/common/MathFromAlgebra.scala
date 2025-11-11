@@ -1,7 +1,6 @@
 package gay.menkissing.common
 
 import algebra.ring.*
-import algebra.instances.all.*
 
 extension [A](self: A)(using asg: AdditiveSemigroup[A])
   infix def +(that: A): A = asg.plus(self, that)

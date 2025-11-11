@@ -15,6 +15,9 @@ ThisBuild / version := "0.1.0-SNAPSHOT"
 
 ThisBuild / scalaVersion := "3.7.3"
 
+ThisBuild / scalacOptions ++=
+  Seq("-Wunused:imports", "-Wunused:locals", "-Wunused:params")
+
 val goodDir = file(".")
 
 lazy val runNode = inputKey[Unit]("Run a node app with arguments.")
@@ -121,7 +124,7 @@ lazy val core =
       libraryDependencies ++= Seq(
         "dev.optics" %%% "monocle-core",
         "dev.optics" %%% "monocle-macro"
-      ).map(_ % "3.1.0"),
+      ).map(_ % "3.3.0"),
       // use the syntax that I thought was already in scala 3 by now
       scalacOptions ++= Seq(
         "-Xkind-projector:underscores",
@@ -151,7 +154,7 @@ lazy val bench =
       publish / skip := true,
       run / baseDirectory := goodDir,
       Compile / run / mainClass := Some("gay.menkissing.bench.Main"),
-      scalacOptions += "-experimental"
+      scalacOptions ++= Seq("-experimental")
     ).jvmSettings(
       Compile / run / fork := true
     ).nativeSettings(

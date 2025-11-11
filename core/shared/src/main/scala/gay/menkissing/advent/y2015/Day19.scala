@@ -1,14 +1,8 @@
 package gay.menkissing.advent
 package y2015
 
-import cats.*
-import cats.implicits.*
-import cats.data.Chain
 
-import gay.menkissing.common.*
-import alleycats.std.set.*
 
-import scala.collection.mutable
 import scala.annotation.tailrec
 
 object Day19 extends Problem:

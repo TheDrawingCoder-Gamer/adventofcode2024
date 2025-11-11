@@ -1,11 +1,9 @@
 package gay.menkissing.advent
 package y2024
 
-import scala.annotation.tailrec
 import scala.collection.mutable
 import cats.derived.*
 import cats.*
-import cats.syntax.all.*
 
 object Day18Writeup extends ProblemAdv:
   type Input = (Int, Int, List[Vec2i])

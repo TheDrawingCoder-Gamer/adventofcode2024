@@ -5,8 +5,6 @@ import gay.menkissing.common.*
 
 import scala.collection.mutable
 import algebra.instances.all.*
-import cats.*
-import cats.syntax.all.*
 
 object Day06 extends Problem:
   type Input = (Grid[Boolean], Int)

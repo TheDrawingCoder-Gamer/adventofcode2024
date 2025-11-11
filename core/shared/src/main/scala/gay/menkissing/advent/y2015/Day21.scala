@@ -73,10 +73,10 @@ object Day21 extends Problem:
     val values = configurations
     // >= - if we would die in the same amount of turns as the boss, we take our turn first so
     // we get to deal the last hit
-    values.filter((cost, a) => a.diesIn(boss.damage) >= boss.diesIn(a.damage))
+    values.filter((_, a) => a.diesIn(boss.damage) >= boss.diesIn(a.damage))
       .minBy(_._1)._1
 
   def part2(boss: Actor): Int =
     val values = configurations
-    values.filter((cost, a) => a.diesIn(boss.damage) < boss.diesIn(a.damage))
+    values.filter((_, a) => a.diesIn(boss.damage) < boss.diesIn(a.damage))
       .maxBy(_._1)._1

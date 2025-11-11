@@ -3,15 +3,12 @@ package gay.menkissing.bench.spawn
 import gay.menkissing.bench.{
   Args,
   BenchmarkRunOpts,
-  IterationPlan,
-  IterationResult,
   Main,
   Verbosity
 }
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel, JSImport}
-import scala.sys.process.*
 
 object Spawn:
 

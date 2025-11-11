@@ -2,7 +2,6 @@ package gay.menkissing.common
 
 import algebra.ring.*
 import algebra.instances.all.*
-import cats.implicits.*
 
 object IntegralSequences:
   def triangleNumber[T](n: T)(using ring: Ring[T], as: AsNumber[T]): BigInt =

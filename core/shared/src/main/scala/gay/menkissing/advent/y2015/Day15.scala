@@ -1,9 +1,6 @@
 package gay.menkissing.advent
 package y2015
 
-import gay.menkissing.common.*
-import cats.*, cats.syntax.all.*
-import alleycats.std.set.*
 
 object Day15 extends Problem:
   type Input = Vector[Ingredient]

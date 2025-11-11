@@ -44,7 +44,7 @@ object Day11 extends Problem:
       numGrid.values.transpose.map(seq =>
         if seq.forall(_.isDefined) then seq.as(Some(1_000_000L)) else seq
       ).transpose
-    val points = numGrid.zipWithIndices.filter((v, idx) => v.isEmpty).map(_._2)
+    val points = numGrid.zipWithIndices.filter((v, _) => v.isEmpty).map(_._2)
     def calculateNewPoint(p: Vec2[Int]): Vec2[Long] =
       val newX = rows(p.y).take(p.x).map(_.getOrElse(1L)).sum
       val newY = cols(p.x).take(p.y).map(_.getOrElse(1L)).sum

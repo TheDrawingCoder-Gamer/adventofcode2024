@@ -1,9 +1,6 @@
 package gay.menkissing.advent
 
-import java.nio.file.Path
-import scala.io.Source
 import scala.scalajs.js.annotation.JSImport
-import scala.util.Using
 import scalajs.js
 
 object FileIO:

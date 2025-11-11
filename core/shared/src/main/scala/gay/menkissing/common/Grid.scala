@@ -75,8 +75,7 @@ case class Grid[A] private (values: Vector[Vector[A]])
         .prependedAll(Vector.fill(n, width + n * 2)(default))
     )
   def expandDir(default: A)(n: Int, dir: Direction2D): Grid[A] =
-    val newData =
-      dir match
+    dir match
         case Direction2D.Up =>
           values.prependedAll(Vector.fill(n, width)(default))
         case Direction2D.Down =>

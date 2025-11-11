@@ -1,7 +1,6 @@
 package gay.menkissing.advent
 package y2021
 
-import gay.menkissing.common.*
 
 object Day03 extends Problem:
   type Input = (List[Int], Int)
@@ -30,7 +29,7 @@ object Day03 extends Problem:
 
   def part2(input: (List[Int], Int)): Int =
     val (is, bitSize) = input
-    val halfCount = is.length / 2
+    is.length / 2
 
     val (o2, co2) = (0 until bitSize).reverseIterator.foldLeft((is, is)):
       case (z @ (List(_), List(_)), _) => z

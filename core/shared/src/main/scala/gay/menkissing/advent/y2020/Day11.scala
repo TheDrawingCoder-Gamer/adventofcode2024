@@ -1,12 +1,11 @@
 package gay.menkissing.advent
 package y2020
 
-import gay.menkissing.common.{*, given}
+import gay.menkissing.common.*
 import cats.*
 import cats.syntax.all.*
 import algebra.instances.all.*
 
-import scala.collection.mutable
 
 object Day11 extends Problem:
   type Input = Grid[Seat]

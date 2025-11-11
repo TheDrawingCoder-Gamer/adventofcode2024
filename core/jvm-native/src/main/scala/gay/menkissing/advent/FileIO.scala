@@ -1,6 +1,5 @@
 package gay.menkissing.advent
 
-import java.nio.file.Path
 import scala.io.Source
 import scala.util.Using
 

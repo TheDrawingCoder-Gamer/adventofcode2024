@@ -1,7 +1,7 @@
 package gay.menkissing.advent
 package y2021
 
-import gay.menkissing.common.{*, given}
+import gay.menkissing.common.*
 import cats.syntax.all.*
 
 object Day04 extends Problem:

@@ -2,16 +2,12 @@ package gay.menkissing.advent
 package y2022
 
 import gay.menkissing.common.*
-import cats.data.*
 import cats.*
 import cats.syntax.all.*
-import cats.arrow.FunctionK
 import monocle.syntax.all.*
 import monocle.macros.*
-import annotation.tailrec
 // import scala.collection.parallel.CollectionConverters.*
 
-import collection.mutable
 
 import monocle.*
 
@@ -237,33 +233,8 @@ object Day19 extends Problem:
         geodeRobots: Int,
         timeLeft: Int
       ): Unit =
-      def tryBuildOre: Unit =
-        if blueprint.oreCost.canAfford(ore, clay, geode) then
-          dfs(
-            ore = ore + oreRobots - blueprint.oreCost.ore,
-            clay = clay + clayRobots - blueprint.oreCost.clay,
-            obsidian = obsidian + obsidianRobots - blueprint.oreCost.obsidian,
-            geode = geode + geodeRobots,
-            oreRobots = oreRobots + 1,
-            clayRobots = clayRobots,
-            obsidianRobots = obsidianRobots,
-            geodeRobots = geodeRobots,
-            timeLeft = timeLeft - 1
-          )
-      def tryBuildObsidian: Unit =
-        if blueprint.obsidianCost.canAfford(ore, clay, geode) then
-          dfs(
-            ore = ore + oreRobots - blueprint.obsidianCost.ore,
-            clay = clay + clayRobots - blueprint.obsidianCost.clay,
-            obsidian =
-              obsidian + obsidianRobots - blueprint.obsidianCost.obsidian,
-            geode = geode + geodeRobots,
-            oreRobots = oreRobots,
-            clayRobots = clayRobots,
-            obsidianRobots = obsidianRobots + 1,
-            geodeRobots = geodeRobots,
-            timeLeft = timeLeft - 1
-          )
+      
+      
       maxSeen = maxSeen.max(geode)
       if timeLeft <= 0 then
         maxGeodes = maxGeodes.max(geode)

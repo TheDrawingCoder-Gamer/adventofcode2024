@@ -39,7 +39,7 @@ object Day12 extends Problem:
   def parse(str: String): (Vec2[Int], Vec2[Int], MountainMap) =
     var start = Vec2(0, 0)
     var end = Vec2(0, 0)
-    var y = 0
+    
     val grid =
       Grid.fromStringWithIndex(str):
         case (v, 'S') =>

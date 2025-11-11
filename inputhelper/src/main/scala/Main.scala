@@ -1,5 +1,4 @@
 import sttp.client4.quick.*
-import java.io.File
 import java.nio.file.Path
 import java.nio.file.Files
 

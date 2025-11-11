@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2022
 
 import scala.annotation.tailrec
-import gay.menkissing.common.*
 
 object Day25 extends HalfDay:
   type Input = List[Long]

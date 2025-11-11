@@ -135,7 +135,6 @@ object Day07 extends Problem:
           val right = y.value.toList.map(charStrength)
           left.compare(right)
 
-  import Hand.*
   override def part1(input: List[(Hand, Int)]): Int =
     val resInput = input.sortBy(_._1)(using Hand.orderHand.toOrdering)
     resInput.zipWithIndex.map:

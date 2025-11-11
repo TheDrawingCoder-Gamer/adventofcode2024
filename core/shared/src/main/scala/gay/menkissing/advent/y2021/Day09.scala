@@ -1,8 +1,7 @@
 package gay.menkissing.advent
 package y2021
 
-import gay.menkissing.common.{Grid, Vec2, given}
-import cats.syntax.all.*
+import gay.menkissing.common.{Grid, Vec2}
 import algebra.instances.all.*
 
 import scala.annotation.tailrec

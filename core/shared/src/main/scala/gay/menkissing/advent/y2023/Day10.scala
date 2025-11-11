@@ -1,11 +1,10 @@
 package gay.menkissing.advent
 package y2023
 
-import gay.menkissing.common.{*, given}
+import gay.menkissing.common.*
 import scala.collection.mutable
 import cats.*
 import cats.syntax.all.*
-import cats.data.*
 import algebra.instances.all.*
 
 object Day10 extends Problem:

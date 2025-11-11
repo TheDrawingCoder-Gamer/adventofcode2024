@@ -1,7 +1,6 @@
 package gay.menkissing.advent
 package y2024
 
-import gay.menkissing.common.*
 
 object Day07 extends Problem:
   type Input = List[Equation]

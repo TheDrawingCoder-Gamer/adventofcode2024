@@ -3,10 +3,8 @@ package y2020
 
 import cats.*
 import cats.implicits.*
-import gay.menkissing.common.{*, given}
 import parsley.*
 
-import scala.collection.mutable
 
 object Day19 extends Problem:
   type Input = (Map[Int, RawRule], List[String])

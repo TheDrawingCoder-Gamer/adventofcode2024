@@ -53,7 +53,7 @@ object Day14 extends Problem:
       case (pair @ (fst, snd), inserted) => map((pair, 0)) = Map(snd -> 1L)
 
     (1 to 40).foreach: n =>
-      patterns.foreach: (pair, inserted) =>
+      patterns.foreach: (pair, _) =>
         val (fst, snd) = pair
         val z = patterns(pair)
         map((pair, n)) =

@@ -1,7 +1,6 @@
 package gay.menkissing.common
 
 import cats.*
-import algebras.given
 
 enum Direction2D:
   case Up, Down, Left, Right

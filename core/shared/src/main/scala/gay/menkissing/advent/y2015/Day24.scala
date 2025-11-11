@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2015
 
 import gay.menkissing.common.*
-import cats.syntax.all.*
 object Day24 extends Problem:
   type Input = List[Int]
   type Output = Long

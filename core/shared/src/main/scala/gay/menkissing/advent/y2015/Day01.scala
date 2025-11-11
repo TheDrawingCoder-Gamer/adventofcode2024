@@ -1,8 +1,6 @@
 package gay.menkissing.advent
 package y2015
 
-import cats.*
-import cats.syntax.all.*
 
 object Day01 extends Problem:
   type Input = String

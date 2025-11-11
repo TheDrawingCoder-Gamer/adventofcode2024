@@ -3,7 +3,6 @@ package y2021
 
 import gay.menkissing.common.*, ArityN.*, Sys3D.*, algebras.given
 
-import scala.annotation.tailrec
 import scala.collection.mutable
 
 import cats.syntax.all.*

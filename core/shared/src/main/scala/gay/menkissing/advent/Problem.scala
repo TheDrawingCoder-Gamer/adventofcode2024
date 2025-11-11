@@ -1,8 +1,6 @@
 package gay.menkissing.advent
 
 import gay.menkissing.common.debugTiming
-import cats.*
-import compiletime.deferred
 
 trait Problem extends ProblemSuperAdv, WithParser, HasSharedOutput
 trait NewProblem extends ProblemSuperAdv, HasSharedInput, HasSharedOutput

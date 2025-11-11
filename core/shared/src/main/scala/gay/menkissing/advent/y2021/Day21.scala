@@ -8,7 +8,6 @@ import cats.*
 import gay.menkissing.common.*
 
 import monocle.*
-import monocle.syntax.all.*
 import monocle.macros.*
 
 object Day21 extends Problem:
@@ -130,7 +129,8 @@ object Day21 extends Problem:
 
   override def part2(input: ProblemState): Long =
     val p2State = P2State.fromProblemState(input)
-    given Semigroup[Long] = _ + _
+    // given Semigroup[Long] = _ + _
+    // TODO: where is it getting its Long semigroup instance???
     val (l, r) =
       unfolded((0L, 0L, Chain(p2State))):
         case (p1Sum, p2Sum, states) =>

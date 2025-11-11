@@ -5,7 +5,6 @@ import compiletime.ops.int.*
 import scala.quoted.*
 import cats.*
 
-import scala.compiletime.erasedValue
 import scala.reflect.ClassTag
 
 object ArityNMacros:

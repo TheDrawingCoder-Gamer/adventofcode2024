@@ -244,7 +244,6 @@ def findAllPathsNoRetraverse[A]
     isGoal: A => Boolean,
     neighbors: A => IterableOnce[A]
   ): List[List[A]] =
-  val paths = mutable.ListBuffer.empty[List[A]]
 
   def dfs(src: A, daPath: List[A]): Eval[List[List[A]]] =
     if isGoal(src) then Eval.now(List(daPath.reverse))
@@ -298,6 +297,7 @@ object SearchReturns:
     totalPath.toList
 
   def lengthFromPath[A](cameFrom: mutable.Map[A, A], p: A, score: Double): Int =
+    val _ = score
     var c = 1
     var current = p
     while cameFrom.contains(current) do

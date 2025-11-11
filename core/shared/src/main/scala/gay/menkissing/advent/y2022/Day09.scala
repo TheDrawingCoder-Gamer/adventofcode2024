@@ -4,7 +4,6 @@ package y2022
 import gay.menkissing.common.*
 import cats.implicits.{catsKernelStdOrderForInt as _, *}
 import cats.data.*
-import algebra.instances.*
 
 object Day09 extends Problem:
   type Input = List[Movement]

@@ -3,8 +3,6 @@ package y2024
 
 import gay.menkissing.common.*, ArityN.*
 
-import scala.collection.mutable.ListBuffer
-import algebra.instances.all.*
 
 object Day08 extends Problem:
   type Input = Grid[Char]

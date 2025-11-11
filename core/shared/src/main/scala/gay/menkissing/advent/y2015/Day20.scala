@@ -1,11 +1,7 @@
 package gay.menkissing.advent
 package y2015
 
-import gay.menkissing.common.*
-import cats.implicits.*
-import algebra.instances.all.*
 
-import scala.collection.mutable
 
 object Day20 extends Problem:
   type Input = Int

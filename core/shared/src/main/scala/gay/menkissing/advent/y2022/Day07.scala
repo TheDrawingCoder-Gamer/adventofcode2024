@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2022
 
 import scala.collection.mutable
-import scala.util.chaining.*
 import gay.menkissing.common.*
 
 object Day07 extends Problem:
@@ -14,9 +13,11 @@ object Day07 extends Problem:
     case Chdir(to: String)
     case List(files: Seq[AFile])
 
-  enum AFile(name: String):
-    case File(name: String, size: Int) extends AFile(name)
-    case Dir(name: String) extends AFile(name)
+  enum AFile:
+    case File(name: String, size: Int) extends AFile
+    case Dir(name: String) extends AFile
+
+    val name: String
 
   def parse(input: String): Seq[Command] =
     val daSeq = mutable.ListBuffer[Command]()

@@ -24,7 +24,7 @@ object Day09 extends Problem:
             case ((l, r), v) if l == curPos => Some((r, v))
             case ((l, r), v) if r == curPos => Some((l, v))
             case _                          => None
-          .filter((k, v) => !visited.contains(k))
+          .filter((k, _) => !visited.contains(k))
 
         if distances.isEmpty then Right(dist)
         else Left(distances.map((x, y) => (x, visited + x, dist + y)))

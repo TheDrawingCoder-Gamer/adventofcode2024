@@ -1,6 +1,5 @@
 package gay.menkissing.bench
 
-import cats.syntax.all.*
 
 import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.Duration

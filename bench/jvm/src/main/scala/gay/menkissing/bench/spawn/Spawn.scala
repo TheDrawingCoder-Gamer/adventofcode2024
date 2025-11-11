@@ -2,18 +2,12 @@ package gay.menkissing.bench.spawn
 
 import gay.menkissing.bench.{
   BenchmarkRunOpts,
-  IterationPlan,
-  IterationResult,
   Main,
   Verbosity
 }
 
-import java.io.ByteArrayOutputStream
-import java.nio.charset.StandardCharsets
 import scala.concurrent.TimeoutException
 import scala.concurrent.duration.Duration
-import scala.concurrent.duration.DurationDouble
-import scala.concurrent.duration.DurationConversions.*
 import scala.sys.process.*
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

@@ -5,7 +5,6 @@ import cats.data.Chain
 import cats.syntax.all.*
 import cats.*
 
-import gay.menkissing.common.LetterString
 
 object Day12 extends Problem:
   type Input = List[(Node, Node)]

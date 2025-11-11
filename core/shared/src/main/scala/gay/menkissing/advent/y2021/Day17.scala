@@ -19,8 +19,7 @@ object Day17 extends Problem:
         AABB2D(mnx.toInt dimBy mxx.toInt, mny.toInt dimBy mxy.toInt)
 
   def willBeInRange(input: AABB2D[Int], initVelocity: Vec2[Int]): Boolean =
-    val validRange =
-      AABB2D(0 dimBy input.xs.max, input.ys.min dimBy Int.MaxValue)
+    AABB2D(0 dimBy input.xs.max, input.ys.min dimBy Int.MaxValue)
     var cur = Vec2(0, 0)
     var curV = initVelocity
     // Even if cur.x == xs.max, curV.x could == 0

@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2015
 
 import gay.menkissing.common.*
-import scala.collection.mutable
 
 object Day14 extends Problem:
   type Input = List[Reindeer]

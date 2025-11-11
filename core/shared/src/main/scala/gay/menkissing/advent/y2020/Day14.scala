@@ -3,7 +3,6 @@ package y2020
 
 import cats.*
 import cats.implicits.*
-import gay.menkissing.common.{*, given}
 
 import scala.collection.mutable
 

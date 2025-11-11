@@ -2,11 +2,9 @@ package gay.menkissing.common
 
 import cats.collections.Discrete
 import cats.collections.Range
-import cats.collections.syntax.range.*
 import cats.*
 import cats.syntax.all.*
 import algebra.ring.*
-import algebra.instances.*
 import cats.derived.*
 
 final case class Vec2[A](x: A, y: A) derives VecN, Eq:

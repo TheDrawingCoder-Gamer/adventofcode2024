@@ -12,7 +12,8 @@ object Args:
   @JSGlobal("process")
   object process extends ProcessObj
 
-  def args(input: Array[String]): Array[String] =
+  def args(args: Array[String]): Array[String] =
+    val _ = args
     val r = process.argv.toArray.dropWhile(_ != "--")
     if r.nonEmpty then r.drop(1)
     else r

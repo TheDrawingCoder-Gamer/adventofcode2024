@@ -2,7 +2,6 @@ package gay.menkissing.common
 
 import scala.annotation.tailrec
 import algebra.ring.*
-import algebra.instances.*
 import cats.*
 import cats.syntax.all.*
 

@@ -1,7 +1,6 @@
 package gay.menkissing.common
 
 import cats.*
-import cats.implicits.*
 
 case class AABB2D[A](xs: Dimension[A], ys: Dimension[A]):
   def contains(p: Vec2[A])(using Order[A]): Boolean =

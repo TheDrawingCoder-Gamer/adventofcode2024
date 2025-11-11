@@ -1,18 +1,10 @@
 package gay.menkissing.bench.spawn
 
-import gay.menkissing.bench.{
-  BenchmarkRunOpts,
-  IterationPlan,
-  IterationResult,
-  Main,
-  Verbosity
-}
+import gay.menkissing.bench.{BenchmarkRunOpts, Main}
 
 import scala.concurrent.{Await, ExecutionContext, Future, TimeoutException}
 import scala.concurrent.duration.Duration
-import scala.concurrent.duration.DurationConversions.*
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.DurationDouble
 
 object Spawn:
   def run(name: String, runOpts: BenchmarkRunOpts): Option[Vector[Double]] =

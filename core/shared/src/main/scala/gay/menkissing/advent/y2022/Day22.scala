@@ -2,7 +2,6 @@ package gay.menkissing.advent
 package y2022
 
 import gay.menkissing.common.*
-import cats.syntax.all.*
 import algebra.instances.all.*
 
 object Day22 extends Problem:
@@ -529,7 +528,7 @@ object Day22 extends Problem:
           case AxisDirection.Positive => rowOrCol.indexWhere(_ != GNil)
           case AxisDirection.Negative => rowOrCol.lastIndexWhere(_ != GNil)
 
-      moveHelper(pos, dir, n): (line, lastPos) =>
+      moveHelper(pos, dir, n): (line, _) =>
         val countUntilEdge =
           line.indexWhere(it => grid.getOrElse(it, GNil) == GNil)
         val restCount = n - countUntilEdge

@@ -4,9 +4,7 @@ package y2021
 import gay.menkissing.common.*
 import Sys3D.*
 import algebra.instances.all.*
-import cats.syntax.show.*
 
-import collection.mutable
 
 object Day22 extends Problem:
   type Input = List[Step]
