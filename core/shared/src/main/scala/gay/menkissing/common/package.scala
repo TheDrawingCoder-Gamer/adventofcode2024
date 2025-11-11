@@ -167,6 +167,6 @@ extension [A](self: Array[A])
   def collectFirstSome[B](f: A => Option[B]): Option[B] =
     self.collectFirst(Function.unlift(f))
 
-class ThisShouldntHappenError(val why: String) extends RuntimeException
+final class ThisShouldntHappenError(val why: String) extends RuntimeException
 
 def !!! : Nothing = throw ThisShouldntHappenError("This shouldn't happen")

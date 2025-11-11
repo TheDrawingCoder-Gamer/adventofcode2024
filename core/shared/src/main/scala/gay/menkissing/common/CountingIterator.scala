@@ -1,6 +1,8 @@
 package gay.menkissing.common
 
-class CountingIterator[A](val underlying: Iterator[A]) extends Iterator[A]:
+final class CountingIterator[A]
+  (val underlying: Iterator[A])
+    extends Iterator[A]:
   var count = 0L
 
   def next(): A =

@@ -43,7 +43,7 @@ object Day05 extends Problem:
   // Ordered from bottom to top
   type Pallete = mutable.ListBuffer[Crate]
 
-  class Palettes(val palletes: Vector[Pallete]):
+  final class Palettes(val palletes: Vector[Pallete]):
     private def moveWith
       (n: Int, from: Int, to: Int)
       (
@@ -70,7 +70,7 @@ object Day05 extends Problem:
     def performsMany(craneMoves: Seq[CraneMove]): Unit =
       craneMoves.foreach(performMany)
 
-  case class CraneMove(n: Int, from: Int, to: Int)
+  final case class CraneMove(n: Int, from: Int, to: Int)
 
   def part1(input: (Palettes, List[CraneMove])): String =
     val (pals, moves) = input

@@ -55,6 +55,6 @@ object Day19 extends Problem:
     beegList.max
 
   lazy val input = FileIO.getInput(2021, 19)
-  case class Scanner(pos: Vec3[Int], detections: Set[Vec3[Int]])
+  final case class Scanner(pos: Vec3[Int], detections: Set[Vec3[Int]])
 
-  case class Solution(scanners: Set[Vec3[Int]], beacons: Set[Vec3[Int]])
+  final case class Solution(scanners: Set[Vec3[Int]], beacons: Set[Vec3[Int]])

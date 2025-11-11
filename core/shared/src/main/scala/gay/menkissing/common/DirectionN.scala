@@ -2,7 +2,7 @@ package gay.menkissing.common
 
 import algebra.ring.*
 
-case class DirectionN(axis: Int, direction: AxisDirection)
+final case class DirectionN(axis: Int, direction: AxisDirection)
 
 trait IsDirectionN[A]:
   type Axis

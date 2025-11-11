@@ -9,7 +9,7 @@ import scala.collection.mutable
 object Day16 extends Problem:
   type Input = DaInput
   type Output = Long
-  case class DaInput
+  final case class DaInput
     (
       validRanges: Map[String, (Range, Range)],
       ourTicket: List[Int],

@@ -102,7 +102,7 @@ object Day15 extends Problem:
               g.updated(p)(GridItemP2.Empty).updated(p.offset(dir))(item)
             else g
 
-  case class ProblemState
+  final case class ProblemState
     (
       grid: Grid[GridItem],
       robot: Vec2[Int],
@@ -139,7 +139,7 @@ object Day15 extends Problem:
         ).mkString("", "", ""))
         .mkString("", "\n", "")
 
-  case class ProblemStateP2
+  final case class ProblemStateP2
     (
       grid: Grid[GridItemP2],
       robot: Vec2[Int],

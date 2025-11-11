@@ -26,7 +26,7 @@ object Day07 extends Problem:
 
   given Order[HandKind] = Order.by(_.ordinal)
 
-  case class Hand(value: String) extends AnyVal
+  final case class Hand(value: String) extends AnyVal
   object Hand:
     def apply(n: String): Hand =
       assert(n.length == 5)

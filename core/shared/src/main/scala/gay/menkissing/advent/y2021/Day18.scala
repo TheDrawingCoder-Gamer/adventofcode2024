@@ -1,7 +1,6 @@
 package gay.menkissing.advent
 package y2021
 
-
 object Day18 extends Problem:
   type Input = SnailfishNum
   type Output = Long
@@ -16,7 +15,7 @@ object Day18 extends Problem:
             case Some(v) => v
             case _       => f(r).getOrElse(this)
 
-  case class SnailfishGroup(l: SnailfishNum, r: SnailfishNum)
+  final case class SnailfishGroup(l: SnailfishNum, r: SnailfishNum)
       extends SnailfishNum
   object SnailfishNum:
     def parse(str: String): SnailfishNum =
@@ -24,7 +23,7 @@ object Day18 extends Problem:
         case s"[$l,$r]" => SnailfishGroup(parse(l), parse(r))
         case x          => SnailfishLiteral(x.toInt)
 
-  case class SnailfishLiteral(lit: Int) extends SnailfishNum
+  final case class SnailfishLiteral(lit: Int) extends SnailfishNum
 
   override def parse(str: String): SnailfishNum = SnailfishNum.parse(str)
 
@@ -32,4 +31,4 @@ object Day18 extends Problem:
 
   override def part2(input: SnailfishNum): Long = ???
 
-  override lazy val input: String = ???
+  override lazy val input: String = FileIO.getInput(2021, 18)

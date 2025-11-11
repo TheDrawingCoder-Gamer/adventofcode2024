@@ -10,7 +10,7 @@ object Day23 extends Problem:
 
   type ElfGrid = Grid[Boolean]
 
-  case class Elf(current: Vec2[Int], proposal: Option[Vec2[Int]])
+  final case class Elf(current: Vec2[Int], proposal: Option[Vec2[Int]])
 
   val order: Vector[Direction2D] =
     Vector(

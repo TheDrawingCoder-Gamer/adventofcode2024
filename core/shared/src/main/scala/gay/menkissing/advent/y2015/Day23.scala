@@ -5,7 +5,7 @@ object Day23 extends Problem:
   type Input = Vector[Instruction]
   type Output = Int
 
-  case class State(a: Int, b: Int, pc: Int):
+  final case class State(a: Int, b: Int, pc: Int):
     def getRegister(c: Char): Int =
       c match
         case 'a' => a

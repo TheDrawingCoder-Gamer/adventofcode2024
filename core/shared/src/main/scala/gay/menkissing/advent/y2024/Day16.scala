@@ -23,7 +23,7 @@ object Day16 extends Problem:
       solution.slidingN[2].foldLeft(0.0):
         case (acc, (l, r)) => acc + l.edgeScore(r)
       .toInt
-  case class Reindeer(pos: Vec2[Int], dir: Direction2D) derives Eq:
+  final case class Reindeer(pos: Vec2[Int], dir: Direction2D) derives Eq:
     def neighbors: List[Reindeer] =
       Direction2D.values.flatMap: d =>
         Option.unless(d == dir.reverse)(Reindeer(pos.offset(d), d))
@@ -42,7 +42,7 @@ object Day16 extends Problem:
         // Prevent turning aorund
         Double.PositiveInfinity
 
-  case class ProblemState(reindeer: Reindeer, maze: Maze, end: Vec2[Int]):
+  final case class ProblemState(reindeer: Reindeer, maze: Maze, end: Vec2[Int]):
     def getSolution: List[Reindeer] =
       astarGeneric[Reindeer](
         reindeer,

@@ -12,11 +12,11 @@ object Day10 extends ProblemAdv:
   type OutputP2 = String
 
   // I just KNOW it will tell me there is more than one register for part two
-  case class CPU(tick: Int, register: Int)
+  final case class CPU(tick: Int, register: Int)
 
   sealed trait Operation
   case object Noop extends Operation
-  case class Addx(n: Int) extends Operation
+  final case class Addx(n: Int) extends Operation
 
   def opTakesCycles(op: Operation): Int =
     op match

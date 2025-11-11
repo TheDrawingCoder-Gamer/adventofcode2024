@@ -20,7 +20,7 @@ object Day18 extends NewProblem:
   def parseP2(str: String): Map[Vec3[Int], Cube] = parse(str, false)
   def neighbors(pos: Vec3[Int]): Iterable[Vec3[Int]] =
     Direction3D.values.toList.map(v => pos.offset(v))
-  case class Cube
+  final case class Cube
     (
       pos: Vec3[Int],
       north: Boolean,

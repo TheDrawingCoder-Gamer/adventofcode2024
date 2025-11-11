@@ -13,7 +13,7 @@ object Day10 extends Problem:
 
   lazy val input: String = FileIO.getInput(2023, 10)
 
-  case class Pipe(conn1: Direction2D, conn2: Direction2D):
+  final case class Pipe(conn1: Direction2D, conn2: Direction2D):
 
     def exit(entrance: Direction2D): Direction2D =
       if conn1 == entrance then conn2 else conn1

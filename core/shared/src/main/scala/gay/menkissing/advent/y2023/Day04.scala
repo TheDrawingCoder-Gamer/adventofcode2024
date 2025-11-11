@@ -9,7 +9,7 @@ object Day04 extends Problem:
 
   lazy val input = FileIO.getInput(2023, 4)
 
-  case class Scratchcard(winningNumbers: Set[Int], numbers: List[Int]):
+  final case class Scratchcard(winningNumbers: Set[Int], numbers: List[Int]):
     def countWinners: Int = numbers.count(winningNumbers)
     def score: Int =
       countWinners match

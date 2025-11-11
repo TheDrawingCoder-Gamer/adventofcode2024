@@ -85,7 +85,7 @@ object Day21 extends Problem:
         case BuiltExpr.Human                => res
         case _ => throw new Exception(s"unhandled $this")
 
-  case class Context(monkes: Map[String, Expression])
+  final case class Context(monkes: Map[String, Expression])
   def evaluate(ctx: Context, expr: Expression): Long =
     expr match
       case Expression.Number(n)    => n

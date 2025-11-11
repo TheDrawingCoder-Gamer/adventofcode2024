@@ -12,7 +12,7 @@ object Day05 extends Problem:
 
   lazy val input = FileIO.getInput(2021, 5)
 
-  case class Line(start: Vec2[Int], end: Vec2[Int]):
+  final case class Line(start: Vec2[Int], end: Vec2[Int]):
     def orientation: LineOrientation =
       if start == end then LineOrientation.Point
       else if start.x == end.x then LineOrientation.Vertical

@@ -21,7 +21,7 @@ object Day06 extends Problem:
         case Off    => math.max(0, i - 1)
         case Toggle => i + 2
 
-  case class Instruction(op: Op, start: Vec2[Int], stop: Vec2[Int]):
+  final case class Instruction(op: Op, start: Vec2[Int], stop: Vec2[Int]):
     def advance(arr: Array[Boolean]): Unit =
       val minX = start.x `min` stop.x
       val maxX = start.x `max` stop.x

@@ -13,7 +13,7 @@ object Day17 extends Problem:
   type Input = Set[Vec3[Int]]
   type Output = Int
 
-  case class Vec4[A](x: A, y: A, z: A, w: A) derives VecN
+  final case class Vec4[A](x: A, y: A, z: A, w: A) derives VecN
 
   lazy val input = FileIO.getInput(2020, 17)
   def parse(str: String): Input =

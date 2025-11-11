@@ -7,12 +7,12 @@ object Day03 extends Problem:
   type Input = List[Rucksack]
   type Output = Int
 
-  case class ItemType(underlying: Char):
+  final case class ItemType(underlying: Char):
     def priority: Int =
       if underlying.isUpper then underlying - 'A' + 27
       else underlying - 'a' + 1
 
-  case class Rucksack
+  final case class Rucksack
     (
       leftCompartment: List[ItemType],
       rightCompartment: List[ItemType]
@@ -31,7 +31,7 @@ object Day03 extends Problem:
       val (l, r) = input.splitAt(input.length / 2)
       Rucksack(l.toList.map(ItemType.apply), r.toList.map(ItemType.apply))
 
-  case class Group(elf1: Rucksack, elf2: Rucksack, elf3: Rucksack):
+  final case class Group(elf1: Rucksack, elf2: Rucksack, elf3: Rucksack):
     def badge: ItemType =
       elf1.items.intersect(elf2.items.intersect(elf3.items)).head
 

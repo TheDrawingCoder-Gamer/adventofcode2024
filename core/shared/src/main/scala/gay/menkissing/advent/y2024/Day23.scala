@@ -1,7 +1,6 @@
 package gay.menkissing.advent
 package y2024
 
-
 import scala.collection.immutable.BitSet
 
 object Day23 extends ProblemAdv:
@@ -31,7 +30,7 @@ object Day23 extends ProblemAdv:
       val c2 = ((n & 0b11111) + 'a').toChar
       String.valueOf(Array(c1, c2))
 
-  case class LANConnections(values: List[(Int, Int)]):
+  final case class LANConnections(values: List[(Int, Int)]):
     val computerMap: Map[Int, BitSet] =
       values.flatMap(it => List((it._1, it._2), (it._2, it._1)))
         .groupMap(_._1)(_._2).view.mapValues(_.to(BitSet)).toMap

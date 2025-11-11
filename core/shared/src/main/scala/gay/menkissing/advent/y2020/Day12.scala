@@ -9,7 +9,7 @@ object Day12 extends Problem:
   type Input = List[(Char, Int)]
   type Output = Int
 
-  case class DaState
+  final case class DaState
     (
       x: Int = 0,
       y: Int = 0,
@@ -32,7 +32,7 @@ object Day12 extends Problem:
           val next = Vec2(x, y) + (facing.digitalDir[Int] * value)
           copy(x = next.x, y = next.y)
         case _ => this
-  case class DaStateP2
+  final case class DaStateP2
     (
       ship: Vec2[Int] = Vec2(0, 0),
       waypointRelative: Vec2[Int] = Vec2(10, -1)

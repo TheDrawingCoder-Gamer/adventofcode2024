@@ -3,7 +3,7 @@ package gay.menkissing.common
 import cats.*
 import cats.syntax.all.*
 
-case class Grid[A] private (values: Vector[Vector[A]])
+final case class Grid[A] private (values: Vector[Vector[A]])
     extends PartialFunction[Vec2[Int], A]:
   val width: Int = values.head.length
 
@@ -76,14 +76,13 @@ case class Grid[A] private (values: Vector[Vector[A]])
     )
   def expandDir(default: A)(n: Int, dir: Direction2D): Grid[A] =
     dir match
-        case Direction2D.Up =>
-          values.prependedAll(Vector.fill(n, width)(default))
-        case Direction2D.Down =>
-          values.appendedAll(Vector.fill(n, width)(default))
-        case Direction2D.Left =>
-          values.map[Vector[A]](_.prependedAll(Vector.fill[A](n)(default)))
-        case Direction2D.Right =>
-          values.map[Vector[A]](_.appendedAll(Vector.fill[A](n)(default)))
+      case Direction2D.Up => values.prependedAll(Vector.fill(n, width)(default))
+      case Direction2D.Down =>
+        values.appendedAll(Vector.fill(n, width)(default))
+      case Direction2D.Left =>
+        values.map[Vector[A]](_.prependedAll(Vector.fill[A](n)(default)))
+      case Direction2D.Right =>
+        values.map[Vector[A]](_.appendedAll(Vector.fill[A](n)(default)))
     Grid(values)
   def valuesAround(default: A)(x: Int, y: Int): Grid[A] =
     val foo =

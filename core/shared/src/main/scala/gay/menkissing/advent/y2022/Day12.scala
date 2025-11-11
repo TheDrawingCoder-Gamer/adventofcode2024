@@ -9,7 +9,7 @@ object Day12 extends Problem:
   type Input = (Vec2[Int], Vec2[Int], MountainMap)
   type Output = Int
 
-  case class MountainMap(grid: Grid[Byte]) extends AnyVal:
+  final case class MountainMap(grid: Grid[Byte]) extends AnyVal:
     def verticies: Vector[Vec2[Int]] = (0 until grid.width)
       .flatMap(x => 0.until(grid.height).map(y => Vec2(x, y))).toVector
     def neighbors(x: Int, y: Int): Iterable[Byte] = neighbors(Vec2(x, y))
@@ -39,7 +39,7 @@ object Day12 extends Problem:
   def parse(str: String): (Vec2[Int], Vec2[Int], MountainMap) =
     var start = Vec2(0, 0)
     var end = Vec2(0, 0)
-    
+
     val grid =
       Grid.fromStringWithIndex(str):
         case (v, 'S') =>

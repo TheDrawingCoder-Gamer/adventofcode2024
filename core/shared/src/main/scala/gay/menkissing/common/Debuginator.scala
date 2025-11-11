@@ -12,7 +12,7 @@ object Debuginator:
     case Simple
     case Verbose
 
-  class ActiveDebuginator(val verbose: Boolean) extends Debuginator:
+  final class ActiveDebuginator(val verbose: Boolean) extends Debuginator:
     inline def assert(inline arg: Boolean): Unit =
       if !arg then throw AssertionError("Assertion failed")
     inline def assertEq(inline expected: Any, inline actual: Any): Unit =

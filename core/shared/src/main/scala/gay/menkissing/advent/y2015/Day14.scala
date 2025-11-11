@@ -7,8 +7,8 @@ object Day14 extends Problem:
   type Input = List[Reindeer]
   type Output = Int
 
-  case class Reindeer(speed: Int, active: Int, rest: Int)
-  case class ReindeerState
+  final case class Reindeer(speed: Int, active: Int, rest: Int)
+  final case class ReindeerState
     (
       pos: Int,
       activeTime: Int,

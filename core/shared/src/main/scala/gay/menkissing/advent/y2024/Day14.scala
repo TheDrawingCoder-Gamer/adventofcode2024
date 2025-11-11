@@ -8,7 +8,7 @@ object Day14 extends Problem:
   type Input = List[Robot]
   type Output = Int
 
-  case class Robot(pos: Vec2[Int], velocity: Vec2[Int]):
+  final case class Robot(pos: Vec2[Int], velocity: Vec2[Int]):
     def stepN(n: Int = 1): Robot =
       copy(pos =
         pos.copy(

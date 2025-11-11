@@ -9,7 +9,7 @@ object Day16 extends Problem:
   type Input = Array[Byte]
   type Output = Long
 
-  case class Packet(version: Int, kind: PacketKind):
+  final case class Packet(version: Int, kind: PacketKind):
     def deepChildren: Chain[Packet] =
       kind match
         case PacketKind.Operator(_, ls) =>

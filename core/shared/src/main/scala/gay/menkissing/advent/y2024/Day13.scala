@@ -3,7 +3,6 @@ package y2024
 
 import gay.menkissing.common.*
 
-
 import algebra.instances.all.*
 
 object Day13 extends Problem:
@@ -26,7 +25,7 @@ object Day13 extends Problem:
         Vec2(xp.toLong, yp.toLong)
       )
 
-  case class CraneMachine
+  final case class CraneMachine
     (
       buttonA: Vec2[Long],
       buttonB: Vec2[Long],

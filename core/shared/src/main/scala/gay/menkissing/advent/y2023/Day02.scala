@@ -9,7 +9,7 @@ object Day02 extends Problem:
   type Input = List[Game]
   type Output = Int
 
-  case class Pull(r: Int, g: Int, b: Int):
+  final case class Pull(r: Int, g: Int, b: Int):
     def +(that: Pull) = zipWith(_ + _)(that)
 
     infix def max(that: Pull) = zipWith(math.max)(that)
@@ -31,7 +31,7 @@ object Day02 extends Problem:
           case _ => assert(false)
       Pull(r, g, b)
 
-  case class Game(id: Int, pulls: List[Pull])
+  final case class Game(id: Int, pulls: List[Pull])
 
   object Game:
     def fromString(it: String): Game =

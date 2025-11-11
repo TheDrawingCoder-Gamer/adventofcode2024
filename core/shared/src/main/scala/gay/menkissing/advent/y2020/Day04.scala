@@ -5,7 +5,7 @@ object Day04 extends Problem:
   type Input = List[Passport]
   type Output = Int
 
-  case class Passport
+  final case class Passport
     (
       byr: Option[Int],
       iyr: Option[Int],

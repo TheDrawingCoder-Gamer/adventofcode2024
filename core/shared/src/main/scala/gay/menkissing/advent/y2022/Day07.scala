@@ -72,9 +72,9 @@ object Day07 extends Problem:
     val name: String
     def show: String
 
-  case class FSFFile(size: Int, name: String) extends FSFile:
+  final case class FSFFile(size: Int, name: String) extends FSFile:
     override def show: String = s"- $name (file, size=$size)"
-  class FSDir
+  final class FSDir
     (
       var size: Int,
       val name: String,

@@ -5,7 +5,7 @@ object Day25 extends HalfDay:
   type Input = List[KeyOrLock]
   type Output = Long
 
-  case class KeyOrLock(isKey: Boolean, pinHeights: Vector[Int]):
+  final case class KeyOrLock(isKey: Boolean, pinHeights: Vector[Int]):
     def compatibleWith(that: KeyOrLock): Boolean =
       assert(this.isKey ^ that.isKey)
       this.pinHeights.zip(that.pinHeights).forall((l, r) => l + r <= 5)

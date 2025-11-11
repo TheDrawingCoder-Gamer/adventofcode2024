@@ -9,7 +9,7 @@ object Day20 extends Problem:
 
   lazy val input = FileIO.getInput(2021, 20)
 
-  case class Image(grid: Grid[Boolean], oobPixel: Boolean):
+  final case class Image(grid: Grid[Boolean], oobPixel: Boolean):
     def apply(x: Int, y: Int): Boolean = grid.get(x, y).getOrElse(oobPixel)
     def expand(n: Int): Image = Image(grid.expand(oobPixel)(n), oobPixel)
     def height = grid.height

@@ -18,18 +18,19 @@ object Day24 extends Problem:
   lazy val input = FileIO.getInput(2022, 24)
 
   sealed trait BlizzardMapPoint
-  case class BlizzardSpot(blizzards: List[Direction2D]) extends BlizzardMapPoint
+  final case class BlizzardSpot(blizzards: List[Direction2D])
+      extends BlizzardMapPoint
   object BlizzardSpot:
     def one(dir: Direction2D): BlizzardSpot = BlizzardSpot(List(dir))
 
   case object Wall extends BlizzardMapPoint
   case object Empty extends BlizzardMapPoint
 
-  case class TimeLocation(time: Int, loc: Vec2[Int]) derives Eq
+  final case class TimeLocation(time: Int, loc: Vec2[Int]) derives Eq
 
   type BlizzardMap = Grid[BlizzardMapPoint]
 
-  class State:
+  final class State:
     val memo = mutable.HashMap[Int, BlizzardMap]()
 
     def freakstar(start: TimeLocation, goal: Vec2[Int]): Option[TimeLocation] =

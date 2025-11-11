@@ -33,8 +33,8 @@ object Day13 extends Problem:
 
   // order contains eq, which so happens to exactly match our universal equals impl
   given orderPacket: Order[Packet] = Order.fromOrdering(using Ordering.ordered)
-  case class NestedPacket(packets: List[Packet]) extends Packet
-  case class LeafPacket(n: Int) extends Packet
+  final case class NestedPacket(packets: List[Packet]) extends Packet
+  final case class LeafPacket(n: Int) extends Packet
 
   val leafParser: Parser[LeafPacket] =
     Numbers.bigInt.map(it => LeafPacket(it.toInt))

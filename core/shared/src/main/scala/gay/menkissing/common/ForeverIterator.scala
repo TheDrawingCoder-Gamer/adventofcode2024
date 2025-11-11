@@ -2,7 +2,7 @@ package gay.menkissing.common
 
 import scala.collection.mutable
 
-class ForeverIterator[A](val underlying: Iterator[A]) extends Iterator[A]:
+final class ForeverIterator[A](val underlying: Iterator[A]) extends Iterator[A]:
   private var memoizedAll: Boolean = false
   private val memoizedValues = mutable.ArrayBuffer[A]()
   private var currentIterator = underlying

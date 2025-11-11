@@ -1,14 +1,13 @@
 package gay.menkissing.advent
 package y2024
 
-
 object Day07 extends Problem:
   type Input = List[Equation]
   type Output = Long
 
   lazy val input = FileIO.getInput(2024, 7)
 
-  case class Equation(result: Long, inputs: List[Long]):
+  final case class Equation(result: Long, inputs: List[Long]):
     def canBeTrue: Boolean =
       assert(inputs.sizeIs > 1)
       calculateTruth(inputs, result, 0)

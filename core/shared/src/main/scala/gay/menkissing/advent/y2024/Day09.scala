@@ -13,7 +13,7 @@ object Day09 extends Problem:
   override def parse(str: String): String = str
 
   def unpackData(str: String): Disk =
-    
+
     Disk(str.zipWithIndex.flatMap: (s, i) =>
       if i % 2 == 0 then Iterator.fill(s.asDigit)((i / 2).toLong)
       else Iterator.fill(s.asDigit)(-1L))
@@ -25,10 +25,10 @@ object Day09 extends Problem:
 
   sealed trait Chunk
 
-  case class File(size: Int, id: Long) extends Chunk
-  case class Free(size: Int) extends Chunk
+  final case class File(size: Int, id: Long) extends Chunk
+  final case class Free(size: Int) extends Chunk
 
-  case class Disk(disk: Seq[Long]):
+  final case class Disk(disk: Seq[Long]):
     override def toString: String =
       disk.map:
         case -1 => '.'

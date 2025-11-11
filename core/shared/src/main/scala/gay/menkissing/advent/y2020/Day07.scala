@@ -5,7 +5,7 @@ object Day07 extends Problem:
   type Input = Rules
   type Output = Int
 
-  case class BagDesc(color: String, amount: Int)
+  final case class BagDesc(color: String, amount: Int)
   type Rules = Map[String, Set[BagDesc]]
 
   override def parse(str: String): Rules =

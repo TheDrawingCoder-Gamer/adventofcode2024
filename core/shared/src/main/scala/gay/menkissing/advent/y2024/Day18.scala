@@ -10,7 +10,7 @@ object Day18 extends ProblemAdv:
   type OutputP1 = Int
   type OutputP2 = Vec2[Int]
 
-  case class GridSize(x: Int, y: Int)
+  final case class GridSize(x: Int, y: Int)
 
   override def parse(str: String): List[Vec2[Int]] =
     str.linesIterator.map:

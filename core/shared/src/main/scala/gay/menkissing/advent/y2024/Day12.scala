@@ -63,7 +63,7 @@ object Day12 extends Problem:
         regionMap.optionalCardinalNeighbors(x, y).count(_.forall(_ != '#'))
       ).sum
 
-  case class PlantMap(plants: Vector[String]):
+  final case class PlantMap(plants: Vector[String]):
     val height: Int = plants.size
     val width: Int = plants.head.length
     // Length should be equal

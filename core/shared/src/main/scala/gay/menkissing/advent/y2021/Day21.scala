@@ -14,13 +14,13 @@ object Day21 extends Problem:
   type Input = ProblemState
   type Output = Long
 
-  case class Player(score: Int, space: Int):
+  final case class Player(score: Int, space: Int):
     def move(n: Int): Player =
       val daSpace = (space + n) % 10
       val good = if daSpace == 0 then 10 else daSpace
       copy(score = score + good, space = good)
 
-  case class ProblemState(dice: Int, nrolls: Int, p1: Player, p2: Player):
+  final case class ProblemState(dice: Int, nrolls: Int, p1: Player, p2: Player):
     def nextDiceDeterministic: ProblemState =
       copy(dice = (dice + 1) % 100, nrolls = nrolls + 1)
 
@@ -71,8 +71,8 @@ object Day21 extends Problem:
       case 2 => state.p1.score * state.nrolls
       case _ => 0
 
-  case class Players(p1: Player, p2: Player)
-  case class P2State(p1: Player, p2: Player, universeCount: Long):
+  final case class Players(p1: Player, p2: Player)
+  final case class P2State(p1: Player, p2: Player, universeCount: Long):
     inline def updatePlayer[N <: Int](w: Player, uc: Long): P2State =
       inline compiletime.constValue[N] match
         case 1 => copy(p1 = w, universeCount = uc)

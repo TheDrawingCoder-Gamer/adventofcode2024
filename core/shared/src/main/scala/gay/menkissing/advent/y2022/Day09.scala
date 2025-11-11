@@ -48,7 +48,7 @@ object Day09 extends Problem:
   def moveN(dir: Direction2D, n: Int): Day9State[List[List[Vec2[Int]]]] =
     move(dir).replicateA(n)
 
-  case class Movement(dir: Direction2D, n: Int):
+  final case class Movement(dir: Direction2D, n: Int):
     val execute: Day9State[List[List[Vec2[Int]]]] = moveN(dir, n)
 
   def parse(input: String): List[Movement] =

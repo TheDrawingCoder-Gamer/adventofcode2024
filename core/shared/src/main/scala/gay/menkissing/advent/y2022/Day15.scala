@@ -10,7 +10,7 @@ object Day15 extends Problem:
   type Input = Set[SensorRanged]
   type Output = Long
 
-  case class SensorRanged(pos: Vec2[Int], beacon: Vec2[Int]):
+  final case class SensorRanged(pos: Vec2[Int], beacon: Vec2[Int]):
     val range = pos `taxiDistance` beacon
 
     def rangeForRow(row: Int): Option[Range[Int]] =
@@ -18,7 +18,7 @@ object Day15 extends Problem:
       val newRange = range - diff
       Option.unless(newRange <= 0)(Range(pos.x - newRange, pos.x + newRange))
 
-  class RangeGrid(values: Set[SensorRanged]):
+  final class RangeGrid(values: Set[SensorRanged]):
     def getRow(row: Int): Diet[Int] =
       values.foldLeft(Diet.empty[Int]):
         case (acc, ls) =>

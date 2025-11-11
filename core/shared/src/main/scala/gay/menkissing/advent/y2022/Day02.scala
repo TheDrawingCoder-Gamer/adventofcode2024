@@ -42,18 +42,18 @@ object Day02 extends Problem:
 
     def score: Int = ordinal + 1
 
-  case class RawThrow(opponent: RPS, player: Int):
+  final case class RawThrow(opponent: RPS, player: Int):
     def toStrategy: Strategy = Strategy(opponent, RPSResult.fromOrdinal(player))
     def toThrow: Throw = Throw(opponent, RPS.fromOrdinal(player))
 
-  case class Throw(opponent: RPS, player: RPS):
+  final case class Throw(opponent: RPS, player: RPS):
     def score: Int =
       // real
       val shapeScore = player.score
       val result = player.result(opponent).score
       result + shapeScore
 
-  case class Strategy(opponent: RPS, player: RPSResult):
+  final case class Strategy(opponent: RPS, player: RPSResult):
     def toThrow: Throw =
       val newPlayer =
         player match

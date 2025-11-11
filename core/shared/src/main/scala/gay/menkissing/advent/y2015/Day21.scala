@@ -8,7 +8,7 @@ object Day21 extends Problem:
   type Input = Actor
   type Output = Int
 
-  case class Actor(hp: Int, damage: Int, armor: Int):
+  final case class Actor(hp: Int, damage: Int, armor: Int):
     def diesIn(dmg: Int): Int =
       val realDmg = math.max(1, dmg - armor)
       math.ceil(hp.toDouble / realDmg.toDouble).toInt
@@ -23,7 +23,7 @@ object Day21 extends Problem:
     ) = str.linesIterator.toArray: @unchecked
     Actor(hp.toInt, dmg.toInt, armor.toInt)
 
-  case class StoreItem(cost: Int, damage: Int, armor: Int):
+  final case class StoreItem(cost: Int, damage: Int, armor: Int):
     def |+|(that: StoreItem): StoreItem =
       StoreItem(cost + that.cost, damage + that.damage, armor + that.armor)
 

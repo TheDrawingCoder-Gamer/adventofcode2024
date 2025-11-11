@@ -22,7 +22,7 @@ object Day08 extends Problem:
       case s"nop $n" => Instruction.Nop(n.toInt)
     .toVector
 
-  case class CPU(acc: Int, ip: Int)
+  final case class CPU(acc: Int, ip: Int)
 
   import Instruction.*
 

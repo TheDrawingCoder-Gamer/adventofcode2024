@@ -10,7 +10,7 @@ object Day18Writeup extends ProblemAdv:
   type OutputP1 = Int
   type OutputP2 = Vec2i
 
-  case class Vec2i(x: Int, y: Int) derives Show:
+  final case class Vec2i(x: Int, y: Int) derives Show:
     def cardinalNeighbors: List[Vec2i] =
       List(Vec2i(x - 1, y), Vec2i(x + 1, y), Vec2i(x, y - 1), Vec2i(x, y + 1))
 

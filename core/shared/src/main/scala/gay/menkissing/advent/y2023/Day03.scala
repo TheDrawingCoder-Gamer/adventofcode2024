@@ -14,7 +14,7 @@ object Day03 extends Problem:
   def parse(input: String): Grid[Char] =
     Grid(input.linesIterator.map(_.iterator))
 
-  case class Number(n: Int, size: Int, point: Vec2[Int])
+  final case class Number(n: Int, size: Int, point: Vec2[Int])
   extension (grid: Grid[Char])
     def gears: Seq[Vec2[Int]] =
       grid.indices.mapFilter: (x, y) =>

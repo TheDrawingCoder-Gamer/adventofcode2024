@@ -5,7 +5,8 @@ object Day02 extends Problem:
   type Input = List[PolicyEntry]
   type Output = Int
 
-  case class PolicyEntry(left: Int, right: Int, of: Char, password: String)
+  final case class PolicyEntry
+    (left: Int, right: Int, of: Char, password: String)
 
   override def parse(str: String): List[PolicyEntry] =
     str.linesIterator.map:

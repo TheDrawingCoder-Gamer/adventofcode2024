@@ -6,7 +6,7 @@ object Day24 extends ProblemAdv:
   type OutputP1 = Long
   type OutputP2 = String
 
-  case class Machine
+  final case class Machine
     (
       starts: Map[String, Long],
       eqs: Map[String, BooleanEquation]
@@ -74,16 +74,16 @@ object Day24 extends ProblemAdv:
 
   case object InvalidCircuit extends Circuit
 
-  case class CircuitKey(x: String) extends Circuit
+  final case class CircuitKey(x: String) extends Circuit
 
-  case class CircuitOp(op: Op, l: Circuit, r: Circuit) extends Circuit:
+  final case class CircuitOp(op: Op, l: Circuit, r: Circuit) extends Circuit:
     override def equals(obj: Any): Boolean =
       obj match
         case CircuitOp(tOp, tL, tR) =>
           (tOp == op) && ((tL == l && tR == r) || (tL == r && tR == l))
         case _ => false
 
-  case class BooleanEquation(l: String, r: String, op: Op)
+  final case class BooleanEquation(l: String, r: String, op: Op)
 
   def keyOfInt(prefix: String, i: Int) =
     if i < 10 then s"${prefix}0$i" else s"$prefix$i"

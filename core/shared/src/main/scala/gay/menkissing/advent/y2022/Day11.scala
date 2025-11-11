@@ -10,7 +10,7 @@ object Day11 extends Problem:
   type Input = Vector[Monkey]
   type Output = Long
 
-  class Monkey
+  final class Monkey
     (
       val n: Int,
       val items: mutable.ListBuffer[Long],

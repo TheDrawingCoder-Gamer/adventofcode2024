@@ -19,8 +19,8 @@ object Day22 extends Problem:
   def modify(f: GameState => GameState): GameStateState[Unit] = State.modify(f)
   def inspect[A](f: GameState => A): GameStateState[A] = State.inspect(f)
 
-  case class Boss(hp: Int, damage: Int) derives Show
-  case class Player(mana: Int, hp: Int, armor: Int) derives Show
+  final case class Boss(hp: Int, damage: Int) derives Show
+  final case class Player(mana: Int, hp: Int, armor: Int) derives Show
   object Player:
     val initial: Player = Player(500, 50, 0)
 
@@ -86,7 +86,7 @@ object Day22 extends Problem:
           case Poison   => state
           case Recharge => state
 
-  case class Effects
+  final case class Effects
     (shield: Int = 0, poison: Int = 0, recharge: Int = 0)
       derives Show:
     def effectLens(effect: Effect) =
@@ -100,7 +100,7 @@ object Day22 extends Problem:
       debugger.assert(lens.exist(_ == 0))
       lens.replace(effect.initTimer)
 
-  case class GameState
+  final case class GameState
     (
       player: Player,
       boss: Boss,

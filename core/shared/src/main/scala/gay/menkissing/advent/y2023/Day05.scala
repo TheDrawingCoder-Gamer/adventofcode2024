@@ -23,7 +23,7 @@ object Day05 extends Problem:
       case Ior.Right(vs)  => vs.map(g).reduce
       case Ior.Both(l, r) => r.map(g).reduce.addLeft(l)
 
-  case class MapRange(destStart: Long, srcStart: Long, len: Long):
+  final case class MapRange(destStart: Long, srcStart: Long, len: Long):
     val single: PartialFunction[Long, Long] =
       // ok i geniunely didnt know u could drop the brackets around partial functions
       // the more you know?

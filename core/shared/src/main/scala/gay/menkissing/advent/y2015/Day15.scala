@@ -1,12 +1,11 @@
 package gay.menkissing.advent
 package y2015
 
-
 object Day15 extends Problem:
   type Input = Vector[Ingredient]
   type Output = Int
 
-  case class Ingredient
+  final case class Ingredient
     (
       capacity: Int,
       durability: Int,

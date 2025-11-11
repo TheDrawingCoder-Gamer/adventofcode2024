@@ -48,7 +48,8 @@ object Day17 extends Problem:
       )
     ).map(_.map(Rock.parseSegment).reverse)
 
-  class Chamber(val levels: mutable.Buffer[Array[Boolean]] = mutable.Buffer()):
+  final class Chamber
+    (val levels: mutable.Buffer[Array[Boolean]] = mutable.Buffer()):
     def height = levels.length
     def cloned: Chamber = Chamber(levels.map(_.clone()).clone())
 
@@ -116,7 +117,7 @@ object Day17 extends Problem:
     val baseHeight = chamber.height
 
     // Then for each multiple of 5, check to see if we found any repitition
-    case class BaseChamber(rockCount: Int, windCount: Long, height: Int)
+    final case class BaseChamber(rockCount: Int, windCount: Long, height: Int)
 
     val (repeatBase, extRockCount) =
       unfoldedMap(

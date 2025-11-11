@@ -10,7 +10,7 @@ object Day15Writeup extends Writeup[Day15Writeup.ProblemState, Long]:
   enum Direction:
     case Up, Down, Left, Right
 
-  case class Vec2i(x: Int, y: Int):
+  final case class Vec2i(x: Int, y: Int):
     def offset(dir: Direction): Vec2i =
       dir match
         case Direction.Up    => Vec2i(x, y - 1)
@@ -21,7 +21,7 @@ object Day15Writeup extends Writeup[Day15Writeup.ProblemState, Long]:
     def isContainedIn(w: Int, h: Int): Boolean =
       x >= 0 && x < w && y >= 0 && y < h
 
-  case class Grid[A](values: Vector[Vector[A]]):
+  final case class Grid[A](values: Vector[Vector[A]]):
     val height: Int = values.size
     val width: Int = values.head.size
 
@@ -110,7 +110,7 @@ object Day15Writeup extends Writeup[Day15Writeup.ProblemState, Long]:
               g.updated(p)(GridItemP2.Empty).updated(p.offset(dir))(item)
             else g
 
-  case class ProblemState
+  final case class ProblemState
     (
       grid: Grid[GridItem],
       robot: Vec2i,
@@ -137,7 +137,7 @@ object Day15Writeup extends Writeup[Day15Writeup.ProblemState, Long]:
           case GridItem.Empty => List(GridItemP2.Empty, GridItemP2.Empty)))
       ProblemStateP2(newGrid, robot.copy(x = robot.x * 2), remainingMoves)
 
-  case class ProblemStateP2
+  final case class ProblemStateP2
     (
       grid: Grid[GridItemP2],
       robot: Vec2i,

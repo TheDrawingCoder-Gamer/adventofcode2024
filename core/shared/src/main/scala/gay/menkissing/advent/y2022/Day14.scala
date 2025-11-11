@@ -16,7 +16,7 @@ object Day14 extends Problem:
       val e = b `max` a
 
       s to e
-  case class Pathway(points: List[Vec2[Int]]):
+  final case class Pathway(points: List[Vec2[Int]]):
     def bake: Set[Vec2[Int]] =
       points.slidingN[2].flatMap:
         case (s, e) =>

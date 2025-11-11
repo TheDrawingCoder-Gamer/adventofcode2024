@@ -6,7 +6,7 @@ object Day04 extends Problem:
   type Output = Int
 
   // j*bs...
-  case class Jobs(left: Range, right: Range):
+  final case class Jobs(left: Range, right: Range):
     def useless: Boolean =
       val size = symdiff(left.toSet, right.toSet).size
       val expected = (left.size max right.size) - (left.size min right.size)

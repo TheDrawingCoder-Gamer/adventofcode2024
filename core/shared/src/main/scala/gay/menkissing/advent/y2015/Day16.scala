@@ -1,7 +1,6 @@
 package gay.menkissing.advent
 package y2015
 
-
 object Day16 extends Problem:
   type Input = List[Aunt]
   type Output = Int
@@ -9,7 +8,7 @@ object Day16 extends Problem:
   val greaterValues = Set("cats", "trees")
   val lessValues = Set("pomeranians", "goldfish")
   val specialValues = greaterValues ++ lessValues
-  case class Aunt(n: Int, values: Map[String, Int]):
+  final case class Aunt(n: Int, values: Map[String, Int]):
     def validP1: Boolean = values.forall((k, v) => giftSue(k) == v)
     def validP2: Boolean =
       values.filter((k, _) => !specialValues(k))

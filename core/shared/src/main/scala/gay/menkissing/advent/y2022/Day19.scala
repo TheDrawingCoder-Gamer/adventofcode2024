@@ -8,18 +8,17 @@ import monocle.syntax.all.*
 import monocle.macros.*
 // import scala.collection.parallel.CollectionConverters.*
 
-
 import monocle.*
 
 object Day19 extends Problem:
   type Input = List[Blueprint]
   type Output = Int
 
-  case class Cost(ore: Int, clay: Int, obsidian: Int):
+  final case class Cost(ore: Int, clay: Int, obsidian: Int):
     def canAfford(ore: Int, clay: Int, obsidian: Int): Boolean =
       this.ore <= ore && this.clay <= clay && this.obsidian <= obsidian
 
-  case class Minerals(ore: Int, clay: Int, obsidian: Int, geode: Int):
+  final case class Minerals(ore: Int, clay: Int, obsidian: Int, geode: Int):
     def isValid: Boolean = ore >= 0 && clay >= 0 && obsidian >= 0 && geode >= 0
 
     def canAfford(cost: Cost): Boolean = cost.canAfford(ore, clay, obsidian)
@@ -60,7 +59,7 @@ object Day19 extends Problem:
   // Because we can only build 1 robot each step,
   // Once we have N Z robots, and the sum of all costs that take Z are <= N,
   // That robot shouldn't be built anymore
-  case class Blueprint
+  final case class Blueprint
     (
       id: Int,
       oreCost: Cost,
@@ -122,11 +121,11 @@ object Day19 extends Problem:
       val blueprintCostLens: Getter[Blueprint, Cost] = Getter(_.geodeCost)
       val blueprintMaxLens: Getter[Blueprint, Int] = Getter(_ => Int.MaxValue)
 
-  case class Robots(ore: Int, clay: Int, obsidian: Int, geode: Int)
+  final case class Robots(ore: Int, clay: Int, obsidian: Int, geode: Int)
   object Robots:
     val initial = Robots(1, 0, 0, 0)
 
-  case class PState(robots: Robots, inStock: Minerals, time: Int):
+  final case class PState(robots: Robots, inStock: Minerals, time: Int):
     def forceBuild(robot: Robot, blueprint: Blueprint): PState =
       val cost = robot.blueprintCostLens.get(blueprint)
       robot.stateRobotLens.modify(_ + 1)(this.copy(inStock = inStock - cost))
@@ -214,7 +213,7 @@ object Day19 extends Problem:
     robot.blueprintMaxLens.get(blueprint) > cur &&
       robot.blueprintCostLens.get(blueprint).canAfford(ore, clay, obsidian)
 
-  case class Matrix(arr: IArray[Double], w: Int, h: Int)
+  final case class Matrix(arr: IArray[Double], w: Int, h: Int)
 
   def maxGeodes(blueprint: Blueprint, totalTime: Int): Int =
     var maxGeodes = 0
@@ -233,8 +232,7 @@ object Day19 extends Problem:
         geodeRobots: Int,
         timeLeft: Int
       ): Unit =
-      
-      
+
       maxSeen = maxSeen.max(geode)
       if timeLeft <= 0 then
         maxGeodes = maxGeodes.max(geode)

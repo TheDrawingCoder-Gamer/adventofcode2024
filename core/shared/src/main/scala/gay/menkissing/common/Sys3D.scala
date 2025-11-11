@@ -127,7 +127,7 @@ object Sys3D:
   enum Rotation:
     case Rot0, Rot90, Rot180, Rot270
 
-  case class Orientation3D(facing: Direction3D, rot: Rotation)
+  final case class Orientation3D(facing: Direction3D, rot: Rotation)
 
   object Orientation3D:
     val orientations: Seq[Orientation3D] =
@@ -136,7 +136,8 @@ object Sys3D:
         r <- Rotation.values
       yield Orientation3D(f, r)
 
-  case class AABB3D[A](xs: Dimension[A], ys: Dimension[A], zs: Dimension[A]):
+  final case class AABB3D[A]
+    (xs: Dimension[A], ys: Dimension[A], zs: Dimension[A]):
     infix def intersect
       (that: AABB3D[A])
       (using ord: Order[A]): Option[AABB3D[A]] =

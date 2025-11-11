@@ -38,7 +38,7 @@ object Day23 extends NewProblem:
       Vec2(11, 1)
     )
 
-  case class State
+  final case class State
     (amphipods: Map[Vec2[Int], Amphipod], roomSize: Int)
       derives Eq:
     def isGoal: Boolean =

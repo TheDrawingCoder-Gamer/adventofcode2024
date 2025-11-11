@@ -29,7 +29,7 @@ object Day13 extends ProblemAdv:
       .toList
     (goodDots, goodFolds)
 
-  case class Fold(axis: Axis2D, at: Int):
+  final case class Fold(axis: Axis2D, at: Int):
     def apply(pos: Vec2[Int]): Vec2[Int] =
       axis match
         case Axis2D.X => pos.copy(x = fold(at)(pos.x))

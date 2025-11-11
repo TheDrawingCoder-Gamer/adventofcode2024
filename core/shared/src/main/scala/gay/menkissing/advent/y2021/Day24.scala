@@ -45,7 +45,8 @@ object Day24 extends Problem:
         case s"mod $x $y" => Mod(Variable.parse(x), Operand.parse(y))
         case s"eql $x $y" => Eql(Variable.parse(x), Operand.parse(y))
 
-  case class State(x: Int, y: Int, z: Int, w: Int, remainingInput: String):
+  final case class State
+    (x: Int, y: Int, z: Int, w: Int, remainingInput: String):
     def setVar(variable: Variable, v: Int): State = updateVar(variable, _ => v)
     def updateVar(variable: Variable, f: Int => Int): State =
       variable match
@@ -83,7 +84,7 @@ object Day24 extends Problem:
           if getVar(base) == evaluateOperand(value) then setVar(base, 1)
           else setVar(base, 0)
 
-  case class FuncSegment(n: Int, m: Int):
+  final case class FuncSegment(n: Int, m: Int):
     override def toString(): String = s"segment N=$n,M=$m"
     // each iteration:
     // if n >= 0 then either we stay in the same "ballpark" or we times by 26

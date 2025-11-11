@@ -44,7 +44,8 @@ object Day20 extends Problem:
       q.headOption.map: p =>
         reconstructPath(cameFrom.toMap, p)
 
-  case class RaceTrack(start: Vec2[Int], end: Vec2[Int], grid: Grid[Boolean]):
+  final case class RaceTrack
+    (start: Vec2[Int], end: Vec2[Int], grid: Grid[Boolean]):
     lazy val basePath: List[Vec2[Int]] = grid.pathfind(start, end).get
 
     def findCheats(limit: Int): List[Cheat] =
@@ -55,7 +56,7 @@ object Day20 extends Problem:
             Cheat(lp, rp, (ri - li) - dist)
           )
 
-  case class Cheat(start: Vec2[Int], end: Vec2[Int], saved: Int)
+  final case class Cheat(start: Vec2[Int], end: Vec2[Int], saved: Int)
 
   override def parse(str: String): RaceTrack =
     val goodGrid =

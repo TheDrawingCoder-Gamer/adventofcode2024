@@ -307,7 +307,7 @@ object Day22 extends Problem:
       )
     ).flatten
 
-  case class ConnectionInfo
+  final case class ConnectionInfo
     (
       thisDir: Direction2D,
       thatDir: Direction2D,
@@ -396,7 +396,7 @@ object Day22 extends Problem:
         fullParsed(net7, list7)
       )
 
-  case class CompleteGrid
+  final case class CompleteGrid
     (
       regionMap: Map[Int, Vec2[Int]],
       connections: List[ConnectionInfo],

@@ -14,7 +14,8 @@ object Day16 extends Problem:
 
   val fullTimeP2 = 26
   // valve?
-  case class ValveRoom(room: String, flowRate: Int, connectsTo: Vector[String]):
+  final case class ValveRoom
+    (room: String, flowRate: Int, connectsTo: Vector[String]):
     def value(time: Int, fullTime: Int) = flowRate * (fullTime - time)
 
   type ValveMap = Map[String, ValveRoom]
@@ -41,8 +42,8 @@ object Day16 extends Problem:
       distanceMemo.memo(s"$s.$e"):
         graphAStar(s, e, self).get
 
-  case class State(on: List[String], time: Int, pressure: Int)
-  case class Position(dest: ValveRoom, progress: Int)
+  final case class State(on: List[String], time: Int, pressure: Int)
+  final case class Position(dest: ValveRoom, progress: Int)
 
   def importantRooms(rooms: ValveMap, on: List[String]) =
     rooms.filter((k, v) => v.flowRate != 0 && !on.contains(k)).values.toVector

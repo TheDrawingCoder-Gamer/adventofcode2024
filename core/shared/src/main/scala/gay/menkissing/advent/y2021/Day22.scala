@@ -5,12 +5,11 @@ import gay.menkissing.common.*
 import Sys3D.*
 import algebra.instances.all.*
 
-
 object Day22 extends Problem:
   type Input = List[Step]
   type Output = BigInt
 
-  case class Step(command: Command, cuboid: AABB3D[Int])
+  final case class Step(command: Command, cuboid: AABB3D[Int])
 
   enum Command:
     case On, Off
