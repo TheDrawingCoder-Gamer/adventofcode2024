@@ -56,3 +56,6 @@ core/shared/src/main/resources/**/*.txt
 metals.sbt
 
 benchResults
+
+# NO EVIL ERRLOG
+*.log
