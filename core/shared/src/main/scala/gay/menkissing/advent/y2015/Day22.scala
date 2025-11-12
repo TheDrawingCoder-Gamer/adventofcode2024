@@ -12,7 +12,7 @@ object Day22 extends Problem:
   type Input = Boss
   type Output = Int
 
-  val debugger = Debuginator(active = true)
+  val debugger = Debuginator(active = false)
 
   type GameStateState[A] = State[GameState, A]
 

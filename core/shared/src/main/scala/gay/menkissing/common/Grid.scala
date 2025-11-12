@@ -58,6 +58,8 @@ final case class Grid[A] private (values: Vector[Vector[A]])
 
   def columns: Seq[Seq[A]] = values.transpose.toSeq.map(_.toSeq)
 
+  def rotate: Grid[A] = Grid(values.transpose.map(_.reverse))
+
   private def nToXY(n: Int): (Int, Int) =
     (n % width, Math.floor(n / width).toInt)
   def updated(x: Int, y: Int)(v: A): Grid[A] =

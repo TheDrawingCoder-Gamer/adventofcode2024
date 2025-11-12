@@ -59,6 +59,15 @@ def logBaseN(n: Double, base: Double): Double = math.log(n) / math.log(base)
 extension [A, B](map: mutable.Map[A, B])
   def memo(in: A)(func: => B): B = map.getOrElseUpdate(in, func)
 
+def bfsFoldlG[A, B](a: A)(f: A => Either[Iterable[A], B]): Option[B] =
+  var result: Option[B] = None
+  val queue = mutable.Queue(a)
+  while queue.nonEmpty do
+    f(queue.dequeue()) match
+      case Right(r)     => result = Some(r)
+      case Left(states) => queue.enqueueAll(states)
+  result
+
 private def bfsImpl[A, B, C]
   (a: A, z: C, append: (C, B) => C)
   (f: A => Either[Iterable[A], B]): C =
