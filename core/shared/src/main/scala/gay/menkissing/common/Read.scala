@@ -8,13 +8,9 @@ trait Read[A]:
 
 object Read:
   given stdReadForInt: Read[Int] with
-    def read(str: String): Option[Int] =
-      try Some(Integer.parseInt(str))
-      catch case x: NumberFormatException => None
+    def read(str: String): Option[Int] = str.toIntOption
 
   given stdReadForLong: Read[Long] with
-    def read(str: String): Option[Long] =
-      try Some(java.lang.Long.parseLong(str))
-      catch case x: NumberFormatException => None
+    def read(str: String): Option[Long] = str.toLongOption
 
   def unapply[A](in: String)(using read: Read[A]): Option[A] = read.read(in)

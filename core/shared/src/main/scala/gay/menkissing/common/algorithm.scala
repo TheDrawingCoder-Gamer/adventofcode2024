@@ -6,7 +6,7 @@ import cats.syntax.all.*
 
 /**
  * Simplified generialized AStar Removes isGoal in favor of goal, which does
- * `_ == goal`. See [[astarGeneric]]
+ * `_ === goal`. See [[astarGeneric]]
  */
 def astar[A]
   (
