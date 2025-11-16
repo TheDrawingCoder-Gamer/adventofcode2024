@@ -45,45 +45,6 @@ object Day24 extends Problem:
         case s"mod $x $y" => Mod(Variable.parse(x), Operand.parse(y))
         case s"eql $x $y" => Eql(Variable.parse(x), Operand.parse(y))
 
-  final case class State
-    (x: Int, y: Int, z: Int, w: Int, remainingInput: String):
-    def setVar(variable: Variable, v: Int): State = updateVar(variable, _ => v)
-    def updateVar(variable: Variable, f: Int => Int): State =
-      variable match
-        case Variable.W => copy(w = f(w))
-        case Variable.X => copy(x = f(x))
-        case Variable.Y => copy(y = f(y))
-        case Variable.Z => copy(z = f(z))
-
-    def getVar(variable: Variable): Int =
-      variable match
-        case Variable.X => x
-        case Variable.Y => y
-        case Variable.Z => z
-        case Variable.W => w
-
-    def evaluateOperand(operand: Operand): Int =
-      operand match
-        case Left(value)  => value
-        case Right(value) => getVar(value)
-
-    def advance(step: Instruction): State =
-      step match
-        case Instruction.Inp(variable) =>
-          setVar(variable, remainingInput.head.asDigit)
-            .copy(remainingInput = remainingInput.tail)
-        case Instruction.Add(base, value) =>
-          updateVar(base, _ + evaluateOperand(value))
-        case Instruction.Mul(base, value) =>
-          updateVar(base, _ * evaluateOperand(value))
-        case Instruction.Div(base, value) =>
-          updateVar(base, _ / evaluateOperand(value))
-        case Instruction.Mod(base, value) =>
-          updateVar(base, _ % evaluateOperand(value))
-        case Instruction.Eql(base, value) =>
-          if getVar(base) == evaluateOperand(value) then setVar(base, 1)
-          else setVar(base, 0)
-
   final case class FuncSegment(n: Int, m: Int):
     override def toString(): String = s"segment N=$n,M=$m"
     // each iteration:

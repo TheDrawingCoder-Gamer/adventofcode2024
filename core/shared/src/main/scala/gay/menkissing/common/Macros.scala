@@ -26,12 +26,68 @@ object Macros:
   inline def summonSingletons[T](using s: Mirror.SumOf[T]): List[T] =
     summonSingletonsImpl[s.MirroredElemTypes, T](constValue[s.MirroredLabel])
 
+  def summonProductFields[T: Type]
+    (m: Expr[Mirror.ProductOf[T]])
+    (using q: Quotes): List[Field[q.type, T, ?]] =
+    import quotes.reflect.*
+    m match
+      case '{
+            $m: Mirror.ProductOf[T] {
+              type MirroredElemLabels = elementLabels
+              type MirroredElemTypes = elementTypes
+            }
+          } =>
+        val parentType = Type.of[T]
+        val labels =
+          tupleToList(TypeRepr.of[elementLabels]).map(_.valueAs[String])
+        val typeReprs = tupleToList(TypeRepr.of[elementTypes])
+        labels.zip(typeReprs).map: (label, kind) =>
+          kind.asType match
+            case '[t] => Field(using quotes, parentType, Type.of[t])(label)
+
+  class Field[Q <: Quotes, S, A]
+    (using val quotes: Q, val parentType: Type[S], val fieldType: Type[A])
+    (val label: String):
+    import quotes.reflect.*
+    def dereference(parent: Term): Term = Select.unique(parent, label)
+    def get(parent: Expr[S]): Expr[A] = dereference(parent.asTerm).asExprOf[A]
+    def set(parent: Expr[S], value: Expr[A]): Expr[S] =
+      import quotes.reflect.*
+      val term =
+        Select.overloaded(
+          parent.asTerm,
+          "copy",
+          TypeRepr.of[A] :: Nil,
+          value.asTerm :: Nil
+        )
+      term.asExprOf[S]
+
+  def exprOfMap[V: Type]
+    (using Quotes)
+    (as: Seq[(String, Expr[V])]): Expr[Map[String, V]] =
+    '{ Map(${ Varargs(as.map { case (k, v) => '{ ${ Expr(k) } -> $v } }) }*) }
+
   type TupleN[T, N <: Int] =
     N match
       case 0    => EmptyTuple
       case S[n] => T *: TupleN[T, n]
 
   type TupleIsHomo[T <: Tuple] = T =:= TupleN[Tuple.Head[T], Tuple.Size[T]]
+
+  extension (using q: Quotes)(self: q.reflect.TypeRepr)
+    def valueAs[A]: A =
+      import q.reflect.*
+      self.asType match
+        case '[t] => Type.valueOfConstant[t].get.asInstanceOf[A]
+        case _ => report.errorAndAbort(s"expected a literal, got ${self.show}")
+
+  def tupleToList
+    (using q: Quotes)
+    (repr: q.reflect.TypeRepr): List[q.reflect.TypeRepr] =
+    import q.reflect.*
+    repr.asType match
+      case '[t *: ts]    => TypeRepr.of[t] :: tupleToList(TypeRepr.of[ts])
+      case '[EmptyTuple] => Nil
 
   def countTuple[Elems: Type](using Quotes): Int =
     Type.of[Elems] match

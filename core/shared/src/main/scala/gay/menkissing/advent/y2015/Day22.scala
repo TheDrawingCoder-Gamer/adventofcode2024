@@ -1,8 +1,10 @@
 package gay.menkissing.advent
 package y2015
 
+import monocle.*
+import monocle.syntax.AppliedLens
 import monocle.syntax.all.*
-import gay.menkissing.common.*
+import gay.menkissing.common.*, lens.DeriveLenses
 import cats.data.*
 import cats.*
 import cats.derived.*
@@ -89,17 +91,21 @@ object Day22 extends Problem:
   final case class Effects
     (shield: Int = 0, poison: Int = 0, recharge: Int = 0)
       derives Show:
-    def effectLens(effect: Effect) =
-      effect match
-        case Effect.Shield   => this.focus(_.shield)
-        case Effect.Poison   => this.focus(_.poison)
-        case Effect.Recharge => this.focus(_.recharge)
+
+    def effectLens(effect: Effect): AppliedLens[Effects, Int] =
+      AppliedLens(this, Effects.effectLens(effect))
 
     def addEffect(effect: Effect): Effects =
-      val lens = effectLens(effect)
-      debugger.assert(lens.exist(_ == 0))
-      lens.replace(effect.initTimer)
+      val lens = Effects.effectLens(effect)
+      debugger.assert(lens.exist(_ == 0)(this))
+      lens.replace(effect.initTimer)(this)
 
+  object Effects extends DeriveLenses[Effects]:
+    def effectLens(effect: Effect): Lens[Effects, Int] =
+      effect match
+        case Effect.Shield   => Effects.shield
+        case Effect.Poison   => Effects.poison
+        case Effect.Recharge => Effects.recharge
   final case class GameState
     (
       player: Player,
