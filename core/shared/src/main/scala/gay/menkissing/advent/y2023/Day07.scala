@@ -3,6 +3,7 @@ package y2023
 
 import cats.*
 import cats.syntax.all.*
+import gay.menkissing.common.*
 
 object Day07 extends Problem:
   type Input = List[(Hand, Int)]
@@ -26,11 +27,11 @@ object Day07 extends Problem:
 
   given Order[HandKind] = Order.by(_.ordinal)
 
-  final case class Hand(value: String) extends AnyVal
-  object Hand:
-    def apply(n: String): Hand =
+  type Hand = Hand.Type
+  object Hand extends Newtype[String]:
+    override def apply(n: String): Hand =
       assert(n.length == 5)
-      new Hand(n)
+      super.apply(n)
 
     // VALID FULL HOUSES:
     // n.size == 2; 2 or 3 card types, including jonkler. if there were no second non jonkler, then a five of a kind would be chosen instead
