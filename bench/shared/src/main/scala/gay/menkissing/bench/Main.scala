@@ -70,6 +70,21 @@ object Main extends Bench:
     benchmarkFull(8, Day08)
     benchmarkFull(9, Day09)
     benchmarkFull(10, Day10)
+    benchmarkFull(11, Day11)
+    benchmarkFull(12, Day12)
+    benchmarkFull(13, Day13)
+    benchmarkFull(14, Day14)
+    benchmarkFull(15, Day15)
+    benchmarkFull(16, Day16)
+    benchmarkFull(17, Day17)
+    benchmarkFull(18, Day18)
+    benchmarkFull(19, Day19)
+    benchmarkFull(20, Day20)
+    benchmarkFull(21, Day21)
+    benchmarkFull(22, Day22)
+    benchmarkFull(23, Day23)
+    benchmarkFull(24, Day24)
+    benchmarkHalf(25, Day25)
 
   locally:
     given Year = Year(2020)
@@ -92,8 +107,12 @@ object Main extends Bench:
     benchmarkFull(14, Day14)
     benchmarkFull(15, Day15)
     benchmarkFull(16, Day16)
+    benchmarkFull(17, Day17)
     benchmarkFull(18, Day18)
     benchmarkFull(19, Day19)
+    benchmarkFull(20, Day20)
+    benchmarkFull(21, Day21)
+    benchmarkFull(22, Day22)
 
   locally:
     given Year = Year(2021)
@@ -112,6 +131,12 @@ object Main extends Bench:
     benchmarkFull(10, Day10)
     benchmarkFull(11, Day11)
     benchmarkFull(12, Day12)
+    benchmarkFull(13, Day13)
+    benchmarkFull(14, Day14)
+    benchmarkFull(15, Day15)
+    benchmarkFull(16, Day16)
+    benchmarkFull(17, Day17)
+    benchmarkFull(18, Day18)
     benchmarkFull(
       19,
       Day19,
@@ -126,6 +151,10 @@ object Main extends Bench:
         BenchmarkOptions(excludePlatforms = List(PlatformKind.Native))
       )
     )
+    benchmarkFull(22, Day22)
+    benchmarkFull(23, Day23)
+    benchmarkFull(24, Day24)
+    benchmarkHalf(25, Day25)
 
   locally:
     given Year = Year(2022)
@@ -152,9 +181,9 @@ object Main extends Bench:
       FullOpts.part1Only(BenchmarkOptions(unit = TimeUnit.MICROSECONDS))
     )
     benchmarkFull(16, Day16)
-
-    benchmarkHalf(18, Day18)
-
+    benchmarkFull(17, Day17)
+    benchmarkFull(18, Day18)
+    benchmarkFull(19, Day19)
     benchmarkFull(20, Day20)
     benchmarkFull(21, Day21)
     benchmarkFull(22, Day22)
@@ -182,6 +211,11 @@ object Main extends Bench:
     benchmarkFull(5, Day05)
     benchmarkFull(6, Day06)
     benchmarkFull(7, Day07)
+    benchmarkFull(8, Day08)
+    benchmarkFull(9, Day09)
+    benchmarkFull(10, Day10)
+    benchmarkFull(11, Day11)
+    benchmarkFull(12, Day12)
 
   locally:
     given Year = Year(2024)

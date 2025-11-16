@@ -363,6 +363,6 @@ object Day19 extends Problem:
   def part2(input: List[Blueprint]): Int =
     input.take(3).map: b =>
       val r = maxGeodes(b, 32)
-      println(r)
+      // println(r)
       r
     .product

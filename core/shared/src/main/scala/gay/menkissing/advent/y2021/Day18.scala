@@ -99,7 +99,8 @@ object Day18 extends Problem:
 
   override def part1(input: NonEmptyList[SnailfishNum]): Long =
     val res = input.reduce
-    println(res.show)
+    // TODO: redo benchmark for today
+    // println(res.show)
     res.magnitude
 
   override def part2(input: NonEmptyList[SnailfishNum]): Long =

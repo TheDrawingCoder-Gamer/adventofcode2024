@@ -156,11 +156,9 @@ extension [F[_], A](self: F[A])(using fold: Foldable[F])
   def foldString(using show: Show[A]): String = foldString("", "", "")
 
   def countWhile(f: A => Boolean): Long =
-    fold.foldM[[a] =>> Either[Long, a], A, Long](self, 0L): (i, a) =>
+    fold.foldM[Either[Long, _], A, Long](self, 0L): (i, a) =>
       if !f(a) then Left(i) else Right(i + 1L)
-    .match
-      case Left(i)  => i
-      case Right(i) => i
+    .merge
 
 extension [F[_]](self: Monad[F])
   def whenM[A](cond: F[Boolean])(ifTrue: => F[A]): F[Unit] =
@@ -179,3 +177,16 @@ extension [A](self: Array[A])
 final class ThisShouldntHappenError(val why: String) extends RuntimeException
 
 def !!! : Nothing = throw ThisShouldntHappenError("This shouldn't happen")
+
+opaque type MonadPApp[F[_]] = Monad[F]
+
+extension [F[_]](self: MonadPApp[F])
+  def tailRecM[A](a: A)[B](f: A => F[Either[A, B]]): F[B] = self.tailRecM(a)(f)
+
+object MonadPApp:
+  def apply[F[_]](using m: Monad[F]) = m
+
+object MonadExt:
+  def tailRecM[F[_]: Monad]
+    (using DummyImplicit)[A](a: A)[B](f: A => F[Either[A, B]]): F[B] =
+    Monad[F].tailRecM(a)(f)
