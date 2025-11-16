@@ -100,18 +100,8 @@ extension [A](self: Iterator[A])
     val i = self.flatMap(f)
     Option.when(i.hasNext)(i.next())
 
-extension [A](self: Vector[A])
-  def unsnoc: (Vector[A], A) = (self.init, self.last)
-
-object Unsnoc:
-  def unapply[A](vec: Vector[A]): Option[(Vector[A], A)] =
-    Option.when(vec.nonEmpty)(vec.unsnoc)
-
-@tailrec
 def unfoldedMap[A, S](init: S)(f: S => Either[A, S]): A =
-  f(init) match
-    case Left(a)  => a
-    case Right(s) => unfoldedMap(s)(f)
+  Monad[Id].tailRecM(init)(f.andThen(_.swap))
 
 def unfolded[A, S](init: S)(f: S => Option[(A, S)]): A =
   @tailrec
@@ -156,9 +146,23 @@ extension [F[_], A](self: F[A])(using fold: Foldable[F])
   def foldString(using show: Show[A]): String = foldString("", "", "")
 
   def countWhile(f: A => Boolean): Long =
-    fold.foldM[Either[Long, _], A, Long](self, 0L): (i, a) =>
-      if !f(a) then Left(i) else Right(i + 1L)
-    .merge
+    self.shortCircuitFoldLeft[Long](0L): (i, a) =>
+      if !f(a) then Done(i) else Continue(i + 1L)
+
+  /**
+   * A fold that can short circuit when returning a `Done`.
+   */
+  def shortCircuitFoldLeft[B](b: B)(f: (B, A) => StepResult[B]): B =
+    self.foldShortCircuitGen(b)(f).merge
+
+  private def foldShortCircuitGen[B]
+    (b: B)
+    (f: (B, A) => StepResult[B]): StepResult[B] =
+    fold.foldM[StepResult, A, B](self, b): (acc, v) =>
+      f(acc, v)
+
+  def foldFind[B](b: B)(f: (B, A) => StepResult[B]): Option[B] =
+    foldShortCircuitGen(b)(f).left.toOption
 
 extension [F[_]](self: Monad[F])
   def whenM[A](cond: F[Boolean])(ifTrue: => F[A]): F[Unit] =
@@ -177,16 +181,3 @@ extension [A](self: Array[A])
 final class ThisShouldntHappenError(val why: String) extends RuntimeException
 
 def !!! : Nothing = throw ThisShouldntHappenError("This shouldn't happen")
-
-opaque type MonadPApp[F[_]] = Monad[F]
-
-extension [F[_]](self: MonadPApp[F])
-  def tailRecM[A](a: A)[B](f: A => F[Either[A, B]]): F[B] = self.tailRecM(a)(f)
-
-object MonadPApp:
-  def apply[F[_]](using m: Monad[F]) = m
-
-object MonadExt:
-  def tailRecM[F[_]: Monad]
-    (using DummyImplicit)[A](a: A)[B](f: A => F[Either[A, B]]): F[B] =
-    Monad[F].tailRecM(a)(f)

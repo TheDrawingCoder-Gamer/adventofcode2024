@@ -55,7 +55,7 @@ object Day22 extends Problem:
     (p1: List[Int], p2: List[Int]): Eval[
     (Boolean, List[Int])
   ] =
-    MonadPApp[Eval].tailRecM(p1, p2, Set.empty[(List[Int], List[Int])]):
+    Monad[Eval].tailRecM(p1, p2, Set.empty[(List[Int], List[Int])]):
       (p1, p2, seen) =>
         if seen((p1, p2)) then Eval.now(Right(false, p1))
         else
@@ -74,11 +74,11 @@ object Day22 extends Problem:
       // this is only false for our part 2 test case anyway
       return 0
 
-    unfoldedMap((p1, p2)): (p1, p2) =>
+    Monad[Id].tailRecM((p1, p2)): (p1, p2) =>
       val (newP1, newP2) = fullRound(p1, p2)
-      if newP1.isEmpty then Left(score(newP2))
-      else if newP2.isEmpty then Left(score(newP1))
-      else Right((newP1, newP2))
+      if newP1.isEmpty then Right(score(newP2))
+      else if newP2.isEmpty then Right(score(newP1))
+      else Left((newP1, newP2))
 
   def part2(input: (List[Int], List[Int])): OutputP2 =
     val (p1, p2) = input

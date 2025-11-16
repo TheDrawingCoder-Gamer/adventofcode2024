@@ -1,6 +1,7 @@
 package gay.menkissing.advent
 package y2022
 
+import cats.*
 import gay.menkissing.common.*
 
 import collection.mutable
@@ -120,7 +121,7 @@ object Day17 extends Problem:
     final case class BaseChamber(rockCount: Int, windCount: Long, height: Int)
 
     val (repeatBase, extRockCount) =
-      unfoldedMap(
+      Monad[Id].tailRecM(
         (
           baseRockCount,
           Vector(BaseChamber(baseRockCount, baseWind, baseHeight))
@@ -143,7 +144,7 @@ object Day17 extends Problem:
                   extChamberHeight - 20).map(chamber.levels)
               bottomPart.zip(topPart).forall((l, r) => l.sameElements(r))
 
-        foundRepeat.map(it => (it, extRockCount)).toLeft:
+        foundRepeat.map(it => (it, extRockCount)).toRight:
           val newExtendedBaseChambers =
             extendedBaseChambers :+
               BaseChamber(extRockCount, extWind, extChamberHeight)

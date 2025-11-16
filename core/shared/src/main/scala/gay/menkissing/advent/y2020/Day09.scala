@@ -1,6 +1,7 @@
 package gay.menkissing.advent
 package y2020
 
+import cats.*
 import cats.implicits.*
 
 import gay.menkissing.common.*, ArityN.*
@@ -15,10 +16,10 @@ object Day09 extends Problem:
     input.linesIterator.map(_.toLong).toVector
 
   def weakNum(input: Vector[Long]): Long =
-    input.sliding(26).findMap:
-      case Unsnoc(init, last) =>
-        Option.when(init.combinationsN[2].forall(_ + _ != last))(last)
-      case _ => !!!
+    input.sliding(26).findMap: v =>
+      val init = v.init
+      val last = v.last
+      Option.when(init.combinationsN[2].forall(_ + _ != last))(last)
     .get
 
   def part1(input: Vector[Long]): Long = weakNum(input)
@@ -27,11 +28,11 @@ object Day09 extends Problem:
     val num = weakNum(input)
 
     val (min, max) =
-      unfoldedMap((0, 1, input(0))): (min, max, sum) =>
+      Monad[Id].tailRecM((0, 1, input(0))): (min, max, sum) =>
         sum.compareTo(num) match
-          case -1 => Right((min, max + 1, sum + input(max)))
-          case 1  => Right((min + 1, max, sum - input(min)))
-          case 0  => Left((min, max))
+          case -1 => Left((min, max + 1, sum + input(max)))
+          case 1  => Left((min + 1, max, sum - input(min)))
+          case 0  => Right((min, max))
 
     val nums = (min until max).map(input)
     nums.min + nums.max

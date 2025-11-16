@@ -129,14 +129,11 @@ object Day20 extends Problem:
     def hasEdge(edge: Int): Boolean = edges.contains(edge)
 
     def arranged(dir: Direction2D, edge: Int): Option[Tile] = (0 until 8).toList
-      .foldM[Either[Tile, _], Tile](this):
+      .foldFind(this):
         case (acc, i) =>
-          if acc.selectEdge(dir) == edge then Left(acc)
-          else if i == 3 then Right(acc.flip)
-          else Right(acc.rotate)
-      .match
-        case Left(value) => Some(value)
-        case Right(_)    => None
+          if acc.selectEdge(dir) == edge then Done(acc)
+          else if i == 3 then Continue(acc.flip)
+          else Continue(acc.rotate)
 
     def forceImage: Grid[Boolean] =
       val cropped =
@@ -245,14 +242,13 @@ object Day20 extends Problem:
       imageGrid(row)(col) = tile
 
     val List(se1, se2) = neighbors(corner).map(corner.sharedEdges(_))
-    val newCorner = (0 until 8).toList.foldM[Either[Tile, _], Tile](corner):
+    val newCorner = (0 until 8).toList.shortCircuitFoldLeft(corner):
       case (acc, i) =>
         if se1(acc.selectEdge(Direction2D.Right)) &&
           se2(acc.selectEdge(Direction2D.Down))
-        then Left(acc)
-        else if i == 3 then Right(acc.flip)
-        else Right(acc.rotate)
-    .merge
+        then Done(acc)
+        else if i == 3 then Continue(acc.flip)
+        else Continue(acc.rotate)
 
     placeTile(newCorner, 0, 0)
 
