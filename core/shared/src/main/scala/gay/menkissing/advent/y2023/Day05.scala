@@ -3,7 +3,7 @@ package y2023
 
 import cats.data.{NonEmptyList, NonEmptyChain, Ior}
 import cats.syntax.all.*
-import gay.menkissing.common.ArityN.*
+import gay.menkissing.common.*, ArityN.*
 
 object Day05 extends Problem:
   // was already here and declared as input so it ALL WORKS OUT : )
@@ -56,22 +56,23 @@ object Day05 extends Problem:
             )
           else if max < srcStart || min >= srcStart + len then
             Ior.Right(NonEmptyChain.one((min, max)))
-          else ???
+          else !!!
 
   lazy val input: String = FileIO.getInput(2023, 5)
   // List instead of map - input is a continuous chain
   def parse(str: String): (List[Long], NonEmptyList[NonEmptyList[MapRange]]) =
-    val head :: rest = str.split("\n\n").toList: @unchecked
+    val head :: rest = str.split("\n\n").toList.runtimeChecked
     val seeds =
       head match
         case s"seeds: $ss" => ss.trim.split(" ").map(it => it.toLong).toList
         case _             => ???
     val mapRanges =
       rest.map: group =>
-        val ranges = NonEmptyList.fromList(group.linesIterator.toList.tail).get
+        val ranges =
+          NonEmptyList.fromListUnsafe(group.linesIterator.toList.tail)
         ranges.map:
           case s"$ds $ss $l" => MapRange(ds.toLong, ss.toLong, l.toLong)
-    (seeds, NonEmptyList.fromList(mapRanges).get)
+    (seeds, NonEmptyList.fromListUnsafe(mapRanges))
 
   def part1(input: (List[Long], NonEmptyList[NonEmptyList[MapRange]])): Long =
     val (seeds, ranges) = input
@@ -81,7 +82,7 @@ object Day05 extends Problem:
           .orElse(PartialFunction.fromFunction(identity))
       ).reduceLeft((l, r) => l.andThen(r))
 
-    seeds.map(it => seedToLocationFunc.applyOrElse(it, _ => ???)).min
+    seeds.map(seedToLocationFunc.apply).min
 
   def part2(input: (List[Long], NonEmptyList[NonEmptyList[MapRange]])): Long =
     val (seeds, ranges) = input

@@ -3,7 +3,7 @@ package gay.menkissing.common
 import cats.*
 import cats.syntax.all.*
 
-final case class Grid[A] private (values: Vector[Vector[A]])
+final case class Grid[+A] private (values: Vector[Vector[A]])
     extends PartialFunction[Vec2[Int], A]:
   val width: Int = values.head.length
 
@@ -40,7 +40,8 @@ final case class Grid[A] private (values: Vector[Vector[A]])
     Option.unless(x == -1 || y == -1)(Vec2(x, y))
   def get(p: Vec2[Int]): Option[A] = get(p.x, p.y)
 
-  def getOrElse(p: Vec2[Int], orElse: => A): A = applyOrElse(p, _ => orElse)
+  def getOrElse[AA >: A](p: Vec2[Int], orElse: => AA): AA =
+    applyOrElse(p, _ => orElse)
 
   def apply(x: Int, y: Int): A = values(y)(x)
 
@@ -62,31 +63,31 @@ final case class Grid[A] private (values: Vector[Vector[A]])
 
   private def nToXY(n: Int): (Int, Int) =
     (n % width, Math.floor(n / width).toInt)
-  def updated(x: Int, y: Int)(v: A): Grid[A] =
+  def updated[AA >: A](x: Int, y: Int)(v: AA): Grid[AA] =
     Grid(values.updated(y, values(y).updated(x, v)))
-  def updated(n: Int)(v: A): Grid[A] =
+  def updated[AA >: A](n: Int)(v: AA): Grid[AA] =
     val (x, y) = nToXY(n)
     updated(x, y)(v)
-  def updated(p: Vec2[Int])(v: A): Grid[A] = updated(p.x, p.y)(v)
-  def expand(default: A)(n: Int): Grid[A] =
-    Grid[A](
-      values.map[Vector[A]](
-        _.prependedAll(Vector.fill[A](n)(default))
-          .appendedAll(Vector.fill[A](n)(default))
+  def updated[AA >: A](p: Vec2[Int])(v: AA): Grid[AA] = updated(p.x, p.y)(v)
+  def expand[AA >: A](default: AA)(n: Int): Grid[AA] =
+    Grid[AA](
+      values.map[Vector[AA]](
+        _.prependedAll(Vector.fill(n)(default))
+          .appendedAll(Vector.fill(n)(default))
       ).appendedAll(Vector.fill(n, width + n * 2)(default))
         .prependedAll(Vector.fill(n, width + n * 2)(default))
     )
-  def expandDir(default: A)(n: Int, dir: Direction2D): Grid[A] =
+  def expandDir[AA >: A](default: AA)(n: Int, dir: Direction2D): Grid[AA] =
     dir match
       case Direction2D.Up => values.prependedAll(Vector.fill(n, width)(default))
       case Direction2D.Down =>
         values.appendedAll(Vector.fill(n, width)(default))
       case Direction2D.Left =>
-        values.map[Vector[A]](_.prependedAll(Vector.fill[A](n)(default)))
+        values.map[Vector[AA]](_.prependedAll(Vector.fill(n)(default)))
       case Direction2D.Right =>
-        values.map[Vector[A]](_.appendedAll(Vector.fill[A](n)(default)))
+        values.map[Vector[AA]](_.appendedAll(Vector.fill(n)(default)))
     Grid(values)
-  def valuesAround(default: A)(x: Int, y: Int): Grid[A] =
+  def valuesAround[AA >: A](default: AA)(x: Int, y: Int): Grid[AA] =
     val foo =
       for
         y <- (y - 1) to (y + 1)
@@ -101,12 +102,12 @@ final case class Grid[A] private (values: Vector[Vector[A]])
     Grid((mnY to mxY).map(y => (mnX to mxX).map(x => apply(x, y))))
   def flatten: Vector[A] = values.flatten
 
-  def combineHorizontal(that: Grid[A]): Grid[A] =
+  def combineHorizontal[AA >: A](that: Grid[AA]): Grid[AA] =
     require(this.height == that.height)
     // YAY I LOVE CATS
     Grid(values.alignCombine(that.values))
 
-  def combineVertical(that: Grid[A]): Grid[A] =
+  def combineVertical[AA >: A](that: Grid[AA]): Grid[AA] =
     require(this.width == that.width)
     Grid(values ++ that.values)
 
@@ -147,7 +148,7 @@ final case class Grid[A] private (values: Vector[Vector[A]])
       x <- 0 until width
     yield (this(x, y), Vec2(x, y))
 
-  def mapWithIndex(f: (Vec2[Int], A) => A): Grid[A] =
+  def mapWithIndex[R](f: (Vec2[Int], A) => R): Grid[R] =
     Grid:
       values.zipWithIndex.map: (row, y) =>
         row.zipWithIndex.map: (p, x) =>
