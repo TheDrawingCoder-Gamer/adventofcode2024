@@ -15,8 +15,13 @@ ThisBuild / version := "0.1.0-SNAPSHOT"
 
 ThisBuild / scalaVersion := "3.7.3"
 
-ThisBuild / scalacOptions ++=
-  Seq("-Wunused:imports", "-Wunused:locals", "-Wunused:params")
+ThisBuild / scalacOptions ++= Seq(
+  "-Wunused:imports",
+  "-Wunused:locals",
+  "-Wunused:params",
+  "-java-output-version",
+  "17"
+)
 
 val goodDir = file(".")
 
