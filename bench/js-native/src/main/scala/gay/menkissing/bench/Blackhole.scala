@@ -1,6 +1,8 @@
 package gay.menkissing.bench
 
-class NativeBlackhole:
+// blackhole implemented in userspace,
+// as opposed to java which asks the JIT compiler for help
+class UserspaceBlackhole:
   @volatile var x = false
   @volatile var ar: AnyRef = ""
 
@@ -25,7 +27,7 @@ class NativeBlackhole:
   final def consumeA[A](a: A): Unit = consume(a :: Nil)
 
 object Blackhole:
-  type Impl = NativeBlackhole
+  type Impl = UserspaceBlackhole
 
   extension (hole: Impl)
     def consumed(obj: Any): Unit = hole.consumeA(obj)

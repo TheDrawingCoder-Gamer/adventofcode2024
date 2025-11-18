@@ -9,6 +9,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Await
 import scala.collection.mutable.ArrayBuffer
+import gay.menkissing.common.ThisShouldntHappenError
 
 object Spawn:
   private def forkedMainCommand
@@ -17,6 +18,8 @@ object Spawn:
       Seq(
         "java",
         "-XX:+UnlockExperimentalVMOptions",
+        // silence it please for the love of god
+        "-XX:CompileCommand=quiet",
         "-XX:CompileCommand=blackhole,gay.menkissing.bench.JavaBlackhole::consume",
         "-cp",
         System.getProperty("java.class.path"),
@@ -36,7 +39,9 @@ object Spawn:
           errLine = err; errLines += err
       )
     forkedMainCommand(name, runOpts).!(logger)
-    if errLine == "timed-out" || errLine == "failed" then None
+    if errLine == "failed" then
+      throw new ThisShouldntHappenError("Benchmark failed to complete")
+    if errLine == "timed-out" then None
     else Some(errLine.split(',').map(_.toDouble).toVector)
 
 object ForkedMain:

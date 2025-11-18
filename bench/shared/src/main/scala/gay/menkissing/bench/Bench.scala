@@ -116,7 +116,6 @@ trait Bench:
 
   def main(badArgs: Array[String]): Unit =
     val args = CLIArgs.parse(Args.args(badArgs))
-    println(args.patterns)
     def patternMatches(name: String): Boolean =
       if args.patterns.nonEmpty then args.patterns.exists(_.matches(name))
       else true
