@@ -8,6 +8,7 @@ import scala.sys.process.*
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Await
+import scala.collection.mutable.ArrayBuffer
 
 object Spawn:
   private def forkedMainCommand
@@ -15,6 +16,7 @@ object Spawn:
     Process(
       Seq(
         "java",
+        "-XX:+UnlockExperimentalVMOptions",
         "-XX:CompileCommand=blackhole,gay.menkissing.bench.JavaBlackhole::consume",
         "-cp",
         System.getProperty("java.class.path"),
@@ -25,10 +27,16 @@ object Spawn:
       )
     )
   def run(name: String, runOpts: BenchmarkRunOpts): Option[Vector[Double]] =
+    val errLines = ArrayBuffer[String]()
     var errLine = ""
-    val logger = ProcessLogger(out => println(out), err => errLine = err)
+    val logger =
+      ProcessLogger(
+        out => println(out),
+        err =>
+          errLine = err; errLines += err
+      )
     forkedMainCommand(name, runOpts).!(logger)
-    if errLine == "timed-out" then None
+    if errLine == "timed-out" || errLine == "failed" then None
     else Some(errLine.split(',').map(_.toDouble).toVector)
 
 object ForkedMain:
@@ -46,4 +54,6 @@ object ForkedMain:
     try
       val r = Await.result(res, timeout.getOrElse(Duration.Inf))
       System.err.println(r.mkString(","))
-    catch case e: TimeoutException => System.err.println("timed-out")
+    catch
+      case e: TimeoutException => System.err.println("timed-out")
+      case e: Exception        => System.err.println("failed")

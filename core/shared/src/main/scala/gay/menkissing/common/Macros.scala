@@ -53,12 +53,13 @@ object Macros:
     def get(parent: Expr[S]): Expr[A] = dereference(parent.asTerm).asExprOf[A]
     def set(parent: Expr[S], value: Expr[A]): Expr[S] =
       import quotes.reflect.*
+      val copyTerm = NamedArg(label, value.asTerm)
       val term =
         Select.overloaded(
           parent.asTerm,
           "copy",
-          TypeRepr.of[A] :: Nil,
-          value.asTerm :: Nil
+          Nil,
+          copyTerm :: Nil
         )
       term.asExprOf[S]
 

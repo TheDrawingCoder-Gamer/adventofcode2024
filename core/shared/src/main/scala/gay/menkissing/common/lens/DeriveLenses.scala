@@ -1,6 +1,7 @@
 package gay.menkissing.common.lens
 
 import monocle.*
+import gay.menkissing.common.ThisShouldntHappenError
 
 type ToLens[S] = [T] =>> Lens[S, T]
 
@@ -14,5 +15,5 @@ trait DeriveLenses[A](using lensesMap: LensesMap[A]) extends Selectable:
   inline def selectDynamic(name: String): PLens[A, A, ?, ?] =
     lenses.getOrElse(
       name,
-      ???
+      throw new ThisShouldntHappenError("Fields are typed at compile time")
     )
