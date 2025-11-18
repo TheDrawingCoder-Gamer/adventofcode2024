@@ -113,6 +113,9 @@ object Main extends Bench:
     benchmarkFull(20, Day20)
     benchmarkFull(21, Day21)
     benchmarkFull(22, Day22)
+    benchmarkFull(23, Day23)
+    benchmarkFull(24, Day24)
+    benchmarkHalf(25, Day25)
 
   locally:
     given Year = Year(2021)
