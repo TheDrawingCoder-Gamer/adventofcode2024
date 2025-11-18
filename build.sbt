@@ -22,6 +22,12 @@ ThisBuild / scalacOptions ++= Seq(
   "-java-output-version",
   "17"
 )
+ThisBuild / javacOptions ++= Seq(
+  "-source",
+  "17",
+  "-target",
+  "17"
+)
 
 val goodDir = file(".")
 
@@ -155,7 +161,7 @@ lazy val bench =
   crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("bench"))
     .dependsOn(core)
     // .dependsOn(root)
-    .configurePlatform(JVMPlatform)(_.enablePlugins(JmhPlugin)).settings(
+    .settings(
       publish / skip := true,
       run / baseDirectory := goodDir,
       Compile / run / mainClass := Some("gay.menkissing.bench.Main"),

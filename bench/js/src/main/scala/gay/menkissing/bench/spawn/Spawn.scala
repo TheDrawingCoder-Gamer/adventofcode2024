@@ -1,11 +1,6 @@
 package gay.menkissing.bench.spawn
 
-import gay.menkissing.bench.{
-  Args,
-  BenchmarkRunOpts,
-  Main,
-  Verbosity
-}
+import gay.menkissing.bench.{Args, BenchmarkRunOpts, Main, Verbosity}
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel, JSImport}

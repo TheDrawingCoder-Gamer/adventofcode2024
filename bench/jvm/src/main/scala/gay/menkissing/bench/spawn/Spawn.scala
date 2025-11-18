@@ -1,10 +1,6 @@
 package gay.menkissing.bench.spawn
 
-import gay.menkissing.bench.{
-  BenchmarkRunOpts,
-  Main,
-  Verbosity
-}
+import gay.menkissing.bench.{BenchmarkRunOpts, Main, Verbosity}
 
 import scala.concurrent.TimeoutException
 import scala.concurrent.duration.Duration
@@ -19,6 +15,7 @@ object Spawn:
     Process(
       Seq(
         "java",
+        "-XX:CompileCommand=blackhole,gay.menkissing.bench.JavaBlackhole::consume",
         "-cp",
         System.getProperty("java.class.path"),
         "gay.menkissing.bench.spawn.ForkedMain",

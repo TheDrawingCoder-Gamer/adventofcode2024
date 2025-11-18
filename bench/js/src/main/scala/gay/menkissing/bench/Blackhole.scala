@@ -17,7 +17,7 @@ class JSBlackhole:
 
   final def consume(i: Int): Unit = x ^= i == 0
 
-  final def consume(l: Long): Unit = x ^= l.toInt == 0
+  final def consume(l: Long): Unit = x ^= l == 0L
 
   final def consume(f: Float): Unit = x ^= f == 0
 

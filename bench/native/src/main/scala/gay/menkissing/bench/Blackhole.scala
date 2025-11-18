@@ -1,8 +1,8 @@
 package gay.menkissing.bench
 
 class NativeBlackhole:
-  var x = false
-  var ar: AnyRef = ""
+  @volatile var x = false
+  @volatile var ar: AnyRef = ""
 
   final def consume(obj: Object): Unit = x ^= obj eq ar
 
@@ -16,7 +16,7 @@ class NativeBlackhole:
 
   final def consume(i: Int): Unit = x ^= i == 0
 
-  final def consume(l: Long): Unit = x ^= l.toInt == 0
+  final def consume(l: Long): Unit = x ^= l == 0L
 
   final def consume(f: Float): Unit = x ^= f == 0
 
