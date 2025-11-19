@@ -25,16 +25,9 @@ object Day17 extends Problem:
   // thought process:
   // wouldn't it be hilarous if I had to do zero changes between part 1 and 2?
   def step[V[_]](state: Set[V[Int]])(using vn: VecN[V]): Set[V[Int]] =
-    val extendedSet = state.flatMap(it => it.allNeighbors.toSet + it)
-    val withKilled =
-      state.filter: p =>
-        val r = p.allNeighbors.count(state.apply)
-        r == 2 || r == 3
-    val deadSet = extendedSet -- state
-    val withBorn =
-      deadSet.filter:
-        _.allNeighbors.count(state.apply) == 3
-    withKilled ++ withBorn
+    conwayStep[V[Int]](vn.allNeighbors, it => it == 2 || it == 3, _ == 3)(
+      state
+    )
 
   def show3dSlice(state: Set[Vec3[Int]]): String =
     if state.isEmpty then return "empty state"

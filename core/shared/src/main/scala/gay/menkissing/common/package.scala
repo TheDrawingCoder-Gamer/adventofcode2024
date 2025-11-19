@@ -181,3 +181,21 @@ extension [A](self: Array[A])
 final class ThisShouldntHappenError(val why: String) extends RuntimeException
 
 def !!! : Nothing = throw ThisShouldntHappenError("This shouldn't happen")
+
+def conwayStep[A]
+  (
+    neighbors: A => Iterable[A],
+    testKeepAlive: Int => Boolean,
+    testBirth: Int => Boolean
+  )
+  (set: Set[A]): Set[A] =
+  val extendedSet = set.flatMap(it => neighbors(it).toSet + it)
+  val withKilled =
+    set.filter: p =>
+      val r = neighbors(p).count(set.apply)
+      testKeepAlive(r)
+  val deadSet = extendedSet -- set
+  val withBorn =
+    deadSet.filter: it =>
+      testBirth(neighbors(it).count(set.apply))
+  withKilled ++ withBorn

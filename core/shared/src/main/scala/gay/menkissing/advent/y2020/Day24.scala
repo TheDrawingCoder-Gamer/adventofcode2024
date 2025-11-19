@@ -3,6 +3,7 @@ package y2020
 
 import parsley.*
 import gay.menkissing.common.repeated
+import gay.menkissing.common.conwayStep
 
 object Day24 extends Problem:
   type Input = List[List[HexDir]]
@@ -63,20 +64,8 @@ object Day24 extends Problem:
       if blackUp(realCoord) then blackUp - realCoord else blackUp + realCoord
   def part1(input: List[List[HexDir]]): OutputP1 = determineStart(input).size
 
-  // even tho it would be hilarious to reuse day 17s code entirely, we have different test condition
-  // if we were given "keep alive at 2 or 3 and birth at 3" then we could reuse day 17
-  // not going to stop me from doing the minimal possible changes tho LOL
-  def step(state: Set[HexCoord]): Set[HexCoord] =
-    val extendedSet = state.flatMap(it => it.neighbors.toSet + it)
-    val withKilled =
-      state.filter: p =>
-        val r = p.neighbors.count(state.apply)
-        r == 1 || r == 2
-    val deadSet = extendedSet -- state
-    val withBorn =
-      deadSet.filter:
-        _.neighbors.count(state.apply) == 2
-    withKilled ++ withBorn
+  // Use scala 3.8.0's standard conway step function
+  val step = conwayStep[HexCoord](_.neighbors, it => it == 1 || it == 2, _ == 2)
 
   def part2(input: List[List[HexDir]]): OutputP2 =
     val state = determineStart(input)

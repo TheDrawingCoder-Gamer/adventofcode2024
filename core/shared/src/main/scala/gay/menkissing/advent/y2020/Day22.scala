@@ -10,7 +10,7 @@ object Day22 extends Problem:
 
   def input = FileIO.getInput(2020, 22)
 
-  val debugger = Debuginator(active = true)
+  val debugger = Debuginator(active = false)
 
   def parse(str: String): Input =
     val Array(p1, p2) = str.trim.split("\n\n")
