@@ -3,7 +3,6 @@ package y2015
 
 import gay.menkissing.common.*
 
-
 import collection.mutable
 
 object Day10 extends Problem:
@@ -300,4 +299,4 @@ object Day10 extends Problem:
 
   def part2(input: String): Int = lookandsay(input, 50)
 
-  lazy val input: String = FileIO.getInput(2015, 10)
+  def input: String = FileIO.getInput(2015, 10)

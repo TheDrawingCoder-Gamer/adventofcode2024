@@ -76,4 +76,4 @@ object Day12 extends Problem:
 
     res.ship `taxiDistance` Vec2(0, 0)
 
-  override lazy val input: String = FileIO.getInput(2020, 12)
+  def input: String = FileIO.getInput(2020, 12)

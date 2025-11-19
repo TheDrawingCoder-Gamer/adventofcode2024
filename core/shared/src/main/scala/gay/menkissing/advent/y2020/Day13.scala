@@ -5,7 +5,6 @@ import cats.*
 import cats.implicits.*
 import gay.menkissing.common.*
 
-
 object Day13 extends Problem:
   type Input = (Int, List[Option[Int]])
   type Output = BigInt
@@ -47,4 +46,4 @@ object Day13 extends Problem:
 
     crt(offsets)
 
-  override lazy val input: String = FileIO.getInput(2020, 13)
+  def input: String = FileIO.getInput(2020, 13)

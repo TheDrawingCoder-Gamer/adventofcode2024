@@ -47,7 +47,7 @@ object Day15 extends Problem:
           Vec2(x, y)
       else None
 
-  lazy val input = FileIO.getInput(2022, 15)
+  def input = FileIO.getInput(2022, 15)
 
   def parse(input: String): Set[SensorRanged] =
     input.linesIterator.map:

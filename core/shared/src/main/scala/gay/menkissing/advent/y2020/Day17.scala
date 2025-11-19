@@ -15,7 +15,7 @@ object Day17 extends Problem:
 
   final case class Vec4[A](x: A, y: A, z: A, w: A) derives VecN
 
-  lazy val input = FileIO.getInput(2020, 17)
+  def input = FileIO.getInput(2020, 17)
   def parse(str: String): Input =
     Grid.fromString(str)(_ == '#').zipWithIndices.flatMap:
       case (true, Vec2(x, y)) => Some(Vec3(x, 0, y))

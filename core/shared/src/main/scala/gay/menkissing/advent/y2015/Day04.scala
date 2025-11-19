@@ -191,4 +191,4 @@ object Day04 extends Problem:
       i += 1
     ???
 
-  lazy val input: String = FileIO.getInput(2015, 4)
+  def input: String = FileIO.getInput(2015, 4)

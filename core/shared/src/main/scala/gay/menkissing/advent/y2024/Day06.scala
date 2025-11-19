@@ -10,7 +10,7 @@ object Day06 extends Problem:
   type Input = (Grid[Boolean], Int)
   type Output = Int
 
-  lazy val input = FileIO.getInput(2024, 6)
+  def input = FileIO.getInput(2024, 6)
 
   override def parse(str: String): (Grid[Boolean], Int) =
     (

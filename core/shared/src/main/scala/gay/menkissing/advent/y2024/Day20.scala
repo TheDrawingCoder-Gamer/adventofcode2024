@@ -46,7 +46,7 @@ object Day20 extends Problem:
 
   final case class RaceTrack
     (start: Vec2[Int], end: Vec2[Int], grid: Grid[Boolean]):
-    lazy val basePath: List[Vec2[Int]] = grid.pathfind(start, end).get
+    def basePath: List[Vec2[Int]] = grid.pathfind(start, end).get
 
     def findCheats(limit: Int): List[Cheat] =
       basePath.zipWithIndex.flatMap: (lp, li) =>
@@ -85,4 +85,4 @@ object Day20 extends Problem:
 
     cheats.count(_.saved >= 100)
 
-  override lazy val input: String = FileIO.getInput(2024, 20)
+  override def input: String = FileIO.getInput(2024, 20)

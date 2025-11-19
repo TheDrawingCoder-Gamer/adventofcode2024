@@ -8,7 +8,7 @@ object Day23 extends Problem:
   type Input = Vector[Int]
   type Output = Long
 
-  lazy val input = FileIO.getInput(2020, 23)
+  def input = FileIO.getInput(2020, 23)
 
   val debugger = Debuginator(active = false)
 

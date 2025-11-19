@@ -9,7 +9,7 @@ object Day07 extends Problem:
   type Input = List[(Hand, Int)]
   type Output = Int
 
-  lazy val input: String = FileIO.getInput(2023, 7)
+  def input: String = FileIO.getInput(2023, 7)
 
   override def parse(str: String): List[(Hand, Int)] =
     str.linesIterator.toList.map:

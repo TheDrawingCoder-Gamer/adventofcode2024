@@ -99,7 +99,7 @@ object Day21 extends Problem:
           case Operation.Subtract => ll - rr
       case Expression.Unknown => assert(false)
 
-  lazy val input = FileIO.getInput(2022, 21)
+  def input = FileIO.getInput(2022, 21)
   def parseMonke(input: String): (String, Expression) =
     input match
       case s"$monke: $l $op $r" =>

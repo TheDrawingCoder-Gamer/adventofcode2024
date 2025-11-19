@@ -10,7 +10,7 @@ object Day09 extends Problem:
   type Input = Vector[Long]
   type Output = Long
 
-  lazy val input = FileIO.getInput(2020, 9)
+  def input = FileIO.getInput(2020, 9)
 
   def parse(input: String): Vector[Long] =
     input.linesIterator.map(_.toLong).toVector

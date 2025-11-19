@@ -8,7 +8,7 @@ import algebra.instances.all.*
 object Day18 extends Problem:
   type Input = Grid[Boolean]
   type Output = Int
-  lazy val input: String = FileIO.getInput(2015, 18)
+  def input: String = FileIO.getInput(2015, 18)
 
   def parse(str: String): Grid[Boolean] =
     Grid.fromString(str):

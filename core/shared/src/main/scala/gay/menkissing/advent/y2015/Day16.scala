@@ -17,7 +17,7 @@ object Day16 extends Problem:
           .forall((k, v) => giftSue(k) < v) &&
         values.filter((k, _) => lessValues(k)).forall((k, v) => giftSue(k) > v)
 
-  lazy val input: String = FileIO.getInput(2015, 16)
+  def input: String = FileIO.getInput(2015, 16)
 
   val giftSue =
     Map(

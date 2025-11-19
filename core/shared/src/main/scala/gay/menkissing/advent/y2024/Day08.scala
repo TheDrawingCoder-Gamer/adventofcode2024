@@ -3,12 +3,11 @@ package y2024
 
 import gay.menkissing.common.*, ArityN.*
 
-
 object Day08 extends Problem:
   type Input = Grid[Char]
   type Output = Int
 
-  lazy val input = FileIO.getInput(2024, 8)
+  def input = FileIO.getInput(2024, 8)
 
   override def parse(str: String): Grid[Char] =
     Grid[Char](str.linesIterator.map(_.iterator))

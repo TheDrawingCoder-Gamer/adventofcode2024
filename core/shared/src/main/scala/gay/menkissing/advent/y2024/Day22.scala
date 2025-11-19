@@ -61,4 +61,4 @@ object Day22 extends Problem:
       diffMap.get(i).map(v => (i, v))
     .maxBy(_._2)._2
 
-  override lazy val input: String = FileIO.getInput(2024, 22)
+  override def input: String = FileIO.getInput(2024, 22)

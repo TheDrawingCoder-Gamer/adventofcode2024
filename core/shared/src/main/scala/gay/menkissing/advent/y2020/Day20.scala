@@ -50,7 +50,7 @@ object Day20 extends Problem:
       val flipped = unflipped.map(flipBits)
       unflipped ++ flipped
 
-  lazy val input = FileIO.getInput(2020, 20)
+  def input = FileIO.getInput(2020, 20)
 
   def parse(str: String): Input =
     str.trim.split("\n\n").map: group =>

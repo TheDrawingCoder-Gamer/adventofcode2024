@@ -1,12 +1,11 @@
 package gay.menkissing.advent
 package y2021
 
-
 object Day03 extends Problem:
   type Input = (List[Int], Int)
   type Output = Int
 
-  lazy val input = FileIO.getInput(2021, 3)
+  def input = FileIO.getInput(2021, 3)
 
   def parse(input: String): (List[Int], Int) =
     (

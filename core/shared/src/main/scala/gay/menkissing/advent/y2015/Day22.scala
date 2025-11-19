@@ -4,12 +4,14 @@ package y2015
 import monocle.*
 import monocle.syntax.AppliedLens
 import monocle.syntax.all.*
-import gay.menkissing.common.*, lens.DeriveLenses
+import gay.menkissing.common.*
 import cats.data.*
 import cats.*
 import cats.derived.*
 import cats.syntax.all.*
+import monocle.macros.GenLens
 
+// On native, this requires ~400 MiB of memory to load - how exciting!
 object Day22 extends Problem:
   type Input = Boss
   type Output = Int
@@ -100,12 +102,12 @@ object Day22 extends Problem:
       debugger.assert(lens.exist(_ == 0)(this))
       lens.replace(effect.initTimer)(this)
 
-  object Effects extends DeriveLenses[Effects]:
+  object Effects:
     def effectLens(effect: Effect): Lens[Effects, Int] =
       effect match
-        case Effect.Shield   => Effects.shield
-        case Effect.Poison   => Effects.poison
-        case Effect.Recharge => Effects.recharge
+        case Effect.Shield   => GenLens[Effects](_.shield)
+        case Effect.Poison   => GenLens[Effects](_.poison)
+        case Effect.Recharge => GenLens[Effects](_.recharge)
   final case class GameState
     (
       player: Player,
@@ -156,13 +158,13 @@ object Day22 extends Problem:
   def fullTurnP2(spell: Spell): GameStateState[Unit] =
     playerTurnP2(spell) *> bossTurn
 
-  lazy val input = FileIO.getInput(2015, 22)
+  def input = FileIO.getInput(2015, 22)
 
   def parse(str: String): Input =
     val Array(
       s"Hit Points: $hp",
       s"Damage: $dmg"
-    ) = str.linesIterator.toArray: @unchecked
+    ) = str.linesIterator.toArray.runtimeChecked
     Boss(hp.toInt, dmg.toInt)
 
   def part1(input: Boss): OutputP1 =

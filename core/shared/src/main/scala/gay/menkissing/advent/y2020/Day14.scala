@@ -68,4 +68,4 @@ object Day14 extends Problem:
 
     mem.values.sum
 
-  override lazy val input: String = FileIO.getInput(2020, 14)
+  def input: String = FileIO.getInput(2020, 14)

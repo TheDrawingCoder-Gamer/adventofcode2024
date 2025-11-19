@@ -7,7 +7,7 @@ object Day24 extends Problem:
   type Input = Vector[Instruction]
   type Output = BigInt
 
-  lazy val input = FileIO.getInput(2021, 24)
+  def input = FileIO.getInput(2021, 24)
 
   enum Variable:
     case X, Y, Z, W

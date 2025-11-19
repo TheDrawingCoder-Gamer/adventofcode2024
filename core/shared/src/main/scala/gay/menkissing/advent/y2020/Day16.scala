@@ -64,4 +64,4 @@ object Day16 extends Problem:
     input.ourTicket.zip(realOrdered).filter(_._2.startsWith("departure"))
       .map(_._1.toLong).product
 
-  override lazy val input: String = FileIO.getInput(2020, 16)
+  def input: String = FileIO.getInput(2020, 16)

@@ -6,7 +6,7 @@ object Day06 extends ProblemUniqueInputs:
   type InputP2 = (Long, Long)
   type Output = Long
 
-  override lazy val input: String = FileIO.getInput(2023, 6)
+  override def input: String = FileIO.getInput(2023, 6)
 
   override def parseP1(str: String): List[(Long, Long)] =
     str.linesIterator.toList match

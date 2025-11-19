@@ -9,7 +9,7 @@ object Day15 extends Problem:
   type Input = Grid[Int]
   type Output = Int
 
-  lazy val input = FileIO.getInput(2021, 15)
+  def input = FileIO.getInput(2021, 15)
 
   def parse(str: String): Input = Grid.fromString(str)(_.asDigit)
 

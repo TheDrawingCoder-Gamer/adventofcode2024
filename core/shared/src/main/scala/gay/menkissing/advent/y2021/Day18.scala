@@ -107,4 +107,4 @@ object Day18 extends Problem:
     input.combinationsN[2].flatMap: (l, r) =>
       List(l + r, r + l)
     .map(_.magnitude).max
-  override lazy val input: String = FileIO.getInput(2021, 18)
+  def input: String = FileIO.getInput(2021, 18)

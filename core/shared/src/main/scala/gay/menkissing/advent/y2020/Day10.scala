@@ -40,4 +40,4 @@ object Day10 extends Problem:
 
     dict(maxPlug)
 
-  override lazy val input: String = FileIO.getInput(2020, 10)
+  def input: String = FileIO.getInput(2020, 10)

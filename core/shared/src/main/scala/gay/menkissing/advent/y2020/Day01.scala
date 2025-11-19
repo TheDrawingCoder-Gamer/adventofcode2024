@@ -17,5 +17,4 @@ object Day01 extends Problem:
     input.combinationsN[3].flatMap: (x, y, z) =>
       Option.when(x + y + z == 2020)(x * y * z)
     .next()
-
-  override lazy val input: String = FileIO.getInput(2020, 1)
+  def input: String = FileIO.getInput(2020, 1)

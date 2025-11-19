@@ -1,14 +1,13 @@
 package gay.menkissing.advent
 package y2021
 
-
 import scala.annotation.tailrec
 
 object Day02 extends Problem:
   type Input = List[(Dir, Int)]
   type Output = Int
 
-  lazy val input = FileIO.getInput(2021, 2)
+  def input = FileIO.getInput(2021, 2)
 
   enum Dir:
     case Forward

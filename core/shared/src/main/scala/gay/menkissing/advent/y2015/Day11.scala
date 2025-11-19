@@ -44,4 +44,4 @@ object Day11 extends Problem:
     Iterator.iterate(advance(input))(advance).dropWhile(it => !test(it)).drop(1)
       .find(test).get
 
-  lazy val input: String = FileIO.getInput(2015, 11)
+  def input: String = FileIO.getInput(2015, 11)

@@ -45,7 +45,7 @@ object Day13 extends Problem:
           .between(Parser.char('['), Parser.char(']'))
           .map(it => NestedPacket(it.toList))
 
-  lazy val input = FileIO.getInput(2022, 13)
+  def input = FileIO.getInput(2022, 13)
 
   def parse(str: String): Vector[Packet] =
     str.linesIterator.filterNot(_.isEmpty).map: it =>

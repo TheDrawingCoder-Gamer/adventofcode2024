@@ -8,7 +8,7 @@ object Day25 extends HalfDay:
   type Input = (Long, Long)
   type Output = Long
 
-  lazy val input = FileIO.getInput(2020, 25)
+  def input = FileIO.getInput(2020, 25)
 
   def parse(str: String): Input =
     val Array(card, door) =

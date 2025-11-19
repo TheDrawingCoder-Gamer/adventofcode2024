@@ -66,4 +66,4 @@ object Day15 extends Problem:
   def part2(input: Vector[Ingredient]): Int =
     freakyConfigurations(input).withFilter(_.calories == 500).map(_.score).max
 
-  lazy val input: String = FileIO.getInput(2015, 15)
+  def input: String = FileIO.getInput(2015, 15)

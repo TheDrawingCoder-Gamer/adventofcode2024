@@ -5,7 +5,6 @@ import cats.*
 import cats.implicits.*
 import parsley.*
 
-
 object Day19 extends Problem:
   type Input = (Map[Int, RawRule], List[String])
   type Output = Int
@@ -83,4 +82,4 @@ object Day19 extends Problem:
 
     messages.count(it => r0Parser.parse(it).isSuccess)
 
-  override lazy val input: String = FileIO.getInput(2020, 19)
+  def input: String = FileIO.getInput(2020, 19)

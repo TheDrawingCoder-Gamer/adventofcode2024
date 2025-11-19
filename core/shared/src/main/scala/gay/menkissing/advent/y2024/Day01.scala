@@ -5,7 +5,7 @@ object Day01 extends Problem:
   type Input = (List[Int], List[Int])
   type Output = Int
 
-  override lazy val input = FileIO.getInput(2024, 1)
+  override def input = FileIO.getInput(2024, 1)
 
   override def parse(str: String): (List[Int], List[Int]) =
     str.linesIterator.map:

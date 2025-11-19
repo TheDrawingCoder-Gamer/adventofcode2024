@@ -58,7 +58,7 @@ object Day05 extends Problem:
             Ior.Right(NonEmptyChain.one((min, max)))
           else !!!
 
-  lazy val input: String = FileIO.getInput(2023, 5)
+  def input: String = FileIO.getInput(2023, 5)
   // List instead of map - input is a continuous chain
   def parse(str: String): (List[Long], NonEmptyList[NonEmptyList[MapRange]]) =
     val head :: rest = str.split("\n\n").toList.runtimeChecked

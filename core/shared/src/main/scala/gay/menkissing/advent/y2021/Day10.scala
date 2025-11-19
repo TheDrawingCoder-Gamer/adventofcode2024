@@ -7,7 +7,7 @@ object Day10 extends Problem:
   type Input = List[String]
   type Output = Long
 
-  lazy val input = FileIO.getInput(2021, 10)
+  def input = FileIO.getInput(2021, 10)
 
   @tailrec
   def matchLine

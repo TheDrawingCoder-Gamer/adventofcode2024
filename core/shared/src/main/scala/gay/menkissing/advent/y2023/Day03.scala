@@ -9,7 +9,7 @@ object Day03 extends Problem:
   type Input = Grid[Char]
   type Output = Int
 
-  lazy val input = FileIO.getInput(2023, 3)
+  def input = FileIO.getInput(2023, 3)
 
   def parse(input: String): Grid[Char] =
     Grid(input.linesIterator.map(_.iterator))

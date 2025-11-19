@@ -8,7 +8,7 @@ object Day05 extends Problem:
   type Input = (List[(Int, Int)], List[List[Int]])
   type Output = Int
 
-  lazy val input = FileIO.getInput(2024, 5)
+  def input = FileIO.getInput(2024, 5)
 
   override def parse(str: String): (List[(Int, Int)], List[List[Int]]) =
 

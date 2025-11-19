@@ -6,7 +6,6 @@ import parsley.combinator.*
 import parsley.token.descriptions.LexicalDesc
 import token.Lexer
 
-
 object Day18 extends Problem:
   type Input = String
   type Output = BigInt
@@ -65,4 +64,4 @@ object Day18 extends Problem:
       exprP2.parse(line).get.calc
     .sum
 
-  override lazy val input: String = FileIO.getInput(2020, 18)
+  def input: String = FileIO.getInput(2020, 18)

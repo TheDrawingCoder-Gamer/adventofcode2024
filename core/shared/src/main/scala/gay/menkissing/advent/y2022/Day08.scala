@@ -8,7 +8,7 @@ object Day08 extends Problem:
   type Input = Grid[Int]
   type Output = Int
 
-  lazy val input = FileIO.getInput(2022, 8)
+  def input = FileIO.getInput(2022, 8)
 
   override def parse(str: String): Grid[Int] =
     Grid:

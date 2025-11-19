@@ -24,7 +24,7 @@ trait Bench:
   val unit: TimeUnit = TimeUnit.MILLISECONDS
 
   case class Benchmark
-    (name: String, body: Blackhole.Impl => Unit, opts: BenchmarkOptions):
+    (name: String, body: BenchmarkBody, opts: BenchmarkOptions):
     def run(verbosity: Verbosity): Vector[Double] =
       if verbosity.ordinal >= Verbosity.Normal.ordinal then
         println(s"benchmarking $name...")
@@ -33,9 +33,9 @@ trait Bench:
       val times = mut.ListBuffer[Double]()
 
       val warmupStartTime = System.nanoTime()
-
+      body.load()
       (1 to opts.warmup).foreach: n =>
-        val time = nanoTimed(body(hole))
+        val time = nanoTimed(body.run(hole))
         hole.teardown()
         if verbosity.ordinal >= Verbosity.Verbose.ordinal then
           println(f"warmup $n: ${Duration(time, NANOSECONDS)
@@ -51,7 +51,7 @@ trait Bench:
           warmupEndTime + (opts.realWarmupTime - warmupDuration).toNanos
         var n = opts.warmup + 1
         while System.nanoTime() < targetTime do
-          val time = nanoTimed(body(hole))
+          val time = nanoTimed(body.run(hole))
           hole.teardown()
           if verbosity.ordinal >= Verbosity.Verbose.ordinal then
             println(f"warmup $n: ${Duration(time, NANOSECONDS)
@@ -61,7 +61,7 @@ trait Bench:
 
       val measureStartTime = System.nanoTime()
       (1 to opts.measurement).foreach: n =>
-        val time = nanoTimed(body(hole))
+        val time = nanoTimed(body.run(hole))
         hole.teardown()
 
         times.append(time)
@@ -80,7 +80,7 @@ trait Bench:
           measureEndTime + (opts.realWarmupTime - measureDuration).toNanos
         var n = opts.measurement + 1
         while System.nanoTime() < targetTime do
-          val time = nanoTimed(body(hole))
+          val time = nanoTimed(body.run(hole))
           hole.teardown()
 
           times.append(time)
@@ -90,7 +90,7 @@ trait Bench:
                 .toUnit(opts.unit)}%1.3f ${opts.unit.display}")
           n += 1
           Gc.gc()
-
+      body.free()
       times.toVector
 
   case class BenchmarkOptions
@@ -113,6 +113,10 @@ trait Bench:
     (name: String, options: BenchmarkOptions = BenchmarkOptions())
     (body: => U): Unit =
     benchmarks.append(Benchmark(name, hole => hole.consumed(body), options))
+  final def benchmarkAdvanced
+    (name: String, options: BenchmarkOptions = BenchmarkOptions())
+    (body: BenchmarkBody): Unit =
+    benchmarks.append(Benchmark(name, body, options))
 
   def main(badArgs: Array[String]): Unit =
     val args = CLIArgs.parse(Args.args(badArgs))

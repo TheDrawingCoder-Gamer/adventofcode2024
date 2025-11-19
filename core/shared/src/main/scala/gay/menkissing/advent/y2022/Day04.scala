@@ -40,4 +40,4 @@ object Day04 extends Problem:
 
   def symdiff[A](l: Set[A], r: Set[A]) = (l ++ r) diff (l intersect r)
 
-  lazy val input = FileIO.getInput(2022, 4)
+  def input = FileIO.getInput(2022, 4)

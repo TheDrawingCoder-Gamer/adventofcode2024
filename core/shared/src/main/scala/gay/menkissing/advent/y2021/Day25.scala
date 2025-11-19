@@ -10,7 +10,7 @@ object Day25 extends HalfDay:
   type Input = Grid[Option[Direction2D]]
   type Output = Int
 
-  lazy val input = FileIO.getInput(2021, 25)
+  def input = FileIO.getInput(2021, 25)
 
   def parse(str: String): Grid[Option[Direction2D]] =
     Grid.fromString(str):

@@ -38,7 +38,7 @@ object Day12 extends Problem:
         case (_, c) => (c - 'a').toByte
     (start, end, MountainMap(grid))
 
-  lazy val input = FileIO.getInput(2022, 12)
+  def input = FileIO.getInput(2022, 12)
   def part1(input: (Vec2[Int], Vec2[Int], MountainMap)): Int =
     val (start, end, graph) = input
     astarScore(

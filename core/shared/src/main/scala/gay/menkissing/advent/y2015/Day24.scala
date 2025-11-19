@@ -6,7 +6,7 @@ object Day24 extends Problem:
   type Input = List[Int]
   type Output = Long
 
-  lazy val input = FileIO.getInput(2015, 24)
+  def input = FileIO.getInput(2015, 24)
 
   def parse(str: String): Input = str.linesIterator.map(_.toInt).toList
 

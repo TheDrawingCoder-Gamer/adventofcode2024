@@ -7,7 +7,7 @@ object Day02 extends Problem:
 
   type Input = List[List[Int]]
   type Output = Int
-  override lazy val input: String = FileIO.getInput(2024, 2)
+  override def input: String = FileIO.getInput(2024, 2)
 
   override def parse(str: String): List[List[Int]] =
     str.linesIterator.map(_.split(' ').map(_.toInt).toList).toList

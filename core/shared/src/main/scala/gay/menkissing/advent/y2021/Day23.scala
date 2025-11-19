@@ -83,7 +83,7 @@ object Day23 extends NewProblem:
       // otherwise it can go to the hallway
       else hallwayPoses
 
-  lazy val input = FileIO.getInput(2021, 23)
+  def input = FileIO.getInput(2021, 23)
 
   // its amazing how much faster it is when you have a sensible ordering for your priority queue
   // (and dont reconstruct your path every time)

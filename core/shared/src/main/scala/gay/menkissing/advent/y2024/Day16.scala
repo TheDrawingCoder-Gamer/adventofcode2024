@@ -113,4 +113,4 @@ object Day16 extends Problem:
 
   override def part2(input: ProblemState): Int = input.getGoodSeats.size
 
-  override lazy val input: String = FileIO.getInput(2024, 16)
+  override def input: String = FileIO.getInput(2024, 16)

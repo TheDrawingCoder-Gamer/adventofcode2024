@@ -31,4 +31,4 @@ object Day02 extends Problem:
       bow + ribbon
     .sum
 
-  lazy val input: String = FileIO.getInput(2015, 2)
+  def input: String = FileIO.getInput(2015, 2)

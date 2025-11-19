@@ -83,4 +83,4 @@ object Day14 extends Problem:
     // println(input.stepN(r).pretty)
     r
 
-  lazy val input: String = FileIO.getInput(2024, 14).trim
+  def input: String = FileIO.getInput(2024, 14).trim

@@ -11,7 +11,7 @@ object Day11 extends Problem:
   type Input = Grid[Int]
   type Output = Long
 
-  lazy val input = FileIO.getInput(2021, 11)
+  def input = FileIO.getInput(2021, 11)
 
   def parse(input: String): Grid[Int] = Grid.fromString(input)(_.asDigit)
 

@@ -6,7 +6,6 @@ import cats.*
 import cats.syntax.all.*
 import algebra.instances.all.*
 
-
 object Day11 extends Problem:
   type Input = Grid[Seat]
   type Output = Int
@@ -82,4 +81,4 @@ object Day11 extends Problem:
       case _             => 0
     .sum
 
-  override lazy val input: String = FileIO.getInput(2020, 11)
+  def input: String = FileIO.getInput(2020, 11)

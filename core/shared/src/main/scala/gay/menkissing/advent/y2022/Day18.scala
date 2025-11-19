@@ -57,7 +57,7 @@ object Day18 extends NewProblem:
               case None => (curCube, map)
       resMap.updated(pos, cube)
 
-  lazy val input = FileIO.getInput(2022, 18)
+  def input = FileIO.getInput(2022, 18)
 
   def part1(input: Map[Vec3[Int], Cube]): Int =
     val goodInput =

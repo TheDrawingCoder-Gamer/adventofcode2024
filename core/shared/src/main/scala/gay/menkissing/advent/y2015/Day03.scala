@@ -54,4 +54,4 @@ object Day03 extends Problem:
 
     set.size
 
-  lazy val input: String = FileIO.getInput(2015, 3)
+  def input: String = FileIO.getInput(2015, 3)

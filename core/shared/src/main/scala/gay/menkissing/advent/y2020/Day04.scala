@@ -75,4 +75,4 @@ object Day04 extends Problem:
 
   override def part2(input: List[Passport]): Int = input.count(_.isValidP2)
 
-  override lazy val input: String = FileIO.getInput(2020, 4)
+  def input: String = FileIO.getInput(2020, 4)

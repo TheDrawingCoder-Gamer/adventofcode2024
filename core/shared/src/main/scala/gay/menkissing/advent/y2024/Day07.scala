@@ -5,7 +5,7 @@ object Day07 extends Problem:
   type Input = List[Equation]
   type Output = Long
 
-  lazy val input = FileIO.getInput(2024, 7)
+  def input = FileIO.getInput(2024, 7)
 
   final case class Equation(result: Long, inputs: List[Long]):
     def canBeTrue: Boolean =

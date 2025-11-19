@@ -10,7 +10,7 @@ object Day05 extends Problem:
   type Input = List[Line]
   type Output = Int
 
-  lazy val input = FileIO.getInput(2021, 5)
+  def input = FileIO.getInput(2021, 5)
 
   final case class Line(start: Vec2[Int], end: Vec2[Int]):
     def orientation: LineOrientation =

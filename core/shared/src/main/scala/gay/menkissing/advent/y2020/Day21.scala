@@ -8,7 +8,7 @@ object Day21 extends ProblemAdv:
   type OutputP1 = Int
   type OutputP2 = String
 
-  lazy val input = FileIO.getInput(2020, 21)
+  def input = FileIO.getInput(2020, 21)
 
   def parse(str: String): Input =
     str.linesIterator.map:

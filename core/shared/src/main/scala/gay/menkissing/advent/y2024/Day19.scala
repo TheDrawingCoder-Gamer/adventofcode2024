@@ -53,4 +53,4 @@ object Day19 extends Problem:
     val (towels, designs) = input
     designs.map(countDesigns(towels, _)).sum
 
-  override lazy val input: String = FileIO.getInput(2024, 19)
+  override def input: String = FileIO.getInput(2024, 19)

@@ -54,7 +54,7 @@ object Day19 extends Problem:
       solved.scanners.toList.combinationsN[2].map(_ `taxiDistance` _)
     beegList.max
 
-  lazy val input = FileIO.getInput(2021, 19)
+  def input = FileIO.getInput(2021, 19)
   final case class Scanner(pos: Vec3[Int], detections: Set[Vec3[Int]])
 
   final case class Solution(scanners: Set[Vec3[Int]], beacons: Set[Vec3[Int]])

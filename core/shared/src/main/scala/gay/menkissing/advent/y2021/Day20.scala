@@ -7,7 +7,7 @@ object Day20 extends Problem:
   type Input = (Vector[Boolean], Image)
   type Output = Int
 
-  lazy val input = FileIO.getInput(2021, 20)
+  def input = FileIO.getInput(2021, 20)
 
   final case class Image(grid: Grid[Boolean], oobPixel: Boolean):
     def apply(x: Int, y: Int): Boolean = grid.get(x, y).getOrElse(oobPixel)

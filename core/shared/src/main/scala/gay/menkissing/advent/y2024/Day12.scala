@@ -113,4 +113,4 @@ object Day12 extends Problem:
   def part2(plants: PlantMap): Int =
     plants.regions.map(r => r.area * r.sides).sum
 
-  override lazy val input: String = FileIO.getInput(2024, 12)
+  override def input: String = FileIO.getInput(2024, 12)

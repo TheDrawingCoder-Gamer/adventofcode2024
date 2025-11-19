@@ -18,4 +18,4 @@ object Day06 extends Problem:
   def part1(str: String): Int = process(str, 4)
   def part2(str: String): Int = process(str, 14)
 
-  lazy val input = FileIO.getInput(2022, 6)
+  def input = FileIO.getInput(2022, 6)

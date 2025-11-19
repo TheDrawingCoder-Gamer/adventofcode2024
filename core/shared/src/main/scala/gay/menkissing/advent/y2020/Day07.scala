@@ -33,4 +33,4 @@ object Day07 extends Problem:
         case (acc, bag) => acc + (bag.amount * getBagAmount(bag.color))
     getBagAmount("shiny gold") - 1
 
-  override lazy val input: String = FileIO.getInput(2020, 7)
+  def input: String = FileIO.getInput(2020, 7)

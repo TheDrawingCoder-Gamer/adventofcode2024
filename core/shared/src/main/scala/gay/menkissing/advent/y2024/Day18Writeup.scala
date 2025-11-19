@@ -80,4 +80,4 @@ object Day18Writeup extends ProblemAdv:
 
   val test = false
 
-  override lazy val input: String = FileIO.getInput(2024, 18, test)
+  override def input: String = FileIO.getInput(2024, 18, test)

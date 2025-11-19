@@ -8,7 +8,7 @@ object Day07 extends Problem:
   type Input = Seq[Command]
   type Output = Int
 
-  lazy val input = FileIO.getInput(2022, 7)
+  def input = FileIO.getInput(2022, 7)
   enum Command:
     case Chdir(to: String)
     case List(files: Seq[AFile])

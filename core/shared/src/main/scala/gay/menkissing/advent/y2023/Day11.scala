@@ -8,7 +8,7 @@ import cats.syntax.all.*
 object Day11 extends Problem:
   type Input = Grid[Boolean]
   type Output = Long
-  lazy val input = FileIO.getInput(2023, 11)
+  def input = FileIO.getInput(2023, 11)
 
   def parse(str: String): Grid[Boolean] =
     Grid.fromString(str):

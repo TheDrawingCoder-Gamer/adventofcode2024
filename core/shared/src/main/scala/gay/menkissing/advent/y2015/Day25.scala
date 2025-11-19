@@ -7,7 +7,7 @@ object Day25 extends HalfDay:
   type Input = Vec2[Int]
   type Output = Long
 
-  lazy val input: String = FileIO.getInput(2015, 25)
+  def input: String = FileIO.getInput(2015, 25)
 
   def parse(str: String): Vec2[Int] =
     str.trim match

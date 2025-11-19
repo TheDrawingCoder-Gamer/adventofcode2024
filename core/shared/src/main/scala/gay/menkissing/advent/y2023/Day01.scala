@@ -8,7 +8,7 @@ object Day01 extends Problem:
   type Input = Vector[String]
   type Output = Int
 
-  lazy val input = FileIO.getInput(2023, 1)
+  def input = FileIO.getInput(2023, 1)
 
   def parse(input: String): Vector[String] = input.linesIterator.toVector
 

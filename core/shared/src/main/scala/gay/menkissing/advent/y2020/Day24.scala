@@ -34,7 +34,7 @@ object Day24 extends Problem:
         case "ne" => NorthEast
     lazy val parseMany = Parsley.some(parser)
 
-  lazy val input = FileIO.getInput(2020, 24)
+  def input = FileIO.getInput(2020, 24)
 
   def parse(str: String): Input =
     str.linesIterator.map: line =>

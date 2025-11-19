@@ -45,4 +45,4 @@ object Day08 extends Problem:
       (y.length + 2) - x.length
     .sum
 
-  lazy val input: String = FileIO.getInput(2015, 8)
+  def input: String = FileIO.getInput(2015, 8)

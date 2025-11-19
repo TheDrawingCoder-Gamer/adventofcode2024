@@ -23,7 +23,7 @@ object Day10 extends ProblemAdv:
       case Noop    => 1
       case Addx(_) => 2
 
-  lazy val input = FileIO.getInput(2022, 10)
+  def input = FileIO.getInput(2022, 10)
 
   def parse(input: String): List[Operation] =
     input.linesIterator.map:

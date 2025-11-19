@@ -40,7 +40,7 @@ object Day02 extends Problem:
           Game(n.toInt, rest.split(";").map(Pull.fromString).toList)
         case _ => assert(false)
 
-  lazy val input = FileIO.getInput(2023, 2)
+  def input = FileIO.getInput(2023, 2)
 
   def parse(input: String): List[Game] =
     input.linesIterator.map(Game.fromString).toList

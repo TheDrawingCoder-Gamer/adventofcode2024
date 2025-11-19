@@ -13,7 +13,7 @@ object Day08 extends Problem:
     case Jmp(n: Int)
     case Nop(n: Int)
 
-  lazy val input = FileIO.getInput(2020, 8)
+  def input = FileIO.getInput(2020, 8)
 
   def parse(input: String): Vector[Instruction] =
     input.linesIterator.map:

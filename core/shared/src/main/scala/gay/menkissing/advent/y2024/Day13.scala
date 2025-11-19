@@ -68,4 +68,4 @@ object Day13 extends Problem:
   override def part2(input: List[CraneMachine]): Long =
     input.flatMap(_.correctUnitError.minimumTokensP2).sum
 
-  lazy val input: String = FileIO.getInput(2024, 13).trim
+  def input: String = FileIO.getInput(2024, 13).trim

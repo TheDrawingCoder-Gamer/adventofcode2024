@@ -8,7 +8,7 @@ import scala.collection.mutable
 object Day09 extends Problem:
   type Input = String
   type Output = Long
-  lazy val input = FileIO.getInput(2024, 9).trim
+  def input = FileIO.getInput(2024, 9).trim
 
   override def parse(str: String): String = str
 

@@ -20,7 +20,7 @@ object Day22 extends Problem:
         case "on"  => On
         case "off" => Off
 
-  lazy val input = FileIO.getInput(2021, 22)
+  def input = FileIO.getInput(2021, 22)
 
   def tryAddhole(obj: AABB3D[Int], hole: AABB3D[Int]): Set[AABB3D[Int]] =
     obj intersect hole match

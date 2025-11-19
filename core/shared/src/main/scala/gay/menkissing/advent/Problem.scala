@@ -61,7 +61,7 @@ object WithPart2:
   type WithOutput[O] = WithPart2 { type OutputP2 = O }
 
 trait WithInput:
-  lazy val input: String
+  def input: String
 
 extension [Output](x: HasOutputP1.Aux[Output])
   def tryFormatP1(out: Output): String =
@@ -82,26 +82,45 @@ extension [Output]
   def fullPart1: Output = x.part1(x.parseP1(x.input))
   def debugAndTimeP1(): Unit =
     val input = x.input
-    val res = debugTiming(x.part1(x.parseP1(input)))
+    x.debugRunP1(input)
+
+extension [Output]
+  (
+    x: WithPart1.WithOutput[Output] & ParseP1
+  )
+  def runPart1(data: String): Output = x.part1(x.parseP1(data))
+  def debugRunP1(data: String): Unit =
+    val res = debugTiming(x.part1(x.parseP1(data)))
     println(x.tryFormatP1(res))
 
 extension [Output]
   (
     x: WithPart2.WithOutput[Output] & WithInput & ParseP2
   )
-  def fullPart2: Output = x.part2(x.parseP2(x.input))
+  def fullPart2: Output = x.runPart2(x.input)
   def debugAndTimeP2(): Unit =
     val input = x.input
-    val res = debugTiming(x.part2(x.parseP2(input)))
+    x.debugRunP2(input)
+
+extension [Output]
+  (
+    x: WithPart2.WithOutput[Output] & ParseP2
+  )
+  def runPart2(data: String): Output = x.part2(x.parseP2(data))
+  def debugRunP2(data: String): Unit =
+    val res = debugTiming(x.part2(x.parseP2(data)))
     println(x.tryFormatP2(res))
 
 trait IncompleteProblem extends ParseP1, WithPart1, WithInput:
-  def main(args: Array[String]): Unit = this.debugAndTimeP1()
+  def main(args: Array[String]): Unit = 
+    val input = this.input
+    this.debugRunP1(input)
 
 trait ProblemSuperAdv extends IncompleteProblem, WithPart2, ParseP2:
   override def main(args: Array[String]): Unit =
-    this.debugAndTimeP1()
-    this.debugAndTimeP2()
+    val input = this.input
+    this.debugRunP1(input)
+    this.debugRunP2(input)
 
 trait ProblemUniqueInputs extends ProblemSuperAdv, HasSharedOutput
 
@@ -113,7 +132,7 @@ trait WriteupAdv[Input, +OutputP1, +OutputP2]:
   def part1(str: String): OutputP1
   def part2(str: String): OutputP2
 
-  lazy val input: String
+  def input: String
 
   def fullPart1: OutputP1 = part1(input)
   def fullPart2: OutputP2 = part2(input)

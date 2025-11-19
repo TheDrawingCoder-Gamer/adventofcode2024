@@ -27,4 +27,4 @@ object Day25 extends HalfDay:
         key.compatibleWith(lock)
     .size
 
-  override lazy val input: String = FileIO.getInput(2024, 25)
+  override def input: String = FileIO.getInput(2024, 25)

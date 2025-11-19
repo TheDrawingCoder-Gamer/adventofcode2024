@@ -43,4 +43,4 @@ object Day09 extends Problem:
 
       def combine(a: Int, b: Int): Int = a max b
     calc(input).max
-  lazy val input: String = FileIO.getInput(2015, 9)
+  def input: String = FileIO.getInput(2015, 9)

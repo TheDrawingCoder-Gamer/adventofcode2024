@@ -11,7 +11,7 @@ object Day14 extends Problem:
   type CharPair = (Char, Char)
 
   type Occurrences = Map[Char, Long]
-  lazy val input = FileIO.getInput(2021, 14)
+  def input = FileIO.getInput(2021, 14)
   def parse(str: String): Input =
     val Array(template, patterns) = str.split("\n\n").toArray: @unchecked
     val goodPats =

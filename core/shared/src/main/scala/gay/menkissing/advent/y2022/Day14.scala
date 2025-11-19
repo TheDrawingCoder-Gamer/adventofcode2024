@@ -116,7 +116,7 @@ object Day14 extends Problem:
     val goodData = data.flatMap(_.bake).toSet
     SparseCaveGrid(goodData, source)
 
-  lazy val input = FileIO.getInput(2022, 14)
+  def input = FileIO.getInput(2022, 14)
 
   def part1(input: SparseCaveGrid): Int =
     LazyList.iterate(Option(input))(_.flatMap(_.withSandP1))

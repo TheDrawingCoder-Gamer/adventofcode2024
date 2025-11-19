@@ -20,4 +20,4 @@ object Day01 extends Problem:
 
   override def part2(input: List[Int]): Int = measureScans(slidingSums(input))
 
-  override lazy val input: String = FileIO.getInput(2021, 1)
+  def input: String = FileIO.getInput(2021, 1)

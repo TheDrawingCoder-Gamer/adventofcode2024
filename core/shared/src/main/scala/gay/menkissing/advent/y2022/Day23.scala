@@ -108,4 +108,4 @@ object Day23 extends Problem:
       it.map(if _ then '#' else '.').mkString
     .foldLeft("")(_ + "\n" + _)
 
-  override lazy val input: String = FileIO.getInput(2022, 23)
+  def input: String = FileIO.getInput(2022, 23)

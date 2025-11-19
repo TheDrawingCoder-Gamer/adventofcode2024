@@ -54,7 +54,7 @@ object Day21 extends Problem:
         else player2Turn.map(it => Option.when(it)(2))
     yield r2
 
-  lazy val input = FileIO.getInput(2021, 21)
+  def input = FileIO.getInput(2021, 21)
 
   override def parse(str: String): ProblemState =
     val List(player1, player2) =

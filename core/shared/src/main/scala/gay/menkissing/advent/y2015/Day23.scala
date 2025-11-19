@@ -39,7 +39,7 @@ object Day23 extends Problem:
           if state.getRegister(r) == 1 then state.jump(offset)
           else state.incrPC
 
-  lazy val input = FileIO.getInput(2015, 23)
+  def input = FileIO.getInput(2015, 23)
 
   def parse(str: String): Input =
     str.linesIterator.map:

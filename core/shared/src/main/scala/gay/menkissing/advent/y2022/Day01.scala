@@ -19,4 +19,4 @@ object Day01 extends Problem:
     val summedElfs: List[Int] = elfs.map(it => it.sum).sorted.reverse
     summedElfs.take(3).sum
 
-  lazy val input = FileIO.getInput(2022, 1)
+  def input = FileIO.getInput(2022, 1)

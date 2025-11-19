@@ -44,4 +44,4 @@ object Day03 extends Problem:
     val groups = input.groupedN[3].map(Group.apply)
     groups.map(_.badge.priority).sum
 
-  lazy val input = FileIO.getInput(2022, 3)
+  def input = FileIO.getInput(2022, 3)

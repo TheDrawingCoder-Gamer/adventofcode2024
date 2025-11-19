@@ -1,8 +1,6 @@
 package gay.menkissing.advent
 package y2020
 
-
-
 object Day15 extends Problem:
   type Input = List[Int]
   type Output = Int
@@ -33,4 +31,4 @@ object Day15 extends Problem:
 
   def part2(input: List[Int]): Int = calc(input, 30_000_000)
 
-  override lazy val input: String = FileIO.getInput(2020, 15)
+  def input: String = FileIO.getInput(2020, 15)

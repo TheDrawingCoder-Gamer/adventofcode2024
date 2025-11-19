@@ -1,15 +1,13 @@
 package gay.menkissing.advent
 package y2015
 
-
-
 import scala.annotation.tailrec
 
 object Day19 extends Problem:
   type Input = (Map[String, List[String]], String)
   type Output = Int
 
-  lazy val input = FileIO.getInput(2015, 19)
+  def input = FileIO.getInput(2015, 19)
 
   def splitElements(str: String): List[String] =
     val builder = List.newBuilder[String]

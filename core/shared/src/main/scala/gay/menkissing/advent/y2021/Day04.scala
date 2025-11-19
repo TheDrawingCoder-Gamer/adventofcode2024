@@ -11,7 +11,7 @@ object Day04 extends Problem:
   type BingoCard = Grid[Int]
   type RealBingoCard = Grid[(Int, Boolean)]
 
-  lazy val input = FileIO.getInput(2021, 4)
+  def input = FileIO.getInput(2021, 4)
 
   def parse(str: String): (List[Int], List[BingoCard]) =
     val blocks = str.split("\n\n")

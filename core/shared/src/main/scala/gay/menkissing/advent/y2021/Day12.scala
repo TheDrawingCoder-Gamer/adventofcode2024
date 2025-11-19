@@ -5,12 +5,11 @@ import cats.data.Chain
 import cats.syntax.all.*
 import cats.*
 
-
 object Day12 extends Problem:
   type Input = List[(Node, Node)]
   type Output = Long
 
-  lazy val input = FileIO.getInput(2021, 12)
+  def input = FileIO.getInput(2021, 12)
 
   enum Node:
     case Start

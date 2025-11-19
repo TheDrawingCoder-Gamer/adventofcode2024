@@ -32,7 +32,7 @@ object Day11 extends Problem:
         case Addition(_, _) => gl + gr
         case Multiply(_, _) => gl * gr
 
-  lazy val input = FileIO.getInput(2022, 11)
+  def input = FileIO.getInput(2022, 11)
 
   def parse(str: String): Vector[Monkey] =
     str.split("\n\n").map: it =>

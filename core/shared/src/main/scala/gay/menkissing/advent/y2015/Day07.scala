@@ -64,4 +64,4 @@ object Day07 extends Problem:
     val go2 = calc(newInput)
     go2("a")
 
-  lazy val input: String = FileIO.getInput(2015, 7)
+  def input: String = FileIO.getInput(2015, 7)

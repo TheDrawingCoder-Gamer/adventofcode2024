@@ -219,4 +219,4 @@ object Day21 extends Problem:
       num * res
     .sum
 
-  override lazy val input: String = FileIO.getInput(2024, 21)
+  override def input: String = FileIO.getInput(2024, 21)

@@ -8,7 +8,7 @@ object Day08 extends Problem:
   type Input = List[(List[Int], List[Int])]
   type Output = Int
 
-  lazy val input = FileIO.getInput(2021, 8)
+  def input = FileIO.getInput(2021, 8)
 
   val aBit: Byte = 0b1000000
   val bBit: Byte = 0b0100000

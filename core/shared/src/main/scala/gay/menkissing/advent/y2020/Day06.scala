@@ -20,4 +20,4 @@ object Day06 extends Problem:
       block.reduce(_ & _).size
     .sum
 
-  override lazy val input: String = FileIO.getInput(2020, 6)
+  def input: String = FileIO.getInput(2020, 6)

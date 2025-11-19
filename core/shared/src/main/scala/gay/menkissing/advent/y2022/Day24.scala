@@ -15,7 +15,7 @@ object Day24 extends Problem:
   type Input = BlizzardMap
   type Output = Int
 
-  lazy val input = FileIO.getInput(2022, 24)
+  def input = FileIO.getInput(2022, 24)
 
   sealed trait BlizzardMapPoint
   final case class BlizzardSpot(blizzards: List[Direction2D])

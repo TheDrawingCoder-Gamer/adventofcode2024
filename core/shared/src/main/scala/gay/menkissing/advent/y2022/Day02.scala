@@ -78,4 +78,4 @@ object Day02 extends Problem:
   def part2(input: List[RawThrow]): Int =
     input.map(_.toStrategy.toThrow.score).sum
 
-  lazy val input = FileIO.getInput(2022, 2)
+  def input = FileIO.getInput(2022, 2)

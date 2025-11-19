@@ -6,7 +6,7 @@ object Day05 extends Problem:
   type Input = (Palettes, List[CraneMove])
   type Output = String
 
-  lazy val input = FileIO.getInput(2022, 5)
+  def input = FileIO.getInput(2022, 5)
 
   def parsePalletes(input: String): Palettes =
     Palettes(

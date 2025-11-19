@@ -592,7 +592,7 @@ object Day22 extends Problem:
     case Clockwise
     case Counterclockwise
     case Move(n: Int)
-  lazy val input = FileIO.getInput(2022, 22)
+  def input = FileIO.getInput(2022, 22)
   def parseInstructions(input: String): List[Instruction] =
     @annotation.tailrec
     def helper(i: String, accum: List[Instruction]): List[Instruction] =

@@ -23,4 +23,4 @@ object Day05 extends Problem:
       case (l, r) if r - l > 1 => r - 1
     .get
 
-  override lazy val input: String = FileIO.getInput(2020, 5)
+  def input: String = FileIO.getInput(2020, 5)

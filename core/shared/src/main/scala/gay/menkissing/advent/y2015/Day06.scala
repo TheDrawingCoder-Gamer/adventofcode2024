@@ -69,4 +69,4 @@ object Day06 extends Problem:
     input.foreach(_.advance(arr))
     arr.sum
 
-  lazy val input: String = FileIO.getInput(2015, 6)
+  def input: String = FileIO.getInput(2015, 6)

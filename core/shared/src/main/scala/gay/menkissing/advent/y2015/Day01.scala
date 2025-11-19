@@ -1,7 +1,6 @@
 package gay.menkissing.advent
 package y2015
 
-
 object Day01 extends Problem:
   type Input = String
 
@@ -19,4 +18,4 @@ object Day01 extends Problem:
       case ((a, b), (_, _))      => (-1, b)
     ._2 + 1
 
-  lazy val input: String = FileIO.getInput(2015, 1)
+  def input: String = FileIO.getInput(2015, 1)

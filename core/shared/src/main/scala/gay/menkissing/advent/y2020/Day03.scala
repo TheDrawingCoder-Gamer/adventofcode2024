@@ -21,4 +21,4 @@ object Day03 extends Problem:
     List((1, 1), (3, 1), (5, 1), (7, 1), (1, 2)).foldLeft(1L):
       case (acc, (x, y)) => acc * input.testSlope(x, y)
 
-  override lazy val input: String = FileIO.getInput(2020, 3)
+  def input: String = FileIO.getInput(2020, 3)

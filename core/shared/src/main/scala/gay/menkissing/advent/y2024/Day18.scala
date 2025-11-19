@@ -77,4 +77,4 @@ object Day18 extends ProblemAdv:
 
   val gridSize: GridSize = if test then GridSize(7, 7) else GridSize(71, 71)
   val bytesFallen: Int = if test then 12 else 1024
-  override lazy val input: String = FileIO.getInput(2024, 18, test)
+  override def input: String = FileIO.getInput(2024, 18, test)

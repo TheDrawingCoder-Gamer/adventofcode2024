@@ -7,7 +7,7 @@ import cats.implicits.*
 object Day12 extends Problem:
   type Input = List[(List[Option[Boolean]], List[Int])]
   type Output = Long
-  lazy val input = FileIO.getInput(2023, 12)
+  def input = FileIO.getInput(2023, 12)
 
   def parse(str: String): List[(List[Option[Boolean]], List[Int])] =
     str.linesIterator.map:

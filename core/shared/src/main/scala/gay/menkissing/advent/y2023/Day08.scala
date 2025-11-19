@@ -7,7 +7,7 @@ import algebra.ring.EuclideanRing
 object Day08 extends Problem:
   type Input = (String, Map[String, (String, String)])
   type Output = Long
-  lazy val input: String = FileIO.getInput(2023, 8)
+  def input: String = FileIO.getInput(2023, 8)
 
   def parse(str: String): (String, Map[String, (String, String)]) =
     val List(path, conns) = str.split("\n\n").toList: @unchecked

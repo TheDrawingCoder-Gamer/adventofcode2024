@@ -63,7 +63,7 @@ object Day09 extends Problem:
         Movement(dir, n.toInt)
     .toList
 
-  lazy val input = FileIO.getInput(2022, 9)
+  def input = FileIO.getInput(2022, 9)
 
   def runWithLength(movements: List[Movement], length: Int): Int =
     movements.traverse(_.execute).map(_.flatten).map(_.map(_.tail))

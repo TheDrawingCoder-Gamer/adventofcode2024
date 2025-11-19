@@ -43,7 +43,7 @@ object Day25 extends HalfDay:
           toSnigit(s) -> (n - s) / 5
     if sunits.isEmpty then "0"
     else sunits.mkString.reverse
-  lazy val input = FileIO.getInput(2022, 25)
+  def input = FileIO.getInput(2022, 25)
   def parse(input: String): List[Long] =
     input.linesIterator.map(snafuToDec).toList
   def part1(input: List[Long]): String = decToSnafu(input.sum)

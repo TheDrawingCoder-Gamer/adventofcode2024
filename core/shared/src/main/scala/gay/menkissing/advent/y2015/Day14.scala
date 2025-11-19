@@ -60,4 +60,4 @@ object Day14 extends Problem:
     val fun = (it: List[ReindeerState]) => updateMaxes(it.map(_.advance))
     fun.repeated(2503)(states).maxBy(_.point).point
 
-  lazy val input: String = FileIO.getInput(2015, 14)
+  def input: String = FileIO.getInput(2015, 14)

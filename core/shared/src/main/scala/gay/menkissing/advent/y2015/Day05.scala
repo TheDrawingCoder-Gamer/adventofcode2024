@@ -26,4 +26,4 @@ object Day05 extends Problem:
         ls.exists((b, j) => a == b && i.intersect(j).isEmpty)
       ) && l.toList.sliding3.exists((a, _, b) => a == b)
 
-  lazy val input: String = FileIO.getInput(2015, 5)
+  def input: String = FileIO.getInput(2015, 5)

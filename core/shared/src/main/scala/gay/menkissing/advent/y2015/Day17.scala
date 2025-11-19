@@ -5,7 +5,7 @@ object Day17 extends Problem:
   type Input = List[Int]
   type Output = Int
 
-  lazy val input = FileIO.getInput(2015, 17)
+  def input = FileIO.getInput(2015, 17)
 
   // yes WE are giving our classes identity
   class Box[A](val value: A)

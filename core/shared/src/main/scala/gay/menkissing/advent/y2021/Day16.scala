@@ -34,7 +34,7 @@ object Day16 extends Problem:
             case 6 => if vs(0) < vs(1) then 1L else 0L
             case 7 => if vs(0) == vs(1) then 1L else 0L
 
-  lazy val input = FileIO.getInput(2021, 16)
+  def input = FileIO.getInput(2021, 16)
 
   def parseNibble(c: Char): Byte = parseHex(c.toString).toByte
   def parseHex(s: String): Int = Integer.parseInt(s, 16)

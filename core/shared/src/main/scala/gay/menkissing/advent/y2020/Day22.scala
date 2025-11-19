@@ -8,7 +8,7 @@ object Day22 extends Problem:
   type Input = (List[Int], List[Int])
   type Output = Int
 
-  lazy val input = FileIO.getInput(2020, 22)
+  def input = FileIO.getInput(2020, 22)
 
   val debugger = Debuginator(active = true)
 

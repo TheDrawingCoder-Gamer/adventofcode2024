@@ -7,7 +7,7 @@ object Day07 extends Problem:
   type Input = List[Int]
   type Output = Int
 
-  lazy val input = FileIO.getInput(2021, 7)
+  def input = FileIO.getInput(2021, 7)
 
   def parse(input: String): List[Int] =
     input.trim.split(",").map(_.toInt).toList

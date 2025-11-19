@@ -35,4 +35,4 @@ object Day12 extends Problem:
 
     go(freakyObj)
 
-  lazy val input: String = FileIO.getInput(2015, 12)
+  def input: String = FileIO.getInput(2015, 12)

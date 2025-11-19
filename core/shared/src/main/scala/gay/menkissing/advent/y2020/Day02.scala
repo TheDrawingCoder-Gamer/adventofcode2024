@@ -25,4 +25,4 @@ object Day02 extends Problem:
       val r = entry.password(entry.right - 1) == entry.of
       l ^ r
 
-  override lazy val input: String = FileIO.getInput(2020, 2)
+  def input: String = FileIO.getInput(2020, 2)

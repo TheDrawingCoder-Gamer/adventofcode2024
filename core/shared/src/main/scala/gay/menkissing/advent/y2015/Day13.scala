@@ -59,4 +59,4 @@ object Day13 extends Problem:
     // no need to update list, getOrElse works just fine
     calc(optInput, nPeople + 1)
 
-  lazy val input: String = FileIO.getInput(2015, 13)
+  def input: String = FileIO.getInput(2015, 13)

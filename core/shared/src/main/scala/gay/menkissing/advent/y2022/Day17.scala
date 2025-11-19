@@ -10,7 +10,7 @@ object Day17 extends Problem:
   type Input = List[Boolean]
   type Output = Long
 
-  lazy val input = FileIO.getInput(2022, 17)
+  def input = FileIO.getInput(2022, 17)
 
   val debugger = Debuginator(level = Debuginator.Level.Simple)
 

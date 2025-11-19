@@ -13,7 +13,7 @@ object Day21 extends Problem:
       val realDmg = math.max(1, dmg - armor)
       math.ceil(hp.toDouble / realDmg.toDouble).toInt
 
-  lazy val input = FileIO.getInput(2015, 21)
+  def input = FileIO.getInput(2015, 21)
 
   def parse(str: String): Actor =
     val Array(

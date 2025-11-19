@@ -132,4 +132,4 @@ object Day24 extends ProblemAdv:
   override def part2(input: Machine): String =
     solve(input).flatten.toVector.sorted.mkString(",")
 
-  override lazy val input: String = FileIO.getInput(2024, 24)
+  override def input: String = FileIO.getInput(2024, 24)

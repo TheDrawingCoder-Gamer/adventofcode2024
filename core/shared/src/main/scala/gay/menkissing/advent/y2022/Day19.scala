@@ -350,7 +350,7 @@ object Day19 extends Problem:
     )
     maxGeodes
 
-  lazy val input = FileIO.getInput(2022, 19)
+  def input = FileIO.getInput(2022, 19)
 
   def parse(str: String): List[Blueprint] =
     str.linesIterator.map(Blueprint.parse).toList

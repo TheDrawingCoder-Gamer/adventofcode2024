@@ -73,4 +73,4 @@ object Day23 extends ProblemAdv:
     maximumClique(conns.computerMap).map(Computer.unapply).toList.sorted
       .mkString(",")
 
-  override lazy val input: String = FileIO.getInput(2024, 23)
+  override def input: String = FileIO.getInput(2024, 23)

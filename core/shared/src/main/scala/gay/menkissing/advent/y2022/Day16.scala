@@ -22,7 +22,7 @@ object Day16 extends Problem:
 
   val start = "AA"
 
-  lazy val input = FileIO.getInput(2022, 16)
+  def input = FileIO.getInput(2022, 16)
 
   def parse(input: String): ValveMap =
     input.trim.linesIterator.map:

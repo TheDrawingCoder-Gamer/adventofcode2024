@@ -3,12 +3,11 @@ package y2024
 
 import gay.menkissing.common.*
 
-
 object Day11 extends Problem:
   type Input = List[Long]
   type Output = Long
 
-  lazy val input = FileIO.getInput(2024, 11)
+  def input = FileIO.getInput(2024, 11)
 
   override def parse(str: String): List[Long] =
     str.split(' ').map(_.trim.toLong).toList

@@ -10,7 +10,7 @@ object Day13 extends ProblemAdv:
   type OutputP1 = Int
   type OutputP2 = String
 
-  lazy val input = FileIO.getInput(2021, 13)
+  def input = FileIO.getInput(2021, 13)
 
   def parse(str: String): (Set[Vec2[Int]], List[Fold]) =
     val Array(dots, folds) = str.trim.split("\n\n").toArray.runtimeChecked

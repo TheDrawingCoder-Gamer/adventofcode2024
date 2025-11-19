@@ -53,7 +53,7 @@ object Day20 extends Problem:
   extension (vec: IArray[Long])
     def mixNumbersImm: IArray[Long] = vec.zipWithIndex.mixNumbersReal.map(_._1)
 
-  lazy val input = FileIO.getInput(2022, 20)
+  def input = FileIO.getInput(2022, 20)
   def parse(input: String): Vector[Long] =
     input.linesIterator.map(_.toLong).toVector
   def part1(input: Vector[Long]): Long =

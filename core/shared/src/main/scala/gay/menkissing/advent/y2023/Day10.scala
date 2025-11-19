@@ -11,7 +11,7 @@ object Day10 extends Problem:
   type Input = (Grid[Option[Pipe]], Vec2[Int])
   type Output = Int
 
-  lazy val input: String = FileIO.getInput(2023, 10)
+  def input: String = FileIO.getInput(2023, 10)
 
   final case class Pipe(conn1: Direction2D, conn2: Direction2D):
 

@@ -5,7 +5,7 @@ object Day03 extends Problem:
   type Input = String
   type Output = Int
 
-  lazy val input: String = FileIO.getInput(2024, 3)
+  def input: String = FileIO.getInput(2024, 3)
 
   override def parse(str: String): String = str
 

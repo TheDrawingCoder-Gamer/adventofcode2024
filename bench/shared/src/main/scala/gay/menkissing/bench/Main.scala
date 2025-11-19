@@ -2,13 +2,40 @@ package gay.menkissing.bench
 
 import gay.menkissing.advent.*
 import gay.menkissing.bench.Bench
-import gay.menkissing.bench.Main.benchmark
 
 import java.util.concurrent.TimeUnit
+import gay.menkissing.bench.Blackhole.consumed
+import gay.menkissing.bench.Blackhole.Impl
 
 // JVM can run this too, but Jmh is preferred bc they know what they are doing
 object Main extends Bench:
   case class Year(n: Int) extends AnyVal
+
+  // This special casing doesn't particularly matter for JVM and JS, but on
+  // native we don't spawn a new process for each benchmark, so
+  // it's important to try and free as much memory as possible.
+  class Part1BenchmarkBody(argObj: => IncompleteProblem) extends BenchmarkBody:
+    lazy val obj = argObj
+
+    private var input: String = null
+
+    override def load(): Unit = input = obj.input
+
+    def run(blackhole: Blackhole.Impl): Unit =
+      blackhole.consumed(obj.runPart1(input))
+
+    override def free(): Unit = input = null
+
+  class Part2BenchmarkBody(argObj: => ProblemSuperAdv) extends BenchmarkBody:
+    lazy val obj = argObj
+
+    private var input: String = null
+
+    override def load(): Unit = input = obj.input
+
+    def run(blackhole: Impl): Unit = blackhole.consumed(obj.runPart2(input))
+
+    override def free(): Unit = input = null
 
   enum FullOpts:
     case Separate(p1: BenchmarkOptions, p2: BenchmarkOptions)
@@ -39,11 +66,12 @@ object Main extends Bench:
       opts: FullOpts = FullOpts.Both(BenchmarkOptions())
     )
     (using year: Year): Unit =
-    lazy val pee = p
-    benchmark(s"day${day}y${year.n}p1", opts.part1):
-      pee.fullPart1
-    benchmark(s"day${day}y${year.n}p2", opts.part2):
-      pee.fullPart2
+    benchmarkAdvanced(s"day${day}y${year.n}p1", opts.part1)(
+      Part1BenchmarkBody(p)
+    )
+    benchmarkAdvanced(s"day${day}y${year.n}p2", opts.part2)(
+      Part2BenchmarkBody(p)
+    )
   def benchmarkHalf
     (
       day: Int,
@@ -51,9 +79,7 @@ object Main extends Bench:
       opts: BenchmarkOptions = BenchmarkOptions()
     )
     (using year: Year): Unit =
-    lazy val pee = p
-    benchmark(s"day${day}y${year.n}p1", opts):
-      pee.fullPart1
+    benchmarkAdvanced(s"day${day}y${year.n}p1", opts)(Part1BenchmarkBody(p))
 
   locally:
     given Year = Year(2015)

@@ -109,4 +109,4 @@ object Day17 extends ProblemAdv, FormatP1:
       else (a >> 3) + 1
     .find(it => input.copy(regA = it).completeP2).get
 
-  override lazy val input: String = FileIO.getInput(2024, 17)
+  override def input: String = FileIO.getInput(2024, 17)

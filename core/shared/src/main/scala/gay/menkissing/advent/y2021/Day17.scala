@@ -9,7 +9,7 @@ object Day17 extends Problem:
   type Input = AABB2D[Int]
   type Output = Int
 
-  lazy val input = FileIO.getInput(2021, 17)
+  def input = FileIO.getInput(2021, 17)
 
   val debugger = Debuginator(active = false)
 

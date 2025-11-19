@@ -48,4 +48,4 @@ object Day06 extends Problem:
     advance.repeated(256)(fishMap).foldLeft(0L):
       case (acc, (_, v)) => acc + v
 
-  override lazy val input: String = FileIO.getInput(2021, 6)
+  def input: String = FileIO.getInput(2021, 6)

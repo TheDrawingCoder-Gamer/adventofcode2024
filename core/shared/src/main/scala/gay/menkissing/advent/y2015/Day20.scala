@@ -1,13 +1,11 @@
 package gay.menkissing.advent
 package y2015
 
-
-
 object Day20 extends Problem:
   type Input = Int
   type Output = Int
 
-  lazy val input = FileIO.getInput(2015, 20)
+  def input = FileIO.getInput(2015, 20)
 
   def parse(str: String): Int = str.trim.toInt
 
