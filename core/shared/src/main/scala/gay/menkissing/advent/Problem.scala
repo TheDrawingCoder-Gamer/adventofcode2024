@@ -41,6 +41,12 @@ trait FormatP1 extends HasOutputP1:
 trait FormatP2 extends HasOutputP2:
   def formatP2(out: OutputP2): String
 
+trait FormatBoth extends FormatP1, FormatP2, HasSharedOutput:
+  def format(out: Output): String
+
+  override def formatP1(out: OutputP1): String = format(out)
+  override def formatP2(out: OutputP2): String = format(out)
+
 trait WithParser extends ParseP1, ParseP2, HasSharedInput:
 
   override def parseP1(str: String): Input = parse(str)
@@ -112,7 +118,7 @@ extension [Output]
     println(x.tryFormatP2(res))
 
 trait IncompleteProblem extends ParseP1, WithPart1, WithInput:
-  def main(args: Array[String]): Unit = 
+  def main(args: Array[String]): Unit =
     val input = this.input
     this.debugRunP1(input)
 
