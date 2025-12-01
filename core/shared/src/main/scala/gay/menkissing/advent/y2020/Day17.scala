@@ -24,8 +24,8 @@ object Day17 extends Problem:
 
   // thought process:
   // wouldn't it be hilarous if I had to do zero changes between part 1 and 2?
-  def step[V[_]](state: Set[V[Int]])(using vn: VecN[V]): Set[V[Int]] =
-    conwayStep[V[Int]](vn.allNeighbors, it => it == 2 || it == 3, _ == 3)(
+  def step[A](neighbors: A => Iterable[A])(state: Set[A]): Set[A] =
+    conwayStep[A](neighbors, it => it == 2 || it == 3, _ == 3)(
       state
     )
 
@@ -49,8 +49,9 @@ object Day17 extends Problem:
         show"slice y=$y;\n$grid"
     .mkString("\n\n")
 
-  def part1(input: Set[Vec3[Int]]): Int = step[Vec3].repeated(6)(input).size
+  def part1(input: Set[Vec3[Int]]): Int =
+    step[Vec3[Int]](_.allNeighbors).repeated(6)(input).size
 
   def part2(input: Set[Vec3[Int]]): Int =
     val newInput = input.map(it => Vec4(it.x, it.y, it.z, 0))
-    step[Vec4].repeated(6)(newInput).size
+    step[Vec4[Int]](_.allNeighbors).repeated(6)(newInput).size

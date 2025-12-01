@@ -15,11 +15,6 @@ object Day25 extends HalfDay:
       str.linesIterator.map(_.toLong).toArray.runtimeChecked
     (card, door)
 
-  def precalcMultInverses: Array[Int] =
-    Array.tabulate(20201227): i =>
-      if i == 0 then 0
-      else (0 until 20201227).find(it => ((i * it) % 20201227) == 1).get
-
   def transform(subject: Long, loopSize: Int): Long =
 
     def transformStep(n: Long): Long = (n * subject) % 20201227L
