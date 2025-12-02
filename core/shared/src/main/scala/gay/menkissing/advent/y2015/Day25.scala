@@ -11,8 +11,7 @@ object Day25 extends HalfDay:
 
   def parse(str: String): Vec2[Int] =
     str.trim match
-      case s"To continue, please consult the code grid in the manual.  Enter the code at row $y, column $x." =>
-        Vec2(x.toInt, y.toInt)
+      case s"$_ row $y, column $x." => Vec2(x.toInt, y.toInt)
 
   def sumtorial(p: Int): Int = IntSequences.triangleNumber(p).toInt
 

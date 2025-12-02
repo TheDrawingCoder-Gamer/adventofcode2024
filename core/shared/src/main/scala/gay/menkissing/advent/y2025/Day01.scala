@@ -16,7 +16,7 @@ object Day01 extends Problem:
       case s"L$n" => (false, n.toInt)
     .toList
 
-  def part1(input: List[(Boolean, Int)]): OutputP1 =
+  def part1(input: List[(Boolean, Int)]): Int =
     input.foldLeft((50, 0)):
       case ((cur, passZero), (right, by)) =>
         val newValue =
@@ -26,7 +26,7 @@ object Day01 extends Problem:
         (newValue, if newValue == 0 then passZero + 1 else passZero)
     ._2
 
-  def part2(input: List[(Boolean, Int)]): OutputP2 =
+  def part2(input: List[(Boolean, Int)]): Int =
     input.foldLeft((50, 0)):
       case ((cur, passZero), (right, by)) =>
         val (forcedWrap, byN) = by /% 100
@@ -38,8 +38,5 @@ object Day01 extends Problem:
             if unwrapped >= 100 then 1
             else if cur != 0 && unwrapped <= 0 then 1
             else 0
-        println(
-          s"$cur (${if right then "R" else "L"}$by)-> $newValue $unwrapped $passV"
-        )
         (newValue, passZero + passV)
     ._2
