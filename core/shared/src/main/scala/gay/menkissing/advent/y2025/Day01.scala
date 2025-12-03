@@ -8,7 +8,7 @@ object Day01 extends Problem:
   type Input = List[(Boolean, Int)]
   type Output = Int
 
-  lazy val input = FileIO.getInput(2025, 1)
+  def input = FileIO.getInput(2025, 1)
 
   def parse(str: String): Input =
     str.linesIterator.map:

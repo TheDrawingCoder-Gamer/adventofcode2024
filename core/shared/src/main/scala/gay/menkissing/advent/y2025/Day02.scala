@@ -7,7 +7,7 @@ object Day02 extends Problem:
   type Input = List[Range[Long]]
   type Output = Long
 
-  lazy val input = FileIO.getInput(2025, 2)
+  def input = FileIO.getInput(2025, 2)
 
   def parse(str: String): List[Range[Long]] =
     str.trim.split(",").map:
