@@ -12,18 +12,18 @@ object Day04 extends Problem:
 
   def input: String = FileIO.getInput(2025, 4)
 
-  def parse(str: String): Input =
+  def parse(str: String): Set[Vec2[Int]] =
     Grid.fromString(str)(_ == '@').zipWithIndices.filter(_._1).map(_._2).toSet
 
-  def part1(input: Set[Vec2[Int]]): OutputP1 =
-    input.count: p =>
-      p.allNeighbors.count(input) < 4
+  def accessible(universe: Set[Vec2[Int]])(p: Vec2[Int]): Boolean =
+    p.allNeighbors.count(universe) < 4
 
-  def part2(input: Set[Vec2[Int]]): OutputP2 =
+  def part1(input: Set[Vec2[Int]]): Int = input.count(accessible(input))
+
+  def part2(input: Set[Vec2[Int]]): Int =
     @tailrec
     def step(in: Set[Vec2[Int]], acc: Int): Int =
-      val (accessibleIn, inaccessibleIn) =
-        in.partition(_.allNeighbors.count(in) < 4)
+      val (accessibleIn, inaccessibleIn) = in.partition(accessible(in))
       if accessibleIn.isEmpty then acc
       else step(inaccessibleIn, acc + accessibleIn.size)
     step(input, 0)

@@ -1,17 +1,15 @@
 package gay.menkissing.advent
 package y2025
 
-import cats.collections.Range
-
 object Day02 extends Problem:
-  type Input = List[Range[Long]]
+  type Input = List[(Long, Long)]
   type Output = Long
 
   def input = FileIO.getInput(2025, 2)
 
-  def parse(str: String): List[Range[Long]] =
+  def parse(str: String): List[(Long, Long)] =
     str.trim.split(",").map:
-      case s"$l-$r" => Range(l.toLong, r.toLong)
+      case s"$l-$r" => (l.toLong, r.toLong)
     .toList
 
   def invalidP1(n: Long): Boolean =
@@ -27,12 +25,12 @@ object Day02 extends Problem:
       val bit = str.take(size)
       (bit * rep) == str
 
-  def part1(input: List[Range[Long]]): Long =
-    input.map:
-      _.toIterator.filter(invalidP1).sum
+  def part1(input: List[(Long, Long)]): Long =
+    input.map: (l, r) =>
+      Iterator.range(l, r).filter(invalidP1).sum
     .sum
 
-  def part2(input: List[Range[Long]]): Long =
-    input.map:
-      _.toIterator.filter(invalidP2).sum
+  def part2(input: List[(Long, Long)]): Long =
+    input.map: (l, r) =>
+      Iterator.range(l, r).filter(invalidP2).sum
     .sum

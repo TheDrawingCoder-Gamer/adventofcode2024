@@ -10,7 +10,7 @@ object Day01 extends Problem:
 
   def input = FileIO.getInput(2025, 1)
 
-  def parse(str: String): Input =
+  def parse(str: String): List[(Boolean, Int)] =
     str.linesIterator.map:
       case s"R$n" => (true, n.toInt)
       case s"L$n" => (false, n.toInt)
@@ -35,8 +35,7 @@ object Day01 extends Problem:
         val newValue = unwrapped rem 100
         val passV =
           forcedWrap + locally:
-            if unwrapped >= 100 then 1
-            else if cur != 0 && unwrapped <= 0 then 1
+            if cur != 0 && (unwrapped >= 100 || unwrapped <= 0) then 1
             else 0
         (newValue, passZero + passV)
     ._2

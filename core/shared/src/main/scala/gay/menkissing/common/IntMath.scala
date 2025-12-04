@@ -32,7 +32,7 @@ extension (self: Int)
 
   infix def rem(that: Int): Int =
     val mod = self % that
-    if mod < 0 then mod + that else mod
+    if mod < 0 then mod + math.abs(that) else mod
 
   infix def ceilDiv(that: Int): Int =
     math.ceil(self.toDouble / that.toDouble).toInt
