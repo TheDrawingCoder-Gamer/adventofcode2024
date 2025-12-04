@@ -7,7 +7,7 @@ object Day03 extends Problem:
   type Input = List[List[Int]]
   type Output = Long
 
-  def input: String = FileIO.getInput(2025, 3, test = true)
+  def input: String = FileIO.getInput(2025, 3)
 
   def parse(str: String): Input =
     str.linesIterator.map:
