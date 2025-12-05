@@ -280,3 +280,14 @@ object Main extends Bench:
     benchmarkFull(23, Day23)
     benchmarkFull(24, Day24)
     benchmarkHalf(25, Day25)
+
+  locally:
+    given Year = Year(2025)
+
+    import y2025.*
+
+    benchmarkFull(1, Day01)
+    benchmarkFull(2, Day02)
+    benchmarkFull(3, Day03)
+    benchmarkFull(4, Day04)
+    benchmarkFull(5, Day05)
