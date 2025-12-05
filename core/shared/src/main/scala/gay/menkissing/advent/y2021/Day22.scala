@@ -29,18 +29,20 @@ object Day22 extends Problem:
 
   def addHole(obj: AABB3D[Int], hole: AABB3D[Int]): Set[AABB3D[Int]] =
     var daSet = Set.empty[AABB3D[Int]]
-    if obj.xs.min != hole.xs.min then
-      daSet += AABB3D(obj.xs.min dimBy hole.xs.min - 1, obj.ys, obj.zs)
-    if obj.xs.max != hole.xs.max then
-      daSet += AABB3D(hole.xs.max + 1 dimBy obj.xs.max, obj.ys, obj.zs)
-    if obj.ys.min != hole.ys.min then
-      daSet += AABB3D(hole.xs, obj.ys.min dimBy hole.ys.min - 1, obj.zs)
-    if obj.ys.max != hole.ys.max then
-      daSet += AABB3D(hole.xs, hole.ys.max + 1 dimBy obj.ys.max, obj.zs)
-    if obj.zs.min != hole.zs.min then
-      daSet += AABB3D(hole.xs, hole.ys, obj.zs.min dimBy hole.zs.min - 1)
-    if obj.zs.max != hole.zs.max then
-      daSet += AABB3D(hole.xs, hole.ys, hole.zs.max + 1 dimBy obj.zs.max)
+    if obj.xs.start != hole.xs.start then
+      daSet += AABB3D(obj.xs.start safeToIncl hole.xs.start - 1, obj.ys, obj.zs)
+    if obj.xs.end != hole.xs.end then
+      daSet += AABB3D(hole.xs.end + 1 safeToIncl obj.xs.end, obj.ys, obj.zs)
+    if obj.ys.start != hole.ys.start then
+      daSet +=
+        AABB3D(hole.xs, obj.ys.start safeToIncl hole.ys.start - 1, obj.zs)
+    if obj.ys.end != hole.ys.end then
+      daSet += AABB3D(hole.xs, hole.ys.end + 1 safeToIncl obj.ys.end, obj.zs)
+    if obj.zs.start != hole.zs.start then
+      daSet +=
+        AABB3D(hole.xs, hole.ys, obj.zs.start safeToIncl hole.zs.start - 1)
+    if obj.zs.end != hole.zs.end then
+      daSet += AABB3D(hole.xs, hole.ys, hole.zs.end + 1 safeToIncl obj.zs.end)
 
     daSet
   def parse(str: String): List[Step] =
@@ -50,9 +52,9 @@ object Day22 extends Problem:
         Step(
           command,
           AABB3D(
-            lx.toInt dimBy rx.toInt,
-            ly.toInt dimBy ry.toInt,
-            lz.toInt dimBy rz.toInt
+            lx.toInt safeToIncl rx.toInt,
+            ly.toInt safeToIncl ry.toInt,
+            lz.toInt safeToIncl rz.toInt
           )
         )
     .toList
@@ -70,7 +72,8 @@ object Day22 extends Problem:
 
   def score(s: Set[AABB3D[Int]]): BigInt = s.toList.map(_.volume).sum
   def part1(input: List[Step]): BigInt =
-    val rangeBound = AABB3D(-50 dimBy 50, -50 dimBy 50, -50 dimBy 50)
+    val rangeBound =
+      AABB3D(-50 safeToIncl 50, -50 safeToIncl 50, -50 safeToIncl 50)
     score(run(input.takeWhile(_.cuboid.fitsIn(rangeBound))))
 
   def part2(input: List[Step]): BigInt = score(run(input))

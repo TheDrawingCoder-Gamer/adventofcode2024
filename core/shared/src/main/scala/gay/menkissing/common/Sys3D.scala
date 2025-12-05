@@ -4,6 +4,7 @@ import scala.annotation.tailrec
 import algebra.ring.*
 import cats.*
 import cats.syntax.all.*
+import cats.collections.Range
 
 object Sys3D:
   object Vec3i:
@@ -136,15 +137,14 @@ object Sys3D:
         r <- Rotation.values
       yield Orientation3D(f, r)
 
-  final case class AABB3D[A]
-    (xs: Dimension[A], ys: Dimension[A], zs: Dimension[A]):
+  final case class AABB3D[A](xs: Range[A], ys: Range[A], zs: Range[A]):
     infix def intersect
       (that: AABB3D[A])
       (using ord: Order[A]): Option[AABB3D[A]] =
       for
-        xs <- this.xs intersect that.xs
-        ys <- this.ys intersect that.ys
-        zs <- this.zs intersect that.zs
+        xs <- this.xs & that.xs
+        ys <- this.ys & that.ys
+        zs <- this.zs & that.zs
       yield AABB3D(xs, ys, zs)
 
     def volume
@@ -152,24 +152,24 @@ object Sys3D:
         rng: Ring[A],
         cv: AsNumber[A]
       ): BigInt =
-      cv.toBigInt(xs.length) * cv.toBigInt(ys.length) * cv.toBigInt(zs.length)
+      cv.toBigInt(xs.size) * cv.toBigInt(ys.size) * cv.toBigInt(zs.size)
 
     def contains(v: Vec3[A])(using ord: Order[A]): Boolean =
-      v.x >= xs.min && v.x <= xs.max && v.y >= ys.min && v.y <= ys.max &&
-        v.z >= zs.min && v.z <= zs.max
+      v.x >= xs.start && v.x <= xs.end && v.y >= ys.start && v.y <= ys.end &&
+        v.z >= zs.start && v.z <= zs.end
 
     def grow(n: A)(using add: AdditiveGroup[A], ord: Order[A]): AABB3D[A] =
       AABB3D(
-        xs.min - n dimBy xs.max + n,
-        ys.min - n dimBy ys.max + n,
-        zs.min - n dimBy zs.max + n
+        xs.start - n safeToIncl xs.end + n,
+        ys.start - n safeToIncl ys.end + n,
+        zs.start - n safeToIncl zs.end + n
       )
 
     def fitsIn(that: AABB3D[A])(using order: Order[A]): Boolean =
-      xs.fitsIn(that.xs) && ys.fitsIn(that.ys) && zs.fitsIn(that.zs)
+      that.xs.contains(xs) && that.ys.contains(ys) && that.zs.contains(zs)
 
-    def start: Vec3[A] = Vec3(xs.min, ys.min, zs.min)
-    def stop: Vec3[A] = Vec3(xs.max, ys.max, zs.max)
+    def start: Vec3[A] = Vec3(xs.start, ys.start, zs.start)
+    def stop: Vec3[A] = Vec3(xs.end, ys.end, zs.end)
 
   object AABB3D:
     given showAABB3D[A](using show: Show[A]): Show[AABB3D[A]] =
@@ -179,9 +179,9 @@ object Sys3D:
       (start: Vec3[A], stop: Vec3[A])
       (using order: Order[A]): AABB3D[A] =
       new AABB3D(
-        start.x dimBy stop.x,
-        start.y dimBy stop.y,
-        start.z dimBy stop.z
+        start.x safeToIncl stop.x,
+        start.y safeToIncl stop.y,
+        start.z safeToIncl stop.z
       )
 
     def containingAll[A]
