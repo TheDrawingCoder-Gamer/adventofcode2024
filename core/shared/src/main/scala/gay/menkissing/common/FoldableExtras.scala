@@ -28,6 +28,21 @@ extension [F[_], A](self: F[A])(using fold: Foldable[F])
   // haskell's `group`
   def segmented(using eq: Eq[A]): List[NonEmptyList[A]] = segmentBy(eq.eqv)
 
+  def splitOn(a: A)(using eq: Eq[A]): List[List[A]] = self.splitWhen(_ === a)
+
+  // oversimplification of `splitWhen` from haskell's `split` library
+  // didnt feel like implementing all its internals
+  def splitWhen(f: A => Boolean): List[List[A]] =
+    val ls = fold.toList(self)
+    @tailrec def go
+      (cur: List[A], holder: List[A], acc: List[List[A]]): List[List[A]] =
+      cur match
+        case Nil     => (holder.reverse :: acc).reverse
+        case x :: xs =>
+          if f(x) then go(xs, Nil, holder.reverse :: acc)
+          else go(xs, x :: holder, acc)
+    go(ls, Nil, Nil)
+
   def foldString
     (start: String, sep: String, end: String)
     (using show: Show[A]): String =
@@ -60,7 +75,7 @@ extension [F[_], A](self: F[A])(using fold: Foldable[F])
     foldShortCircuitGen(b)(f).left.toOption
 
   // Fold and automatically collect the results for each fold operation...
-  def accumFoldLeft[B](b: B)(f: (B, A) => B): List[B] =
+  def scanLeft[B](b: B)(f: (B, A) => B): List[B] =
     fold.foldLeft(self, (b, List.empty[B])):
       case ((acc, accum), a) =>
         val r = f(acc, a)
