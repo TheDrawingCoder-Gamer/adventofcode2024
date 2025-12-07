@@ -34,11 +34,6 @@ object Day07 extends Problem:
         (splits + newSplits, newAcc)
     ._1
 
-  def advancePart2(splitters: Set[Int]): Kleisli[Chain, Int, Int] =
-    Kleisli: point =>
-      if splitters(point) then Chain(point - 1, point + 1)
-      else Chain.one(point)
-
   def part2(input: Input): Long =
 
     input.splitters.foldLeft(Map(input.start -> 1L)): (curBeams, splitters) =>
