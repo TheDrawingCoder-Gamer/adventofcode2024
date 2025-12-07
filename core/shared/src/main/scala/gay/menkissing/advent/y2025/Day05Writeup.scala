@@ -49,5 +49,5 @@ object Day05Writeup extends Problem:
       ranges.foldLeft(Set.empty[LRange]): (acc, range) =>
         val removed = acc.flatMap(_ - range)
         removed + range
-    // toIterator because Set is not a functor and hates you
-    combinedRanges.toIterator.map(_.size).sum
+    // iterator because Set is not a functor and hates you
+    combinedRanges.iterator.map(_.size).sum
