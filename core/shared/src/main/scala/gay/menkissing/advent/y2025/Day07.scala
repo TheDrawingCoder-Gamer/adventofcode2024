@@ -45,9 +45,5 @@ object Day07 extends Problem:
       curBeams.iterator.map: (idx, n) =>
         if splitters(idx) then Chain(idx - 1 -> n, idx + 1 -> n)
         else Chain.one(idx -> n)
-      .toList.combineAll.foldLeft(Map.empty[Int, Long]):
-        case (acc, (k, v)) =>
-          acc.updatedWith(k):
-            case Some(x) => Some(x + v)
-            case None    => Some(v)
+      .toList.combineAll.groupMapReduce(_._1)(_._2)
     .values.sum
