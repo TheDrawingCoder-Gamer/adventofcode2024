@@ -23,10 +23,7 @@ object Day01 extends Problem:
   override def part2(input: (List[Int], List[Int])): Int =
     val (fst, snd) = input
     val sndCount =
-      snd.foldLeft(Map[Int, Int]()):
-        case (map, a) =>
-          map.updatedWith(a):
-            case Some(value) => Some(value + 1)
-            case _           => Some(1)
+      snd.foldLeft(Map.empty[Int, Int].withDefaultValue(0)):
+        case (map, a) => map.updated(a, map(a) + 1)
 
     fst.map(it => sndCount.getOrElse(it, 0) * it).sum

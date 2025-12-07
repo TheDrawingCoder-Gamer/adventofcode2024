@@ -109,6 +109,13 @@ def unfolded[A, S](init: S)(f: S => Option[(A, S)]): A =
       case Some((a, v)) => go(v, Some(a))
   go(init, None).get
 
+def unfoldedS[S](init: S)(f: S => Option[S]): S =
+  @tailrec def go(state: S): S =
+    f(state) match
+      case None    => state
+      case Some(v) => go(v)
+  go(init)
+
 extension [F[_]](self: Monad[F])
   def whenM[A](cond: F[Boolean])(ifTrue: => F[A]): F[Unit] =
     self.ifM(cond)(self.as(ifTrue, ()), self.pure(()))

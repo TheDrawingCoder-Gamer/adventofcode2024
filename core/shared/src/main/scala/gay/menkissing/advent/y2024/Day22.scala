@@ -50,12 +50,10 @@ object Day22 extends Problem:
             acc.updatedWith(Vector(y - x, z - y, w - z, v - w)):
               case Some(value) => Some(value)
               case None        => Some(v)
-      .foldLeft(Map[Vector[Int], Long]()): (acc, oldMap) =>
-        oldMap.foldLeft(acc):
-          case (c, (k, v)) =>
-            c.updatedWith(k):
-              case Some(value) => Some(value + v.toLong)
-              case _           => Some(v.toLong)
+      .foldLeft(Map.empty[Vector[Int], Long].withDefaultValue(0L)):
+        (acc, oldMap) =>
+          oldMap.foldLeft(acc):
+            case (c, (k, v)) => c.updated(k, c(k) + v.toLong)
 
     validDiffSequences.flatMap: i =>
       diffMap.get(i).map(v => (i, v))

@@ -66,17 +66,13 @@ object Day11 extends Problem:
       Option.when(updated)(res)
 
   override def part1(input: Grid[Seat]): Int =
-    Iterator.unfold(input): x =>
-      x.next().map(y => (y, y))
-    .toList.last.flatten.map:
+    unfoldedS(input)(_.next()).flatten.map:
       case Seat.Occupied => 1
       case _             => 0
     .sum
 
   def part2(input: Grid[Seat]): Int =
-    Iterator.unfold(input): x =>
-      x.nextP2().map(y => (y, y))
-    .toList.last.flatten.map:
+    unfoldedS(input)(_.nextP2()).flatten.map:
       case Seat.Occupied => 1
       case _             => 0
     .sum
