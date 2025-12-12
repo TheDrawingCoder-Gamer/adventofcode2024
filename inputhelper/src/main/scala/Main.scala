@@ -22,10 +22,11 @@ object Main:
       return
     val cookie = args(0)
 
-    for year <- 2015 to 2024 do
+    for year <- 2015 to 2025 do
+      val maxDay = if year >= 2025 then 12 else 25
       val dir = inputDir.resolve(s"y$year")
       if !Files.exists(dir) then Files.createDirectory(dir)
-      for day <- 1 to 25 do
+      for day <- 1 to maxDay do
         val dayFile = dir.resolve(s"day${padNum(day)}.txt")
 
         if !Files.exists(dayFile) then
